@@ -175,7 +175,7 @@ public class GerritHookFilter implements ChangeListener {
         log.info("Event " + event + " not recognised and ignored");
       }
     } catch (Throwable e) {
-      log.error("Event " + e + " processing failed", e);
+      log.error("Event " + event + " processing failed", e);
     }
   }
 
