@@ -62,9 +62,11 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
       List<Condition> conditions = new ArrayList<Condition>();
       conditions.add(new Condition("change", "commented"));
 
-      for (ApprovalAttribute approval : hook.approvals) {
-        addApprovalCategoryCondition(conditions, approval.type, approval.value);
-      };
+      if (hook.approvals != null) {
+        for (ApprovalAttribute approval : hook.approvals) {
+          addApprovalCategoryCondition(conditions, approval.type, approval.value);
+        }
+      }
 
       performAction(hook.change,
           conditions.toArray(new Condition[conditions.size()]));

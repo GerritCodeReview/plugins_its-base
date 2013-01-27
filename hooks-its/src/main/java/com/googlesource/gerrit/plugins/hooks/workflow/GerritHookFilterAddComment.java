@@ -85,7 +85,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
   private String getComment(CommentAddedEvent commentAdded) {
     StringBuilder comment = new StringBuilder(getCommentPrefix(commentAdded.change));
 
-    if (commentAdded.approvals.length > 0) {
+    if (commentAdded.approvals != null && commentAdded.approvals.length > 0) {
       comment.append("Code-Review: ");
       for (ApprovalAttribute approval : commentAdded.approvals) {
         String value = getApprovalValue(approval);
