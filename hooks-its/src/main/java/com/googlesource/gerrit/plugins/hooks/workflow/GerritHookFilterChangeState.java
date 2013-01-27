@@ -189,7 +189,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
 
     public Condition(String key, String[] values) {
       super();
-      this.key = key;
+      this.key = key.toLowerCase();
       this.val = values;
     }
 
