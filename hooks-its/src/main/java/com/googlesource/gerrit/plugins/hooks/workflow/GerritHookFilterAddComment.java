@@ -16,6 +16,8 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
 
+import com.google.common.base.Strings;
+import com.google.gerrit.server.config.AnonymousCowardName;
 import com.google.gerrit.server.events.AccountAttribute;
 import com.google.gerrit.server.events.ApprovalAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
@@ -31,6 +33,9 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
 
   @Inject
   private ItsFacade its;
+
+  @Inject @AnonymousCowardName
+  private String anonymousCowardName;
 
   @Override
   public void doFilter(CommentAddedEvent hook) throws IOException {
@@ -60,8 +65,16 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
     return getChangeIdUrl(change) + " | ";
   }
 
+  private String formatAccountAttribute(AccountAttribute who) {
+    if (who != null && !Strings.isNullOrEmpty(who.name)) {
+      return who.name;
+    }
+    return anonymousCowardName;
+  }
+
   private String getComment(ChangeAttribute change, ChangeEvent hook, AccountAttribute who, String what) {
-    return getCommentPrefix(change) + "change " + what + " [by " + who + "]";
+    return getCommentPrefix(change) + "change " + what + " [by "
+        + formatAccountAttribute(who) + "]";
   }
 
   private String getComment(ChangeRestoredEvent hook) {
@@ -96,7 +109,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
     }
 
     comment.append(commentAdded.comment + " ");
-    comment.append("[by " + commentAdded.author + "]");
+    comment.append("[by " + formatAccountAttribute(commentAdded.author) + "]");
     return comment.toString();
   }
 
