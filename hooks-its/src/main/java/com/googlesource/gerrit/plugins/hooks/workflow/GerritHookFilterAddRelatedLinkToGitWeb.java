@@ -57,6 +57,9 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
     log.debug("Git commit " + hook.refUpdate.newRev + ": " + gitComment);
 
     URL gitUrl = getGitUrl(hook);
+    if (gitUrl == null) {
+      return;
+    }
     String[] issues = getIssueIds(gitComment);
 
     for (String issue : issues) {
@@ -68,15 +71,30 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
   }
 
 
+  /**
+   * generates the URL to GitWeb for the event
+   *
+   * @return if null is returned, the configuration does not allow to come up
+   * with a GitWeb url. In that case, a message describing the problematic
+   * setting has been logged.
+   */
   private URL getGitUrl(RefUpdatedEvent hook) throws MalformedURLException,
       UnsupportedEncodingException {
     String gerritCanonicalUrl =
         gerritConfig.getString("gerrit", null, "canonicalWebUrl");
+    if (gerritCanonicalUrl == null) {
+      log.info( "No canonicalWebUrl configured. Skipping GitWeb link generation");
+      return null;
+    }
     if(!gerritCanonicalUrl.endsWith("/")) {
       gerritCanonicalUrl += "/";
     }
 
     String gitWebUrl = gitWebConfig.getUrl();
+    if (gitWebUrl == null) {
+      log.info( "No url for GitWeb found. Skipping GitWeb link generation");
+      return null;
+    }
     if (!gitWebUrl.startsWith("http")) {
       gitWebUrl = gerritCanonicalUrl + gitWebUrl;
     }
