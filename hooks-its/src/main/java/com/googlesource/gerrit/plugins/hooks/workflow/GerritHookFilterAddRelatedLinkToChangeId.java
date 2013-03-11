@@ -17,9 +17,11 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 import java.io.IOException;
 import java.net.URL;
 
+import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
@@ -33,8 +35,16 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
   @Inject
   private ItsFacade its;
 
+  @Inject
+  @GerritServerConfig
+  private Config gerritConfig;
+
   @Override
   public void doFilter(PatchSetCreatedEvent patchsetCreated) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnPatchSetCreated",
+        true))) {
+      return;
+    }
 
     String gitComment =
         getComment(patchsetCreated.change.project,

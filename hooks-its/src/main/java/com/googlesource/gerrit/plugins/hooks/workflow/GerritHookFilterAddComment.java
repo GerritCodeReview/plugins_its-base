@@ -16,8 +16,11 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
 
+import org.eclipse.jgit.lib.Config;
+
 import com.google.common.base.Strings;
 import com.google.gerrit.server.config.AnonymousCowardName;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.AccountAttribute;
 import com.google.gerrit.server.events.ApprovalAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
@@ -37,26 +40,48 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
   @Inject @AnonymousCowardName
   private String anonymousCowardName;
 
+  @Inject
+  @GerritServerConfig
+  private Config gerritConfig;
+
   @Override
   public void doFilter(CommentAddedEvent hook) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnCommentAdded",
+        true))) {
+      return;
+    }
+
     String comment = getComment(hook);
     addComment(hook.change, comment);
   }
 
   @Override
   public void doFilter(ChangeMergedEvent hook) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeMerged",
+        true))) {
+      return;
+    }
+
     String comment = getComment(hook);
     addComment(hook.change, comment);
   }
 
   @Override
   public void doFilter(ChangeAbandonedEvent hook) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeAbandoned",
+        true))) {
+      return;
+    }
     String comment = getComment(hook);
     addComment(hook.change, comment);
   }
 
   @Override
   public void doFilter(ChangeRestoredEvent hook) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeRestored",
+        true))) {
+      return;
+    }
     String comment = getComment(hook);
     addComment(hook.change, comment);
   }

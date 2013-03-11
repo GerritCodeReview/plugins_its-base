@@ -52,6 +52,10 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
 
   @Override
   public void doFilter(RefUpdatedEvent hook) throws IOException {
+    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnRefUpdatedGitWeb",
+        true))) {
+      return;
+    }
 
     String gitComment = getComment(hook.refUpdate.project,  hook.refUpdate.newRev);
     log.debug("Git commit " + hook.refUpdate.newRev + ": " + gitComment);
