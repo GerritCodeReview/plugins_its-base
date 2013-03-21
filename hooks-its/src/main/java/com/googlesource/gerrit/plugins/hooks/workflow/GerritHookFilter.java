@@ -172,7 +172,7 @@ public class GerritHookFilter implements ChangeListener {
       } else if (event instanceof RefUpdatedEvent) {
         doFilter((RefUpdatedEvent) event);
       } else {
-        log.info("Event " + event + " not recognised and ignored");
+        log.debug("Event " + event + " not recognised and ignored");
       }
     } catch (Throwable e) {
       log.error("Event " + event + " processing failed", e);
