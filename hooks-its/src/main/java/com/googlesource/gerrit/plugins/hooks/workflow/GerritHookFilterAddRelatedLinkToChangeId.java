@@ -41,20 +41,32 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
 
   @Override
   public void doFilter(PatchSetCreatedEvent patchsetCreated) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnPatchSetCreated",
-        true))) {
-      return;
-    }
+    boolean addPatchSetComment = gerritConfig.getBoolean(its.name(), null,
+        "commentOnPatchSetCreated", true);
 
-    String gitComment =
-        getComment(patchsetCreated.change.project,
-            patchsetCreated.patchSet.revision);
-    String[] issues = getIssueIds(gitComment);
+    boolean addChangeComment = "1".equals(patchsetCreated.patchSet.number) &&
+        gerritConfig.getBoolean(its.name(), null, "commentOnChangeCreated",
+            false);
 
-    for (String issue : issues) {
-      its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
-          "Gerrit Patch Set " + patchsetCreated.change.id + "/"
-              + patchsetCreated.patchSet.number);
+    if (addPatchSetComment || addChangeComment) {
+      String gitComment =
+          getComment(patchsetCreated.change.project,
+              patchsetCreated.patchSet.revision);
+
+      String[] issues = getIssueIds(gitComment);
+
+      for (String issue : issues) {
+        if (addChangeComment) {
+          its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
+              "Gerrit Change " + patchsetCreated.change.id);
+        }
+
+        if (addPatchSetComment) {
+          its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
+              "Gerrit Patch-Set " + patchsetCreated.change.id + "/"
+                  + patchsetCreated.patchSet.number);
+        }
+      }
     }
   }
 }
