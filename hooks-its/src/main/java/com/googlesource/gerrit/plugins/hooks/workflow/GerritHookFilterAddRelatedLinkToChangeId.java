@@ -53,7 +53,7 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
 
     for (String issue : issues) {
       its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
-          "Gerrit Patch-Set: " + patchsetCreated.change.id + "/"
+          "Gerrit Patch-Set " + patchsetCreated.change.id + "/"
               + patchsetCreated.patchSet.number);
     }
   }
