@@ -27,6 +27,11 @@ issue.
 +
 Default is `true`.
 
+[[itsName.commentOnChangeCreated]]itsName.commentOnChangeCreated::
++
+If true, creating a change adds an ITS comment to the change's associated issue.
++
+Default is `false`.
 
 [[itsName.commentOnChangeMerged]]itsName.commentOnChangeMerged::
 +
