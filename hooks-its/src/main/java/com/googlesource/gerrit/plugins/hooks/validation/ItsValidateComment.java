@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +35,7 @@ import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 
 public class ItsValidateComment implements CommitValidationListener {
 
@@ -48,6 +48,9 @@ public class ItsValidateComment implements CommitValidationListener {
   @Inject
   @GerritServerConfig
   private Config gerritConfig;
+
+  @Inject @ItsName
+  private String itsName;
 
   public List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
 
@@ -133,14 +136,11 @@ public class ItsValidateComment implements CommitValidationListener {
   private HashMap<Pattern, ItsAssociationPolicy> getCommentRegexMap() {
     HashMap<Pattern, ItsAssociationPolicy> regexMap = new HashMap<Pattern, ItsAssociationPolicy>();
 
-    Set<String> linkSubsections = gerritConfig.getSubsections("commentLink");
-    for (String string : linkSubsections) {
-      String match = gerritConfig.getString("commentLink", string, "match");
-      if (match != null) {
-        regexMap
-            .put(Pattern.compile(match), gerritConfig.getEnum("commentLink",
-                string, "association", ItsAssociationPolicy.OPTIONAL));
-      }
+    String match = gerritConfig.getString("commentLink", itsName, "match");
+    if (match != null) {
+      regexMap
+          .put(Pattern.compile(match), gerritConfig.getEnum("commentLink",
+              itsName, "association", ItsAssociationPolicy.OPTIONAL));
     }
 
     return regexMap;
