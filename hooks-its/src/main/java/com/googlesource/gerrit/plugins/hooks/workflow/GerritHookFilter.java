@@ -91,40 +91,6 @@ public class GerritHookFilter implements ChangeListener {
     return issues.toArray(new String[issues.size()]);
   }
 
-  protected Long[] getWorkItems(String gitComment) {
-    List<Pattern> commentRegexList = getCommentRegexList();
-    if (commentRegexList == null) return new Long[] {};
-
-    log.debug("Matching '" + gitComment + "' against " + commentRegexList);
-
-    ArrayList<Long> workItems = new ArrayList<Long>();
-
-    for (Pattern pattern : commentRegexList) {
-      Matcher matcher = pattern.matcher(gitComment);
-
-      while (matcher.find()) {
-        addMatchedWorkItems(workItems, matcher);
-      }
-    }
-
-    return workItems.toArray(new Long[workItems.size()]);
-  }
-
-  private void addMatchedWorkItems(ArrayList<Long> workItems, Matcher matcher) {
-    int groupCount = matcher.groupCount();
-    for (int i = 1; i <= groupCount; i++) {
-
-      String group = matcher.group(i);
-      try {
-        Long workItem = new Long(group);
-        workItems.add(workItem);
-      } catch (NumberFormatException e) {
-        log.debug("matched string '" + group
-            + "' is not a work item > skipping");
-      }
-    }
-  }
-
   private List<Pattern> getCommentRegexList() {
     ArrayList<Pattern> regexList = new ArrayList<Pattern>();
 
