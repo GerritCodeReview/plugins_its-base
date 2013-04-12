@@ -122,7 +122,7 @@ public class ItsValidateComment implements CommitValidationListener {
               + comment + " but not found on ITS");
         } else {
           exist = true;
-          log.warn("Workitem " + issueId + " found");
+          log.debug("Workitem " + issueId + " found");
         }
       } catch (IOException ex) {
         log.warn("Unexpected error accessint ITS", ex);
