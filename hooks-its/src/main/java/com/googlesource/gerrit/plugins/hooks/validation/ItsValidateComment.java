@@ -53,7 +53,7 @@ public class ItsValidateComment implements CommitValidationListener {
   @Inject
   private IssueExtractor issueExtractor;
 
-  public List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
+  private List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = getItsAssociationPolicy();
 
