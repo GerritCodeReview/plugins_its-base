@@ -1,7 +1,6 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,20 +31,18 @@ public class IssueExtractor {
    * @return array of {@link Strings}. Each String being a found issue id.
    */
   public String[] getIssueIds(String haystack) {
-    List<Pattern> commentRegexList = getCommentRegexList();
-    if (commentRegexList == null) return new String[] {};
+    Pattern pattern = getPattern();
+    if (pattern == null) return new String[] {};
 
-    log.debug("Matching '" + haystack + "' against " + commentRegexList);
+    log.debug("Matching '" + haystack + "' against " + pattern.pattern());
 
     ArrayList<String> issues = new ArrayList<String>();
-    for (Pattern pattern : commentRegexList) {
-      Matcher matcher = pattern.matcher(haystack);
+    Matcher matcher = pattern.matcher(haystack);
 
-      while (matcher.find()) {
-        String issueId = extractMatchedWorkItems(matcher);
-        if (issueId != null) {
-          issues.add(issueId);
-        }
+    while (matcher.find()) {
+      String issueId = extractMatchedWorkItems(matcher);
+      if (issueId != null) {
+        issues.add(issueId);
       }
     }
 
@@ -72,16 +69,5 @@ public class IssueExtractor {
       ret = Pattern.compile(match);
     }
     return ret;
-  }
-
-  private List<Pattern> getCommentRegexList() {
-    ArrayList<Pattern> regexList = new ArrayList<Pattern>();
-
-    Pattern pattern = getPattern();
-    if (pattern != null) {
-      regexList.add(pattern);
-    }
-
-    return regexList;
   }
 }
