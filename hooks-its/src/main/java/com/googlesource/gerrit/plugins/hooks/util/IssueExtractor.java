@@ -40,21 +40,11 @@ public class IssueExtractor {
     Matcher matcher = pattern.matcher(haystack);
 
     while (matcher.find()) {
-      String issueId = extractMatchedWorkItems(matcher);
-      if (issueId != null) {
-        issues.add(issueId);
-      }
+      int groupIdx = Math.min(matcher.groupCount(), 1);
+      issues.add(matcher.group(groupIdx));
     }
 
     return issues.toArray(new String[issues.size()]);
-  }
-
-  public String extractMatchedWorkItems(Matcher matcher) {
-    int groupCount = matcher.groupCount();
-    if (groupCount >= 1)
-      return matcher.group(1);
-    else
-      return null;
   }
 
   /**
