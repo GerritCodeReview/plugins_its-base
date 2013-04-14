@@ -36,6 +36,7 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
+import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class ItsValidateComment implements CommitValidationListener {
 
@@ -51,6 +52,9 @@ public class ItsValidateComment implements CommitValidationListener {
 
   @Inject @ItsName
   private String itsName;
+
+  @Inject
+  private IssueExtractor issueExtractor;
 
   public List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
 
@@ -136,10 +140,10 @@ public class ItsValidateComment implements CommitValidationListener {
   private HashMap<Pattern, ItsAssociationPolicy> getCommentRegexMap() {
     HashMap<Pattern, ItsAssociationPolicy> regexMap = new HashMap<Pattern, ItsAssociationPolicy>();
 
-    String match = gerritConfig.getString("commentLink", itsName, "match");
-    if (match != null) {
+    Pattern pattern = issueExtractor.getPattern();
+    if (pattern != null) {
       regexMap
-          .put(Pattern.compile(match), gerritConfig.getEnum("commentLink",
+          .put(pattern, gerritConfig.getEnum("commentLink",
               itsName, "association", ItsAssociationPolicy.OPTIONAL));
     }
 

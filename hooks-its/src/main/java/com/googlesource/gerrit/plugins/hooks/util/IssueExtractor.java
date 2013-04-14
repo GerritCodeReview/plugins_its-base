@@ -53,12 +53,26 @@ public class IssueExtractor {
     return issues.toArray(new String[issues.size()]);
   }
 
+  /**
+   * Gets the regular expression used to identify issue ids.
+   * @return the regular expression, or {@code null}, if there is no pattern
+   *    to match issue ids.
+   */
+  public Pattern getPattern() {
+    Pattern ret = null;
+    String match = gerritConfig.getString("commentLink", itsName, "match");
+    if (match != null) {
+      ret = Pattern.compile(match);
+    }
+    return ret;
+  }
+
   private List<Pattern> getCommentRegexList() {
     ArrayList<Pattern> regexList = new ArrayList<Pattern>();
 
-    String match = gerritConfig.getString("commentLink", itsName, "match");
-    if (match != null) {
-      regexList.add(Pattern.compile(match));
+    Pattern pattern = getPattern();
+    if (pattern != null) {
+      regexList.add(pattern);
     }
 
     return regexList;
