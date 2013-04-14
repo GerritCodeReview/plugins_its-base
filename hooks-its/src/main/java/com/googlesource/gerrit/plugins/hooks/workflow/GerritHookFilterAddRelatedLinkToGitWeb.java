@@ -33,6 +33,7 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
 
@@ -49,6 +50,8 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
   @Inject
   private GitWebConfig gitWebConfig;
 
+  @Inject
+  private IssueExtractor issueExtractor;
 
   @Override
   public void doFilter(RefUpdatedEvent hook) throws IOException {
@@ -64,7 +67,7 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
     if (gitUrl == null) {
       return;
     }
-    String[] issues = getIssueIds(gitComment);
+    String[] issues = issueExtractor.getIssueIds(gitComment);
 
     for (String issue : issues) {
       log.debug("Adding GitWeb URL " + gitUrl + " to issue " + issue);

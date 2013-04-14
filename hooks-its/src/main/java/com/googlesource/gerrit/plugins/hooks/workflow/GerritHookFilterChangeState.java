@@ -39,6 +39,7 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.InvalidTransitionException;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class GerritHookFilterChangeState extends GerritHookFilter {
   private static final Logger log = LoggerFactory
@@ -50,6 +51,9 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
   @Inject
   @SitePath
   private File sitePath;
+
+  @Inject
+  private IssueExtractor issueExtractor;
 
   @Override
   public void doFilter(PatchSetCreatedEvent hook) throws IOException {
@@ -138,7 +142,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
     }
 
     String gitComment = change.subject;
-    String[] issues = getIssueIds(gitComment);
+    String[] issues = issueExtractor.getIssueIds(gitComment);
 
     for (String issue : issues) {
       its.performAction(issue, transition.getAction());

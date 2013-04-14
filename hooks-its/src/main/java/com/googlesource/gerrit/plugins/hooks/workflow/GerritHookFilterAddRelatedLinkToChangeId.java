@@ -25,6 +25,7 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class GerritHookFilterAddRelatedLinkToChangeId extends
     GerritHookFilter  {
@@ -38,6 +39,9 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
   @Inject
   @GerritServerConfig
   private Config gerritConfig;
+
+  @Inject
+  private IssueExtractor issueExtractor;
 
   @Override
   public void doFilter(PatchSetCreatedEvent patchsetCreated) throws IOException {
@@ -53,7 +57,7 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
           getComment(patchsetCreated.change.project,
               patchsetCreated.patchSet.revision);
 
-      String[] issues = getIssueIds(gitComment);
+      String[] issues = issueExtractor.getIssueIds(gitComment);
 
       for (String issue : issues) {
         if (addChangeComment) {

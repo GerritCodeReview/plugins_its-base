@@ -31,6 +31,7 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class GerritHookFilterAddComment extends GerritHookFilter  {
 
@@ -43,6 +44,9 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
   @Inject
   @GerritServerConfig
   private Config gerritConfig;
+
+  @Inject
+  private IssueExtractor issueExtractor;
 
   @Override
   public void doFilter(CommentAddedEvent hook) throws IOException {
@@ -162,7 +166,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
   private void addComment(ChangeAttribute change, String comment)
       throws IOException {
     String gitComment = change.subject;;
-    String[] issues = getIssueIds(gitComment);
+    String[] issues = issueExtractor.getIssueIds(gitComment);
 
     for (String issue : issues) {
       its.addComment(issue, comment);
