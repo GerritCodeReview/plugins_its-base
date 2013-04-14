@@ -29,9 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.server.config.SitePath;
-import com.google.gerrit.server.events.ApprovalAttribute;
+import com.google.gerrit.server.data.ApprovalAttribute;
+import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
-import com.google.gerrit.server.events.ChangeAttribute;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
