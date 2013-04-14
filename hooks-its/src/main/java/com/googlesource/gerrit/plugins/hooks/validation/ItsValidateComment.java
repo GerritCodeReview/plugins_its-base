@@ -16,9 +16,7 @@ package com.googlesource.gerrit.plugins.hooks.validation;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,29 +55,23 @@ public class ItsValidateComment implements CommitValidationListener {
   private IssueExtractor issueExtractor;
 
   public List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
-
-    HashMap<Pattern, ItsAssociationPolicy> regexes = getCommentRegexMap();
-    if (regexes.size() == 0) {
+    Pattern pattern = issueExtractor.getPattern();
+    if (pattern == null) {
       return Collections.emptyList();
     }
 
     String message = commit.getFullMessage();
-    log.debug("Searching comment " + message.trim() + " for patterns "
-        + regexes);
+    log.debug("Searching comment " + message.trim() + " for pattern "
+        + pattern.pattern());
 
     String issueId = null;
     ItsAssociationPolicy associationPolicy = ItsAssociationPolicy.OPTIONAL;
-    Pattern pattern = null;
-    for (Entry<Pattern, ItsAssociationPolicy> entry : regexes.entrySet()) {
-      pattern = entry.getKey();
-      Matcher matcher = pattern.matcher(message);
-      associationPolicy = entry.getValue();
-      if (matcher.find()) {
-        issueId = issueExtractor.extractMatchedWorkItems(matcher);
-        log.debug("Pattern matched on comment '{}' with issue id '{}'",
-            message.trim(), issueId);
-        break;
-      }
+    Matcher matcher = pattern.matcher(message);
+    associationPolicy = getItsAssociationPolicy();
+    if (matcher.find()) {
+      issueId = issueExtractor.extractMatchedWorkItems(matcher);
+      log.debug("Pattern matched on comment '{}' with issue id '{}'",
+          message.trim(), issueId);
     }
 
     String validationMessage = null;
@@ -137,17 +129,9 @@ public class ItsValidateComment implements CommitValidationListener {
     return exist;
   }
 
-  private HashMap<Pattern, ItsAssociationPolicy> getCommentRegexMap() {
-    HashMap<Pattern, ItsAssociationPolicy> regexMap = new HashMap<Pattern, ItsAssociationPolicy>();
-
-    Pattern pattern = issueExtractor.getPattern();
-    if (pattern != null) {
-      regexMap
-          .put(pattern, gerritConfig.getEnum("commentLink",
-              itsName, "association", ItsAssociationPolicy.OPTIONAL));
-    }
-
-    return regexMap;
+  private ItsAssociationPolicy getItsAssociationPolicy() {
+    return gerritConfig.getEnum("commentLink", itsName, "association",
+        ItsAssociationPolicy.OPTIONAL);
   }
 
   @Override
