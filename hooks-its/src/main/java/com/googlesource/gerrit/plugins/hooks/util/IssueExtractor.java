@@ -1,9 +1,10 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Inject;
 
@@ -36,7 +37,7 @@ public class IssueExtractor {
 
     log.debug("Matching '" + haystack + "' against " + pattern.pattern());
 
-    ArrayList<String> issues = new ArrayList<String>();
+    Set<String> issues = Sets.newHashSet();
     Matcher matcher = pattern.matcher(haystack);
 
     while (matcher.find()) {
