@@ -75,7 +75,7 @@ public class ItsValidateComment implements CommitValidationListener {
       Matcher matcher = pattern.matcher(message);
       associationPolicy = entry.getValue();
       if (matcher.find()) {
-        issueId = extractMatchedWorkItems(matcher);
+        issueId = issueExtractor.extractMatchedWorkItems(matcher);
         log.debug("Pattern matched on comment '{}' with issue id '{}'",
             message.trim(), issueId);
         break;
@@ -149,15 +149,6 @@ public class ItsValidateComment implements CommitValidationListener {
 
     return regexMap;
   }
-
-  private String extractMatchedWorkItems(Matcher matcher) {
-    int groupCount = matcher.groupCount();
-    if (groupCount >= 1)
-      return matcher.group(1);
-    else
-      return null;
-  }
-
 
   @Override
   public List<CommitValidationMessage> onCommitReceived(
