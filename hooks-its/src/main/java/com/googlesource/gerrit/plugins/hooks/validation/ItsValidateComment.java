@@ -17,8 +17,6 @@ package com.googlesource.gerrit.plugins.hooks.validation;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -26,6 +24,7 @@ import org.eclipse.jgit.transport.ReceiveCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
@@ -55,83 +54,96 @@ public class ItsValidateComment implements CommitValidationListener {
   private IssueExtractor issueExtractor;
 
   public List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
-    Pattern pattern = issueExtractor.getPattern();
-    if (pattern == null) {
-      return Collections.emptyList();
-    }
-
-    String message = commit.getFullMessage();
-    log.debug("Searching comment " + message.trim() + " for pattern "
-        + pattern.pattern());
-
-    String issueId = null;
-    ItsAssociationPolicy associationPolicy = ItsAssociationPolicy.OPTIONAL;
-    Matcher matcher = pattern.matcher(message);
-    associationPolicy = getItsAssociationPolicy();
-    if (matcher.find()) {
-      issueId = issueExtractor.extractMatchedWorkItems(matcher);
-      log.debug("Pattern matched on comment '{}' with issue id '{}'",
-          message.trim(), issueId);
-    }
-
-    String validationMessage = null;
-    if (pattern != null && issueId == null) {
-      validationMessage =
-          "Missing issue-id in commit message\n"
-              + "Commit "
-              + commit.getId().getName()
-              + " not associated to any issue\n"
-              + "\n"
-              + "Hint: insert one or more issue-id anywhere in the commit message.\n"
-              + "      Issue-ids are strings matching " + pattern.pattern() + "\n"
-              + "      and are pointing to existing tickets on "
-              + client.name() + " Issue-Tracker";
-    } else if (pattern != null && !isWorkitemPresent(issueId, message)) {
-      validationMessage =
-          "Issue " + issueId + " not found or visible in " + client.name()
-              + " Issue-Tracker";
-    } else {
-      return Collections.emptyList();
-    }
+    List<CommitValidationMessage> ret = Lists.newArrayList();
+    ItsAssociationPolicy associationPolicy = getItsAssociationPolicy();
 
     switch (associationPolicy) {
       case MANDATORY:
-        throw new CommitValidationException(validationMessage.split("\n")[0],
-            Collections.singletonList(new CommitValidationMessage("\n"
-                + validationMessage + "\n", false)));
-
       case SUGGESTED:
-        return Collections.singletonList(new CommitValidationMessage("\n"
-            + validationMessage + "\n", false));
+        String commitMessage = commit.getFullMessage();
+        String[] issueIds = issueExtractor.getIssueIds(commitMessage);
+        String synopsis = null;
+        String details = null;
+        if (issueIds.length > 0) {
+          List<String> nonExistingIssueIds = Lists.newArrayList();
+          for (String issueId : issueIds) {
+            boolean exists = false;
+            try {
+              exists = client.exists(issueId);
+            } catch (IOException e) {
+              synopsis = "Failed to check whether or not issue " + issueId
+                  + " exists";
+              log.warn(synopsis, e);
+              details = e.toString();
+              ret.add(commitValidationFailure(synopsis, details));
+            }
+            if (!exists) {
+              nonExistingIssueIds.add(issueId);
+            }
+          }
 
-      default:
-        return Collections.emptyList();
-    }
-  }
+          if (!nonExistingIssueIds.isEmpty()) {
+            synopsis = "Non-existing issue ids referenced in commit message";
 
-  private boolean isWorkitemPresent(String issueId, String comment) {
-    boolean exist = false;
-    if (issueId != null) {
-      try {
-        if (!client.exists(issueId)) {
-          log.warn("Workitem " + issueId + " declared in the comment "
-              + comment + " but not found on ITS");
+            StringBuilder sb = new StringBuilder();
+            sb.append("The issue-ids\n");
+            for (String issueId : nonExistingIssueIds) {
+              sb.append("    * ");
+              sb.append(issueId);
+              sb.append("\n");
+            }
+            sb.append("are referenced in the commit message of\n");
+            sb.append(commit.getId().getName());
+            sb.append(",\n");
+            sb.append("but do not exist in ");
+            sb.append(client.name());
+            sb.append(" Issue-Tracker");
+            details = sb.toString();
+
+            ret.add(commitValidationFailure(synopsis, details));
+          }
         } else {
-          exist = true;
-          log.debug("Workitem " + issueId + " found");
+          synopsis = "Missing issue-id in commit message";
+
+          StringBuilder sb = new StringBuilder();
+          sb.append("Commit ");
+          sb.append(commit.getId().getName());
+          sb.append(" not associated to any issue\n");
+          sb.append("\n");
+          sb.append("Hint: insert one or more issue-id anywhere in the ");
+          sb.append("commit message.\n");
+          sb.append("      Issue-ids are strings matching ");
+          sb.append(issueExtractor.getPattern().pattern());
+          sb.append("\n");
+          sb.append("      and are pointing to existing tickets on ");
+          sb.append(client.name());
+          sb.append(" Issue-Tracker");
+          details = sb.toString();
+
+          ret.add(commitValidationFailure(synopsis, details));
         }
-      } catch (IOException ex) {
-        log.warn("Unexpected error accessint ITS", ex);
-      }
-    } else {
-      log.debug("Rejecting commit: no pattern matched on comment " + comment);
+        break;
+      case OPTIONAL:
+      default:
+        break;
     }
-    return exist;
+    return ret;
   }
 
   private ItsAssociationPolicy getItsAssociationPolicy() {
     return gerritConfig.getEnum("commentLink", itsName, "association",
         ItsAssociationPolicy.OPTIONAL);
+  }
+
+  private CommitValidationMessage commitValidationFailure(
+      String synopsis, String details) throws CommitValidationException {
+    CommitValidationMessage ret =
+        new CommitValidationMessage(synopsis + "\n" + details, false);
+    if (getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
+      throw new CommitValidationException(synopsis,
+          Collections.singletonList(ret));
+    }
+    return ret;
   }
 
   @Override
