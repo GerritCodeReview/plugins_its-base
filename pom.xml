@@ -26,6 +26,12 @@ limitations under the License.
 
   <name>Gerrit Code Review - Issue tracker support</name>
   
+  <properties>
+    <easymockVersion>3.0</easymockVersion>
+    <powermockVersion>1.5</powermockVersion>
+    <slf4jVersion>1.6.2</slf4jVersion>
+  </properties>
+
   <modules>
     <module>hooks-its</module>
   </modules>
