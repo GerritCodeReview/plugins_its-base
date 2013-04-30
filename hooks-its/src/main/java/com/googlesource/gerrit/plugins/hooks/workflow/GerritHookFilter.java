@@ -33,6 +33,7 @@ import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.git.GitRepositoryManager;
+import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
 public class GerritHookFilter implements ChangeListener {
@@ -56,7 +57,8 @@ public class GerritHookFilter implements ChangeListener {
     }
   }
 
-  public void doFilter(PatchSetCreatedEvent hook) throws IOException {
+  public void doFilter(PatchSetCreatedEvent hook) throws IOException,
+      OrmException {
   }
 
   public void doFilter(CommentAddedEvent hook) throws IOException {
