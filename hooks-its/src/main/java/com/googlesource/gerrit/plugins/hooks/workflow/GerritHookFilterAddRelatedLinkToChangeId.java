@@ -16,13 +16,21 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gwtorm.server.OrmException;
+import com.google.gwtorm.server.ResultSet;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
@@ -43,8 +51,52 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
   @Inject
   private IssueExtractor issueExtractor;
 
+  @Inject
+  private ReviewDb db;
+
+  /**
+   * Filter issues to those that occur for the first time in a change
+   *
+   * @param issues The issues to filter.
+   * @param patchSet Filter for this patch set.
+   * @return the issues that occur for the first time.
+   * @throws IOException
+   * @throws OrmException
+   */
+  private List<String> filterForFirstLinkedIssues(String[] issues,
+      PatchSetCreatedEvent patchSet) throws IOException, OrmException {
+    List<String> ret = Lists.newArrayList(issues);
+    int patchSetNumberCurrent = Integer.parseInt(patchSet.patchSet.number);
+
+    if (patchSetNumberCurrent > 1) {
+      String project = patchSet.change.project;
+      int changeNumber = Integer.parseInt(patchSet.change.number);
+      Change.Id changeId = new Change.Id(changeNumber);
+
+      // It would be nice to get patch sets directly via
+      //   patchSetCreated.change.patchSets
+      // but it turns out that it's null for our events. So we fetch the patch
+      // sets from the db instead.
+      ResultSet<PatchSet> patchSets = db.patchSets().byChange(changeId);
+      Iterator<PatchSet> patchSetIter = patchSets.iterator();
+
+      while (!ret.isEmpty() && patchSetIter.hasNext()) {
+        PatchSet previousPatchSet = patchSetIter.next();
+        if (previousPatchSet.getPatchSetId() < patchSetNumberCurrent) {
+          String commitMessage = getComment(project,
+              previousPatchSet.getRevision().get());
+          for (String issue : issueExtractor.getIssueIds(commitMessage)) {
+            ret.remove(issue);
+          }
+        }
+      }
+    }
+    return ret;
+  }
+
   @Override
-  public void doFilter(PatchSetCreatedEvent patchsetCreated) throws IOException {
+  public void doFilter(PatchSetCreatedEvent patchsetCreated)
+      throws IOException, OrmException {
     boolean addPatchSetComment = gerritConfig.getBoolean(its.name(), null,
         "commentOnPatchSetCreated", true);
 
@@ -52,12 +104,20 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
         gerritConfig.getBoolean(its.name(), null, "commentOnChangeCreated",
             false);
 
-    if (addPatchSetComment || addChangeComment) {
+    boolean addFirstLinkedPatchSetComment = gerritConfig.getBoolean(its.name(),
+        null, "commentOnFirstLinkedPatchSetCreated", false);
+
+    if (addPatchSetComment || addFirstLinkedPatchSetComment || addChangeComment) {
       String gitComment =
           getComment(patchsetCreated.change.project,
               patchsetCreated.patchSet.revision);
 
       String[] issues = issueExtractor.getIssueIds(gitComment);
+
+      List<String> firstLinkedIssues = null;
+      if (addFirstLinkedPatchSetComment) {
+        firstLinkedIssues = filterForFirstLinkedIssues(issues, patchsetCreated);
+      }
 
       for (String issue : issues) {
         if (addChangeComment) {
@@ -66,6 +126,12 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
         }
 
         if (addPatchSetComment) {
+          its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
+              "Gerrit Patch-Set " + patchsetCreated.change.id + "/"
+                  + patchsetCreated.patchSet.number);
+        }
+
+        if (addFirstLinkedPatchSetComment && firstLinkedIssues.contains(issue)) {
           its.addRelatedLink(issue, new URL(patchsetCreated.change.url),
               "Gerrit Patch-Set " + patchsetCreated.change.id + "/"
                   + patchsetCreated.patchSet.number);

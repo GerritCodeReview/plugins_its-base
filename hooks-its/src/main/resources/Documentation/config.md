@@ -54,6 +54,14 @@ comment to the change's associated issue.
 +
 Default is `true`.
 
+[[itsName.commentOnFirstLinkedPatchSetCreated]]itsName.commentOnFirstLinkedPatchSetCreated::
++
+If true, creating a patch set for a change adds an ITS comment to the change's
+associated issue, if the issue has not been mentioned in previous patch sets of
+the same change.
++
+Default is `false`.
+
 [[itsName.commentOnPatchSetCreated]]itsName.commentOnPatchSetCreated::
 +
 If true, creating a patch set for a change adds an ITS comment to the change's
