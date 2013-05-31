@@ -24,6 +24,7 @@ import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddComment
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToChangeId;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToGitWeb;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterChangeState;
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
 
 public class ItsHookModule extends AbstractModule {
 
@@ -46,5 +47,7 @@ public class ItsHookModule extends AbstractModule {
         GerritHookFilterAddRelatedLinkToGitWeb.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(
         ItsValidateComment.class);
+    DynamicSet.bind(binder(), ChangeListener.class).to(
+        ActionController.class);
   }
 }
