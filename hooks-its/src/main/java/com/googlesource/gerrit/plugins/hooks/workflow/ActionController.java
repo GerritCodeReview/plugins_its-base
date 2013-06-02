@@ -14,19 +14,48 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
+import java.util.Collection;
+import java.util.Set;
+
 import com.google.gerrit.common.ChangeListener;
 import com.google.gerrit.server.events.ChangeEvent;
+import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
 
+/**
+ * Controller that takes actions according to {@code ChangeEvents@}.
+ *
+ * The taken actions are typically Its related (e.g.: adding an Its comment, or
+ * changing an issue's status).
+ */
 public class ActionController implements ChangeListener {
-  public ActionController() {
-    // TODO construct rule base
+  private final PropertyExtractor propertyExtractor;
+  private final RuleBase ruleBase;
+  private final ActionExecutor actionExecutor;
+
+  @Inject
+  public ActionController(PropertyExtractor propertyExtractor,
+      RuleBase ruleBase, ActionExecutor actionExecutor) {
+    this.propertyExtractor = propertyExtractor;
+    this.ruleBase = ruleBase;
+    this.actionExecutor = actionExecutor;
   }
 
   @Override
   public void onChangeEvent(ChangeEvent event) {
-    // TODO extract conditions from event
-    // TODO find rules in rule base that match the extracted conditions
-    // TODO fire actions for matched rules
+    Set<Set<Property>> propertiesCollections =
+        propertyExtractor.extractFrom(event);
+    for (Set<Property> properties : propertiesCollections) {
+      Collection<ActionRequest> actions =
+          ruleBase.actionRequestsFor(properties);
+      if (!actions.isEmpty()) {
+        for (Property property : properties) {
+          if ("issue".equals(property.getKey())) {
+            String issue = property.getValue();
+            actionExecutor.execute(issue, actions);
+          }
+        }
+      }
+    }
   }
-
 }
