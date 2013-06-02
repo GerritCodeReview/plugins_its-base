@@ -19,11 +19,15 @@ public class IssueExtractor {
   private static final Logger log = LoggerFactory.getLogger(
       IssueExtractor.class);
 
-  @Inject @GerritServerConfig
-  private Config gerritConfig;
+  private final Config gerritConfig;
+  private final String itsName;
 
-  @Inject @ItsName
-  private String itsName;
+  @Inject
+  IssueExtractor(@GerritServerConfig Config gerritConfig,
+      @ItsName String itsName) {
+    this.gerritConfig = gerritConfig;
+    this.itsName = itsName;
+  }
 
   /**
    * Gets issue ids from a string.
