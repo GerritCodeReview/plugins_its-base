@@ -15,12 +15,15 @@
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 
 /**
  * Executes an {@link ActionRequest}
@@ -30,23 +33,38 @@ public class ActionExecutor {
       ActionExecutor.class);
 
   private final ItsFacade its;
+  private final AddStandardComment.Factory addStandardCommentFactory;
 
   @Inject
-  public ActionExecutor(ItsFacade its) {
+  public ActionExecutor(ItsFacade its,
+      AddStandardComment.Factory addStandardCommentFactory) {
     this.its = its;
+    this.addStandardCommentFactory = addStandardCommentFactory;
   }
 
-  public void execute(String issue, ActionRequest actionRequest) {
+  public void execute(String issue, ActionRequest actionRequest,
+      Set<Property> properties) {
     try {
-      its.performAction(issue, actionRequest.getUnparsed());
+      String name = actionRequest.getName();
+      Action action = null;
+      if ("add-standard-comment".equals(name)) {
+        action = addStandardCommentFactory.create();
+      }
+
+      if (action == null) {
+        its.performAction(issue, actionRequest.getUnparsed());
+      } else {
+        action.execute(issue, actionRequest, properties);
+      }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions) {
+  public void execute(String issue, Iterable<ActionRequest> actions,
+      Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-        execute(issue, actionRequest);
+        execute(issue, actionRequest, properties);
     }
   }
 }

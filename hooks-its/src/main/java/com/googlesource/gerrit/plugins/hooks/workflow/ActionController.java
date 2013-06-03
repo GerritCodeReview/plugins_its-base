@@ -52,7 +52,7 @@ public class ActionController implements ChangeListener {
         for (Property property : properties) {
           if ("issue".equals(property.getKey())) {
             String issue = property.getValue();
-            actionExecutor.execute(issue, actions);
+            actionExecutor.execute(issue, actions, properties);
           }
         }
       }

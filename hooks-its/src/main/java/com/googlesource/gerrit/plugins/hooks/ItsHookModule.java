@@ -29,6 +29,7 @@ import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterChangeStat
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
 import com.googlesource.gerrit.plugins.hooks.workflow.Rule;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 
 public class ItsHookModule extends FactoryModule {
 
@@ -57,5 +58,6 @@ public class ItsHookModule extends FactoryModule {
     factory(Property.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
+    factory(AddStandardComment.Factory.class);
   }
 }
