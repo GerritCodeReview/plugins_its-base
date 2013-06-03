@@ -16,15 +16,10 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
 
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.common.ChangeListener;
-import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
@@ -35,6 +30,7 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.hooks.util.CommitMessageFetcher;
 
 public class GerritHookFilter implements ChangeListener {
   private static final Logger log = LoggerFactory.getLogger(GerritHookFilter.class);
@@ -42,19 +38,12 @@ public class GerritHookFilter implements ChangeListener {
   @Inject
   private GitRepositoryManager repoManager;
 
+  @Inject
+  private CommitMessageFetcher commitMessageFetcher;
+
   public String getComment(String projectName, String commitId)
       throws IOException {
-
-    final Repository repo =
-        repoManager.openRepository(new NameKey(projectName));
-    try {
-      RevWalk revWalk = new RevWalk(repo);
-      RevCommit commit = revWalk.parseCommit(ObjectId.fromString(commitId));
-
-      return commit.getFullMessage();
-    } finally {
-      repo.close();
-    }
+    return commitMessageFetcher.fetch(projectName, commitId);
   }
 
   public void doFilter(PatchSetCreatedEvent hook) throws IOException,
