@@ -26,6 +26,7 @@ import com.google.inject.assistedinject.Assisted;
  * changing an issue's status).
  */
 public class ActionRequest {
+  private final String unparsed;
 
   public interface Factory {
     ActionRequest create(String specification);
@@ -33,5 +34,24 @@ public class ActionRequest {
 
   @Inject
   public ActionRequest(@Nullable @Assisted String specification) {
+    if (specification == null) {
+      this.unparsed = "";
+    } else {
+      this.unparsed = specification;
+    }
+  }
+
+  /**
+   * Gets the unparsed specification of this action request.
+   *
+   * @return The unparsed action request.
+   */
+  public String getUnparsed() {
+    return unparsed;
+  }
+
+  @Override
+  public String toString() {
+    return getUnparsed();
   }
 }
