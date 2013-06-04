@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jgit.lib.Config;
 
 import org.slf4j.Logger;
@@ -71,19 +72,24 @@ public class IssueExtractor {
   }
 
   /**
-   * Adds an issue to the map returned by {@link #getIssueIds(String, String)}.
+   * Helper funcion for {@link #getIssueIds(String, String)}.
+   * <p>
+   * Adds a text's issues for a given occurrence to the map returned by
+   * {@link #getIssueIds(String, String)}.
    *
-   * @param issue The issue to add.
-   * @param map The map that the issue should get added to.
-   * @param occurrence The occurrence the issue get added at in {@code map}.
+   * @param text The text to extract issues from.
+   * @param occurrence The occurrence the issues get added at in {@code map}.
+   * @param map The map that the issues should get added to.
    */
-  private void addIssueOccurrence(String issue, Map<String,Set<String>> map, String occurrence) {
-    Set<String> occurrences = map.get(issue);
-    if (occurrences == null) {
-      occurrences = Sets.newLinkedHashSet();
-      map.put(issue, occurrences);
+  private void addIssuesOccurrence(String text, String occurrence, Map<String,Set<String>> map) {
+    for (String issue : getIssueIds(text)) {
+      Set<String> occurrences = map.get(issue);
+      if (occurrences == null) {
+        occurrences = Sets.newLinkedHashSet();
+        map.put(issue, occurrences);
+      }
+      occurrences.add(occurrence);
     }
-    occurrences.add(occurrence);
   }
 
   /**
@@ -93,15 +99,61 @@ public class IssueExtractor {
    * @param commitId The commit id to fetch issues for.
    * @return A mapping, whose keys are issue ids and whose values is a set of
    *    places where the issue occurs. Each issue occurs at least in
-   *    "somewhere".
+   *    "somewhere". Issues from the first line get tagged with an occurrence
+   *    "subject". Issues in the last block get tagged with "footer". Issues
+   *    occurring between "subject" and "footer" get tagged with "body".
    */
   public Map<String,Set<String>> getIssueIds(String projectName,
       String commitId) {
     Map<String,Set<String>> ret = Maps.newHashMap();
     String commitMessage = commitMessageFetcher.fetchGuarded(projectName,
         commitId);
-    for (String issue : getIssueIds(commitMessage)) {
-      addIssueOccurrence(issue, ret, "somewhere");
+
+    addIssuesOccurrence(commitMessage, "somewhere", ret);
+
+    String[] lines = commitMessage.split("\n");
+    if (lines.length > 0) {
+      // Parsing for "subject"
+      addIssuesOccurrence(lines[0], "subject", ret);
+
+      // Determining footer line numbers
+      int currentLine = lines.length-1;
+      while (currentLine >=0 && lines[currentLine].isEmpty()) {
+        currentLine--;
+      }
+      int footerEnd = currentLine + 1;
+      while (currentLine >=0 && !lines[currentLine].isEmpty()) {
+        currentLine--;
+      }
+      int footerStart = currentLine + 1;
+
+      if (footerStart == 0) {
+        // The first block of non-blank lines is not considered a footer, so
+        // we adjust that.
+        footerStart = -1;
+      }
+
+      // Parsing for "body", and "footer"
+      String body = null;
+      String footer = null;
+      if (footerStart == -1) {
+        // No footer could be found. So all lines after the first one (that's
+        // the subject) is the body.
+        //body = String[] templateParameters =
+          //  Arrays.copyOfRange(allParameters, 1, allParameters.length);
+        if (lines.length > 0) {
+          body = StringUtils.join(lines, "\n", 1, lines.length);
+        }
+      } else {
+        body = StringUtils.join(lines, "\n", 1, footerStart - 1);
+        footer = StringUtils.join(lines, "\n", footerStart, footerEnd);
+      }
+      if (body != null) {
+        addIssuesOccurrence(body, "body", ret);
+      }
+      if (footer != null) {
+        addIssuesOccurrence(footer, "footer", ret);
+      }
     }
     return ret;
   }

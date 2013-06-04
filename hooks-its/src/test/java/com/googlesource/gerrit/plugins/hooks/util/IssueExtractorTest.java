@@ -193,9 +193,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "1234567891123456789212345678931234567894");
 
     Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
   }
 
@@ -216,10 +219,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "1234567891123456789212345678931234567894");
 
     Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere"));
-    expected.put("4711", Sets.newHashSet("somewhere"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("4711", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
   }
 
@@ -240,10 +246,394 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "1234567891123456789212345678931234567894");
 
     Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere"));
-    expected.put("4711", Sets.newHashSet("somewhere"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("4711", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitSingleIssueBody() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject does not reference a bug\n" +
+            "Body references bug#42\n" +
+            "\n" +
+            "Footer: does not reference a bug\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "body"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitSingleIssueFooter() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject does not reference a bug\n" +
+            "Body does not reference a bug\n" +
+            "\n" +
+            "Footer: references bug#42\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentParts() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n" +
+            "\n" +
+            "Bug: bug#4711 in footer\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsEmptySubject() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n" +
+            "\n" +
+            "Bug: bug#4711 in footer\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsLinePastFooter() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n" +
+            "\n" +
+            "Bug: bug#4711 in footer\n" +
+            "Change-Id: I1234567891123456789212345678931234567894\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsLinesPastFooter() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n" +
+            "\n" +
+            "Bug: bug#4711 in footer\n" +
+            "Change-Id: I1234567891123456789212345678931234567894\n" +
+            "\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsNoFooter() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsNoFooterTrailingLine() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitDifferentPartsNoFooterTrailingLines() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject references bug#42.\n" +
+            "Body references bug#16.\n" +
+            "Body also references bug#176.\n" +
+            "\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "body"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitEmpty() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn("");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitBlankLine() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn("\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitBlankLines() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn("\n\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitMoreBlankLines() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn("\n\n\n");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitMixed() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject bug#42, bug#1984, and bug#16\n" +
+            "\n" +
+            "bug#4711 in body,\n" +
+            "along with bug#1984, and bug#5150.\n" +
+            "bug#4711 in body again, along with bug#16\n" +
+            "\n" +
+            "Bug: bug#176, bug#1984, and bug#5150\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "subject", "body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    expected.put("176", Sets.newHashSet("somewhere", "footer"));
+    expected.put("1984", Sets.newHashSet("somewhere", "subject", "body",
+        "footer"));
+    expected.put("4711", Sets.newHashSet("somewhere", "body"));
+    expected.put("5150", Sets.newHashSet("somewhere", "body", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
   }
 
