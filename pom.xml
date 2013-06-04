@@ -30,6 +30,7 @@ limitations under the License.
     <easymockVersion>3.0</easymockVersion>
     <powermockVersion>1.5</powermockVersion>
     <slf4jVersion>1.6.2</slf4jVersion>
+    <velocityVersion>1.6.4</velocityVersion>
   </properties>
 
   <modules>

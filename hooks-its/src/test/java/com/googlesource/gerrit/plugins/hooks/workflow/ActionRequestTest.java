@@ -14,6 +14,7 @@
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
@@ -85,6 +86,129 @@ public class ActionRequestTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createActionRequest(null);
     assertEquals("Unparsed string does not match", "",
         actionRequest.getName());
+  }
+
+  public void testParameter1Parameterless() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action");
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(1));
+  }
+
+  public void testParameter1Null() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest(null);
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(1));
+  }
+
+  public void testParameter1SingleParameter() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param");
+    assertEquals("Unparsed string does not match", "param",
+        actionRequest.getParameter(1));
+  }
+
+  public void testParemeter1MultipleParameters() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2");
+    assertEquals("Unparsed string does not match", "param1",
+        actionRequest.getParameter(1));
+  }
+
+  public void testParameter3Parameterless() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action");
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParameter3Null() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest(null);
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParameter3SingleParameter() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param");
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParemeter3With2Parameters() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2");
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParemeter3With3Parameters() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2 " +
+        "param3");
+    assertEquals("Unparsed string does not match", "param3",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParemeter3With4Parameters() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2 " +
+        "param3 param4");
+    assertEquals("Unparsed string does not match", "param3",
+        actionRequest.getParameter(3));
+  }
+
+  public void testParametersParameterless() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action");
+
+    String[] expected = new String[0];
+    assertEquals("Parameters do not match", Arrays.asList(expected),
+        Arrays.asList(actionRequest.getParameters()));
+  }
+
+  public void testParametersNull() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest(null);
+
+    String[] expected = new String[0];
+    assertEquals("Parameters do not match", Arrays.asList(expected),
+        Arrays.asList(actionRequest.getParameters()));
+  }
+
+  public void testParametersSingleParameter() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param");
+
+    String[] expected = new String[] { "param" };
+    assertEquals("Parameters do not match", Arrays.asList(expected),
+        Arrays.asList(actionRequest.getParameters()));
+  }
+
+  public void testParameters3Parameter() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2 " +
+        "param3");
+
+    String[] expected = new String[] { "param1", "param2", "param3" };
+    assertEquals("Parameters do not match", Arrays.asList(expected),
+        Arrays.asList(actionRequest.getParameters()));
   }
 
   private ActionRequest createActionRequest(String specification) {

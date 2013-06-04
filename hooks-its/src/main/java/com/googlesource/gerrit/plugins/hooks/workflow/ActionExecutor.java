@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
 
 /**
  * Executes an {@link ActionRequest}
@@ -34,12 +35,15 @@ public class ActionExecutor {
 
   private final ItsFacade its;
   private final AddStandardComment.Factory addStandardCommentFactory;
+  private final AddVelocityComment.Factory addVelocityCommentFactory;
 
   @Inject
   public ActionExecutor(ItsFacade its,
-      AddStandardComment.Factory addStandardCommentFactory) {
+      AddStandardComment.Factory addStandardCommentFactory,
+      AddVelocityComment.Factory addVelocityCommentFactory) {
     this.its = its;
     this.addStandardCommentFactory = addStandardCommentFactory;
+    this.addVelocityCommentFactory = addVelocityCommentFactory;
   }
 
   public void execute(String issue, ActionRequest actionRequest,
@@ -49,6 +53,8 @@ public class ActionExecutor {
       Action action = null;
       if ("add-standard-comment".equals(name)) {
         action = addStandardCommentFactory.create();
+      } else if ("add-velocity-comment".equals(name)) {
+        action = addVelocityCommentFactory.create();
       }
 
       if (action == null) {

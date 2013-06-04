@@ -27,12 +27,14 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
 
   private ItsFacade its;
   private AddStandardComment.Factory addStandardCommentFactory;
+  private AddVelocityComment.Factory addVelocityCommentFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -119,6 +121,42 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     assertLogThrowableMessageContains("injected exception 3");
   }
 
+  public void testAddStandardCommentDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-standard-comment");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddStandardComment addStandardComment =
+        createMock(AddStandardComment.class);
+    expect(addStandardCommentFactory.create()).andReturn(addStandardComment);
+
+    addStandardComment.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
+  public void testAddVelocityCommentDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-velocity-comment");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddVelocityComment addVelocityComment =
+        createMock(AddVelocityComment.class);
+    expect(addVelocityCommentFactory.create()).andReturn(addVelocityComment);
+
+    addVelocityComment.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -137,6 +175,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
       addStandardCommentFactory = createMock(AddStandardComment.Factory.class);
       bind(AddStandardComment.Factory.class).toInstance(
           addStandardCommentFactory);
+
+      addVelocityCommentFactory = createMock(AddVelocityComment.Factory.class);
+      bind(AddVelocityComment.Factory.class).toInstance(
+          addVelocityCommentFactory);
     }
   }
 }
