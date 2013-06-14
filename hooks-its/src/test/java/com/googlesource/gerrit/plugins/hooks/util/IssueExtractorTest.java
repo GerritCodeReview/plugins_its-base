@@ -21,20 +21,32 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.Config;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.RevId;
+import com.google.gerrit.reviewdb.server.PatchSetAccess;
+import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({PatchSet.class,RevId.class})
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private Config serverConfig;
   private CommitMessageFetcher commitMessageFetcher;
+  private ReviewDb db;
 
   public void testPatternNullMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
@@ -637,6 +649,431 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
+  public void testIssueIdsCommitWAddedEmptyFirst() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn("");
+
+    replayMocks();
+
+    PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(4), 1);
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", patchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSingleSubjectIssueFirst() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(1).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject",
+        "added@somewhere", "added@subject"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "subject\n" +
+            "\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject",
+        "added@somewhere", "added@subject"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "subject\n" +
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "subject\n" +
+            "\n" +
+            "Bug: bug#42\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "footer", "added@footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedSubjectFooter()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "subject bug#42\n" +
+            "\n" +
+            "body bug#42\n" +
+            "\n" +
+            "Bug: bug#42\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "subject\n" +
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
+        "body", "footer", "added@footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitWAddedMultiple()
+      throws OrmException {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    Change.Id changeId = createMock(Change.Id.class);
+
+    // Call for current patch set
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "subject bug#42\n" +
+            "\n" +
+            "body bug#42 bug#16\n" +
+            "\n" +
+            "Bug: bug#42\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    // Call for previous patch set
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
+    RevId previousRevId = createMock(RevId.class);
+    expect(previousRevId.get())
+        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+
+    PatchSet previousPatchSet = createMock(PatchSet.class);
+    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
+
+    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
+    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "9876543211987654321298765432139876543214")).andReturn(
+            "subject\n" +
+            "bug#42 bug#4711\n" +
+            "\n" +
+            "Bug: bug#16\n" +
+            "Change-Id: I9876543211987654321298765432139876543214");
+
+    expect(db.patchSets()).andReturn(patchSetAccess);
+
+    PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
+    expect(currentPatchSetId.get()).andReturn(2).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
+        .anyTimes();
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894", currentPatchSetId);
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("16", Sets.newHashSet("somewhere", "body", "added@body"));
+    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
+        "body", "footer", "added@footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -656,6 +1093,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
       commitMessageFetcher = createMock(CommitMessageFetcher.class);
       bind(CommitMessageFetcher.class).toInstance(commitMessageFetcher);
+
+      db = createMock(ReviewDb.class);
+      bind(ReviewDb.class).toInstance(db);
     }
   }
 }

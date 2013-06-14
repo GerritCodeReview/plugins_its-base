@@ -7,7 +7,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
@@ -25,13 +28,16 @@ public class IssueExtractor {
   private final Config gerritConfig;
   private final String itsName;
   private final CommitMessageFetcher commitMessageFetcher;
+  private final ReviewDb db;
 
   @Inject
   IssueExtractor(@GerritServerConfig Config gerritConfig,
-      @ItsName String itsName, CommitMessageFetcher commitMessageFetcher) {
+      @ItsName String itsName, CommitMessageFetcher commitMessageFetcher,
+      ReviewDb db) {
     this.gerritConfig = gerritConfig;
     this.itsName = itsName;
     this.commitMessageFetcher = commitMessageFetcher;
+    this.db = db;
   }
 
   /**
@@ -156,5 +162,63 @@ public class IssueExtractor {
       }
     }
     return ret;
+  }
+
+  /**
+   * Gets issues for a commit with new issue occurrences marked as "added".
+   * <p>
+   * Fetches the patch set's immediate ancestor and compares issue occurrences
+   * between them. Any new occurrence gets marked as "added." So if for
+   * example in patch sets 1, and 2 issue 23 occurs in the subject, while in
+   * patch set the issue occurs in the body, then patch set 2 has occurrences
+   * "somewhere", and "subject" for issue 23. Patch set 3 has occurrences
+   * "somewhere", "body", and "body-added" for issue 23.
+   *
+   * @param projectName The project to fetch {@code commitId} from.
+   * @param commitId The commit id to fetch issues for.
+   * @param patchSetId The patch set for the {@code commitId}. If it is null,
+   *    no occurrence can be marked as "-added".
+   * @return A mapping, whose keys are issue ids and whose values is a set of
+   *    places where the issue occurs. Each issue occurs at least in
+   *    "somewhere". Issues from the first line get tagged with an occurrence
+   *    "subject". Issues in the last block get tagged with "footer". Issues
+   *    occurring between "subject" and "footer" get tagged with "body".
+   */
+  public Map<String,Set<String>> getIssueIds(String projectName,
+      String commitId, PatchSet.Id patchSetId) {
+    Map<String,Set<String>> current = getIssueIds(projectName, commitId);
+    if (patchSetId != null) {
+      Map<String,Set<String>> previous = Maps.newHashMap();
+      if (patchSetId.get() != 1) {
+        PatchSet.Id previousPatchSetId = new PatchSet.Id(
+            patchSetId.getParentKey(), patchSetId.get() - 1);
+        try {
+          PatchSet previousPatchSet = db.patchSets().get(previousPatchSetId);
+          if (previousPatchSet != null) {
+            previous = getIssueIds(projectName,
+                previousPatchSet.getRevision().get());
+          }
+        } catch (OrmException e) {
+          // previous is still empty to indicate that there was no previous
+          // accessible patch set. We treat every occurrence as added.
+        }
+      }
+
+      for (String issue : current.keySet()) {
+        Set<String> currentOccurrences = current.get(issue);
+        Set<String> previousOccurrences = previous.get(issue);
+        Set<String> newOccurrences;
+        if (previousOccurrences == null || previousOccurrences.isEmpty()) {
+          newOccurrences = Sets.newHashSet(currentOccurrences);
+        } else {
+          newOccurrences = Sets.newHashSet(currentOccurrences);
+          newOccurrences.removeAll(previousOccurrences);
+        }
+        for (String occurrence : newOccurrences) {
+          currentOccurrences.add( "added@" + occurrence);
+        }
+      }
+    }
+    return current;
   }
 }

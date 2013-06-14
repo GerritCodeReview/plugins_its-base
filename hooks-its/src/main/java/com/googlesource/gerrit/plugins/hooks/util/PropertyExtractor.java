@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
@@ -47,6 +49,22 @@ public class PropertyExtractor {
     this.propertyAttributeExtractor = propertyAttributeExtractor;
   }
 
+  /**
+   * creates a patch id for change id string and patchset id string.
+   * @param changeId String representation of the patch sets {@code Change.Id@}
+   * @param patchId String representation of the patch sets {@code Patchset.Id@}
+   * @return PatchSet.Id for the specified patch set. If the String to int
+   *    conversion fails for any of the parameters, null is returned.
+   */
+  private PatchSet.Id newPatchSetId(String changeId, String patchId) {
+    try {
+        return new PatchSet.Id(new Change.Id(Integer.parseInt(changeId)),
+            Integer.parseInt(patchId));
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
   private Map<String,Set<String>> extractFrom(ChangeAbandonedEvent event,
       Set<Property> common) {
     common.add(propertyFactory.create("event-type", event.type));
@@ -54,8 +72,10 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.abandoner, "abandoner"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
     common.add(propertyFactory.create("reason", event.reason));
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
-        event.patchSet.revision);
+        event.patchSet.revision, patchSetId);
   }
 
   private Map<String,Set<String>> extractFrom(ChangeMergedEvent event,
@@ -64,8 +84,10 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.change));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter, "submitter"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
-        event.patchSet.revision);
+        event.patchSet.revision, patchSetId);
   }
 
   private Map<String,Set<String>> extractFrom(ChangeRestoredEvent event,
@@ -75,8 +97,10 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.restorer, "restorer"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
     common.add(propertyFactory.create("reason", event.reason));
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
-        event.patchSet.revision);
+        event.patchSet.revision, patchSetId);
   }
 
   private Map<String,Set<String>> extractFrom(RefUpdatedEvent event,
@@ -94,8 +118,10 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.change));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
     common.addAll(propertyAttributeExtractor.extractFrom(event.uploader, "uploader"));
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
-        event.patchSet.revision);
+        event.patchSet.revision, patchSetId);
   }
 
   private Map<String,Set<String>> extractFrom(CommentAddedEvent event,
@@ -106,8 +132,10 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.author, "commenter"));
     common.add(propertyFactory.create("comment", event.comment));
     //TODO approvals
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
-        event.patchSet.revision);
+        event.patchSet.revision, patchSetId);
   }
 
   /**
