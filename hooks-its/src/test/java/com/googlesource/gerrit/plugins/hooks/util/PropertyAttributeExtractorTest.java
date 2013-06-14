@@ -21,6 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
+import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
@@ -293,6 +294,27 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyRevisionOld);
     expected.add(propertyProject);
     expected.add(propertyRef);
+    assertEquals("Properties do not match", expected, actual);
+  }
+
+  public void testApprovalAttribute() {
+    ApprovalAttribute approvalAttribute = new ApprovalAttribute();
+    approvalAttribute.type = "TestType";
+    approvalAttribute.value = "TestValue";
+
+    Property propertyApproval = createMock(Property.class);
+    expect(propertyFactory.create("approval-TestType", "TestValue"))
+        .andReturn(propertyApproval);
+
+    replayMocks();
+
+    PropertyAttributeExtractor extractor =
+        injector.getInstance(PropertyAttributeExtractor.class);
+
+    Set<Property> actual = extractor.extractFrom(approvalAttribute);
+
+    Set<Property> expected = Sets.newHashSet();
+    expected.add(propertyApproval);
     assertEquals("Properties do not match", expected, actual);
   }
 

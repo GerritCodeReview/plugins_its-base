@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.data.AccountAttribute;
+import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
@@ -96,6 +97,13 @@ public class PropertyAttributeExtractor {
         refUpdateAttribute.project));
     properties.add(propertyFactory.create("ref",
         refUpdateAttribute.refName));
+    return properties;
+  }
+
+  public Set<Property>extractFrom(ApprovalAttribute approvalAttribute) {
+    Set<Property> properties = Sets.newHashSet();
+    properties.add(propertyFactory.create("approval-" +
+        approvalAttribute.type, approvalAttribute.value));
     return properties;
   }
 }
