@@ -212,6 +212,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitMultipleIssues() {
@@ -239,6 +240,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitMultipleIssuesMultipleTimes() {
@@ -262,6 +264,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     expected.put("4711", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -294,6 +297,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitSingleIssueFooter() {
@@ -315,9 +320,52 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "1234567891123456789212345678931234567894");
 
     Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "footer"));
+    expected.put("42", Sets.newHashSet("somewhere", "footer",
+        "footer-Footer"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitMultipleIssuesFooter() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "Subject does not reference a bug\n" +
+            "Body does not reference a bug\n" +
+            "\n" +
+            "KeyA: references bug#42\n" +
+            "KeyB: does not reference bug\n" +
+            "KeyC: references bug#176\n" +
+            "Unkeyed reference to bug#4711\n" +
+            "Change-Id: I1234567891123456789212345678931234567894\n" +
+            "KeyZ: references bug#256" );
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "footer", "footer-KeyA"));
+    expected.put("176", Sets.newHashSet("somewhere", "footer", "footer-KeyC"));
+    expected.put("256", Sets.newHashSet("somewhere", "footer", "footer-KeyZ"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -347,9 +395,11 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
-    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -378,9 +428,11 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     Map<String,Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
-    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -410,9 +462,11 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
-    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -443,9 +497,11 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
-    expected.put("4711", Sets.newHashSet("somewhere", "footer"));
+    expected.put("4711", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -636,13 +692,16 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     Map<String,Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "subject", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
-    expected.put("176", Sets.newHashSet("somewhere", "footer"));
+    expected.put("176", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
     expected.put("1984", Sets.newHashSet("somewhere", "subject", "body",
-        "footer"));
+        "footer", "footer-Bug"));
     expected.put("4711", Sets.newHashSet("somewhere", "body"));
-    expected.put("5150", Sets.newHashSet("somewhere", "body", "footer"));
+    expected.put("5150", Sets.newHashSet("somewhere", "body", "footer",
+        "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -699,6 +758,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "added@somewhere", "added@subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -763,6 +823,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
@@ -814,6 +876,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -882,6 +946,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
@@ -931,9 +997,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         "1234567891123456789212345678931234567894", currentPatchSetId);
 
     Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "footer", "added@footer"));
+    expected.put("42", Sets.newHashSet("somewhere", "footer", "added@footer",
+        "footer-Bug", "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -995,9 +1065,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     Map<String,Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
-        "body", "footer", "added@footer"));
+        "body", "footer", "added@footer", "footer-Bug",
+        "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
@@ -1061,9 +1135,14 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     Map<String,Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body", "added@body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
-        "body", "footer", "added@footer"));
+        "body", "footer", "added@footer", "footer-Bug",
+        "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
+    assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
     assertLogMessageContains("Matching");
