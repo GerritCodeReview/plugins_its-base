@@ -26,6 +26,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
 
@@ -33,6 +34,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
 
   private ItsFacade its;
+  private AddComment.Factory addCommentFactory;
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddVelocityComment.Factory addVelocityCommentFactory;
 
@@ -121,6 +123,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     assertLogThrowableMessageContains("injected exception 3");
   }
 
+  public void testAddCommentDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-comment");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddComment addComment = createMock(AddComment.class);
+    expect(addCommentFactory.create()).andReturn(addComment);
+
+    addComment.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   public void testAddStandardCommentDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-standard-comment");
@@ -171,6 +190,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     protected void configure() {
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
+
+      addCommentFactory = createMock(AddComment.Factory.class);
+      bind(AddComment.Factory.class).toInstance(addCommentFactory);
 
       addStandardCommentFactory = createMock(AddStandardComment.Factory.class);
       bind(AddStandardComment.Factory.class).toInstance(

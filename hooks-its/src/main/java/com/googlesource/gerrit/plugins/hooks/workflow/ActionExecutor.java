@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
 
@@ -34,14 +35,16 @@ public class ActionExecutor {
       ActionExecutor.class);
 
   private final ItsFacade its;
+  private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddVelocityComment.Factory addVelocityCommentFactory;
 
   @Inject
-  public ActionExecutor(ItsFacade its,
+  public ActionExecutor(ItsFacade its, AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddVelocityComment.Factory addVelocityCommentFactory) {
     this.its = its;
+    this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addVelocityCommentFactory = addVelocityCommentFactory;
   }
@@ -51,8 +54,10 @@ public class ActionExecutor {
     try {
       String name = actionRequest.getName();
       Action action = null;
-      if ("add-standard-comment".equals(name)) {
-        action = addStandardCommentFactory.create();
+      if ("add-comment".equals(name)) {
+        action = addCommentFactory.create();
+      } else if ("add-standard-comment".equals(name)) {
+          action = addStandardCommentFactory.create();
       } else if ("add-velocity-comment".equals(name)) {
         action = addVelocityCommentFactory.create();
       }
