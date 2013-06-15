@@ -29,6 +29,7 @@ import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -37,6 +38,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddComment.Factory addCommentFactory;
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddVelocityComment.Factory addVelocityCommentFactory;
+  private LogEvent.Factory logEventFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -176,6 +178,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.execute("4711", actionRequest, properties);
   }
 
+  public void testLogEventDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("log-event");
+
+    Set<Property> properties = Collections.emptySet();
+
+    LogEvent logEvent = createMock(LogEvent.class);
+    expect(logEventFactory.create()).andReturn(logEvent);
+
+    logEvent.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -201,6 +220,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
       addVelocityCommentFactory = createMock(AddVelocityComment.Factory.class);
       bind(AddVelocityComment.Factory.class).toInstance(
           addVelocityCommentFactory);
+
+      logEventFactory = createMock(LogEvent.Factory.class);
+      bind(LogEvent.Factory.class).toInstance(logEventFactory);
     }
   }
 }

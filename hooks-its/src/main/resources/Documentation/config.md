@@ -382,6 +382,8 @@ represent the action 'name' being called with parameters 'param1',
   adds a predefined standard comment for certain events
 <<action-add-velocity-comment,add-velocity-comment>>::
   adds a rendered Velocity template as issue comment.
+<<action-log-event,log-event>>::
+  appends the event's properties to Gerrit's log.
 
 Further actions may be provided by 'hooks-its' based plugins.
 
@@ -441,6 +443,24 @@ Any <<event-properties,property>> of the event may be used from
 templates. So for example +$subject+ in the above example refers to
 the event's subject property, and +$change-number+ would refer to the
 change's number.
+
+[[action-log-event]]
+Action: log-event
+^^^^^^^^^^^^^^^^^
+
+The 'log-event' action appends the event's properties to Gerrit's log.
+
+Logging happens at the info level per default, but can be overriden by
+adding the desired log level as parameter. Supported values are
+'error', 'warn', 'info', and 'debug'). So for example
+----
+action = log-event error
+----
+appends the event's properties to Gerrit's log at error level. All
+other parameters are ignored.
+
+This action is useful when testing rules or trying to refine
+conditions on rules, as it make the available properties visible.
 
 
 [[config-legacy]]

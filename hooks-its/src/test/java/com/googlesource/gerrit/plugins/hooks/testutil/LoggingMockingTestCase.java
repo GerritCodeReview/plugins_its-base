@@ -21,24 +21,31 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
 import java.util.Iterator;
+import org.apache.log4j.Level;
 
 public abstract class LoggingMockingTestCase extends MockingTestCase {
 
   private java.util.Collection<LoggingEvent> loggedEvents;
 
-  protected final void assertLogMessageContains(String needle) {
+  protected final void assertLogMessageContains(String needle, Level level) {
     LoggingEvent hit = null;
     Iterator<LoggingEvent> iter = loggedEvents.iterator();
     while (hit == null && iter.hasNext()) {
       LoggingEvent event = iter.next();
       if (event.getRenderedMessage().contains(needle)) {
-        hit = event;
+        if (level == null || level.equals(event.getLevel())) {
+          hit = event;
+        }
       }
     }
     assertNotNull("Could not find log message containing '" + needle + "'",
         hit);
     assertTrue("Could not remove log message containing '" + needle + "'",
         loggedEvents.remove(hit));
+  }
+
+  protected final void assertLogMessageContains(String needle) {
+    assertLogMessageContains(needle, null);
   }
 
   protected final void assertLogThrowableMessageContains(String needle) {
