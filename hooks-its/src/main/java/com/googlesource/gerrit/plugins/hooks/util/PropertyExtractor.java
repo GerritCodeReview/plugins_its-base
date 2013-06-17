@@ -26,6 +26,7 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
+import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
@@ -98,6 +99,18 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.restorer, "restorer"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
     common.add(propertyFactory.create("reason", event.reason));
+    PatchSet.Id patchSetId = newPatchSetId(event.change.number,
+        event.patchSet.number);
+    return issueExtractor.getIssueIds(event.change.project,
+        event.patchSet.revision, patchSetId);
+  }
+
+  private Map<String,Set<String>> extractFrom(DraftPublishedEvent event,
+      Set<Property> common) {
+    common.add(propertyFactory.create("event-type", event.type));
+    common.addAll(propertyAttributeExtractor.extractFrom(event.change));
+    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
+    common.addAll(propertyAttributeExtractor.extractFrom(event.uploader, "uploader"));
     PatchSet.Id patchSetId = newPatchSetId(event.change.number,
         event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,
@@ -199,6 +212,8 @@ public class PropertyExtractor {
       associations = extractFrom((ChangeRestoredEvent) event, common);
     } else if (event instanceof CommentAddedEvent) {
       associations = extractFrom((CommentAddedEvent) event, common);
+    } else if (event instanceof DraftPublishedEvent) {
+      associations = extractFrom((DraftPublishedEvent) event, common);
     } else if (event instanceof PatchSetCreatedEvent) {
       associations = extractFrom((PatchSetCreatedEvent) event, common);
     } else if (event instanceof RefUpdatedEvent) {

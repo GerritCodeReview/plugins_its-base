@@ -168,6 +168,7 @@ corresponding subsection below:
 * <<event-properties-ChangeMergedEvent,ChangeMergedEvent>>
 * <<event-properties-ChangeRestoredEvent,ChangeRestoredEvent>>
 * <<event-properties-CommentAddedEvent,CommentAddedEvent>>
+* <<event-properties-DraftPublishedEvent,DraftPublishedEvent>>
 * <<event-properties-PatchSetCreatedEvent,PatchSetCreatedEvent>>
 * <<event-properties-RefUpdatedEvent,RefUpdatedEvent>>
 * <<event-properties-change,Common properties for events on a change>>
@@ -269,6 +270,19 @@ In addition to the above properties, the event also provides
 properties for the <<event-properties-change,change>> the comment was
 added for, and it's most recent <<event-properties-patch-set,patch
 set>>.
+
+[[event-properties-DraftPublishedEvent]]
+DraftPublishedEvent
+^^^^^^^^^^^^^^^^^^^
+
+'event'::
+  +com.google.gerrit.server.events.DraftPublishedEvent+
+'event-type'::
+  +draft-published+
+
+In addition to the above properties, the event also provides
+properties for the uploaded <<event-properties-patch-set,patch set>>,
+and the <<event-properties-change,change>> it belongs to.
 
 [[event-properties-PatchSetCreatedEvent]]
 PatchSetCreatedEvent
