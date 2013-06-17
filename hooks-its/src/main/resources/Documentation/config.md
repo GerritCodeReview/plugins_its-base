@@ -444,6 +444,34 @@ templates. So for example +$subject+ in the above example refers to
 the event's subject property, and +$change-number+ would refer to the
 change's number.
 
+Additionally, the context's 'its' property provides an object that
+allows to format links using the its' syntax:
+
+'formatLink( url )'::
+  Formats a link to a url.
+  +
+  So for example upon adding a comment to a change, the following rule
+  formats a link to the change:
++
+----
+[rule "formatLinkSampleRule"]
+        event-type = comment-added
+        action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($change-url)}
+----
+
+'formatLink( url, caption )'::
+  Formats a link to a url using 'caption' to represent the url.
+  +
+  So for example upon adding a comment to a change, the following rule
+  formats a link to the change using the change number as link
+  capition:
++
+----
+[rule "formatLinkSampleRule"]
+        event-type = comment-added
+        action = add-velocity-comment inline Comment for change ${its.formatLink($change-url, $change-number)} added.
+-----
+
 [[action-log-event]]
 Action: log-event
 ^^^^^^^^^^^^^^^^^

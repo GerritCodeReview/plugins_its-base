@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +44,7 @@ import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
 
 public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -197,6 +199,79 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
         context.get("subject"));
     assertEquals("Reason property of context did not match", "Life",
         context.get("reason"));
+  }
+
+  public void testItsWrapperFormatLink1Parameter() throws IOException,
+      SecurityException, NoSuchMethodException, IllegalArgumentException,
+      IllegalAccessException, InvocationTargetException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getParameter(1)).andReturn("inline");
+    expect(actionRequest.getParameters()).andReturn(
+        new String[] {"inline", "Simple-Text"});
+
+    IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
+    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    expect(velocityRuntime.evaluate(capture(contextCapture),
+        (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
+        .andAnswer(answer);
+
+    its.addComment("4711", "Simple-Text");
+
+    expect(its.createLinkForWebui("http://www.example.org/",
+        "http://www.example.org/")) .andReturn("Formatted Link");
+
+    replayMocks();
+
+    AddVelocityComment addVelocityComment = createAddVelocityComment();
+    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+
+    VelocityContext context = contextCapture.getValue();
+    Object itsAdapterObj = context.get("its");
+    assertNotNull("its property is null", itsAdapterObj);
+    assertTrue("Its is not a VelocityAdapterItsFacade instance",
+        itsAdapterObj instanceof VelocityAdapterItsFacade);
+    VelocityAdapterItsFacade itsAdapter =
+        (VelocityAdapterItsFacade) itsAdapterObj;
+    String formattedLink = itsAdapter.formatLink("http://www.example.org/");
+    assertEquals("Result of formatLink does not match", "Formatted Link",
+        formattedLink);
+  }
+
+  public void testItsWrapperFormatLink2Parameters() throws IOException,
+      SecurityException, NoSuchMethodException, IllegalArgumentException,
+      IllegalAccessException, InvocationTargetException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getParameter(1)).andReturn("inline");
+    expect(actionRequest.getParameters()).andReturn(
+        new String[] {"inline", "Simple-Text"});
+
+    IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
+    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    expect(velocityRuntime.evaluate(capture(contextCapture),
+        (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
+        .andAnswer(answer);
+
+    its.addComment("4711", "Simple-Text");
+
+    expect(its.createLinkForWebui("http://www.example.org/", "Caption"))
+        .andReturn("Formatted Link");
+
+    replayMocks();
+
+    AddVelocityComment addVelocityComment = createAddVelocityComment();
+    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+
+    VelocityContext context = contextCapture.getValue();
+    Object itsAdapterObj = context.get("its");
+    assertNotNull("its property is null", itsAdapterObj);
+    assertTrue("Its is not a VelocityAdapterItsFacade instance",
+        itsAdapterObj instanceof VelocityAdapterItsFacade);
+    VelocityAdapterItsFacade itsAdapter =
+        (VelocityAdapterItsFacade) itsAdapterObj;
+    String formattedLink = itsAdapter.formatLink("http://www.example.org/",
+        "Caption");
+    assertEquals("Result of formatLink does not match", "Formatted Link",
+        formattedLink);
   }
 
   public void testWarnTemplateNotFound() throws IOException {
