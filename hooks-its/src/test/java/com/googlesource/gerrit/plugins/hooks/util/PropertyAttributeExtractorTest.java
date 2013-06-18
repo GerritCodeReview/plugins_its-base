@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.Change.Status;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -124,6 +125,10 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("change-url", "http://www.example.org/test"))
         .andReturn(propertyUrl);
 
+    Property propertyStatus = createMock(Property.class);
+    expect(propertyFactory.create("status", null))
+        .andReturn(propertyStatus);
+
     Property propertyEmail= createMock(Property.class);
     expect(propertyFactory.create("owner-email", "testEmail"))
         .andReturn(propertyEmail);
@@ -152,6 +157,91 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyId);
     expected.add(propertyNumber);
     expected.add(propertyUrl);
+    expected.add(propertyStatus);
+    expected.add(propertyEmail);
+    expected.add(propertyName);
+    expected.add(propertyUsername);
+    assertEquals("Properties do not match", expected, actual);
+  }
+
+  public void testChangeAttributeFull() {
+    AccountAttribute owner = new AccountAttribute();
+    owner.email = "testEmail";
+    owner.name = "testName";
+    owner.username = "testUsername";
+
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    changeAttribute.topic = "testTopic";
+    changeAttribute.subject = "testSubject";
+    changeAttribute.id = "testId";
+    changeAttribute.number = "4711";
+    changeAttribute.url = "http://www.example.org/test";
+    changeAttribute.status = Status.ABANDONED;
+    changeAttribute.owner = owner;
+
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject"))
+        .andReturn(propertyProject);
+
+    Property propertyBranch = createMock(Property.class);
+    expect(propertyFactory.create("branch", "testBranch"))
+        .andReturn(propertyBranch);
+
+    Property propertyTopic = createMock(Property.class);
+    expect(propertyFactory.create("topic", "testTopic"))
+        .andReturn(propertyTopic);
+
+    Property propertySubject = createMock(Property.class);
+    expect(propertyFactory.create("subject", "testSubject"))
+        .andReturn(propertySubject);
+
+    Property propertyId = createMock(Property.class);
+    expect(propertyFactory.create("change-id", "testId"))
+        .andReturn(propertyId);
+
+    Property propertyNumber = createMock(Property.class);
+    expect(propertyFactory.create("change-number", "4711"))
+        .andReturn(propertyNumber);
+
+    Property propertyUrl = createMock(Property.class);
+    expect(propertyFactory.create("change-url", "http://www.example.org/test"))
+        .andReturn(propertyUrl);
+
+    Property propertyStatus = createMock(Property.class);
+    expect(propertyFactory.create("status", "ABANDONED"))
+        .andReturn(propertyStatus);
+
+    Property propertyEmail= createMock(Property.class);
+    expect(propertyFactory.create("owner-email", "testEmail"))
+        .andReturn(propertyEmail);
+
+    Property propertyName = createMock(Property.class);
+    expect(propertyFactory.create("owner-name", "testName"))
+        .andReturn(propertyName);
+
+    Property propertyUsername = createMock(Property.class);
+    expect(propertyFactory.create("owner-username", "testUsername"))
+        .andReturn(propertyUsername);
+
+
+    replayMocks();
+
+    PropertyAttributeExtractor extractor =
+        injector.getInstance(PropertyAttributeExtractor.class);
+
+    Set<Property> actual = extractor.extractFrom(changeAttribute);
+
+    Set<Property> expected = Sets.newHashSet();
+    expected.add(propertyProject);
+    expected.add(propertyBranch);
+    expected.add(propertyTopic);
+    expected.add(propertySubject);
+    expected.add(propertyId);
+    expected.add(propertyNumber);
+    expected.add(propertyUrl);
+    expected.add(propertyStatus);
     expected.add(propertyEmail);
     expected.add(propertyName);
     expected.add(propertyUsername);

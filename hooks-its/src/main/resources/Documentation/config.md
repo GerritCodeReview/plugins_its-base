@@ -356,6 +356,14 @@ Common properties for events on a change
   full name of the project the change belongs to.
 'subject'::
   first line of the change's most recent patch set's commit message.
+'status'::
+  status of the change ('null', 'NEW', 'SUBMITTED', 'DRAFT', 'MERGED',
+  or 'ABANDONED' )
+  +
+  This property will typically be 'null' unless the used Gerrit
+  incorporates
+  https://gerrit-review.googlesource.com/#/c/47042/[upstream change
+  47042].
 'topic'::
   name of the topic the change belongs to.
 

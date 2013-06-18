@@ -61,6 +61,11 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("change-id", changeAttribute.id));
     properties.add(propertyFactory.create("change-number", changeAttribute.number));
     properties.add(propertyFactory.create("change-url", changeAttribute.url));
+    String status = null;
+    if (changeAttribute.status != null) {
+      status = changeAttribute.status.toString();
+    }
+    properties.add(propertyFactory.create("status", status));
     properties.addAll(extractFrom(changeAttribute.owner, "owner"));
     return properties;
   }
