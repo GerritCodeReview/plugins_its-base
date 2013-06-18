@@ -94,9 +94,22 @@ The conditions are lines of the form
 ----
 name = value1, value2, ..., valueN
 ----
-and match if the event comes with a property 'name' having 'value1',
-or 'value2', or ..., or 'valueN'.
+and (if 'value1' is not +!+) match if the event comes with a property
+'name' having 'value1', or 'value2', or ..., or 'valueN'. So for
+example to match events that come with an 'association' property
+having 'subject', or 'footer-Bug', the following condition can be
+used:
+----
+association = subject,footer-Bug
+----
 
+If 'value1' is +!+, the conditon matches if the event does not come
+with a property 'name' having 'value2', or ..., or 'valueN'. So for
+example to match events that do not come with a 'status' property
+having 'DRAFT', the following condition can be used:
+----
+status = !,DRAFT
+----
 
 [[event-properties]]
 Event Properties
