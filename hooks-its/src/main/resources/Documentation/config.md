@@ -383,6 +383,8 @@ Common properties for events on a patch set
   number of lines deleted by the patch set.
 'insertions'::
   number of lines inserted by the patch set.
+'is-draft'::
+  'true', if the patch set is a draft patch set, 'false' otherwise.
 'parents'::
   A list of git commit hashes that are parents to the patch set.
 'patch-set-number'::
