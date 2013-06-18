@@ -63,10 +63,6 @@ public class Condition {
     return key;
   }
 
-  public Set<String> getValues() {
-    return values;
-  }
-
   /**
    * Checks whether or not the Condition matches the given set of properties
    *
