@@ -172,6 +172,146 @@ public class ConditionTest  extends LoggingMockingTestCase {
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
+  public void testNegatedIsMetByEmpty() {
+    Condition condition = createCondition("testKey", "!,testValue");
+
+    Collection<Property> properties = Collections.emptySet();
+
+    replayMocks();
+
+    assertTrue("isMetBy gave false", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByMismatchedKey() {
+    Condition condition = createCondition("testKey", "!,testValue");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("otherKey").anyTimes();
+    expect(property1.getValue()).andReturn("testValue").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
+    properties.add(property1);
+
+    replayMocks();
+
+    assertTrue("isMetBy gave false", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByMaMismatchedValue() {
+    Condition condition = createCondition("testKey", "!,testValue");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("otherValue").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
+    properties.add(property1);
+
+    replayMocks();
+
+    assertTrue("isMetBy gave false", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByOredNoMatch() {
+    Condition condition = createCondition("testKey", "!,value1,value2,value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("otherValue").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
+    properties.add(property1);
+
+    replayMocks();
+
+    assertTrue("isMetBy gave false", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByOredSingleMatch() {
+    Condition condition = createCondition("testKey", "!,value1,value2,value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("value1").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
+    properties.add(property1);
+
+    replayMocks();
+
+    assertFalse("isMetBy gave true", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByOredMultiple() {
+    Condition condition = createCondition("testKey", "!,value1,value2,value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("value1").anyTimes();
+
+    Property property2 = createMock(Property.class);
+    expect(property2.getKey()).andReturn("testKey").anyTimes();
+    expect(property2.getValue()).andReturn("value3").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(2);
+    properties.add(property1);
+    properties.add(property2);
+
+    replayMocks();
+
+    assertFalse("isMetBy gave true", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByOredAll() {
+    Condition condition = createCondition("testKey", "!,value1,value2,value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("value1").anyTimes();
+
+    Property property2 = createMock(Property.class);
+    expect(property2.getKey()).andReturn("testKey").anyTimes();
+    expect(property2.getValue()).andReturn("value2").anyTimes();
+
+    Property property3 = createMock(Property.class);
+    expect(property3.getKey()).andReturn("testKey").anyTimes();
+    expect(property3.getValue()).andReturn("value3").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
+    properties.add(property1);
+    properties.add(property2);
+    properties.add(property3);
+
+    replayMocks();
+
+    assertFalse("isMetBy gave true", condition.isMetBy(properties));
+  }
+
+  public void testNegatedIsMetByOredOvershoot() {
+    Condition condition = createCondition("testKey", "!,value1,value2,value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("otherValue1").anyTimes();
+
+    Property property2 = createMock(Property.class);
+    expect(property2.getKey()).andReturn("testKey").anyTimes();
+    expect(property2.getValue()).andReturn("value2").anyTimes();
+
+    Property property3 = createMock(Property.class);
+    expect(property3.getKey()).andReturn("testKey").anyTimes();
+    expect(property3.getValue()).andReturn("otherValue3").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(3);
+    properties.add(property1);
+    properties.add(property2);
+    properties.add(property3);
+
+    replayMocks();
+
+    assertFalse("isMetBy gave true", condition.isMetBy(properties));
+  }
+
   private Condition createCondition(String key, String value) {
     Condition.Factory factory = injector.getInstance(Condition.Factory.class);
     return factory.create(key, value);
