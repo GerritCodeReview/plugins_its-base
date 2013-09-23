@@ -16,17 +16,19 @@ package com.googlesource.gerrit.plugins.hooks;
 
 import com.google.gerrit.common.ChangeListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
-import com.google.inject.AbstractModule;
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsValidateComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToChangeId;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToGitWeb;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterChangeState;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
+import com.googlesource.gerrit.plugins.hooks.workflow.Property;
 
-public class ItsHookModule extends AbstractModule {
+public class ItsHookModule extends FactoryModule {
 
   private String itsName;
 
@@ -49,5 +51,7 @@ public class ItsHookModule extends AbstractModule {
         ItsValidateComment.class);
     DynamicSet.bind(binder(), ChangeListener.class).to(
         ActionController.class);
+    factory(ActionRequest.Factory.class);
+    factory(Property.Factory.class);
   }
 }
