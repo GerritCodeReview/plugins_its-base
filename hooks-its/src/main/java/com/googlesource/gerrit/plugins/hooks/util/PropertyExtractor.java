@@ -20,6 +20,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
@@ -130,8 +131,13 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.change));
     common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet));
     common.addAll(propertyAttributeExtractor.extractFrom(event.author, "commenter"));
+    if (event.approvals != null) {
+      for (ApprovalAttribute approvalAttribute : event.approvals) {
+        common.addAll(propertyAttributeExtractor.extractFrom(
+            approvalAttribute));
+      }
+    }
     common.add(propertyFactory.create("comment", event.comment));
-    //TODO approvals
     PatchSet.Id patchSetId = newPatchSetId(event.change.number,
         event.patchSet.number);
     return issueExtractor.getIssueIds(event.change.project,

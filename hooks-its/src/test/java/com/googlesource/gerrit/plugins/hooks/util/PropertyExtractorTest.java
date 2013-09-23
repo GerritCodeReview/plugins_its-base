@@ -24,6 +24,7 @@ import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
+import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
@@ -181,7 +182,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     eventHelper(event, "ChangeRestoredEvent", "change-restored", common, true);
   }
 
-  public void testCommentAddedEvent() {
+  public void testCommentAddedEventWOApprovals() {
     CommentAddedEvent event = new CommentAddedEvent();
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
@@ -217,6 +218,60 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
     common.add(propertyComment);
+
+    eventHelper(event, "CommentAddedEvent", "comment-added", common, true);
+  }
+
+  public void testCommentAddedEventWApprovals() {
+    CommentAddedEvent event = new CommentAddedEvent();
+
+    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    event.change = changeAttribute;
+    Property propertyChange = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(changeAttribute))
+        .andReturn(Sets.newHashSet(propertyChange));
+
+    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    event.author = accountAttribute;
+    Property propertySubmitter = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(accountAttribute,
+        "commenter")).andReturn(Sets.newHashSet(propertySubmitter));
+
+    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    event.patchSet = patchSetAttribute;
+    Property propertyPatchSet = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
+        .andReturn(Sets.newHashSet(propertyPatchSet));
+
+    ApprovalAttribute approvalAttribute1 = createMock(ApprovalAttribute.class);
+    Property propertyApproval1 = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(approvalAttribute1))
+        .andReturn(Sets.newHashSet(propertyApproval1));
+    ApprovalAttribute approvalAttribute2 = createMock(ApprovalAttribute.class);
+    Property propertyApproval2 = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(approvalAttribute2))
+        .andReturn(Sets.newHashSet(propertyApproval2));
+    ApprovalAttribute approvalAttributes[] = { approvalAttribute1,
+        approvalAttribute2 };
+    event.approvals = approvalAttributes;
+
+    event.comment = "testComment";
+    Property propertyComment = createMock(Property.class);
+    expect(propertyFactory.create("comment", "testComment"))
+        .andReturn(propertyComment);
+
+    changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
+    patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
+
+    Set<Property> common = Sets.newHashSet();
+    common.add(propertyChange);
+    common.add(propertySubmitter);
+    common.add(propertyPatchSet);
+    common.add(propertyComment);
+    common.add(propertyApproval1);
+    common.add(propertyApproval2);
 
     eventHelper(event, "CommentAddedEvent", "comment-added", common, true);
   }
