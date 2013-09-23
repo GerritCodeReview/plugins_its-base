@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
+import java.util.Arrays;
+
 import javax.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -55,6 +57,30 @@ public class ActionRequest {
       ret = chopped[0];
     }
     return ret;
+  }
+
+  /**
+   * Gets the name of the requested action.
+   *
+   * @param i The number of the parameter to extract. 1 is the first parameter.
+   * @return The name of the requested parameter, if the requested parameter
+   *    exists. "" otherwise.
+   */
+  public String getParameter(int i) {
+    String ret = "";
+    if (chopped.length > i) {
+      ret = chopped[i];
+    }
+    return ret;
+  }
+
+  /**
+   * Gets the parameters of the requested action.
+   *
+   * @return The parameters of the requested action.
+   */
+  public String[] getParameters() {
+    return Arrays.copyOfRange(chopped, 1, chopped.length);
   }
 
   /**
