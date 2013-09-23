@@ -152,6 +152,25 @@ public class IssueExtractor {
         }
       } else {
         body = StringUtils.join(lines, "\n", 1, footerStart - 1);
+
+        StringBuilder footerBuilder = new StringBuilder();
+        for (int lineIdx = footerStart; lineIdx < footerEnd; lineIdx++) {
+          String line = lines[lineIdx];
+
+          // Adding occurrences for footer keys
+          int colonIdx = line.indexOf(':');
+          if (colonIdx > 0) {
+            // tag of length at least 1
+            String tag = line.substring(0, colonIdx);
+            addIssuesOccurrence(line, "footer-" + tag, ret);
+          }
+
+          // Putting back together the footer to a single String
+          if (lineIdx > footerStart) {
+            footerBuilder.append('\n');
+          }
+          footerBuilder.append(line);
+        }
         footer = StringUtils.join(lines, "\n", footerStart, footerEnd);
       }
       if (body != null) {
