@@ -20,6 +20,8 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -91,7 +93,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyReason);
 
     changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -99,7 +103,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertyPatchSet);
     common.add(propertyReason);
 
-    eventHelper(event, "ChangeAbandonedEvent", "change-abandoned", common);
+    eventHelper(event, "ChangeAbandonedEvent", "change-abandoned", common,
+        true);
   }
 
   public void testChangeMergedEvent() {
@@ -124,14 +129,16 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
 
-    eventHelper(event, "ChangeMergedEvent", "change-merged", common);
+    eventHelper(event, "ChangeMergedEvent", "change-merged", common, true);
   }
 
   public void testChangeRestoredEvent() {
@@ -161,7 +168,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyReason);
 
     changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -169,7 +178,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertyPatchSet);
     common.add(propertyReason);
 
-    eventHelper(event, "ChangeRestoredEvent", "change-restored", common);
+    eventHelper(event, "ChangeRestoredEvent", "change-restored", common, true);
   }
 
   public void testCommentAddedEvent() {
@@ -199,7 +208,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyComment);
 
     changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -207,7 +218,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertyPatchSet);
     common.add(propertyComment);
 
-    eventHelper(event, "CommentAddedEvent", "comment-added", common);
+    eventHelper(event, "CommentAddedEvent", "comment-added", common, true);
   }
 
   public void testPatchSetCreatedEvent() {
@@ -232,14 +243,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
 
-    eventHelper(event, "PatchSetCreatedEvent", "patchset-created", common);
+    eventHelper(event, "PatchSetCreatedEvent", "patchset-created", common,
+        true);
   }
 
   public void testRefUpdatedEvent() {
@@ -265,11 +279,11 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertySubmitter);
     common.add(propertyRefUpdated);
 
-    eventHelper(event, "RefUpdatedEvent", "ref-updated", common);
+    eventHelper(event, "RefUpdatedEvent", "ref-updated", common, false);
   }
 
   private void eventHelper(ChangeEvent event, String className, String type,
-      Set<Property> common) {
+      Set<Property> common, boolean withRevision) {
     PropertyExtractor propertyExtractor = injector.getInstance(
         PropertyExtractor.class);
 
@@ -304,8 +318,14 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     HashMap<String,Set<String>> issueMap = Maps.newHashMap();
     issueMap.put("4711", Sets.newHashSet("body", "anywhere"));
     issueMap.put("42", Sets.newHashSet("footer", "anywhere"));
-    expect(issueExtractor.getIssueIds("testProject", "testRevision"))
-        .andReturn(issueMap);
+    if (withRevision) {
+      PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(176), 3);
+      expect(issueExtractor.getIssueIds("testProject", "testRevision",
+          patchSetId)).andReturn(issueMap);
+    } else {
+      expect(issueExtractor.getIssueIds("testProject", "testRevision"))
+      .andReturn(issueMap);
+    }
 
     replayMocks();
 
