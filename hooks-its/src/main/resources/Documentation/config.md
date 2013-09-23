@@ -168,6 +168,7 @@ corresponding subsection below:
 * <<event-properties-ChangeMergedEvent,ChangeMergedEvent>>
 * <<event-properties-ChangeRestoredEvent,ChangeRestoredEvent>>
 * <<event-properties-CommentAddedEvent,CommentAddedEvent>>
+* <<event-properties-DraftPublishedEvent,DraftPublishedEvent>>
 * <<event-properties-PatchSetCreatedEvent,PatchSetCreatedEvent>>
 * <<event-properties-RefUpdatedEvent,RefUpdatedEvent>>
 * <<event-properties-change,Common properties for events on a change>>
@@ -269,6 +270,19 @@ In addition to the above properties, the event also provides
 properties for the <<event-properties-change,change>> the comment was
 added for, and it's most recent <<event-properties-patch-set,patch
 set>>.
+
+[[event-properties-DraftPublishedEvent]]
+DraftPublishedEvent
+^^^^^^^^^^^^^^^^^^^
+
+'event'::
+  +com.google.gerrit.server.events.DraftPublishedEvent+
+'event-type'::
+  +draft-published+
+
+In addition to the above properties, the event also provides
+properties for the uploaded <<event-properties-patch-set,patch set>>,
+and the <<event-properties-change,change>> it belongs to.
 
 [[event-properties-PatchSetCreatedEvent]]
 PatchSetCreatedEvent
@@ -443,6 +457,34 @@ Any <<event-properties,property>> of the event may be used from
 templates. So for example +$subject+ in the above example refers to
 the event's subject property, and +$change-number+ would refer to the
 change's number.
+
+Additionally, the context's 'its' property provides an object that
+allows to format links using the its' syntax:
+
+'formatLink( url )'::
+  Formats a link to a url.
+  +
+  So for example upon adding a comment to a change, the following rule
+  formats a link to the change:
++
+----
+[rule "formatLinkSampleRule"]
+        event-type = comment-added
+        action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($change-url)}
+----
+
+'formatLink( url, caption )'::
+  Formats a link to a url using 'caption' to represent the url.
+  +
+  So for example upon adding a comment to a change, the following rule
+  formats a link to the change using the change number as link
+  capition:
++
+----
+[rule "formatLinkSampleRule"]
+        event-type = comment-added
+        action = add-velocity-comment inline Comment for change ${its.formatLink($change-url, $change-number)} added.
+-----
 
 [[action-log-event]]
 Action: log-event

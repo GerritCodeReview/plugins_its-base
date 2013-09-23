@@ -17,10 +17,8 @@ import static org.easymock.EasyMock.expect;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -29,34 +27,9 @@ import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 public class ConditionTest  extends LoggingMockingTestCase {
   private Injector injector;
 
-  public void testSimpleValue() {
-    Condition condition = createCondition("testKey", "testValue");
-    assertEquals("key not matching 'testKey'", "testKey", condition.getKey());
-    Set<String> expectedValues = Sets.newHashSet();
-    expectedValues.add("testValue");
-    assertEquals("values do not match", expectedValues, condition.getValues());
-  }
-
   public void testGetKeyNull() {
     Condition condition = new Condition(null, "testValues");
     assertNull("key is not null", condition.getKey());
-  }
-
-  public void testGetValuesNull() {
-    Condition condition = createCondition("testKey", null);
-    Set<String> values = condition.getValues();
-    assertNotNull("values is null", values);
-    assertTrue("values is not empty", values.isEmpty());
-  }
-
-  public void testOredValue() {
-    Condition condition = createCondition("testKey", "value1,value2,value3");
-    assertEquals("key not matching 'testKey'", "testKey", condition.getKey());
-    Set<String> expectedValues = Sets.newLinkedHashSet();
-    expectedValues.add("value1");
-    expectedValues.add("value2");
-    expectedValues.add("value3");
-    assertEquals("values do not match", expectedValues, condition.getValues());
   }
 
   public void testIsMetBySimple() {
@@ -197,16 +170,6 @@ public class ConditionTest  extends LoggingMockingTestCase {
     replayMocks();
 
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
-  }
-
-  public void testUnmodifiableValue() {
-    Condition condition = createCondition("testKey", "testValue");
-    Set<String> values = condition.getValues();
-    try {
-      values.add("value2");
-      fail("value is not unmodifyable");
-    } catch (UnsupportedOperationException e) {
-    }
   }
 
   private Condition createCondition(String key, String value) {

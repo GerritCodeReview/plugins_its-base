@@ -33,6 +33,7 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
+import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Guice;
@@ -274,6 +275,41 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     common.add(propertyApproval2);
 
     eventHelper(event, "CommentAddedEvent", "comment-added", common, true);
+  }
+
+  public void testDraftPublishedEvent() {
+    DraftPublishedEvent event = new DraftPublishedEvent();
+
+    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    event.change = changeAttribute;
+    Property propertyChange = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(changeAttribute))
+        .andReturn(Sets.newHashSet(propertyChange));
+
+    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    event.uploader = accountAttribute;
+    Property propertySubmitter = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(accountAttribute,
+        "uploader")).andReturn(Sets.newHashSet(propertySubmitter));
+
+    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    event.patchSet = patchSetAttribute;
+    Property propertyPatchSet = createMock(Property.class);
+    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
+        .andReturn(Sets.newHashSet(propertyPatchSet));
+
+    changeAttribute.project = "testProject";
+    changeAttribute.number = "176";
+    patchSetAttribute.revision = "testRevision";
+    patchSetAttribute.number = "3";
+
+    Set<Property> common = Sets.newHashSet();
+    common.add(propertyChange);
+    common.add(propertySubmitter);
+    common.add(propertyPatchSet);
+
+    eventHelper(event, "DraftPublishedEvent", "draft-published", common,
+        true);
   }
 
   public void testPatchSetCreatedEvent() {
