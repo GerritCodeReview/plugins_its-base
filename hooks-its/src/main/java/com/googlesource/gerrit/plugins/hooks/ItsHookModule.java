@@ -21,12 +21,14 @@ import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsValidateComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.hooks.workflow.Condition;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToChangeId;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToGitWeb;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterChangeState;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.hooks.workflow.Rule;
 
 public class ItsHookModule extends FactoryModule {
 
@@ -53,5 +55,7 @@ public class ItsHookModule extends FactoryModule {
         ActionController.class);
     factory(ActionRequest.Factory.class);
     factory(Property.Factory.class);
+    factory(Condition.Factory.class);
+    factory(Rule.Factory.class);
   }
 }
