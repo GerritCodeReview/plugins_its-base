@@ -17,9 +17,13 @@ import static org.easymock.EasyMock.expect;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jgit.lib.Config;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Guice;
@@ -30,6 +34,7 @@ import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private Config serverConfig;
+  private CommitMessageFetcher commitMessageFetcher;
 
   public void testPatternNullMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
@@ -171,6 +176,77 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
+  public void testIssueIdsCommitSingleIssue() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitMultipleIssues() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42, and bug#4711\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere"));
+    expected.put("4711", Sets.newHashSet("somewhere"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
+  public void testIssueIdsCommitMultipleIssuesMultipleTimes() {
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(commitMessageFetcher.fetchGuarded("testProject",
+        "1234567891123456789212345678931234567894")).andReturn(
+            "bug#42, bug#4711, bug#4711, bug#42, and bug#4711\n" +
+            "\n" +
+            "Change-Id: I1234567891123456789212345678931234567894");
+
+    replayMocks();
+
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
+        "1234567891123456789212345678931234567894");
+
+    Map<String,Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere"));
+    expected.put("4711", Sets.newHashSet("somewhere"));
+    assertEquals("Extracted issues do not match", expected, actual);
+
+    assertLogMessageContains("Matching");
+  }
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -187,6 +263,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       serverConfig = createMock(Config.class);
       bind(Config.class).annotatedWith(GerritServerConfig.class)
           .toInstance(serverConfig);
+
+      commitMessageFetcher = createMock(CommitMessageFetcher.class);
+      bind(CommitMessageFetcher.class).toInstance(commitMessageFetcher);
     }
   }
 }
