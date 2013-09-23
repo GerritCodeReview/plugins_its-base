@@ -32,6 +32,7 @@ import com.googlesource.gerrit.plugins.hooks.workflow.Rule;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
 
 public class ItsHookModule extends FactoryModule {
 
@@ -63,5 +64,6 @@ public class ItsHookModule extends FactoryModule {
     factory(AddComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(AddVelocityComment.Factory.class);
+    factory(LogEvent.Factory.class);
   }
 }
