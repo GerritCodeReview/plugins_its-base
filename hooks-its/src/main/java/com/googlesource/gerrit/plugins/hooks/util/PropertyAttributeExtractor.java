@@ -85,6 +85,8 @@ public class PropertyAttributeExtractor {
         Integer.toString(patchSetAttribute.sizeDeletions)));
     properties.add(propertyFactory.create("insertions",
         Integer.toString(patchSetAttribute.sizeInsertions)));
+    properties.add(propertyFactory.create("is-draft",
+        Boolean.toString(patchSetAttribute.isDraft)));
     properties.addAll(extractFrom(patchSetAttribute.uploader,
         "uploader"));
     properties.addAll(extractFrom(patchSetAttribute.author,

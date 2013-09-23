@@ -267,6 +267,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     patchSetAttribute.parents = Lists.newArrayList("parent1", "parent2");
     patchSetAttribute.sizeDeletions = 7;
     patchSetAttribute.sizeInsertions = 12;
+    patchSetAttribute.isDraft = true;
     patchSetAttribute.uploader = uploader;
     patchSetAttribute.author = author;
 
@@ -298,6 +299,10 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     Property propertyInsertions = createMock(Property.class);
     expect(propertyFactory.create("insertions", "12"))
         .andReturn(propertyInsertions);
+
+    Property propertyIsDraft= createMock(Property.class);
+    expect(propertyFactory.create("is-draft", "true"))
+        .andReturn(propertyIsDraft);
 
     Property propertyEmail1 = createMock(Property.class);
     expect(propertyFactory.create("uploader-email", "testEmail1"))
@@ -338,6 +343,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyParents);
     expected.add(propertyDeletions);
     expected.add(propertyInsertions);
+    expected.add(propertyIsDraft);
     expected.add(propertyEmail1);
     expected.add(propertyName1);
     expected.add(propertyUsername1);
