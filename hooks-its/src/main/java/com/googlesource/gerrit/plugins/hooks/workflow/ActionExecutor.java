@@ -14,12 +14,39 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+
 /**
  * Executes an {@link ActionRequest}
  */
 public class ActionExecutor {
+  private static final Logger log = LoggerFactory.getLogger(
+      ActionExecutor.class);
+
+  private final ItsFacade its;
+
+  @Inject
+  public ActionExecutor(ItsFacade its) {
+    this.its = its;
+  }
+
+  public void execute(String issue, ActionRequest actionRequest) {
+    try {
+      its.performAction(issue, actionRequest.getUnparsed());
+    } catch (IOException e) {
+      log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
   public void execute(String issue, Iterable<ActionRequest> actions) {
-    // TODO implement
-    throw new RuntimeException("unimplemented");
+    for (ActionRequest actionRequest : actions) {
+        execute(issue, actionRequest);
+    }
   }
 }
