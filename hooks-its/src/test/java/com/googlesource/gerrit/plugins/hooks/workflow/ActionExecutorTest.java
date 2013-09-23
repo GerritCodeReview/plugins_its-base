@@ -17,6 +17,8 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
@@ -24,27 +26,35 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
 
   private ItsFacade its;
+  private AddStandardComment.Factory addStandardCommentFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
+
+    Set<Property> properties = Collections.emptySet();
 
     its.performAction("4711", "unparsed action 1");
 
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest);
+    actionExecutor.execute("4711", actionRequest, properties);
   }
 
   public void testExecuteItemException() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
+
+    Set<Property> properties = Collections.emptySet();
 
     its.performAction("4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
@@ -52,17 +62,21 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest);
+    actionExecutor.execute("4711", actionRequest, properties);
 
     assertLogThrowableMessageContains("injected exception 1");
   }
 
   public void testExecuteIterable() throws IOException {
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    expect(actionRequest1.getName()).andReturn("unparsed");
     expect(actionRequest1.getUnparsed()).andReturn("unparsed action 1");
 
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    expect(actionRequest2.getName()).andReturn("unparsed");
     expect(actionRequest2.getUnparsed()).andReturn("unparsed action 2");
+
+    Set<Property> properties = Collections.emptySet();
 
     its.performAction("4711", "unparsed action 1");
     its.performAction("4711", "unparsed action 2");
@@ -71,18 +85,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     ActionExecutor actionExecutor = createActionExecutor();
     actionExecutor.execute("4711", Sets.newHashSet(
-        actionRequest1, actionRequest2));
+        actionRequest1, actionRequest2), properties);
   }
 
   public void testExecuteIterableExceptions() throws IOException {
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    expect(actionRequest1.getName()).andReturn("unparsed");
     expect(actionRequest1.getUnparsed()).andReturn("unparsed action 1");
 
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    expect(actionRequest2.getName()).andReturn("unparsed");
     expect(actionRequest2.getUnparsed()).andReturn("unparsed action 2");
 
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
+    expect(actionRequest3.getName()).andReturn("unparsed");
     expect(actionRequest3.getUnparsed()).andReturn("unparsed action 3");
+
+    Set<Property> properties = Collections.emptySet();
 
     its.performAction("4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
@@ -94,7 +113,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     ActionExecutor actionExecutor = createActionExecutor();
     actionExecutor.execute("4711", Sets.newHashSet(
-        actionRequest1, actionRequest2, actionRequest3));
+        actionRequest1, actionRequest2, actionRequest3), properties);
 
     assertLogThrowableMessageContains("injected exception 1");
     assertLogThrowableMessageContains("injected exception 3");
@@ -114,6 +133,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     protected void configure() {
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
+
+      addStandardCommentFactory = createMock(AddStandardComment.Factory.class);
+      bind(AddStandardComment.Factory.class).toInstance(
+          addStandardCommentFactory);
     }
   }
 }

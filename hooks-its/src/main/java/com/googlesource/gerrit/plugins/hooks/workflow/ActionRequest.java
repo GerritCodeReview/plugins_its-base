@@ -27,6 +27,7 @@ import com.google.inject.assistedinject.Assisted;
  */
 public class ActionRequest {
   private final String unparsed;
+  private final String[] chopped;
 
   public interface Factory {
     ActionRequest create(String specification);
@@ -39,6 +40,21 @@ public class ActionRequest {
     } else {
       this.unparsed = specification;
     }
+    this.chopped = unparsed.split(" ");
+  }
+
+  /**
+   * Gets the name of the requested action.
+   *
+   * @return The name of the requested action, if a name has been given.
+   *    "" otherwise.
+   */
+  public String getName() {
+    String ret = "";
+    if (chopped.length > 0) {
+      ret = chopped[0];
+    }
+    return ret;
   }
 
   /**

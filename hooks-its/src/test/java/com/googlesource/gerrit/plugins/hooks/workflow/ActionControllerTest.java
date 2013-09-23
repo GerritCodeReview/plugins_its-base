@@ -116,7 +116,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests)
         .once();
 
-    actionExecutor.execute("testIssue", actionRequests);
+    actionExecutor.execute("testIssue", actionRequests, propertySet);
 
     replayMocks();
 
@@ -167,9 +167,9 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2)
         .once();
 
-    actionExecutor.execute("testIssue", actionRequests1);
-    actionExecutor.execute("testIssue", actionRequests2);
-    actionExecutor.execute("testIssue2", actionRequests2);
+    actionExecutor.execute("testIssue", actionRequests1, propertySet1);
+    actionExecutor.execute("testIssue", actionRequests2, propertySet2);
+    actionExecutor.execute("testIssue2", actionRequests2, propertySet2);
 
     replayMocks();
 

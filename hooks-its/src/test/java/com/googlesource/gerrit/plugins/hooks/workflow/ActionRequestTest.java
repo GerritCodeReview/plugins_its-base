@@ -55,6 +55,38 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getUnparsed());
   }
 
+  public void testNameParameterless() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action");
+    assertEquals("Unparsed string does not match", "action",
+        actionRequest.getName());
+  }
+
+  public void testNameSingleParameter() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param");
+    assertEquals("Unparsed string does not match", "action",
+        actionRequest.getName());
+  }
+
+  public void testNameMultipleParameters() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest("action param1 param2");
+    assertEquals("Unparsed string does not match", "action",
+        actionRequest.getName());
+  }
+
+  public void testNameNull() throws IOException {
+    replayMocks();
+
+    ActionRequest actionRequest = createActionRequest(null);
+    assertEquals("Unparsed string does not match", "",
+        actionRequest.getName());
+  }
+
   private ActionRequest createActionRequest(String specification) {
     ActionRequest.Factory factory = injector.getInstance(
         ActionRequest.Factory.class);
