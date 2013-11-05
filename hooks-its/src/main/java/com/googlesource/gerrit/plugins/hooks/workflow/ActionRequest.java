@@ -16,10 +16,9 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.util.Arrays;
 
-import javax.annotation.Nullable;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.google.gerrit.common.Nullable;
 
 /**
  * An action to take for an {@code ChangeEvent}.

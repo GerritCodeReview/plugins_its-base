@@ -14,10 +14,9 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import javax.annotation.Nullable;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.google.gerrit.common.Nullable;
 
 /**
  * A property to match against {@code Condition}s.

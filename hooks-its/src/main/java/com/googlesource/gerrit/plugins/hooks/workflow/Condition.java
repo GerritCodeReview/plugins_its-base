@@ -18,10 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
