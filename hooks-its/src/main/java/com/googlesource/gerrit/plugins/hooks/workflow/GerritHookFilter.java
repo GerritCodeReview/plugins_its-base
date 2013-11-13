@@ -27,16 +27,12 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
-import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.util.CommitMessageFetcher;
 
 public class GerritHookFilter implements ChangeListener {
   private static final Logger log = LoggerFactory.getLogger(GerritHookFilter.class);
-
-  @Inject
-  private GitRepositoryManager repoManager;
 
   @Inject
   private CommitMessageFetcher commitMessageFetcher;
