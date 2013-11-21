@@ -22,10 +22,6 @@ public class InitIts implements InitStep {
 
   public static String COMMENT_LINK_SECTION = "commentLink";
 
-  public static enum YesNoEnum {
-    Y, N;
-  }
-
   public static enum TrueFalseEnum {
     TRUE, FALSE;
   }
@@ -35,9 +31,7 @@ public class InitIts implements InitStep {
   }
 
   public boolean isConnectivityRequested(ConsoleUI ui, String url) {
-    YesNoEnum wantToTest =
-        ui.readEnum(YesNoEnum.N, "Test connectivity to %s", url);
-    return wantToTest == YesNoEnum.Y;
+    return ui.yesno(false, "Test connectivity to %s", url);
   }
 
   public boolean enterSSLVerify(Section section) {
