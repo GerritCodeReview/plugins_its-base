@@ -29,6 +29,8 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
+
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.util.CommitMessageFetcher;
 
 public class GerritHookFilter implements ChangeListener {
@@ -36,6 +38,9 @@ public class GerritHookFilter implements ChangeListener {
 
   @Inject
   private CommitMessageFetcher commitMessageFetcher;
+
+  @Inject
+  private ItsConfig itsConfig;
 
   public String getComment(String projectName, String commitId)
       throws IOException {
@@ -65,6 +70,10 @@ public class GerritHookFilter implements ChangeListener {
 
   @Override
   public void onChangeEvent(ChangeEvent event) {
+    if (!itsConfig.isEnabled(event)) {
+      return;
+    }
+
     try {
       if (event instanceof PatchSetCreatedEvent) {
         doFilter((PatchSetCreatedEvent) event);
