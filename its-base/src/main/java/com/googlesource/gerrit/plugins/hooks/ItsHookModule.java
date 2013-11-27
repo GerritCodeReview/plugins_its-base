@@ -19,6 +19,7 @@ import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsValidateComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Condition;
@@ -38,6 +39,7 @@ public class ItsHookModule extends FactoryModule {
 
   @Override
   protected void configure() {
+    bind(ItsConfig.class);
     DynamicSet.bind(binder(), ChangeListener.class).to(
         GerritHookFilterAddRelatedLinkToChangeId.class);
     DynamicSet.bind(binder(), ChangeListener.class).to(

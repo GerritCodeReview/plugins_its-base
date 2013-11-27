@@ -29,6 +29,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.CommitReceivedEvent;
@@ -37,11 +38,10 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
-import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
-import com.googlesource.gerrit.plugins.hooks.validation.ItsValidateComment;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RevCommit.class})
@@ -50,13 +50,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private Config serverConfig;
   private IssueExtractor issueExtractor;
   private ItsFacade itsFacade;
+  private Project project = new Project(new Project.NameKey("myProject"));
 
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -73,7 +74,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -101,7 +102,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -131,7 +132,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -157,7 +158,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -183,7 +184,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -213,7 +214,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -243,7 +244,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -271,7 +272,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -299,7 +300,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -333,7 +334,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -365,7 +366,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -399,7 +400,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -431,7 +432,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
-    CommitReceivedEvent event = new CommitReceivedEvent(command, null, null,
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
@@ -510,6 +511,13 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
       itsFacade = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(itsFacade);
+
+      bind(ItsConfig.class).toInstance(new ItsConfig(null, null) {
+        @Override
+        public boolean isEnabled(String project) {
+          return true;
+        }
+      });
     }
   }
 }
