@@ -24,6 +24,32 @@ which action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
 configured through a xref:config-rule-base[rule base] in
 `etc/its/action.config`.
 
+It can be configured per project whether the issue tracker
+integration is enabled or not. To enable the issue tracker integration
+for a project the project must have the following entry in its
+`project.config` file in the `refs/meta/config` branch:
+
+```
+  [plugin "<its-name>"]
+    enabled = true
+```
+
+If `plugin.<its-name>.enabled` is not specified in the `project.config`
+file the value is inherited from the parent project. If it is also not
+set on any parent project the issue integration is disabled for this
+project.
+
+By setting `plugin.<its-name>.enabled` to true in the `project.config`
+of the `All-Projects` project the issue tracker integration can be
+enabled by default for all projects. During the initialization of the
+plugin you are asked if the issue integration should be enabled by
+default for all projects and if yes this setting in the
+`project.config` of the `All-Projects` project is done automatically.
+
+With this it is possible to support integration with multiple
+issue tracker systems on a server. E.g. a project can choose if it
+wants to enable integration with Jira or with Bugzilla.
+
 
 
 [[config-rule-base]]

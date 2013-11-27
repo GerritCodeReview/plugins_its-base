@@ -25,6 +25,8 @@ import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
 
@@ -195,6 +197,13 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       actionExecutor = createMock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);
+
+      bind(ItsConfig.class).toInstance(new ItsConfig(null, null) {
+        @Override
+        public boolean isEnabled(ChangeEvent event) {
+          return true;
+        }
+      });
     }
   }
 }

@@ -20,6 +20,8 @@ import java.util.Set;
 import com.google.gerrit.common.ChangeListener;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.inject.Inject;
+
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
 
 /**
@@ -32,17 +34,23 @@ public class ActionController implements ChangeListener {
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
+  private final ItsConfig itsConfig;
 
   @Inject
   public ActionController(PropertyExtractor propertyExtractor,
-      RuleBase ruleBase, ActionExecutor actionExecutor) {
+      RuleBase ruleBase, ActionExecutor actionExecutor, ItsConfig itsConfig) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
+    this.itsConfig = itsConfig;
   }
 
   @Override
   public void onChangeEvent(ChangeEvent event) {
+    if (!itsConfig.isEnabled(event)) {
+      return;
+    }
+
     Set<Set<Property>> propertiesCollections =
         propertyExtractor.extractFrom(event);
     for (Set<Property> properties : propertiesCollections) {
