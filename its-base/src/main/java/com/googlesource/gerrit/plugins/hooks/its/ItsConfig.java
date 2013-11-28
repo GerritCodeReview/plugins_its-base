@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.hooks.its;
 
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
@@ -24,7 +25,8 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
-import com.google.gerrit.server.project.NoSuchProjectException;
+import com.google.gerrit.server.project.ProjectCache;
+import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,11 +36,14 @@ public class ItsConfig {
   private static final Logger log = LoggerFactory.getLogger(ItsConfig.class);
 
   private final String pluginName;
+  private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
 
   @Inject
-  public ItsConfig(@PluginName String pluginName, PluginConfigFactory pluginCfgFactory) {
+  public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
+      PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
+    this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
   }
 
@@ -62,13 +67,22 @@ public class ItsConfig {
   }
 
   public boolean isEnabled(String project) {
-    try {
-      return pluginCfgFactory.getFromProjectConfigWithInheritance(
-          new Project.NameKey(project), pluginName).getBoolean("enabled", false);
-    } catch (NoSuchProjectException e) {
+    ProjectState projectState = projectCache.get(new Project.NameKey(project));
+    if (projectState == null) {
       log.error("Failed to check if " + pluginName + " is enabled for project "
-          + project, e);
+          + project + ": Project " + project + " not found");
       return false;
     }
+
+    for (ProjectState parentState : projectState.treeInOrder()) {
+      PluginConfig parentCfg =
+          pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
+      if ("enforced".equals(parentCfg.getString("enabled"))) {
+        return true;
+      }
+    }
+
+    return pluginCfgFactory.getFromProjectConfigWithInheritance(
+        projectState, pluginName).getBoolean("enabled", false);
   }
 }

@@ -50,6 +50,10 @@ With this it is possible to support integration with multiple
 issue tracker systems on a server. E.g. a project can choose if it
 wants to enable integration with Jira or with Bugzilla.
 
+If child projects must not be allowed to disable the issue tracker
+system integration a project can enforce the issue tracker system
+integration for all child projects by setting
+`plugin.<its-name>.enabled` to `enforced`.
 
 
 [[config-rule-base]]
