@@ -32,6 +32,10 @@ public class InitIts implements InitStep {
     TRUE, FALSE;
   }
 
+  public static enum ItsIntegration {
+    ENABLED, DISABLED, ENFORCED;
+  }
+
   private final String pluginName;
   private final String itsDisplayName;
   protected final ConsoleUI ui;
@@ -54,13 +58,32 @@ public class InitIts implements InitStep {
     Config cfg = allProjectsConfig.load();
     ui.message("\n");
     ui.header(itsDisplayName + " Integration");
-    boolean enabled =
-        ui.yesno(cfg.getBoolean("plugin", pluginName, "enabled", false),
-            "By default enabled for all projects");
-    if (enabled) {
-      cfg.setBoolean("plugin", pluginName, "enabled", enabled);
+
+    ItsIntegration itsintegration;
+    String enabled = cfg.getString("plugin", pluginName, "enabled");
+    if (ItsIntegration.ENFORCED.name().equalsIgnoreCase(enabled)) {
+      itsintegration = ItsIntegration.ENFORCED;
+    } else if (Boolean.parseBoolean(enabled)) {
+      itsintegration = ItsIntegration.ENABLED;
     } else {
-      cfg.unset("plugin", pluginName, "enabled");
+      itsintegration = ItsIntegration.DISABLED;
+    }
+    itsintegration =
+        ui.readEnum(itsintegration,
+            "Issue tracker integration for all projects?");
+    switch (itsintegration) {
+      case ENFORCED:
+        cfg.setString("plugin", pluginName, "enabled", "enforced");
+        break;
+      case ENABLED:
+        cfg.setBoolean("plugin", pluginName, "enabled", true);
+        break;
+      case DISABLED:
+        cfg.unset("plugin", pluginName, "enabled");
+        break;
+      default:
+        throw new IOException("Unsupported value for issue track integration: "
+            + itsintegration.name());
     }
     allProjectsConfig.save(pluginName, "Initialize " + itsDisplayName + " Integration");
   }
