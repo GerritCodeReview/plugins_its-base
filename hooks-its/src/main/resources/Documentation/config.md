@@ -15,14 +15,14 @@ Common configuration
 --------------------
 
 The base functionality for 'hooks-its' based plugins is configured via
-git config files in the site's `etc/its` directory footnote:[The
+git config files in the site's `etc/its` directory. Footnote:[The
 <<config-legacy,legacy configuration>> directly in `etc/gerrit.config`
 still works, but upgrading to this xref:config[new, more flexible
 approach] is strongly recommended.].
 
 Setting up which event in Gerrit (E.g.: “Change Merged”, or “User
-‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a change”) should causes
-what action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
+‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a change”) should trigger
+which action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
 configured through a xref:config-rule-base[rule base] in
 `etc/its/action.config`.
 
@@ -34,13 +34,13 @@ Rule base for Actions
 
 In this part we describe, how to specify which events in Gerrit (E.g.:
 “Change Merged”, or “User ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a
-change”) should causes what action (e.g.: “Set issue's status to
+change”) trigger which action (e.g.: “Set issue's status to
 ‘Resolved’”) on the ITS.
 
 Actions on the ITS and conditions for the action to take place are
 configured through the rule base in `etc/its/actions.config` in the
 site directory. The rule base is a git config file, and may contain an
-arbirary number of rules. Each rule can have an arbitrary number of
+arbitrary number of rules. Each rule can have an arbitrary number of
 conditions and actions. A rule fires all associated actions, once all
 of its conditions are met.
 
@@ -73,16 +73,15 @@ Rules
 Each rule consists of three items: A name, a set of conditions, and a
 set of actions.
 
-A rule's name ('rule1', and 'rule2' in the above example) are
+The names of the rules ('rule1', and 'rule2' in the above example) are
 currently not used and only provided for convenience.
 
-Each rule line setting the option 'action' is interpreted as
-action. Any other lines of a rule are considered a condition.
+For each rule the 'action' parameter is interpreted as action.
+Any other parameter of a rule is considered to be a condition.
 
-Each of a rule's actions is taken for events that meet all of a
-rule's conditions. If a rule contains more than one action
-specifications, the order in which they are given need not be
-respected.
+Each action of a rule is taken for events that meet all of a rule's
+conditions. If a rule contains more than one action, the order in which
+they are given need not be respected.
 
 There is no upper limit on the number of elements in a rules set of
 conditions, and set of actions. Each of those sets may be empty.
@@ -90,7 +89,7 @@ conditions, and set of actions. Each of those sets may be empty.
 Conditions
 ~~~~~~~~~~
 
-The conditions are lines of the form
+The conditions are parameters of the form
 ----
 name = value1, value2, ..., valueN
 ----
@@ -115,7 +114,7 @@ status = !,DRAFT
 Event Properties
 ~~~~~~~~~~~~~~~~
 
-The properties exposed by events depend on the kind of event.
+The properties exposed by events depend on the kind of the event.
 
 For all events, the event's class name is provided in the 'event'
 property. Most native Gerrit events provide the 'event-type'
@@ -210,7 +209,7 @@ it's most recent <<event-properties-patch-set,patch set>>.
 
 [[event-properties-ChangeMergedEvent]]
 ChangeMergedEvent
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 'event'::
   +com.google.gerrit.server.events.ChangeMergedEvent+
@@ -299,7 +298,7 @@ and the <<event-properties-change,change>> it belongs to.
 
 [[event-properties-PatchSetCreatedEvent]]
 PatchSetCreatedEvent
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 'event'::
   +com.google.gerrit.server.events.PatchSetCreatedEvent+
@@ -404,7 +403,7 @@ Common properties for events on a patch set
 Actions
 ~~~~~~~
 
-Lines of the form
+Parameters of the form
 ----
 action = name param1 param2 ... paramN
 ----
