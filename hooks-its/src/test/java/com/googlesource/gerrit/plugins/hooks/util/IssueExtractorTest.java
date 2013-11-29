@@ -27,6 +27,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.RevId;
@@ -37,7 +38,7 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.googlesource.gerrit.plugins.hooks.its.ItsName;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
 @RunWith(PowerMockRunner.class)
@@ -1163,7 +1164,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      bind(String.class).annotatedWith(ItsName.class)
+      bind(String.class).annotatedWith(PluginName.class)
           .toInstance("ItsTestName");
 
       serverConfig = createMock(Config.class);

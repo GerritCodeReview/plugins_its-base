@@ -25,14 +25,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
 public class ItsValidateComment implements CommitValidationListener {
@@ -47,8 +48,8 @@ public class ItsValidateComment implements CommitValidationListener {
   @GerritServerConfig
   private Config gerritConfig;
 
-  @Inject @ItsName
-  private String itsName;
+  @Inject @PluginName
+  private String pluginName;
 
   @Inject
   private IssueExtractor issueExtractor;
@@ -131,7 +132,7 @@ public class ItsValidateComment implements CommitValidationListener {
   }
 
   private ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentLink", itsName, "association",
+    return gerritConfig.getEnum("commentLink", pluginName, "association",
         ItsAssociationPolicy.OPTIONAL);
   }
 

@@ -7,13 +7,12 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
-
-import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jgit.lib.Config;
@@ -26,16 +25,16 @@ public class IssueExtractor {
       IssueExtractor.class);
 
   private final Config gerritConfig;
-  private final String itsName;
+  private final String pluginName;
   private final CommitMessageFetcher commitMessageFetcher;
   private final ReviewDb db;
 
   @Inject
   IssueExtractor(@GerritServerConfig Config gerritConfig,
-      @ItsName String itsName, CommitMessageFetcher commitMessageFetcher,
+      @PluginName String pluginName, CommitMessageFetcher commitMessageFetcher,
       ReviewDb db) {
     this.gerritConfig = gerritConfig;
-    this.itsName = itsName;
+    this.pluginName = pluginName;
     this.commitMessageFetcher = commitMessageFetcher;
     this.db = db;
   }
@@ -70,7 +69,7 @@ public class IssueExtractor {
    */
   public Pattern getPattern() {
     Pattern ret = null;
-    String match = gerritConfig.getString("commentLink", itsName, "match");
+    String match = gerritConfig.getString("commentLink", pluginName, "match");
     if (match != null) {
       ret = Pattern.compile(match);
     }

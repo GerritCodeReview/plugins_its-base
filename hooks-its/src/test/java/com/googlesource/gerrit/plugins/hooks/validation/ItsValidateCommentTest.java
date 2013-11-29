@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.CommitReceivedEvent;
@@ -38,7 +38,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.its.ItsName;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
@@ -499,7 +498,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      bind(String.class).annotatedWith(ItsName.class)
+      bind(String.class).annotatedWith(PluginName.class)
           .toInstance("ItsTestName");
 
       serverConfig = createMock(Config.class);
