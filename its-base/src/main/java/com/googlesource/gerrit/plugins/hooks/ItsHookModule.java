@@ -15,19 +15,24 @@
 package com.googlesource.gerrit.plugins.hooks;
 
 import com.google.gerrit.common.ChangeListener;
+import com.google.gerrit.extensions.annotations.Exports;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.server.config.PluginConfigFactory;
+import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
+import com.googlesource.gerrit.plugins.hooks.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.hooks.validation.ItsValidateComment;
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Condition;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToChangeId;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterAddRelatedLinkToGitWeb;
 import com.googlesource.gerrit.plugins.hooks.workflow.GerritHookFilterChangeState;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionController;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
 import com.googlesource.gerrit.plugins.hooks.workflow.Rule;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
@@ -37,8 +42,20 @@ import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
 
 public class ItsHookModule extends FactoryModule {
 
+  private final String pluginName;
+  private final PluginConfigFactory pluginCfgFactory;
+
+  public ItsHookModule(@PluginName String pluginName,
+      PluginConfigFactory pluginCfgFactory) {
+    this.pluginName = pluginName;
+    this.pluginCfgFactory = pluginCfgFactory;
+  }
+
   @Override
   protected void configure() {
+    bind(ProjectConfigEntry.class)
+        .annotatedWith(Exports.named("enabled"))
+        .toInstance(new ItsHookEnabledConfigEntry(pluginName, pluginCfgFactory));
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), ChangeListener.class).to(
         GerritHookFilterAddRelatedLinkToChangeId.class);
