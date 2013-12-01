@@ -5,10 +5,8 @@ link:https://gerrit-review.googlesource.com/#/admin/projects/plugins/hooks-its['
 is by itself not a real plugin, but the common parent project for issue tracking
 system (ITS) plugins for Gerrit, such as
 link:https://gerrit-review.googlesource.com/#/admin/projects/plugins/hooks-bugzilla['hooks-bugzilla'],
-or
-link:https://gerrit-review.googlesource.com/#/admin/projects/plugins/hooks-jira['hooks-jira'].
-
-
+link:https://gerrit-review.googlesource.com/#/admin/projects/plugins/hooks-jira['hooks-jira']
+or link:https://gerrit-review.googlesource.com/#/admin/projects/plugins/hooks-rtc['hooks-rtc'].
 
 [[config]]
 Common configuration
