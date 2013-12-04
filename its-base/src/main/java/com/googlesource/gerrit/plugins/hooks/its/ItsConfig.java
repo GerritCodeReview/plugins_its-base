@@ -14,8 +14,10 @@
 
 package com.googlesource.gerrit.plugins.hooks.its;
 
+import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
@@ -27,7 +29,9 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
+import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,35 +42,43 @@ public class ItsConfig {
   private final String pluginName;
   private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
+  private final Provider<CurrentUser> self;
 
   @Inject
   public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
-      PluginConfigFactory pluginCfgFactory) {
+      PluginConfigFactory pluginCfgFactory, Provider<CurrentUser> self) {
     this.pluginName = pluginName;
     this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
+    this.self = self;
   }
 
   public boolean isEnabled(ChangeEvent event) {
     if (event instanceof PatchSetCreatedEvent) {
-      return isEnabled(((PatchSetCreatedEvent) event).change.project);
+      PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
+      return isEnabled(e.change.project, e.change.branch);
     } else if (event instanceof CommentAddedEvent) {
-      return isEnabled(((CommentAddedEvent) event).change.project);
+      CommentAddedEvent e = (CommentAddedEvent) event;
+      return isEnabled(e.change.project, e.change.branch);
     } else if (event instanceof ChangeMergedEvent) {
-      return isEnabled(((ChangeMergedEvent) event).change.project);
+      ChangeMergedEvent e = (ChangeMergedEvent) event;
+      return isEnabled(e.change.project, e.change.branch);
     } else if (event instanceof ChangeAbandonedEvent) {
-      return isEnabled(((ChangeAbandonedEvent) event).change.project);
+      ChangeAbandonedEvent e = (ChangeAbandonedEvent) event;
+      return isEnabled(e.change.project, e.change.branch);
     } else if (event instanceof ChangeRestoredEvent) {
-      return isEnabled(((ChangeRestoredEvent) event).change.project);
+      ChangeRestoredEvent e = (ChangeRestoredEvent) event;
+      return isEnabled(e.change.project, e.change.branch);
     } else if (event instanceof RefUpdatedEvent) {
-      return isEnabled(((RefUpdatedEvent) event).refUpdate.project);
+      RefUpdatedEvent e = (RefUpdatedEvent) event;
+      return isEnabled(e.refUpdate.project, e.refUpdate.refName);
     } else {
       log.debug("Event " + event + " not recognised and ignored");
       return false;
     }
   }
 
-  public boolean isEnabled(String project) {
+  public boolean isEnabled(String project, String branch) {
     ProjectState projectState = projectCache.get(new Project.NameKey(project));
     if (projectState == null) {
       log.error("Failed to check if " + pluginName + " is enabled for project "
@@ -77,12 +89,34 @@ public class ItsConfig {
     for (ProjectState parentState : projectState.treeInOrder()) {
       PluginConfig parentCfg =
           pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
-      if ("enforced".equals(parentCfg.getString("enabled"))) {
+      if ("enforced".equals(parentCfg.getString("enabled"))
+          && isEnabledForBranch(parentState, branch)) {
         return true;
       }
     }
 
     return pluginCfgFactory.getFromProjectConfigWithInheritance(
-        projectState, pluginName).getBoolean("enabled", false);
+        projectState, pluginName).getBoolean("enabled", false)
+        && isEnabledForBranch(projectState, branch);
+  }
+
+  private boolean isEnabledForBranch(ProjectState project, String branch) {
+    String[] refPatterns =
+        pluginCfgFactory.getFromProjectConfigWithInheritance(project,
+            pluginName).getStringList("branch");
+    if (refPatterns.length == 0) {
+      return true;
+    }
+    for (String refPattern : refPatterns) {
+      if (RefConfigSection.isValid(refPattern) && match(branch, refPattern)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean match(String branch, String refPattern) {
+    return RefPatternMatcher.getMatcher(refPattern)
+        .match(branch, self.get().getUserName());
   }
 }
