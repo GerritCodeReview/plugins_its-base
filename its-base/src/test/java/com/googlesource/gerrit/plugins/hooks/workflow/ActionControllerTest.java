@@ -198,7 +198,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
       actionExecutor = createMock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);
 
-      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null) {
+      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null, null) {
         @Override
         public boolean isEnabled(ChangeEvent event) {
           return true;
