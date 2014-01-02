@@ -38,4 +38,8 @@ public class InitIts implements InitStep {
     return TrueFalseEnum.TRUE == section.select("Verify SSL Certificates",
         "sslVerify", TrueFalseEnum.TRUE);
   }
+
+  @Override
+  public void postRun() throws Exception {
+  }
 }
