@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlesource.gerrit.plugins.its</groupId>
-  <artifactId>hooks-its-parent</artifactId>
+  <artifactId>its-base-parent</artifactId>
   <packaging>pom</packaging>
   <version>2.9-SNAPSHOT</version>
 
@@ -34,7 +34,7 @@ limitations under the License.
   </properties>
 
   <modules>
-    <module>hooks-its</module>
+    <module>its-base</module>
   </modules>
 
   <licenses>

@@ -21,10 +21,10 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
-    <artifactId>hooks-its-parent</artifactId>
+    <artifactId>its-base-parent</artifactId>
     <version>2.9-SNAPSHOT</version>
   </parent>
-  <artifactId>hooks-its</artifactId>
+  <artifactId>its-base</artifactId>
   <name>Gerrit Code Review - Commit validation and Workflow</name>
   <url>http://maven.apache.org</url>
   <properties>
