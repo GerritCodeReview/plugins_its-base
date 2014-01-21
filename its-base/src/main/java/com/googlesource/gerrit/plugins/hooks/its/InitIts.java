@@ -56,7 +56,7 @@ public class InitIts implements InitStep {
   }
 
   @Override
-  public void run() {
+  public void run() throws IOException, ConfigInvalidException {
   }
 
   @Override
