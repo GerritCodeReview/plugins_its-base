@@ -1,0 +1,13 @@
+<FindBugsFilter>
+  <!-- False positives. -->
+
+  <Match>
+    <Class name="~.*\.TroubleClient.*" />
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD	" />
+  </Match>
+  <Match>
+    <Class name="~.*\.TroubleClient.*" />
+    <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD	" />
+  </Match>
+
+</FindBugsFilter>
