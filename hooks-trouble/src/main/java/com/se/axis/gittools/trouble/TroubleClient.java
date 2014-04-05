@@ -36,7 +36,7 @@ public final class TroubleClient {
   private static final String FORMAT_TICKET_GET = "%s/tickets/%d.json";
   private static final String FORMAT_COMMENT_POST = "%s/tickets/%d/comments.json";
   private static final String FORMAT_GET_POST_PACKAGE = "%s/tickets/%d/packages.json";
-  private static final String FORMAT_PUT_DELETE_PACKAGE = "%s/tickets/%d/packages/%d";
+  private static final String FORMAT_PUT_DELETE_PACKAGE = "%s/tickets/%d/packages/%d.json";
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
 
@@ -262,14 +262,13 @@ public final class TroubleClient {
     this.impersonatedUser = impersonatedUser; // The impersonated user
     this.ticketId = ticketId;
 
-    baseApiUrl = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "url");
-    assert baseApiUrl != null;  // This needs to be checked earlier
-
+    String url = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "url");
+    assert  url != null;  // This needs to be checked earlier
+    baseApiUrl =  url.replaceFirst("/+$", "");
     apiUser = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "username");
     if (apiUser == null) {
       throw new IllegalArgumentException("trouble.username not set in gerrit.config");
     }
-
     apiPass = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "password");
     if (apiPass == null) {
       throw new IllegalArgumentException("trouble.password not set in secure.config");

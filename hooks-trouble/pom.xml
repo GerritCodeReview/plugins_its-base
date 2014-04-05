@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
   <artifactId>hooks-trouble</artifactId>
   <groupId>com.se.axis.gittools</groupId>
-  <version>v0.2.0</version>
+  <version>v0.2.1</version>
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
     <artifactId>hooks-its-parent</artifactId>

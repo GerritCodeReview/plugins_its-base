@@ -12,23 +12,18 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gerrit.reviewdb.client.Account;
-import com.google.gerrit.reviewdb.client.Change;
-import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
-import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.google.gson.GsonBuilder;
+
+import com.googlesource.gerrit.plugins.hooks.its.NoopItsFacade;
 
 import java.io.IOException;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -38,7 +33,109 @@ import java.util.regex.Matcher;
  *
  * This Class is called from ITS base on relevant events.
  */
-public class TroubleItsFacade implements ItsFacade {
+public class TroubleItsFacade extends NoopItsFacade {
+
+  /**
+   * Object represenation of the add-velocity-event actions in action.config.
+   */
+  public class VelocityComment {
+    /**
+     * Identity of the event.
+     */
+    public String id;
+
+    /**
+     * The username of the person that triggered the event.
+     */
+    public String blame;
+
+    /**
+     * The change number.
+     */
+    public Integer change;
+
+    /**
+     * The patch set number.
+     */
+    public Integer patchSet;
+
+    /**
+     * The patch set reference (e.g. refs/changes/*).
+     */
+    public String ref;
+
+    /**
+     * The patch set revision.
+     */
+    public String rev;
+
+    /**
+     * The target branch.
+     */
+    public String branch;
+
+    /**
+     * The repo.
+     */
+    public String project;
+
+    /**
+     * CBM approval.
+     */
+    public String cbmApproved;
+
+    /**
+     * Daily Build OK.
+     */
+    public String dailyBuildOk;
+
+    /**
+     * Validates velocity-comment data.
+     */
+    public final VelocityComment check() {
+      if (id == null) {
+        throw new IllegalArgumentException("rule.*.id is not defined");
+      }
+      if (change == null) {
+        throw new IllegalArgumentException("rule.*.change is not defined");
+      }
+      if (patchSet == null) {
+        throw new IllegalArgumentException("rule.*.patchSet is not defined");
+      }
+      if (rev == null) {
+        throw new IllegalArgumentException("rule.*.rev is not defined");
+      }
+      if (branch == null) {
+        throw new IllegalArgumentException("rule.*.branch is not defined");
+      }
+      if (project == null) {
+        throw new IllegalArgumentException("rule.*.project is not defined");
+      }
+      if (blame == null) {
+        throw new IllegalArgumentException("rule.*.blame is not defined");
+      }
+      if (blame.indexOf('.') != -1) { // e.g. zalan.blenessy instead of zalanb
+        LOG.warn("Invalid Axis account {}", blame);
+        blame = apiUser;
+      }
+      if (cbmApproved != null) {
+        try {
+          Integer.parseInt(cbmApproved);
+        } catch (NumberFormatException e) { // did not change
+          cbmApproved = null;
+        }
+      }
+      if (dailyBuildOk != null) {
+        try {
+          Integer.parseInt(dailyBuildOk);
+        } catch (NumberFormatException e) { // did not change
+          dailyBuildOk = null;
+        }
+      }
+      return this;
+    }
+  }
+
   /**
    * Gerrit configuration section name.
    */
@@ -59,7 +156,9 @@ public class TroubleItsFacade implements ItsFacade {
   private final GitRepositoryManager repoManager;
   private final String apiUser;
 
-  private URL relatedUrl;
+  private final GsonBuilder gson = new GsonBuilder();
+
+  private final String formatGerritUrl;
 
   /**
    * Constructor.
@@ -67,13 +166,18 @@ public class TroubleItsFacade implements ItsFacade {
   @Inject
   public TroubleItsFacade(@GerritServerConfig final Config cfg, final SchemaFactory<ReviewDb> schema,
                           final GitRepositoryManager repoManager) {
-    this.gerritConfig = cfg;
-    this.reviewDbProvider = schema;
+    gerritConfig = cfg;
+    reviewDbProvider = schema;
     this.repoManager = repoManager;
-    this.apiUser = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "username");
+    apiUser = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "username");
     if (apiUser == null) {
-      throw new NullPointerException("trouble.username not set in gerrit.config");
+      throw new IllegalArgumentException("trouble.username not set in gerrit.config");
     }
+    String url = gerritConfig.getString("gerrit", null, "canonicalWebUrl");
+    if (url == null) {
+      throw new IllegalArgumentException("gerrit.canonicalWebUrl not set in gerrit.config");
+    }
+    formatGerritUrl = "\"%s@%s\":" + url.replaceFirst("/+$", "") + "/#/c/%d/";
   }
 
   @Override
@@ -82,75 +186,36 @@ public class TroubleItsFacade implements ItsFacade {
   }
 
   @Override
-  public final void addComment(final String issueId, final String comment) throws IOException {
-    LOG.debug("addComment({},{})", issueId, comment);
-  }
+  public final void addComment(final String issueId, final String json) throws IOException {
+    LOG.debug("addComment({},{})", issueId, json);
+    int ticket = parseIssueId(issueId);
+    VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
 
-  @Override
-  public final void addRelatedLink(final String issueId, final URL url, final String description) throws IOException {
-    LOG.debug("addRelatedLink({},{},{})", new Object[] {issueId, relatedUrl, description});
-    relatedUrl = url;
+    TroubleClient troubleClient = TroubleClient.create(gerritConfig, ticket, event.blame);
+    String targetLink = String.format(formatGerritUrl, event.branch, event.project, event.change);
+    if (event.id.equals("patchset-created")) {
+      // Create comment about the new patchset
+      String comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
+      troubleClient.addComment(new TroubleClient.Comment(comment));
+      handlePatchSetCreated(troubleClient, event.project, event.branch, event.rev, event.ref);
+    } else if (event.id.equals("change-restored")) {
+      // Create comment about the restored review
+      String comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
+      troubleClient.addComment(new TroubleClient.Comment(comment));
+      handlePatchSetCreated(troubleClient, event.project, event.branch, event.rev, event.ref);
+    } else if (event.id.equals("change-abandoned")) {
+      // Create comment about the abandoned review
+      String comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
+      troubleClient.addComment(new TroubleClient.Comment(comment));
+      troubleClient.deletePackage(event.project, event.branch);
+    }
+
   }
 
   @Override
   public final boolean exists(final String issueId) throws IOException {
     LOG.debug("exists({})", issueId);
     return TroubleClient.create(gerritConfig, parseIssueId(issueId)).ticketExists();
-  }
-
-  @Override
-  public final void performAction(final String issueId, final String actionName) throws IOException {
-    LOG.debug("performAction({},{})", issueId, actionName);
-    if (relatedUrl == null) { // safety
-      throw new AssertionError("addRelatedLink or createLinkForWebui was NOT called before this method");
-    }
-
-    try {
-      // get the info from database
-      ReviewDb db = null;
-      Change change = null;
-      PatchSet patchSet = null;
-      Account account = null;
-      try {
-        db = reviewDbProvider.open();
-        change = db.changes().get(extractChangeId(relatedUrl));
-        patchSet = db.patchSets().get(change.currentPatchSetId());
-        account = db.accounts().get(patchSet.getUploader());
-      } catch (OrmException e) {
-        throw new IOException("Failed to access review db", e);
-      } finally {
-        if (db != null) {
-          db.close();
-        }
-      }
-
-      // create the trouble client
-      int ticket = parseIssueId(issueId);
-      String axisId = getAxisId(account, apiUser);
-      TroubleClient troubleClient = TroubleClient.create(gerritConfig, ticket, axisId);
-
-
-      // handle the events
-      String targetLink = createCommentTargetLink(change, relatedUrl);
-      if (actionName.equals("patchset-created")) {
-        // Create comment about the new patchset
-        String comment = String.format(FORMAT_COMMENT_REVIEW, patchSet.getId().get() == 1 ? "STARTED" : "UPDATED", targetLink);
-        troubleClient.addComment(new TroubleClient.Comment(comment));
-        handlePatchSetCreated(account, change, patchSet, troubleClient);
-      } else if (actionName.equals("change-restored")) {
-        // Create comment about the restored review
-        String comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
-        troubleClient.addComment(new TroubleClient.Comment(comment));
-        handlePatchSetCreated(account, change, patchSet, troubleClient);
-      } else if (actionName.equals("change-abandoned")) {
-        // Create comment about the abandoned review
-        String comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
-        troubleClient.addComment(new TroubleClient.Comment(comment));
-        handleChangeAbandoned(account, change, patchSet, troubleClient);
-      }
-    } finally {
-      relatedUrl = null; // reset
-    }
   }
 
   @Override
@@ -168,95 +233,33 @@ public class TroubleItsFacade implements ItsFacade {
     return health;
   }
 
-  @Override
-  public final String createLinkForWebui(final String url, final String text) {
-    LOG.debug("createLinkForWebui({},{})", url, text);
-    String result = url;
-    if (text != null && !text.equals(url)) {
-        result += " (" + text + ")";
-    }
-    try {
-      relatedUrl = new URL(url);
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException("Invalig url received: " + url, e);
-    }
-    return result;
-  }
-
   /**
    * Invoked when a new PatchSet is created.
    */
-  private void handlePatchSetCreated(final Account account, final Change change, final PatchSet patchSet,
-      final TroubleClient troubleClient) throws IOException {
+  private void handlePatchSetCreated(final TroubleClient troubleClient, final String packageName, final String targetBranch,
+      final String revision, final String patchSetRef) throws IOException {
     TroubleClient.Package packageObj = new TroubleClient.Package();
-    packageObj.name = change.getProject().get();
-    packageObj.targetBranch = change.getDest().get().replaceFirst("^refs/heads/", "");
-    List<String> referenceFooters = getReferenceFooters(repoManager, change.getProject(), patchSet.getRevision().get());
+    packageObj.name = packageName;
+    packageObj.targetBranch = targetBranch;
+    List<String> referenceFooters = getReferenceFooters(repoManager, packageName, revision);
     for (String footer : referenceFooters) {
       if (packageObj.fixRef == null) {
         packageObj.fixBranch = parseSourceBranch(footer);
         packageObj.fixRef = new TroubleClient.Reference(parseRevision(footer));
       }
     }
-    packageObj.preMergeRef = new TroubleClient.Reference(patchSet.getRefName());
+    packageObj.preMergeRef = new TroubleClient.Reference(patchSetRef);
 
     // add/update the package (package section)
     troubleClient.addOrUpdatePackage(packageObj);
   }
 
   /**
-   * Invoked when a new PatchSet is created.
-   */
-  private void handleChangeAbandoned(final Account account, final Change change, final PatchSet patchSet,
-      final TroubleClient troubleClient) throws IOException {
-    // delete the package (package section)
-    String packageName = change.getProject().get();
-    String targetBranch = change.getDest().get().replaceFirst("^refs/heads/", "");
-    troubleClient.deletePackage(packageName, targetBranch);
-  }
-
-  /**
-   * Create a link back to the Gerrit Review.
-   */
-  private static String createCommentTargetLink(final Change change, final URL url) {
-    String packageName = change.getProject().get();
-    String targetBranch = change.getDest().get().replaceFirst("^refs/heads/", "");
-
-    StringBuilder link = new StringBuilder();
-    link.append('"').append(targetBranch).append('@').append(packageName).append("\":").append(url);
-    return link.toString();
-  }
-
-  /**
-   * Reads the Axis id from a Gerrit account.
-   *
-   * Fallback to defaultAxisId in case of an error.
-   */
-  private static String getAxisId(final Account account, final String defaultAxisId) {
-    String axisId = null;  // default
-    String email = account.getPreferredEmail();
-    if (email != null) {
-      int pos = email.indexOf('@');
-      if (pos != -1) {
-        String emailAccount = email.substring(0, pos);
-        if (emailAccount.indexOf('.') == -1) { // complete email addresses are disregarded
-          axisId = emailAccount;
-        }
-      }
-    }
-    if (axisId == null) {
-      LOG.warn("Invalid preferred email {}", email);
-      axisId = defaultAxisId;
-    }
-    return axisId;
-  }
-
-  /**
    * Reads the reference footer from the repository.
    */
   private static List<String> getReferenceFooters(final GitRepositoryManager repoManager,
-      final Project.NameKey projectName, final String rev) throws IOException {
-    Repository git = repoManager.openRepository(projectName);
+      final String packageName, final String rev) throws IOException {
+    Repository git = repoManager.openRepository(new Project.NameKey(packageName));
     try {
       RevWalk revWalk = new RevWalk(git);
       RevCommit commit = revWalk.parseCommit(git.resolve(rev));
@@ -264,21 +267,6 @@ public class TroubleItsFacade implements ItsFacade {
     } finally {
       git.close();
     }
-  }
-
-  /**
-   * Extract (parse) the change id from an URL.
-   */
-  private static Change.Id extractChangeId(final URL url) {
-    // its the final segment of path, e.g. http://localhost:8090/4
-    File f = new File(url.getPath());
-    Change.Id id = null;
-    try {
-      id = new Change.Id(Integer.parseInt(f.getName()));
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Failed to extract change id from URL: " + url, e);
-    }
-    return id;
   }
 
   /**
@@ -290,26 +278,6 @@ public class TroubleItsFacade implements ItsFacade {
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("commentlink.trouble.match (group 1) is not a number", e);
     }
-  }
-
-  /**
-   * Extract (parse) the Reference footer from the Review topic.
-   *
-   * The Reference footer value is returned if found.
-   */
-  private static String parseReferenceFooter(final String topic) {
-    // trim off any trailing newlines.
-    String trimmed = topic.trim();
-
-    // cut off the subject and body keeping only the footers section
-    String[] sections = trimmed.split("\\n{2,}");
-    String footer = sections[sections.length - 1];
-
-    // find the footer in question
-    Pattern pattern = Pattern.compile("^Reference:\\s*(" + PATTERN_SHA1 + ".*)$", Pattern.MULTILINE);
-    Matcher matcher = pattern.matcher(footer);
-
-    return (matcher.find() ? matcher.group(1) : null);
   }
 
   /**
