@@ -153,6 +153,36 @@ public class TroubleItsFacade extends NoopItsFacade {
   }
 
   /**
+   * Approval container.
+   */
+  private static class Approvals {
+    /**
+     * CBM Approval status.
+     */
+    public final Boolean cbmApproved;
+
+    /**
+     * Daily-build status.
+     */
+    public final Boolean dailyBuildOk;
+
+    /**
+     * Helper constructor.
+     */
+    public Approvals(final Boolean cbmApproved, final Boolean dailyBuildOk) {
+      this.cbmApproved = cbmApproved;
+      this.dailyBuildOk = dailyBuildOk;
+    }
+
+    /**
+     * Aggregated approval.
+     */
+    public boolean submittable() {
+      return cbmApproved != null && dailyBuildOk != null && cbmApproved && dailyBuildOk;
+    }
+  }
+
+  /**
    * Gerrit configuration section name.
    */
   public static final String ITS_NAME_TROUBLE = "trouble";
@@ -220,24 +250,26 @@ public class TroubleItsFacade extends NoopItsFacade {
 
     String comment = null;
     String targetLink = String.format(formatGerritUrl, event.branch, event.project, event.change);
-    if (event.id.equals("patchset-created")) {
-      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, null);
-      troubleClient.addOrUpdatePackage(troublePackage);
-      // create comment about the new patchset
-      comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
-    } else if (event.id.equals("change-restored")) {
-      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, event.patchSetId());
-      troubleClient.addOrUpdatePackage(troublePackage);
-      // create comment about the restored review
-      comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
-    } else if (event.id.equals("change-abandoned")) {
+    Approvals approvals = null;
+    if (event.id.equals("change-abandoned")) {
       troubleClient.deletePackage(event.project, event.branch);
       // create comment about the abandoned review
       comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
-    } else if (event.id.equals("comment-added")) {
-      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, event.patchSetId());
+    } else {
+      if (event.id.equals("patchset-created")) {
+        // create comment about the new patchset
+        comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
+      } else {
+        approvals = resolveApprovals(event.patchSetId());
+        if (event.id.equals("change-restored")) {
+          // create comment about the restored review
+          comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
+        }
+      }
+      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
       troubleClient.addOrUpdatePackage(troublePackage);
     }
+
     if (comment != null) {
       troubleClient.addComment(new TroubleClient.Comment(comment));
     }
@@ -268,50 +300,15 @@ public class TroubleItsFacade extends NoopItsFacade {
    * Invoked when a new PatchSet is created.
    */
   private TroubleClient.Package createPackage(final String name, final String targetBranch,
-      final String revision, final String patchSetRef, final PatchSet.Id patchSetId) throws IOException {
+      final String revision, final String patchSetRef, final Approvals approvals) throws IOException {
     TroubleClient.Package troublePackage = new TroubleClient.Package();
     troublePackage.name = name;
     troublePackage.targetBranch = targetBranch;
     troublePackage.preMergeRef = new TroubleClient.Reference(patchSetRef);
-
-    // resolve dailyBuildOk and cbmApproved
-    ReviewDb db = null;
-    try {
-      if (patchSetId != null) {
-        db = reviewDbProvider.open();
-        for (PatchSetApproval approval : db.patchSetApprovals().byPatchSet(patchSetId)) {
-          LOG.debug("{}, {}", approval.getLabelId(), approval.getValue());
-          if ("Code-Review".equals(approval.getLabelId().get())) {
-            if (troublePackage.cbmApproved == null && approval.getValue() == CODE_REVIEW_MAX) {
-              troublePackage.cbmApproved = true;
-            } else if (approval.getValue() == CODE_REVIEW_MIN) {
-              troublePackage.cbmApproved = false;
-            }
-          } else if ("Daily-Built".equals(approval.getLabelId().get())) {
-            if (troublePackage.dailyBuildOk == null && approval.getValue() == DAILY_BUILT_MAX) {
-              troublePackage.dailyBuildOk = true;
-            } else if (approval.getValue() == DAILY_BUILT_MIN) {
-              troublePackage.dailyBuildOk = false;
-            }
-          }
-        }
-      }
-      if (troublePackage.cbmApproved == null) {
-        troublePackage.cbmApproved = false;
-      }
-      if (troublePackage.dailyBuildOk == null) {
-        troublePackage.dailyBuildOk = false;
-      }
-    } catch (OrmException err) {
-      LOG.error("Failed to access ReviewDb: ", err.toString());
-      troublePackage.cbmApproved = null; // don't change
-      troublePackage.dailyBuildOk = null; //don't changes
-    } finally {
-      if (db != null) {
-        db.close();
-      }
+    if (approvals != null) {
+      troublePackage.cbmApproved = approvals.cbmApproved;
+      troublePackage.dailyBuildOk = approvals.dailyBuildOk;
     }
-
     // resolve fix information
     List<String> referenceFooters = getReferenceFooters(repoManager, name, revision);
     for (String footer : referenceFooters) {
@@ -320,8 +317,48 @@ public class TroubleItsFacade extends NoopItsFacade {
         troublePackage.fixRef = new TroubleClient.Reference(parseRevision(footer));
       }
     }
-
     return troublePackage;
+  }
+
+  /**
+   * Resolves the effective approval status for a patch set.
+   */
+  private Approvals resolveApprovals(final PatchSet.Id patchSetId) {
+    Boolean cbmApproved = null;
+    Boolean dailyBuildOk = null;
+    ReviewDb db = null;
+    try {
+      db = reviewDbProvider.open();
+      for (PatchSetApproval approval : db.patchSetApprovals().byPatchSet(patchSetId)) {
+        LOG.debug("{}, {}", approval.getLabelId(), approval.getValue());
+        if ("Code-Review".equals(approval.getLabelId().get())) {
+          if (cbmApproved == null && approval.getValue() == CODE_REVIEW_MAX) {
+            cbmApproved = true;
+          } else if (approval.getValue() == CODE_REVIEW_MIN) {
+            cbmApproved = false;
+          }
+        } else if ("Daily-Built".equals(approval.getLabelId().get())) {
+          if (dailyBuildOk == null && approval.getValue() == DAILY_BUILT_MAX) {
+            dailyBuildOk = true;
+          } else if (approval.getValue() == DAILY_BUILT_MIN) {
+            dailyBuildOk = false;
+          }
+        }
+      }
+      if (cbmApproved == null) {
+        cbmApproved = false;
+      }
+      if (dailyBuildOk == null) {
+        dailyBuildOk = false;
+      }
+    } catch (OrmException err) { // cbmApproved and dailyBuildOk is null => nothing is changed
+      LOG.error("Failed to access ReviewDb: ", err.toString());
+    } finally {
+      if (db != null) {
+        db.close();
+      }
+    }
+    return new Approvals(cbmApproved, dailyBuildOk);
   }
 
   /**
