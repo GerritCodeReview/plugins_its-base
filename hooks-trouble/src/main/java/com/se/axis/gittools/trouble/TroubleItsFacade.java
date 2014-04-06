@@ -13,10 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
+
+import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
+
 import com.google.inject.Inject;
 
 import com.google.gson.GsonBuilder;
@@ -114,10 +120,6 @@ public class TroubleItsFacade extends NoopItsFacade {
       if (blame == null) {
         throw new IllegalArgumentException("rule.*.blame is not defined");
       }
-      if (blame.indexOf('.') != -1) { // e.g. zalan.blenessy instead of zalanb
-        LOG.warn("Invalid Axis account {}", blame);
-        blame = apiUser;
-      }
       if (cbmApproved != null) {
         try {
           Integer.parseInt(cbmApproved);
@@ -134,12 +136,31 @@ public class TroubleItsFacade extends NoopItsFacade {
       }
       return this;
     }
+
+    /**
+     * Creates a Change.Id object.
+     */
+    public final Change.Id changeId() {
+      return new Change.Id(change);
+    }
+
+    /**
+     * Creates a PatchSet.Id object.
+     */
+    public final PatchSet.Id patchSetId() {
+      return new PatchSet.Id(changeId(), patchSet);
+    }
   }
 
   /**
    * Gerrit configuration section name.
    */
   public static final String ITS_NAME_TROUBLE = "trouble";
+
+  private static final int CODE_REVIEW_MAX = 2;
+  private static final int CODE_REVIEW_MIN = -2;
+  private static final int DAILY_BUILT_MAX = 1;
+  private static final int DAILY_BUILT_MIN = -1;
 
   private static final String GERRIT_CONFIG_USERNAME = "username";
   private static final String GERRIT_CONFIG_PASSWORD = "password";
@@ -165,7 +186,7 @@ public class TroubleItsFacade extends NoopItsFacade {
    */
   @Inject
   public TroubleItsFacade(@GerritServerConfig final Config cfg, final SchemaFactory<ReviewDb> schema,
-                          final GitRepositoryManager repoManager) {
+      final GitRepositoryManager repoManager) {
     gerritConfig = cfg;
     reviewDbProvider = schema;
     this.repoManager = repoManager;
@@ -188,28 +209,38 @@ public class TroubleItsFacade extends NoopItsFacade {
   @Override
   public final void addComment(final String issueId, final String json) throws IOException {
     LOG.debug("addComment({},{})", issueId, json);
-    int ticket = parseIssueId(issueId);
+
+    // deserialze the VelocityComment
     VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
 
-    TroubleClient troubleClient = TroubleClient.create(gerritConfig, ticket, event.blame);
+    // create the TroubleClient
+    int ticket = parseIssueId(issueId);
+    String username = event.blame.indexOf('.') != -1 ? apiUser : event.blame;
+    TroubleClient troubleClient = TroubleClient.create(gerritConfig, ticket, username);
+
+    String comment = null;
     String targetLink = String.format(formatGerritUrl, event.branch, event.project, event.change);
     if (event.id.equals("patchset-created")) {
-      // Create comment about the new patchset
-      String comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
-      troubleClient.addComment(new TroubleClient.Comment(comment));
-      handlePatchSetCreated(troubleClient, event.project, event.branch, event.rev, event.ref);
+      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, null);
+      troubleClient.addOrUpdatePackage(troublePackage);
+      // create comment about the new patchset
+      comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
     } else if (event.id.equals("change-restored")) {
-      // Create comment about the restored review
-      String comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
-      troubleClient.addComment(new TroubleClient.Comment(comment));
-      handlePatchSetCreated(troubleClient, event.project, event.branch, event.rev, event.ref);
+      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, event.patchSetId());
+      troubleClient.addOrUpdatePackage(troublePackage);
+      // create comment about the restored review
+      comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
     } else if (event.id.equals("change-abandoned")) {
-      // Create comment about the abandoned review
-      String comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
-      troubleClient.addComment(new TroubleClient.Comment(comment));
       troubleClient.deletePackage(event.project, event.branch);
+      // create comment about the abandoned review
+      comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
+    } else if (event.id.equals("comment-added")) {
+      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, event.patchSetId());
+      troubleClient.addOrUpdatePackage(troublePackage);
     }
-
+    if (comment != null) {
+      troubleClient.addComment(new TroubleClient.Comment(comment));
+    }
   }
 
   @Override
@@ -236,22 +267,61 @@ public class TroubleItsFacade extends NoopItsFacade {
   /**
    * Invoked when a new PatchSet is created.
    */
-  private void handlePatchSetCreated(final TroubleClient troubleClient, final String packageName, final String targetBranch,
-      final String revision, final String patchSetRef) throws IOException {
-    TroubleClient.Package packageObj = new TroubleClient.Package();
-    packageObj.name = packageName;
-    packageObj.targetBranch = targetBranch;
-    List<String> referenceFooters = getReferenceFooters(repoManager, packageName, revision);
-    for (String footer : referenceFooters) {
-      if (packageObj.fixRef == null) {
-        packageObj.fixBranch = parseSourceBranch(footer);
-        packageObj.fixRef = new TroubleClient.Reference(parseRevision(footer));
+  private TroubleClient.Package createPackage(final String name, final String targetBranch,
+      final String revision, final String patchSetRef, final PatchSet.Id patchSetId) throws IOException {
+    TroubleClient.Package troublePackage = new TroubleClient.Package();
+    troublePackage.name = name;
+    troublePackage.targetBranch = targetBranch;
+    troublePackage.preMergeRef = new TroubleClient.Reference(patchSetRef);
+
+    // resolve dailyBuildOk and cbmApproved
+    ReviewDb db = null;
+    try {
+      if (patchSetId != null) {
+        db = reviewDbProvider.open();
+        for (PatchSetApproval approval : db.patchSetApprovals().byPatchSet(patchSetId)) {
+          LOG.debug("{}, {}", approval.getLabelId(), approval.getValue());
+          if ("Code-Review".equals(approval.getLabelId().get())) {
+            if (troublePackage.cbmApproved == null && approval.getValue() == CODE_REVIEW_MAX) {
+              troublePackage.cbmApproved = true;
+            } else if (approval.getValue() == CODE_REVIEW_MIN) {
+              troublePackage.cbmApproved = false;
+            }
+          } else if ("Daily-Built".equals(approval.getLabelId().get())) {
+            if (troublePackage.dailyBuildOk == null && approval.getValue() == DAILY_BUILT_MAX) {
+              troublePackage.dailyBuildOk = true;
+            } else if (approval.getValue() == DAILY_BUILT_MIN) {
+              troublePackage.dailyBuildOk = false;
+            }
+          }
+        }
+      }
+      if (troublePackage.cbmApproved == null) {
+        troublePackage.cbmApproved = false;
+      }
+      if (troublePackage.dailyBuildOk == null) {
+        troublePackage.dailyBuildOk = false;
+      }
+    } catch (OrmException err) {
+      LOG.error("Failed to access ReviewDb: ", err.toString());
+      troublePackage.cbmApproved = null; // don't change
+      troublePackage.dailyBuildOk = null; //don't changes
+    } finally {
+      if (db != null) {
+        db.close();
       }
     }
-    packageObj.preMergeRef = new TroubleClient.Reference(patchSetRef);
 
-    // add/update the package (package section)
-    troubleClient.addOrUpdatePackage(packageObj);
+    // resolve fix information
+    List<String> referenceFooters = getReferenceFooters(repoManager, name, revision);
+    for (String footer : referenceFooters) {
+      if (troublePackage.fixRef == null) {
+        troublePackage.fixBranch = parseSourceBranch(footer);
+        troublePackage.fixRef = new TroubleClient.Reference(parseRevision(footer));
+      }
+    }
+
+    return troublePackage;
   }
 
   /**
