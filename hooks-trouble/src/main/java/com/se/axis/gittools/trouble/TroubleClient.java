@@ -37,8 +37,12 @@ public final class TroubleClient {
   private static final String FORMAT_COMMENT_POST = "%s/tickets/%d/comments.json";
   private static final String FORMAT_GET_POST_PACKAGE = "%s/tickets/%d/packages.json";
   private static final String FORMAT_PUT_DELETE_PACKAGE = "%s/tickets/%d/packages/%d.json";
+  private static final String FORMAT_GET_POST_CORRECTION = "%s/tickets/%d/corrections.json";
+  private static final String FORMAT_PUT_DELETE_CORRECTION = "%s/tickets/%d/corrections/%d.json";
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
+
+  private static final String GERRIT_MAGIC = "Gerrit fix for";
 
   private final String baseApiUrl;
   private final String apiUser;
@@ -101,9 +105,14 @@ public final class TroubleClient {
    */
   public static class Package {
     /**
-     * Trouble id of the package (used for updates).
+     * Trouble's package identifier.
      */
     public Integer id;
+
+    /**
+     * Trouble's package identifier (onlu used for correction).
+     */
+    @SerializedName("package_id") private Integer packageId;
 
     /**
      * Package name (path).
@@ -148,22 +157,35 @@ public final class TroubleClient {
     /**
      * The impersonated user name.
      */
-    public String username;
+    private String username;
 
     /**
      * The person who is in charge of the fix (typically same as username).
      */
-    @SerializedName("assigned_username") public String assignedUsername;
+    @SerializedName("assigned_username") private String assignedUsername;
+
+    /**
+     * Default constructor for serialization.
+     */
+    public Package() {
+    }
+
+    /**
+     * Helper constructor.
+     */
+    private Package(final Integer id) {
+      this.packageId = id;
+    }
   }
 
   /**
    * Package container.
    */
-  public static class PackageContainer {
+  private static class PackageContainer {
     /**
      * The contained package.
      */
-    @SerializedName("package") public Package packageObj;
+    @SerializedName("package") private Package troublePackage;
 
     /**
      * Default constructor for serialization.
@@ -174,15 +196,15 @@ public final class TroubleClient {
     /**
      * Helper constructor.
      */
-    public PackageContainer(final Package packageObj) {
-      this.packageObj = packageObj;
+    private PackageContainer(final Package troublePackage) {
+      this.troublePackage = troublePackage;
     }
   }
 
   /**
    * Comment info.
    */
-  public static class Comment {
+  private static class Comment {
     /**
      * The comment free text.
      */
@@ -191,7 +213,7 @@ public final class TroubleClient {
     /**
      * The impersonated user name.
      */
-    public String username;
+    private String username;
 
     /**
      * Default constructor for serialization.
@@ -202,19 +224,20 @@ public final class TroubleClient {
     /**
      * Helper constructor.
      */
-    public Comment(final String text) {
+    private Comment(final String text, final String username) {
       this.text = text;
+      this.username = username;
     }
   }
 
   /**
    * Comment container.
    */
-  public static class CommentContainer {
+  private static class CommentContainer {
     /**
      * A comment.
      */
-    public Comment comment;
+    private Comment comment;
 
     /**
      * Default constructor for serialization.
@@ -225,8 +248,75 @@ public final class TroubleClient {
     /**
      * Helper constructor.
      */
-    public CommentContainer(final Comment comment) {
+    private CommentContainer(final Comment comment) {
       this.comment = comment;
+    }
+  }
+
+  /**
+   * The correction (fix).
+   */
+  private static class Correction {
+    /**
+     * The correction id.
+     */
+    private Integer id;
+
+    /**
+     * The correction title.
+     */
+    @SerializedName("fix_description") public String title;
+
+    /**
+     * The correction description.
+     */
+    @SerializedName("text") public String text;
+
+    /**
+     * The correction packages.
+     */
+    public Package[] packages;
+
+    /**
+     * The impersonated user name.
+     */
+    private String username;
+
+    /**
+     * Default constructor for serialization.
+     */
+    public Correction() {
+    }
+
+    /**
+     * Helper constructor.
+     */
+    private Correction(final String targetBranch, final String username) {
+      this.title = this.text = GERRIT_MAGIC + ' ' + targetBranch;
+      this.username = username;
+    }
+  }
+
+  /**
+   * Correction container.
+   */
+  private static class CorrectionContainer {
+    /**
+     * A correction.
+     */
+    private Correction correction;
+
+    /**
+     * Default constructor for serialization.
+     */
+    public CorrectionContainer() {
+    }
+
+    /**
+     * Helper constructor.
+     */
+    private CorrectionContainer(final Correction correction) {
+      this.correction = correction;
     }
   }
 
@@ -320,13 +410,9 @@ public final class TroubleClient {
   /**
    * Add a comment to trouble.
    */
-  public void addComment(final TroubleClient.Comment comment) throws IOException {
-    if (comment.username == null) {
-      comment.username = impersonatedUser;
-    }
-
-    CommentContainer troubleComment = new CommentContainer(comment);
-    String json = gson.create().toJson(troubleComment); // serialize
+  public void addComment(final String message) throws IOException {
+    TroubleClient.Comment comment = new TroubleClient.Comment(message, impersonatedUser);
+    String json = gson.create().toJson(new CommentContainer(comment)); // serialize
     String url = String.format(FORMAT_COMMENT_POST, baseApiUrl, ticketId);
     sendJsonRequest(url, apiUser, apiPass, "POST", json);
   }
@@ -334,20 +420,20 @@ public final class TroubleClient {
   /**
    * Get a package from Trouble.
    */
-  public TroubleClient.Package[] getPackages(final String name, final String targetBranch) throws IOException {
-    StringBuilder url = new StringBuilder(String.format(FORMAT_GET_POST_PACKAGE, baseApiUrl, ticketId));
-    if (name != null || targetBranch != null) {
-      url.append('?');
-      if (name != null) {
-        url.append("package=").append(urlEncode(name)).append('&');
-      }
-      if (targetBranch != null) {
-        url.append("target_branch=").append(urlEncode(targetBranch)).append('&');
-      }
-      url.setLength(url.length() - 1); // remove the trailing '&'
+  public TroubleClient.Package[] getPackages(final String targetBranch) throws IOException {
+    String url = String.format(FORMAT_GET_POST_PACKAGE, baseApiUrl, ticketId);
+    if (targetBranch != null) {
+      url += "?target_branch=" + urlEncode(targetBranch);
     }
-    String content = getRequest(url.toString(), apiUser, apiPass);
-    return gson.create().fromJson(content, TroubleClient.Package[].class); // deserialize!
+    try { 
+      String content = getRequest(url.toString(), apiUser, apiPass);
+      return gson.create().fromJson(content, TroubleClient.Package[].class); // deserialize!
+    } catch (TroubleClient.HttpException e) { // POST
+      if (e.responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
+        throw e;
+      }
+      return new TroubleClient.Package[0];
+    }
   }
 
   /**
@@ -357,28 +443,22 @@ public final class TroubleClient {
    * it at any time. Hence we need to try update (PUT) first, and as a fallback,
    * we call add.
    */
-  public void addOrUpdatePackage(final TroubleClient.Package packageObj) throws IOException {
+  public void addOrUpdatePackage(final TroubleClient.Package troublePackage)
+      throws IOException {
     // See if the package has already been added
-    if (packageObj.username == null) {
-      packageObj.username = impersonatedUser;
-    }
-    PackageContainer troublePackage = new PackageContainer(packageObj);
+    troublePackage.username = impersonatedUser;
 
-    // get existing packages
-    try { // PUT
-      TroubleClient.Package[] existingPackages = getPackages(packageObj.name, packageObj.targetBranch);
-      String json = gson.create().toJson(troublePackage); // serialize
-      String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, existingPackages[0].id);
+    if (troublePackage.id != null) { // update
+      String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, troublePackage.id);
+      troublePackage.id = null; // prevent serialization
+      String json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
       sendJsonRequest(url, apiUser, apiPass, "PUT", json);
-    } catch (TroubleClient.HttpException e) { // POST
-      if (e.responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
-        throw e;
+    } else { // create
+      if (troublePackage.assignedUsername == null) {
+        troublePackage.assignedUsername = impersonatedUser;
       }
-      if (packageObj.assignedUsername == null) {
-        packageObj.assignedUsername = impersonatedUser;
-      }
-      String json = gson.create().toJson(troublePackage); // serialize
       String url = String.format(FORMAT_GET_POST_PACKAGE, baseApiUrl, ticketId);
+      String json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
       sendJsonRequest(url, apiUser, apiPass, "POST", json);
     }
   }
@@ -386,12 +466,11 @@ public final class TroubleClient {
   /**
    * Delete a package in Trouble.
    */
-  public void deletePackage(final String name, final String targetBranch) throws IOException {
+  public void deletePackage(final int packageId) throws IOException {
     // get existing packages
     int code = -1;
+    String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, packageId);
     try {
-      TroubleClient.Package[] existingPackages = getPackages(name, targetBranch);
-      String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, existingPackages[0].id);
       deleteRequest(url, apiUser, apiPass);
     } catch (TroubleClient.HttpException e) {
       // See Ticket 61020 regarding HttpURLConnection.HTTP_INTERNAL_ERROR
@@ -399,11 +478,69 @@ public final class TroubleClient {
       if (code != HttpURLConnection.HTTP_NOT_FOUND && code != HttpURLConnection.HTTP_INTERNAL_ERROR) {
         throw e;
       }
-      LOG.info("Package " + targetBranch + '@' + name + " already deleted in ticket " + ticketId);
+      LOG.debug("Package " + packageId + " already deleted in ticket " + ticketId);
     }
     if (code != HttpURLConnection.HTTP_INTERNAL_ERROR) {
       LOG.info("Ticket 61020 is fixed - remove workaround!");
     }
+  }
+
+  /**
+   * Get a correction identifier (if any) from Trouble.
+   */
+  public TroubleClient.Correction getCorrection() throws IOException {
+    StringBuilder url = new StringBuilder(String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId));
+    String content = getRequest(url.toString(), apiUser, apiPass);
+
+    for (TroubleClient.Correction correction :  gson.create().fromJson(content, TroubleClient.Correction[].class)) {
+      if (correction.title.startsWith(GERRIT_MAGIC)) {
+        return correction;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Creates and/or updates the Gerrit correction info.
+   *
+   * Correction info is created/updated when the first package towards a specific target branch
+   * is completely approved. Each time the correction info is updated all packages toward the SAME
+   * target branch are added. This can also include the packages that are added by other users.
+   * 
+   * When a package is deleted, it is implicitly removed from all correction infos.
+   */
+  public void createOrUpdateFix(final String targetBranch, final TroubleClient.Package[] packages) throws IOException {
+
+    // get the correction id
+    TroubleClient.Correction correction = getCorrection();
+
+    // create correction info
+    if (correction == null) {
+      correction = new TroubleClient.Correction(targetBranch, impersonatedUser);
+      String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
+      String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
+      String content = sendJsonRequest(url, apiUser, apiPass, "POST", json);
+      correction = gson.create().fromJson(content, TroubleClient.Correction.class);
+    }
+    assert correction.id != null;
+
+    LOG.debug("{} {}", correction.id, correction.title);
+    LOG.debug("{} {}", correction.username, correction.text);
+
+    // create new Package objects that only have the package_id field set.
+    // TODO: test length = 0
+    correction.packages = new TroubleClient.Package[packages.length];
+    for (int i = packages.length - 1; i >= 0; i--) {
+      correction.packages[i] = new TroubleClient.Package(packages[i].id);
+    }
+
+    //String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
+    String url = String.format(FORMAT_PUT_DELETE_CORRECTION, baseApiUrl, ticketId, correction.id);
+    correction.id = null; // do not serialize!
+    LOG.debug("{} {}", correction.id, correction.title);
+    String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
+    sendJsonRequest(url, apiUser, apiPass, "PUT", json);
   }
 
   /**

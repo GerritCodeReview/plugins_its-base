@@ -46,6 +46,11 @@ public class TroubleItsFacade extends NoopItsFacade {
    */
   public class VelocityComment {
     /**
+     * The ticket.
+     */
+    public Integer ticket;
+
+    /**
      * Identity of the event.
      */
     public String id;
@@ -99,6 +104,9 @@ public class TroubleItsFacade extends NoopItsFacade {
      * Validates velocity-comment data.
      */
     public final VelocityComment check() {
+      if (ticket == null) {
+        throw new IllegalArgumentException("rule.*.ticket is not defined");
+      }
       if (id == null) {
         throw new IllegalArgumentException("rule.*.id is not defined");
       }
@@ -244,34 +252,53 @@ public class TroubleItsFacade extends NoopItsFacade {
     VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
 
     // create the TroubleClient
-    int ticket = parseIssueId(issueId);
     String username = event.blame.indexOf('.') != -1 ? apiUser : event.blame;
-    TroubleClient troubleClient = TroubleClient.create(gerritConfig, ticket, username);
+    TroubleClient troubleClient = TroubleClient.create(gerritConfig, event.ticket, username);
+
+    // try find all package in the fix (same targetBranch)
+    TroubleClient.Package[] packages = troubleClient.getPackages(event.branch);
+    TroubleClient.Package existingPackage = findPackage(event.project, packages);
 
     String comment = null;
     String targetLink = String.format(formatGerritUrl, event.branch, event.project, event.change);
-    Approvals approvals = null;
-    if (event.id.equals("change-abandoned")) {
-      troubleClient.deletePackage(event.project, event.branch);
+    if (event.id.equals("change-abandoned")) { // delete package
+      troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
       comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
-    } else {
-      if (event.id.equals("patchset-created")) {
+    } else { // add or update package
+      Approvals approvals = null;
+      if (event.id.equals("patchset-created")) { // reset approvals
         // create comment about the new patchset
         comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
-      } else {
+      } else { // update approvals
         approvals = resolveApprovals(event.patchSetId());
         if (event.id.equals("change-restored")) {
           // create comment about the restored review
           comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
         }
+        if (event.id.equals("comment-added") && existingPackage.cbmApproved == approvals.cbmApproved && existingPackage.dailyBuildOk == approvals.dailyBuildOk) {
+          LOG.debug("no approval change");
+          return; // exit if its just a simple comment without approval change
+        }
       }
-      TroubleClient.Package troublePackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
-      troubleClient.addOrUpdatePackage(troublePackage);
+
+      // create a new (untampered) package
+      TroubleClient.Package newPackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
+      if (existingPackage != null) {
+        newPackage.id = existingPackage.id;
+      }
+
+      // create/update the new package
+      troubleClient.addOrUpdatePackage(newPackage);
+
+      // create/update the fix when a package is approved
+      //if (approvals != null && approvals.submittable()) { // create correction info
+      //  troubleClient.createOrUpdateFix(event.branch, packages);
+      //}
     }
 
     if (comment != null) {
-      troubleClient.addComment(new TroubleClient.Comment(comment));
+      troubleClient.addComment(comment);
     }
   }
 
@@ -294,6 +321,18 @@ public class TroubleItsFacade extends NoopItsFacade {
       LOG.debug("health check on SYSTEM result: {}", health);
     }
     return health;
+  }
+
+  /**
+   * Find a package.
+   */
+  private TroubleClient.Package findPackage(final String name, final TroubleClient.Package[] packages) {
+    for (TroubleClient.Package troublePackage : packages) {
+      if (name.equals(troublePackage.name)) {
+        return troublePackage; // bingo!
+      }
+    }
+    return null;
   }
 
   /**
@@ -330,7 +369,7 @@ public class TroubleItsFacade extends NoopItsFacade {
     try {
       db = reviewDbProvider.open();
       for (PatchSetApproval approval : db.patchSetApprovals().byPatchSet(patchSetId)) {
-        LOG.debug("{}, {}", approval.getLabelId(), approval.getValue());
+        //LOG.debug("{}, {}", approval.getLabelId(), approval.getValue());
         if ("Code-Review".equals(approval.getLabelId().get())) {
           if (cbmApproved == null && approval.getValue() == CODE_REVIEW_MAX) {
             cbmApproved = true;
