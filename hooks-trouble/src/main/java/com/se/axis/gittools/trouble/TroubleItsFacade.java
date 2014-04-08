@@ -30,6 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.googlesource.gerrit.plugins.hooks.its.NoopItsFacade;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -210,14 +211,15 @@ public class TroubleItsFacade extends NoopItsFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleItsFacade.class);
 
-  private final Config gerritConfig;
   private final SchemaFactory<ReviewDb> reviewDbProvider;
   private final GitRepositoryManager repoManager;
+
+  private final TroubleWorkQueue workQueue;
+
   private final String apiUser;
-
-  private final GsonBuilder gson = new GsonBuilder();
-
-  private final String formatGerritUrl;
+  private final String apiPass;
+  private final String baseApiUrl;
+  private final String canonicalWebUrl;
 
   /**
    * Constructor.
@@ -225,18 +227,33 @@ public class TroubleItsFacade extends NoopItsFacade {
   @Inject
   public TroubleItsFacade(@GerritServerConfig final Config cfg, final SchemaFactory<ReviewDb> schema,
       final GitRepositoryManager repoManager) {
-    gerritConfig = cfg;
     reviewDbProvider = schema;
     this.repoManager = repoManager;
-    apiUser = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "username");
-    if (apiUser == null) {
-      throw new IllegalArgumentException("trouble.username not set in gerrit.config");
-    }
-    String url = gerritConfig.getString("gerrit", null, "canonicalWebUrl");
+
+    // Gerrit config
+    String url = cfg.getString("gerrit", null, "canonicalWebUrl");
     if (url == null) {
       throw new IllegalArgumentException("gerrit.canonicalWebUrl not set in gerrit.config");
     }
-    formatGerritUrl = "\"%s@%s\":" + url.replaceFirst("/+$", "") + "/#/c/%d/";
+    canonicalWebUrl = url.replaceFirst("/+$", "");
+
+    // Trouble API config
+    url = cfg.getString(ITS_NAME_TROUBLE, null, "url");
+    assert  url != null;  // This needs to be checked earlier
+    baseApiUrl =  url.replaceFirst("/+$", "");
+    apiUser = cfg.getString(ITS_NAME_TROUBLE, null, "username");
+    if (apiUser == null) {
+      throw new IllegalArgumentException("trouble.username not set in gerrit.config");
+    }
+    apiPass = cfg.getString(ITS_NAME_TROUBLE, null, "password");
+    if (apiPass == null) {
+      throw new IllegalArgumentException("trouble.password not set in secure.config");
+    }
+
+    // TroubleWorkQueue config
+    int numThreads = cfg.getInt(ITS_NAME_TROUBLE, null, "poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
+    int retryLimit = cfg.getInt(ITS_NAME_TROUBLE, null, "retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
+    workQueue = new TroubleWorkQueue(numThreads, retryLimit);
   }
 
   @Override
@@ -248,19 +265,61 @@ public class TroubleItsFacade extends NoopItsFacade {
   public final void addComment(final String issueId, final String json) throws IOException {
     LOG.debug("addComment({},{})", issueId, json);
 
-    // deserialze the VelocityComment
-    VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
+    // deserialize the VelocityComment
+    GsonBuilder gson = new GsonBuilder();
+    final VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
 
+    // create the tsk to be executed in the work queue
+    Callable<Void> task = new Callable<Void>() {
+      public final Void call() throws Exception {
+        handleAddComment(event);
+        return null;
+      }
+      @Override
+      public final String toString() {
+        return json;
+      }
+    };
+
+    // add the task to the work queueu
+    workQueue.submit(event.ticket, task);
+  }
+
+  @Override
+  public final boolean exists(final String issueId) throws IOException {
+    LOG.debug("exists({})", issueId);
+    return TroubleClient.create(baseApiUrl, apiUser, apiPass, parseIssueId(issueId)).ticketExists();
+  }
+
+  @Override
+  public final String healthCheck(final Check check) throws IOException {
+    LOG.debug("healthCheck()");
+    exists("1"); // just fetch ticket 1
+    String health = null;
+    if (check.equals(Check.ACCESS)) {
+      health = "{\"status\"=\"ok\",\"username\"=\"" + apiUser + "\"}";
+      LOG.debug("health check on ACCESS result: {}", health);
+    } else {
+      health = "{\"status\"=\"ok\",\"system\"=\"" + ITS_NAME_TROUBLE + "\"}";
+      LOG.debug("health check on SYSTEM result: {}", health);
+    }
+    return health;
+  }
+
+  /**
+   * Handles the addComment event.
+   */
+  private void handleAddComment(final VelocityComment event) throws IOException {
     // create the TroubleClient
     String username = event.blame.indexOf('.') != -1 ? apiUser : event.blame;
-    TroubleClient troubleClient = TroubleClient.create(gerritConfig, event.ticket, username);
+    TroubleClient troubleClient = TroubleClient.create(baseApiUrl, apiUser, apiPass, event.ticket, username);
 
     // try find all package in the fix (same targetBranch)
     TroubleClient.Package[] packages = troubleClient.getPackages(event.branch);
     TroubleClient.Package existingPackage = findPackage(event.project, packages);
 
     String comment = null;
-    String targetLink = String.format(formatGerritUrl, event.branch, event.project, event.change);
+    String targetLink = createCommentUrl(event.branch, event.project, event.change);
     if (event.id.equals("change-abandoned")) { // delete package
       troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
@@ -276,7 +335,9 @@ public class TroubleItsFacade extends NoopItsFacade {
           // create comment about the restored review
           comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
         }
-        if (event.id.equals("comment-added") && existingPackage.cbmApproved == approvals.cbmApproved && existingPackage.dailyBuildOk == approvals.dailyBuildOk) {
+        if (event.id.equals("comment-added") && existingPackage != null
+            && existingPackage.cbmApproved.equals(approvals.cbmApproved)
+            && existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
           LOG.debug("no approval change");
           return; // exit if its just a simple comment without approval change
         }
@@ -302,25 +363,11 @@ public class TroubleItsFacade extends NoopItsFacade {
     }
   }
 
-  @Override
-  public final boolean exists(final String issueId) throws IOException {
-    LOG.debug("exists({})", issueId);
-    return TroubleClient.create(gerritConfig, parseIssueId(issueId)).ticketExists();
-  }
-
-  @Override
-  public final String healthCheck(final Check check) throws IOException {
-    LOG.debug("healthCheck()");
-    exists("1"); // just fetch ticket 1
-    String health = null;
-    if (check.equals(Check.ACCESS)) {
-      health = "{\"status\"=\"ok\",\"username\"=\"" + apiUser + "\"}";
-      LOG.debug("health check on ACCESS result: {}", health);
-    } else {
-      health = "{\"status\"=\"ok\",\"system\"=\"" + ITS_NAME_TROUBLE + "\"}";
-      LOG.debug("health check on SYSTEM result: {}", health);
-    }
-    return health;
+  /**
+   * Create comment URL.
+   */
+  private String createCommentUrl(final String targetBranch, final String troublePackage, final int change) {
+    return String.format("\"%s@%s\":" + canonicalWebUrl + "/#/c/%d/", targetBranch, troublePackage, change);
   }
 
   /**

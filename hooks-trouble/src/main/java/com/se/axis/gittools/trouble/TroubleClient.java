@@ -4,7 +4,6 @@
 
 package com.se.axis.gittools.trouble;
 
-import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +83,7 @@ public final class TroubleClient {
     /**
      * Commit (SHA1).
      */
-    @SerializedName("revision") public String reference;
+    @SerializedName("revision") private String reference;
 
     /**
      * Default constructor for serialization.
@@ -208,7 +207,7 @@ public final class TroubleClient {
     /**
      * The comment free text.
      */
-    public String text;
+    private String text;
 
     /**
      * The impersonated user name.
@@ -292,7 +291,8 @@ public final class TroubleClient {
      * Helper constructor.
      */
     private Correction(final String targetBranch, final String username) {
-      this.title = this.text = GERRIT_MAGIC + ' ' + targetBranch;
+      this.title = GERRIT_MAGIC + ' ' + targetBranch;
+      this.text = this.title;
       this.username = username;
     }
   }
@@ -348,35 +348,28 @@ public final class TroubleClient {
   /**
    * Private constructor.
    */
-  private TroubleClient(final Config gerritConfig, final int ticketId, final String impersonatedUser) {
-    this.impersonatedUser = impersonatedUser; // The impersonated user
+  private TroubleClient(final String baseApiUrl, final String apiUser, final String apiPass,
+      final int ticketId, final String impersonatedUser) {
+    this.baseApiUrl = baseApiUrl;
+    this.apiUser = apiUser;
+    this.apiPass = apiPass;
+    this.impersonatedUser = (impersonatedUser != null ? impersonatedUser : apiUser);
     this.ticketId = ticketId;
+ }
 
-    String url = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "url");
-    assert  url != null;  // This needs to be checked earlier
-    baseApiUrl =  url.replaceFirst("/+$", "");
-    apiUser = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "username");
-    if (apiUser == null) {
-      throw new IllegalArgumentException("trouble.username not set in gerrit.config");
-    }
-    apiPass = gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "password");
-    if (apiPass == null) {
-      throw new IllegalArgumentException("trouble.password not set in secure.config");
-    }
+  /**
+   * Create a TroubleClient.
+   */
+  public static TroubleClient create(final String baseApiUrl, final String apiUser, final String apiPass,
+      final int ticketId, final String impersonatedUser) {
+    return new TroubleClient(baseApiUrl, apiUser, apiPass, ticketId, impersonatedUser);
   }
 
   /**
    * Create a TroubleClient.
    */
-  public static TroubleClient create(final Config gerritConfig, final int ticketId) {
-    return create(gerritConfig, ticketId, null);
-  }
-
-  /**
-   * Create a TroubleClient.
-   */
-  public static TroubleClient create(final Config gerritConfig, final int ticketId, final String impersonatedUser) {
-    return new TroubleClient(gerritConfig, ticketId, impersonatedUser);
+  public static TroubleClient create(final String baseApiUrl, final String apiUser, final String apiPass, final int ticketId) {
+    return new TroubleClient(baseApiUrl, apiUser, apiPass, ticketId, null);
   }
 
   /**
@@ -425,7 +418,7 @@ public final class TroubleClient {
     if (targetBranch != null) {
       url += "?target_branch=" + urlEncode(targetBranch);
     }
-    try { 
+    try {
       String content = getRequest(url.toString(), apiUser, apiPass);
       return gson.create().fromJson(content, TroubleClient.Package[].class); // deserialize!
     } catch (TroubleClient.HttpException e) { // POST
@@ -507,7 +500,7 @@ public final class TroubleClient {
    * Correction info is created/updated when the first package towards a specific target branch
    * is completely approved. Each time the correction info is updated all packages toward the SAME
    * target branch are added. This can also include the packages that are added by other users.
-   * 
+   *
    * When a package is deleted, it is implicitly removed from all correction infos.
    */
   public void createOrUpdateFix(final String targetBranch, final TroubleClient.Package[] packages) throws IOException {
@@ -529,7 +522,6 @@ public final class TroubleClient {
     LOG.debug("{} {}", correction.username, correction.text);
 
     // create new Package objects that only have the package_id field set.
-    // TODO: test length = 0
     correction.packages = new TroubleClient.Package[packages.length];
     for (int i = packages.length - 1; i >= 0; i--) {
       correction.packages[i] = new TroubleClient.Package(packages[i].id);
