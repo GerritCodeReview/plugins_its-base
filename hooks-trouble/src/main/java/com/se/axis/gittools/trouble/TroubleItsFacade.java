@@ -335,6 +335,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     String comment = null;
     String targetLink = createCommentUrl(event.branch, event.project, event.change);
     if (event.id.equals("change-abandoned")) { // delete package
+      troubleClient.deletePackageFromFix(event.branch, existingPackage.id);
       troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
       comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
@@ -362,14 +363,11 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       if (existingPackage != null) {
         newPackage.id = existingPackage.id;
       }
-
-      // create/update the new package
-      troubleClient.addOrUpdatePackage(newPackage);
-
-      // create/update the fix when a package is approved
-      //if (approvals != null && approvals.submittable()) { // create correction info
-      //  troubleClient.createOrUpdateFix(event.branch, packages);
-      //}
+      newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
+      if (existingPackage == null) { // only for newly created packages
+        assert newPackage.id != null;
+        troubleClient.createOrUpdateFix(event.branch, newPackage.id);
+      }
     }
 
     if (comment != null) {

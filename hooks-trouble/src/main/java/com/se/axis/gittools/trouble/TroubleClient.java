@@ -38,6 +38,7 @@ public final class TroubleClient {
   private static final String FORMAT_PUT_DELETE_PACKAGE = "%s/tickets/%d/packages/%d.json";
   private static final String FORMAT_GET_POST_CORRECTION = "%s/tickets/%d/corrections.json";
   private static final String FORMAT_PUT_DELETE_CORRECTION = "%s/tickets/%d/corrections/%d.json";
+  private static final String FORMAT_DELETE_PACKAGE_FROM_CORRECTION = "%s/tickets/%d/corrections/%d/packages/%d.json";
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
 
@@ -434,45 +435,41 @@ public final class TroubleClient {
    * it at any time. Hence we need to try update (PUT) first, and as a fallback,
    * we call add.
    */
-  public void addOrUpdatePackage(final TroubleClient.Package troublePackage)
+  public TroubleClient.Package addOrUpdatePackage(final TroubleClient.Package troublePackage)
       throws IOException {
     // See if the package has already been added
     troublePackage.username = impersonatedUser;
 
+    String json = null;
     if (troublePackage.id != null) { // update
       String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, troublePackage.id);
       troublePackage.id = null; // prevent serialization
-      String json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
-      sendJsonRequest(url, apiUser, apiPass, "PUT", json);
+      json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
+      json = sendJsonRequest(url, apiUser, apiPass, "PUT", json);
     } else { // create
       if (troublePackage.assignedUsername == null) {
         troublePackage.assignedUsername = impersonatedUser;
       }
       String url = String.format(FORMAT_GET_POST_PACKAGE, baseApiUrl, ticketId);
-      String json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
-      sendJsonRequest(url, apiUser, apiPass, "POST", json);
+      json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
+      json = sendJsonRequest(url, apiUser, apiPass, "POST", json);
     }
+    return gson.create().fromJson(json, TroubleClient.Package.class); // deserialize!
   }
 
   /**
    * Delete a package in Trouble.
    */
   public void deletePackage(final int packageId) throws IOException {
-    // get existing packages
-    int code = -1;
-    String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, packageId);
+    String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, packageId)
+      + "?username=" + urlEncode(impersonatedUser);
     try {
       deleteRequest(url, apiUser, apiPass);
     } catch (TroubleClient.HttpException e) {
-      // See Ticket 61020 regarding HttpURLConnection.HTTP_INTERNAL_ERROR
-      code = e.responseCode;
-      if (code != HttpURLConnection.HTTP_NOT_FOUND && code != HttpURLConnection.HTTP_INTERNAL_ERROR) {
+      if (e.responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
         throw e;
       }
       LOG.debug("Package " + packageId + " already deleted in ticket " + ticketId);
-    }
-    if (code != HttpURLConnection.HTTP_INTERNAL_ERROR) {
-      LOG.info("Ticket 61020 is fixed - remove workaround!");
     }
   }
 
@@ -502,36 +499,50 @@ public final class TroubleClient {
    *
    * When a package is deleted, it is implicitly removed from all correction infos.
    */
-  public void createOrUpdateFix(final String targetBranch, final TroubleClient.Package[] packages) throws IOException {
+  public void createOrUpdateFix(final String targetBranch, final int packageId) throws IOException {
 
     // get the correction id
     TroubleClient.Correction correction = getCorrection(targetBranch);
-
-    // create correction info
-    if (correction == null) {
+    if (correction == null) { // create correction info
       correction = new TroubleClient.Correction(targetBranch, impersonatedUser);
       String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
       String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
       String content = sendJsonRequest(url, apiUser, apiPass, "POST", json);
       correction = gson.create().fromJson(content, TroubleClient.Correction.class);
+    } else {
+      correction.username = impersonatedUser; // set the acting user
     }
     assert correction.id != null;
 
-    LOG.debug("{} {}", correction.id, correction.title);
-    LOG.debug("{} {}", correction.username, correction.text);
-
     // create new Package objects that only have the package_id field set.
-    correction.packages = new TroubleClient.Package[packages.length];
-    for (int i = packages.length - 1; i >= 0; i--) {
-      correction.packages[i] = new TroubleClient.Package(packages[i].id);
-    }
+    correction.packages = new TroubleClient.Package[] {new TroubleClient.Package(packageId)};
 
-    //String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
     String url = String.format(FORMAT_PUT_DELETE_CORRECTION, baseApiUrl, ticketId, correction.id);
     correction.id = null; // do not serialize!
-    LOG.debug("{} {}", correction.id, correction.title);
     String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
     sendJsonRequest(url, apiUser, apiPass, "PUT", json);
+  }
+
+  /**
+   * Delete a package in Trouble.
+   */
+  public void deletePackageFromFix(final String targetBranch, final int packageId) throws IOException {
+    TroubleClient.Correction correction = getCorrection(targetBranch);
+    if (correction == null) {
+      LOG.debug("Correction for target branch {} does not exist", targetBranch);
+      return;
+    }
+
+    String url = String.format(FORMAT_DELETE_PACKAGE_FROM_CORRECTION, baseApiUrl, ticketId, correction.id, packageId)
+      + "?username=" + urlEncode(impersonatedUser);
+    try {
+      deleteRequest(url, apiUser, apiPass);
+    } catch (TroubleClient.HttpException e) {
+      if (e.responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
+        throw e;
+      }
+      LOG.debug("Package " + packageId + " already deleted in ticket " + ticketId);
+    }
   }
 
   /**
@@ -545,16 +556,18 @@ public final class TroubleClient {
    * Generic GET request.
    */
   private static String getRequest(final String api, final String user, final String pass) throws IOException {
-    LOG.debug("GET {}", api);
+    LOG.debug(">> GET {}", api);
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
-      LOG.debug("{} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("<< {}", readAll(conn.getErrorStream()));
+        }
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
-
       String resp = readAll(conn.getInputStream());
-      LOG.debug("{}", resp);
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -566,8 +579,10 @@ public final class TroubleClient {
    */
   private static String sendJsonRequest(final String api, final String user, final String pass,
       final String method, final String json) throws IOException {
-    LOG.debug("{} {}", method, api);
-    LOG.debug("{}", json);
+    if (LOG.isDebugEnabled()) {
+      LOG.debug(">> {} {}", method, api);
+      LOG.debug(">> {}", json);
+    }
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
       conn.setRequestMethod(method);
@@ -577,15 +592,15 @@ public final class TroubleClient {
       byte[] body = getBytes(json);
       conn.setRequestProperty("Content-Length", "" + Integer.toString(body.length));
       writeAll(conn.getOutputStream(), body);
-      LOG.debug("{} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK && conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("<< {}", readAll(conn.getErrorStream()));
+        }
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
-
       String resp = readAll(conn.getInputStream());
-      if (method.equals("POST")) {
-        LOG.debug("{}", resp);
-      }
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -596,16 +611,19 @@ public final class TroubleClient {
    * Generic DELETE request.
    */
   private static String deleteRequest(final String api, final String user, final String pass) throws IOException {
-    LOG.debug("DELETE {}", api);
+    LOG.debug(">> DELETE {}", api);
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
       conn.setRequestMethod("DELETE");
-      LOG.debug("{} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK) {
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("<< {}", readAll(conn.getErrorStream()));
+        }
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
-      LOG.debug("{}", resp);
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -625,7 +643,6 @@ public final class TroubleClient {
       conn.setRequestProperty("Authorization", authHeader(user, pass)); // add the authorization credentials
       conn.setConnectTimeout(TIMEOUT_CONNECT_MILLIS); // dont wait forever
       conn.setReadTimeout(TIMEOUT_READ_MILLIS); // dont wait forever
-
     } catch (MalformedURLException e) {
       throw new AssertionError("Invalid Trouble API URL encountered: " + api, e);
     }
