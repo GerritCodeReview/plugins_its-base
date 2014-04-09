@@ -8,6 +8,8 @@ import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
@@ -43,7 +45,9 @@ public class TroubleModule extends AbstractModule {
   protected final void configure() {
     if (gerritConfig.getString(TroubleItsFacade.ITS_NAME_TROUBLE, null, "url") != null) {
       LOG.info("Trouble is configured as ITS");
-      bind(ItsFacade.class).toInstance(new TroubleItsFacade(gerritConfig, reviewDbProvider, repoManager));
+      TroubleItsFacade trouble = new TroubleItsFacade(gerritConfig, reviewDbProvider, repoManager);
+      bind(ItsFacade.class).toInstance(trouble);
+      DynamicSet.bind(binder(), LifecycleListener.class).toInstance(trouble);
       install(new ItsHookModule(TroubleItsFacade.ITS_NAME_TROUBLE));
     }
   }

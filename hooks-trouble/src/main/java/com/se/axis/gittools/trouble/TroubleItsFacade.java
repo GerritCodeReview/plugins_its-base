@@ -12,6 +12,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -24,6 +25,7 @@ import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.google.gson.GsonBuilder;
 
@@ -40,7 +42,8 @@ import java.util.regex.Matcher;
  *
  * This Class is called from ITS base on relevant events.
  */
-public class TroubleItsFacade extends NoopItsFacade {
+@Singleton
+public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener {
 
   /**
    * Object represenation of the add-velocity-event actions in action.config.
@@ -254,6 +257,17 @@ public class TroubleItsFacade extends NoopItsFacade {
     int numThreads = cfg.getInt(ITS_NAME_TROUBLE, null, "poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
     int retryLimit = cfg.getInt(ITS_NAME_TROUBLE, null, "retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
     workQueue = new TroubleWorkQueue(numThreads, retryLimit);
+  }
+
+  @Override
+  public final void start() {
+    LOG.info("starting up ...");
+  }
+
+  @Override
+  public final void stop() {
+    LOG.info("stopping ...");
+    workQueue.shutdown();
   }
 
   @Override

@@ -41,8 +41,6 @@ public final class TroubleClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
 
-  private static final String GERRIT_MAGIC = "Gerrit fix for";
-
   private final String baseApiUrl;
   private final String apiUser;
   private final String apiPass;
@@ -291,8 +289,8 @@ public final class TroubleClient {
      * Helper constructor.
      */
     private Correction(final String targetBranch, final String username) {
-      this.title = GERRIT_MAGIC + ' ' + targetBranch;
-      this.text = this.title;
+      this.title = correctionTitle(targetBranch);
+      this.text = title;
       this.username = username;
     }
   }
@@ -481,12 +479,13 @@ public final class TroubleClient {
   /**
    * Get a correction identifier (if any) from Trouble.
    */
-  public TroubleClient.Correction getCorrection() throws IOException {
+  public TroubleClient.Correction getCorrection(final String targetBranch) throws IOException {
     StringBuilder url = new StringBuilder(String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId));
     String content = getRequest(url.toString(), apiUser, apiPass);
 
+    String magic = correctionTitle(targetBranch);
     for (TroubleClient.Correction correction :  gson.create().fromJson(content, TroubleClient.Correction[].class)) {
-      if (correction.title.startsWith(GERRIT_MAGIC)) {
+      if (magic.equals(correction.title)) {
         return correction;
       }
     }
@@ -506,7 +505,7 @@ public final class TroubleClient {
   public void createOrUpdateFix(final String targetBranch, final TroubleClient.Package[] packages) throws IOException {
 
     // get the correction id
-    TroubleClient.Correction correction = getCorrection();
+    TroubleClient.Correction correction = getCorrection(targetBranch);
 
     // create correction info
     if (correction == null) {
@@ -533,6 +532,13 @@ public final class TroubleClient {
     LOG.debug("{} {}", correction.id, correction.title);
     String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
     sendJsonRequest(url, apiUser, apiPass, "PUT", json);
+  }
+
+  /**
+   * Creates the Title of a Gerrit correction info.
+   */
+  private static String correctionTitle(final String targetBranch) {
+    return "Gerrit fix for " + targetBranch;
   }
 
   /**

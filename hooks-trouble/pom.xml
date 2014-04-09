@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
   <artifactId>hooks-trouble</artifactId>
   <groupId>com.se.axis.gittools</groupId>
-  <version>v0.8.0</version>
+  <version>v0.8.1</version>
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
     <artifactId>hooks-its-parent</artifactId>
@@ -32,6 +32,7 @@ limitations under the License.
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
     <Gerrit-ApiVersion>2.8</Gerrit-ApiVersion>
     <Gerrit-Module>com.se.axis.gittools.trouble.TroubleModule</Gerrit-Module>
+    <Gerrit-ReloadMode>restart</Gerrit-ReloadMode>
     <powermock.version>1.5.4</powermock.version>
   </properties>
 
@@ -73,6 +74,7 @@ limitations under the License.
                 <Gerrit-ApiType>${Gerrit-ApiType}</Gerrit-ApiType>
                 <Gerrit-ApiVersion>${Gerrit-ApiVersion}</Gerrit-ApiVersion>
                 <Gerrit-Module>${Gerrit-Module}</Gerrit-Module>
+                <Gerrit-ReloadMode>${Gerrit-ReloadMode}</Gerrit-ReloadMode>
               </manifestEntries>
             </transformer>
           </transformers>
@@ -93,6 +95,18 @@ limitations under the License.
 
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+        <reportSets>
+          <reportSet />
+        </reportSets>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
