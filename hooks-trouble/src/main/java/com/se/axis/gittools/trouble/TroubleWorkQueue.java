@@ -89,7 +89,7 @@ public class TroubleWorkQueue {
           }
           LOG.debug("task completed successfully: {}", task);
         } catch (Exception e) {
-          LOG.error("task failed ({}): {}", e, task);
+          LOG.error("task failed: " + task, e);
           throw e;
         }
         return null;

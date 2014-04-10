@@ -13,10 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.extensions.events.LifecycleListener;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.ChangeMessage;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.PatchSetApproval;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
@@ -224,6 +226,8 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private final String baseApiUrl;
   private final String canonicalWebUrl;
 
+  private final Account apiUserAccount;
+
   /**
    * Constructor.
    */
@@ -248,11 +252,14 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     if (apiUser == null) {
       throw new IllegalArgumentException("trouble.username not set in gerrit.config");
     }
+    apiUserAccount = getApiUserAccount();
+    if (apiUserAccount == null) {
+      LOG.warn("trouble.username (" + apiUser + ") in gerrit.config is not valid Gerrit user");
+    }
     apiPass = cfg.getString(ITS_NAME_TROUBLE, null, "password");
     if (apiPass == null) {
       throw new IllegalArgumentException("trouble.password not set in secure.config");
     }
-
     // TroubleWorkQueue config
     int numThreads = cfg.getInt(ITS_NAME_TROUBLE, null, "poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
     int retryLimit = cfg.getInt(ITS_NAME_TROUBLE, null, "retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
@@ -349,12 +356,18 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         if (event.id.equals("change-restored")) {
           // create comment about the restored review
           comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
-        }
-        if (event.id.equals("comment-added") && existingPackage != null
-            && existingPackage.cbmApproved.equals(approvals.cbmApproved)
-            && existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
-          LOG.debug("no approval change");
-          return; // exit if its just a simple comment without approval change
+        } else if (event.id.equals("comment-added") && existingPackage != null) {
+          boolean packageChanged = false;
+          if (existingPackage.mergeRef == null && event.blame.equals(apiUser) && approvals.submittable()) {
+            // Waiting for Ma
+            existingPackage.mergeRef = findMergeTag(event.patchSetId());
+            packageChanged = (existingPackage.mergeRef != null);
+          }
+          if (!packageChanged && existingPackage.cbmApproved.equals(approvals.cbmApproved)
+              && existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
+            LOG.debug("no approval changes - no need to update the package and fix!");
+            return; // exit if its just a simple comment without approval change
+          }
         }
       }
 
@@ -362,6 +375,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       TroubleClient.Package newPackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
       if (existingPackage != null) {
         newPackage.id = existingPackage.id;
+        newPackage.mergeRef = existingPackage.mergeRef;
       }
       newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
       if (existingPackage == null) { // only for newly created packages
@@ -457,6 +471,54 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
     }
     return new Approvals(cbmApproved, dailyBuildOk);
+  }
+
+  /**
+   * Finds the R-Tag from the comments.
+   */
+  private TroubleClient.Reference findMergeTag(final PatchSet.Id patchSetId) {
+    ReviewDb db = null;
+    Account.Id accountId = apiUserAccount != null ? apiUserAccount.getId() : null;
+    try {
+      db = reviewDbProvider.open();
+      Pattern pattern = Pattern.compile("Auto-tagged as (\\S+)$");
+      for (ChangeMessage message : db.changeMessages().byPatchSet(patchSetId)) {
+        //LOG.debug("{}", message.getMessage());
+        if (accountId == null || accountId.equals(message.getAuthor())) {
+          Matcher matcher = pattern.matcher(message.getMessage());
+          if (matcher.find()) {
+            return new TroubleClient.Reference(matcher.group(1));
+          }
+        }
+      }
+    } catch (OrmException err) { // cbmApproved and dailyBuildOk is null => nothing is changed
+      LOG.error("Failed to access ReviewDb: ", err.toString());
+    } finally {
+      if (db != null) {
+        db.close();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Finds the account id of a user.
+   */
+  private Account getApiUserAccount() {
+    ReviewDb db = null;
+    try {
+      db = reviewDbProvider.open();
+      for (Account account : db.accounts().byPreferredEmail(apiUser + "@axis.com")) {
+        return account;
+      }
+    } catch (OrmException err) { // cbmApproved and dailyBuildOk is null => nothing is changed
+      LOG.error("Failed to access ReviewDb: ", err.toString());
+    } finally {
+      if (db != null) {
+        db.close();
+      }
+    }
+    return null;
   }
 
   /**
