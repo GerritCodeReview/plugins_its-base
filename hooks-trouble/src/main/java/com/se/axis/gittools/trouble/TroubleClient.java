@@ -108,7 +108,7 @@ public final class TroubleClient {
     public Integer id;
 
     /**
-     * Trouble's package identifier (onlu used for correction).
+     * Trouble's package identifier (only used for correction).
      */
     @SerializedName("package_id") private Integer packageId;
 
@@ -443,8 +443,10 @@ public final class TroubleClient {
     String json = null;
     if (troublePackage.id != null) { // update
       String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, troublePackage.id);
+      Integer id = troublePackage.id;
       troublePackage.id = null; // prevent serialization
       json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
+      troublePackage.id = id;
       json = sendJsonRequest(url, apiUser, apiPass, "PUT", json);
     } else { // create
       if (troublePackage.assignedUsername == null) {
@@ -509,9 +511,8 @@ public final class TroubleClient {
       String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
       String content = sendJsonRequest(url, apiUser, apiPass, "POST", json);
       correction = gson.create().fromJson(content, TroubleClient.Correction.class);
-    } else {
-      correction.username = impersonatedUser; // set the acting user
     }
+    correction.username = impersonatedUser; // set the acting user
     assert correction.id != null;
 
     // create new Package objects that only have the package_id field set.
@@ -561,9 +562,7 @@ public final class TroubleClient {
     try {
       LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("<< {}", readAll(conn.getErrorStream()));
-        }
+        LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
@@ -594,9 +593,7 @@ public final class TroubleClient {
       writeAll(conn.getOutputStream(), body);
       LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK && conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("<< {}", readAll(conn.getErrorStream()));
-        }
+        LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
@@ -617,9 +614,7 @@ public final class TroubleClient {
       conn.setRequestMethod("DELETE");
       LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK) {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("<< {}", readAll(conn.getErrorStream()));
-        }
+        LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());

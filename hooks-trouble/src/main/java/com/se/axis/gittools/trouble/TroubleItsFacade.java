@@ -341,46 +341,67 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
     String comment = null;
     String targetLink = createCommentUrl(event.branch, event.project, event.change);
-    if (event.id.equals("change-abandoned")) { // delete package
+    if (existingPackage != null && event.id.equals("change-abandoned")) { // delete package
       troubleClient.deletePackageFromFix(event.branch, existingPackage.id);
       troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
       comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
-    } else { // add or update package
+    } else if (event.id.equals("patchset-created") || event.id.equals("change-restored")) { // add or update package
       Approvals approvals = null;
       if (event.id.equals("patchset-created")) { // reset approvals
         // create comment about the new patchset
         comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
-      } else { // update approvals
+      } else { // change-restored
+        // create comment about the restored review
+        comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
         approvals = resolveApprovals(event.patchSetId());
-        if (event.id.equals("change-restored")) {
-          // create comment about the restored review
-          comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
-        } else if (event.id.equals("comment-added") && existingPackage != null) {
-          boolean packageChanged = false;
-          if (existingPackage.mergeRef == null && event.blame.equals(apiUser) && approvals.submittable()) {
-            // Waiting for Ma
-            existingPackage.mergeRef = findMergeTag(event.patchSetId());
-            packageChanged = (existingPackage.mergeRef != null);
-          }
-          if (!packageChanged && existingPackage.cbmApproved.equals(approvals.cbmApproved)
-              && existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
-            LOG.debug("no approval changes - no need to update the package and fix!");
-            return; // exit if its just a simple comment without approval change
-          }
-        }
       }
 
       // create a new (untampered) package
       TroubleClient.Package newPackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
       if (existingPackage != null) {
         newPackage.id = existingPackage.id;
-        newPackage.mergeRef = existingPackage.mergeRef;
       }
       newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
-      if (existingPackage == null) { // only for newly created packages
-        assert newPackage.id != null;
+      if (approvals != null && approvals.submittable()) { // add the package to the fix
         troubleClient.createOrUpdateFix(event.branch, newPackage.id);
+      }
+    } else if (existingPackage != null && event.id.equals("comment-added")) {
+      // create a new (untampered) package
+      TroubleClient.Package newPackage = new TroubleClient.Package();
+      newPackage.id = existingPackage.id;
+      Approvals approvals = resolveApprovals(event.patchSetId());
+
+      // handle Gerrit's comment about the auto-tag
+      if (existingPackage.mergeRef == null && event.blame.equals(apiUser) && approvals.submittable()) {
+        newPackage.mergeRef = findMergeTag(event.patchSetId()); // get the merge tag from the Review comments
+        LOG.debug("found merge tag: {}", newPackage.mergeRef);
+      }
+
+      // handle approval related comments
+      if (!existingPackage.cbmApproved.equals(approvals.cbmApproved)) {
+        newPackage.cbmApproved = approvals.cbmApproved;
+        LOG.debug("cbmApproved: {}", newPackage.cbmApproved);
+      }
+      if (!existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
+        newPackage.dailyBuildOk = approvals.dailyBuildOk;
+        LOG.debug("dailyBuildOk: {}", newPackage.dailyBuildOk);
+      }
+
+      // update the package
+      if (newPackage.cbmApproved != null || newPackage.dailyBuildOk != null || newPackage.mergeRef != null) {
+        newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
+      }
+
+      // update the fix
+      if ((Boolean.TRUE.equals(newPackage.cbmApproved) && Boolean.TRUE.equals(approvals.dailyBuildOk))
+          || (Boolean.TRUE.equals(newPackage.dailyBuildOk) && Boolean.TRUE.equals(approvals.cbmApproved))) {
+        // add the package to the fix when it gets submittable
+        troubleClient.createOrUpdateFix(event.branch, newPackage.id);
+      } else if ((Boolean.FALSE.equals(newPackage.cbmApproved) && Boolean.TRUE.equals(approvals.dailyBuildOk))
+          || (Boolean.FALSE.equals(newPackage.dailyBuildOk) && Boolean.TRUE.equals(approvals.cbmApproved))) {
+        // remove the package from the fix when its no longer submittable
+        troubleClient.deletePackageFromFix(event.branch, newPackage.id);
       }
     }
 
