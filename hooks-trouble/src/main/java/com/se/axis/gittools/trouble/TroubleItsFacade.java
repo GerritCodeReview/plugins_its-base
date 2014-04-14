@@ -363,7 +363,8 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         newPackage.id = existingPackage.id;
       }
       newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
-      if (approvals != null && approvals.submittable()) { // add the package to the fix
+      if (event.patchSet == 1 || event.id.equals("change-restored")) {
+        // create a fix and add the package to it, putting the ticket into the reviewing state.
         troubleClient.createOrUpdateFix(event.branch, newPackage.id);
       }
     } else if (existingPackage != null && event.id.equals("comment-added")) {
