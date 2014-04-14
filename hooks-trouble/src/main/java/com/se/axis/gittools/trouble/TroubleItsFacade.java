@@ -393,17 +393,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       if (newPackage.cbmApproved != null || newPackage.dailyBuildOk != null || newPackage.mergeRef != null) {
         newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
       }
-
-      // update the fix
-      if ((Boolean.TRUE.equals(newPackage.cbmApproved) && Boolean.TRUE.equals(approvals.dailyBuildOk))
-          || (Boolean.TRUE.equals(newPackage.dailyBuildOk) && Boolean.TRUE.equals(approvals.cbmApproved))) {
-        // add the package to the fix when it gets submittable
-        troubleClient.createOrUpdateFix(event.branch, newPackage.id);
-      } else if ((Boolean.FALSE.equals(newPackage.cbmApproved) && Boolean.TRUE.equals(approvals.dailyBuildOk))
-          || (Boolean.FALSE.equals(newPackage.dailyBuildOk) && Boolean.TRUE.equals(approvals.cbmApproved))) {
-        // remove the package from the fix when its no longer submittable
-        troubleClient.deletePackageFromFix(event.branch, newPackage.id);
-      }
     }
 
     if (comment != null) {
@@ -446,10 +435,9 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     // resolve fix information
     List<String> referenceFooters = getReferenceFooters(repoManager, name, revision);
     for (String footer : referenceFooters) {
-      if (troublePackage.fixRef == null) {
-        troublePackage.fixBranch = parseSourceBranch(footer);
-        troublePackage.fixRef = new TroubleClient.Reference(parseRevision(footer));
-      }
+      troublePackage.fixBranch = parseSourceBranch(footer);
+      troublePackage.fixRef = new TroubleClient.Reference(parseRevision(footer));
+      break; // first footer is enough
     }
     return troublePackage;
   }
@@ -579,7 +567,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     Matcher matcher = pattern.matcher(reference);
     if (matcher.find()) {
       String[] branches = matcher.group(1).split("\\s*,\\s*");
-      return branches[branches.length - 1]; // last match
+      return branches[0]; // first match
     }
     return null;
   }

@@ -38,7 +38,7 @@ public class TroubleItsFacadeTest {
     actual = Whitebox.invokeMethod(TroubleItsFacade.class, "parseSourceBranch", EXPECTED_REVISION + " (" + EXPECTED_BRANCH + ")");
     assertEquals(EXPECTED_BRANCH, actual);
     actual = Whitebox.invokeMethod(TroubleItsFacade.class, "parseSourceBranch",
-      EXPECTED_REVISION + " (" + EXPECTED_BRANCH + "/1, " + EXPECTED_BRANCH + ")");
+      EXPECTED_REVISION + " (" + EXPECTED_BRANCH + ", " + EXPECTED_BRANCH + "/1)");
     assertEquals(EXPECTED_BRANCH, actual);
   }
 

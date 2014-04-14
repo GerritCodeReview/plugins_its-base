@@ -557,16 +557,16 @@ public final class TroubleClient {
    * Generic GET request.
    */
   private static String getRequest(final String api, final String user, final String pass) throws IOException {
-    LOG.debug(">> GET {}", api);
+    LOG.info(">> GET {}", api);
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
-      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
         LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
-      LOG.debug("<< {}", resp);
+      LOG.info("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -579,8 +579,8 @@ public final class TroubleClient {
   private static String sendJsonRequest(final String api, final String user, final String pass,
       final String method, final String json) throws IOException {
     if (LOG.isDebugEnabled()) {
-      LOG.debug(">> {} {}", method, api);
-      LOG.debug(">> {}", json);
+      LOG.info(">> {} {}", method, api);
+      LOG.info(">> {}", json);
     }
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
@@ -591,13 +591,13 @@ public final class TroubleClient {
       byte[] body = getBytes(json);
       conn.setRequestProperty("Content-Length", "" + Integer.toString(body.length));
       writeAll(conn.getOutputStream(), body);
-      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK && conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
         LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
-      LOG.debug("<< {}", resp);
+      LOG.info("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -608,17 +608,17 @@ public final class TroubleClient {
    * Generic DELETE request.
    */
   private static String deleteRequest(final String api, final String user, final String pass) throws IOException {
-    LOG.debug(">> DELETE {}", api);
+    LOG.info(">> DELETE {}", api);
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
       conn.setRequestMethod("DELETE");
-      LOG.debug("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
+      LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK) {
         LOG.error("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
-      LOG.debug("<< {}", resp);
+      LOG.info("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
