@@ -369,24 +369,27 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
     } else if (existingPackage != null && event.id.equals("comment-added")) {
       // create a new (untampered) package
+      Approvals approvals = resolveApprovals(event.patchSetId());
       TroubleClient.Package newPackage = new TroubleClient.Package();
       newPackage.id = existingPackage.id;
-      Approvals approvals = resolveApprovals(event.patchSetId());
 
-      // handle Gerrit's comment about the auto-tag
-      if (existingPackage.mergeRef == null && event.blame.equals(apiUser) && approvals.submittable()) {
+      if (event.blame.equals(apiUser) && approvals.submittable()) {
+        // handle Gerrit's comment about the auto-tag
         newPackage.mergeRef = findMergeTag(event.patchSetId()); // get the merge tag from the Review comments
         LOG.debug("found merge tag: {}", newPackage.mergeRef);
-      }
-
-      // handle approval related comments
-      if (!existingPackage.cbmApproved.equals(approvals.cbmApproved)) {
-        newPackage.cbmApproved = approvals.cbmApproved;
-        LOG.debug("cbmApproved: {}", newPackage.cbmApproved);
-      }
-      if (!existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
-        newPackage.dailyBuildOk = approvals.dailyBuildOk;
-        LOG.debug("dailyBuildOk: {}", newPackage.dailyBuildOk);
+        if (newPackage.mergeRef.equals(existingPackage.mergeRef)) {
+          newPackage.mergeRef = null; // block the update (same tag)
+        }
+        newPackage.username = "zalanb"; // See ticket 61387
+      } else { // handle approval related comments
+        if (!existingPackage.cbmApproved.equals(approvals.cbmApproved)) {
+          newPackage.cbmApproved = approvals.cbmApproved;
+          LOG.debug("cbmApproved: {}", newPackage.cbmApproved);
+        }
+        if (!existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
+          newPackage.dailyBuildOk = approvals.dailyBuildOk;
+          LOG.debug("dailyBuildOk: {}", newPackage.dailyBuildOk);
+        }
       }
 
       // update the package
@@ -487,6 +490,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
    * Finds the R-Tag from the comments.
    */
   private TroubleClient.Reference findMergeTag(final PatchSet.Id patchSetId) {
+    String tag = null;
     ReviewDb db = null;
     Account.Id accountId = apiUserAccount != null ? apiUserAccount.getId() : null;
     try {
@@ -497,7 +501,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         if (accountId == null || accountId.equals(message.getAuthor())) {
           Matcher matcher = pattern.matcher(message.getMessage());
           if (matcher.find()) {
-            return new TroubleClient.Reference(matcher.group(1));
+            tag = matcher.group(1);
           }
         }
       }
@@ -508,7 +512,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         db.close();
       }
     }
-    return null;
+    return tag != null ? new TroubleClient.Reference(tag) : null;
   }
 
   /**

@@ -96,6 +96,16 @@ public final class TroubleClient {
     public Reference(final String reference) {
       this.reference = reference;
     }
+
+    @Override
+    public final int hashCode() {
+      return reference != null ? reference.hashCode() : super.hashCode();
+    }
+
+    @Override
+    public final String toString() {
+      return String.valueOf(reference);
+    }
   }
 
   /**
@@ -155,10 +165,12 @@ public final class TroubleClient {
     /**
      * The impersonated user name.
      */
-    private String username;
+    public String username;
 
     /**
      * The person who is in charge of the fix (typically same as username).
+     *
+     * Used in relevant POST/PUT requests.
      */
     @SerializedName("assigned_username") private String assignedUsername;
 
@@ -169,7 +181,7 @@ public final class TroubleClient {
     }
 
     /**
-     * Helper constructor.
+     * Helper constructor for createOrUpdateFix.
      */
     private Package(final Integer id) {
       this.packageId = id;
@@ -438,7 +450,9 @@ public final class TroubleClient {
   public TroubleClient.Package addOrUpdatePackage(final TroubleClient.Package troublePackage)
       throws IOException {
     // See if the package has already been added
-    troublePackage.username = impersonatedUser;
+    if (troublePackage.username == null) {
+      troublePackage.username = impersonatedUser;
+    }
 
     String json = null;
     if (troublePackage.id != null) { // update
