@@ -42,4 +42,16 @@ public class TroubleItsFacadeTest {
     assertEquals(EXPECTED_BRANCH, actual);
   }
 
+  @Test()
+  public void testTitleToSlug() throws Exception {
+    String actual = Whitebox.invokeMethod(TroubleItsFacade.class, "titleToSlug", "test/Package");
+    assertEquals("test-package", actual);
+
+    actual = Whitebox.invokeMethod(TroubleItsFacade.class, "titleToSlug", "test-Package");
+    assertEquals("test-package", actual);
+
+    actual = Whitebox.invokeMethod(TroubleItsFacade.class, "titleToSlug", "test-package");
+    assertEquals("test-package", actual);
+  }
+
 }

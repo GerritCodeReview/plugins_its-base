@@ -81,7 +81,7 @@ public class TroubleWorkQueue {
             } catch (TroubleClient.HttpException e1) {
               throw e1; // re-throw unrecoverable error
             } catch (IOException e2) {
-              LOG.info("task ({}) failed: {}", task, e2);
+              LOG.info("task failed: " + task, e2);
               LOG.info("retrying in {} millis ...", delayMillis);
               Thread.sleep(delayMillis);
               delayMillis *= 2; // wait more next time

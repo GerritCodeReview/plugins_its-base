@@ -576,7 +576,7 @@ public final class TroubleClient {
     try {
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        LOG.error("<< {}", readAll(conn.getErrorStream()));
+        LOG.info("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
@@ -607,7 +607,7 @@ public final class TroubleClient {
       writeAll(conn.getOutputStream(), body);
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK && conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-        LOG.error("<< {}", readAll(conn.getErrorStream()));
+        LOG.info("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());
@@ -628,7 +628,7 @@ public final class TroubleClient {
       conn.setRequestMethod("DELETE");
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK) {
-        LOG.error("<< {}", readAll(conn.getErrorStream()));
+        LOG.info("<< {}", readAll(conn.getErrorStream()));
         throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
       }
       String resp = readAll(conn.getInputStream());

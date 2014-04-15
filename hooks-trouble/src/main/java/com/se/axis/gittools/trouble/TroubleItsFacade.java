@@ -33,8 +33,12 @@ import com.google.gson.GsonBuilder;
 
 import com.googlesource.gerrit.plugins.hooks.its.NoopItsFacade;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -206,6 +210,10 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private static final int DAILY_BUILT_MAX = 1;
   private static final int DAILY_BUILT_MIN = -1;
 
+  // cache containing the correct slug2title mapping
+  private static final String SLUG_TO_TITLE_MAP = "/var/cache/slug2title";
+  private static final int SLUG_TO_TITLE_MAX_AGE = 3600000;
+
   private static final String GERRIT_CONFIG_USERNAME = "username";
   private static final String GERRIT_CONFIG_PASSWORD = "password";
   private static final String GERRIT_CONFIG_URL = "url";
@@ -227,6 +235,9 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private final String canonicalWebUrl;
 
   private final Account apiUserAccount;
+
+  private static HashMap<String, String> slugToTitleMap = new HashMap<String, String>();
+  private static long slugToTitleRip = 0;
 
   /**
    * Constructor.
@@ -337,10 +348,12 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
     // try find all package in the fix (same targetBranch)
     TroubleClient.Package[] packages = troubleClient.getPackages(event.branch);
-    TroubleClient.Package existingPackage = findPackage(event.project, packages);
+    String projectName = slugToTitle(event.project);
+    LOG.debug("resolved projectName: {}", projectName);
+    TroubleClient.Package existingPackage = findPackage(packages, event.project);
 
     String comment = null;
-    String targetLink = createCommentUrl(event.branch, event.project, event.change);
+    String targetLink = createCommentUrl(event.branch, projectName, event.change);
     if (existingPackage != null && event.id.equals("change-abandoned")) { // delete package
       troubleClient.deletePackageFromFix(event.branch, existingPackage.id);
       troubleClient.deletePackage(existingPackage.id);
@@ -358,7 +371,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
 
       // create a new (untampered) package
-      TroubleClient.Package newPackage = createPackage(event.project, event.branch, event.rev, event.ref, approvals);
+      TroubleClient.Package newPackage = createPackage(projectName, event.branch, event.rev, event.ref, approvals);
       if (existingPackage != null) {
         newPackage.id = existingPackage.id;
       }
@@ -413,9 +426,9 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   /**
    * Find a package.
    */
-  private TroubleClient.Package findPackage(final String name, final TroubleClient.Package[] packages) {
+  private TroubleClient.Package findPackage(final TroubleClient.Package[] packages, final String slug) {
     for (TroubleClient.Package troublePackage : packages) {
-      if (name.equals(troublePackage.name)) {
+      if (slug.equals(titleToSlug(troublePackage.name))) {
         return troublePackage; // bingo!
       }
     }
@@ -540,7 +553,8 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
    */
   private static List<String> getReferenceFooters(final GitRepositoryManager repoManager,
       final String packageName, final String rev) throws IOException {
-    Repository git = repoManager.openRepository(new Project.NameKey(packageName));
+    String slug = titleToSlug(packageName);
+    Repository git = repoManager.openRepository(new Project.NameKey(slug));
     try {
       RevWalk revWalk = new RevWalk(git);
       RevCommit commit = revWalk.parseCommit(git.resolve(rev));
@@ -584,4 +598,51 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     Matcher matcher = pattern.matcher(reference);
     return (matcher.find() ? matcher.group(0) : null);
   }
+
+  /**
+   * Converts a title to slug notation.
+   */
+  private static String titleToSlug(final String title) {
+    return title.toLowerCase().replaceFirst("[^a-z0-9_]+$", "").replaceAll("[^a-z0-9_]+", "-");
+  }
+
+  /**
+   * Convert a slug to a title.
+   *
+   * The proper way to do this is to look in the slug2title mapping.
+   * However, this is a best effort implementations so its not necessary
+   * to have an exact conversion.
+   */
+  private static String slugToTitle(final String slug) {
+    long now = System.currentTimeMillis();
+    if (slugToTitleRip < now) { // reload file from disk periodically
+      HashMap<String, String> newMap = new HashMap<String, String>();
+      BufferedReader bufferedReader = null;
+      try {
+        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(SLUG_TO_TITLE_MAP), "utf-8"));
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+          String[] keyVal = line.split("\\s+", 2);
+          if (keyVal.length != 2) {
+            LOG.warn("slug2title file is corrupted {}", keyVal.length);
+          } else {
+            newMap.put(keyVal[0], keyVal[1]);
+          }
+        }
+        slugToTitleMap = newMap;
+        slugToTitleRip = now + SLUG_TO_TITLE_MAX_AGE;
+        LOG.debug("Loaded title2slug map from disk");
+      } catch (IOException ioe) {
+        LOG.warn("Failed to load title2slug map", ioe);
+      } finally {
+        if (bufferedReader != null) {
+          try { bufferedReader.close(); } catch (IOException e) { /* ignore errors on close */ }
+        }
+      }
+    }
+
+    String title = slugToTitleMap.get(slug);
+    return title != null ? title : slug;
+  }
+
 }
