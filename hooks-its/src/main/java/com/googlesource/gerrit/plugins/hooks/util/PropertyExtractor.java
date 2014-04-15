@@ -17,6 +17,8 @@ package com.googlesource.gerrit.plugins.hooks.util;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jgit.lib.ObjectId;
+
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -122,6 +124,10 @@ public class PropertyExtractor {
     common.add(propertyFactory.create("event-type", event.type));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter, "submitter"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate));
+    ObjectId newRev = ObjectId.fromString(event.refUpdate.newRev);
+    if (newRev.equals(ObjectId.zeroId())) { // skip deleted branches
+        return null;
+    }
     return issueExtractor.getIssueIds(event.refUpdate.project,
         event.refUpdate.newRev);
   }

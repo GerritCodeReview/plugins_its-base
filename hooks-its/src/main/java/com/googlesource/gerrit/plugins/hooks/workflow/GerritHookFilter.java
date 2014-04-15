@@ -19,6 +19,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.eclipse.jgit.lib.ObjectId;
+
 import com.google.gerrit.common.ChangeListener;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
@@ -77,7 +79,11 @@ public class GerritHookFilter implements ChangeListener {
       } else if (event instanceof ChangeRestoredEvent) {
         doFilter((ChangeRestoredEvent) event);
       } else if (event instanceof RefUpdatedEvent) {
-        doFilter((RefUpdatedEvent) event);
+        RefUpdatedEvent refUpdatedEvent = (RefUpdatedEvent) event;
+        ObjectId newRev = ObjectId.fromString(refUpdatedEvent.refUpdate.newRev);
+        if (!newRev.equals(ObjectId.zeroId())) { // skip deleted branches
+          doFilter(refUpdatedEvent);
+        }
       } else {
         log.debug("Event " + event + " not recognised and ignored");
       }
