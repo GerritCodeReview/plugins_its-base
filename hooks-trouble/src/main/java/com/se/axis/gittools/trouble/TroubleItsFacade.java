@@ -4,7 +4,6 @@
 
 package com.se.axis.gittools.trouble;
 
-import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -20,13 +19,12 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.git.GitRepositoryManager;
-
+import com.google.gerrit.server.git.WorkQueue;
 import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.SchemaFactory;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.google.gson.GsonBuilder;
@@ -232,7 +230,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private final String apiUser;
   private final String apiPass;
   private final String baseApiUrl;
-  private final String canonicalWebUrl;
+  private final String gerritUrl;
 
   private final Account apiUserAccount;
 
@@ -242,39 +240,38 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   /**
    * Constructor.
    */
-  @Inject
-  public TroubleItsFacade(@GerritServerConfig final Config cfg, final SchemaFactory<ReviewDb> schema,
-      final GitRepositoryManager repoManager) {
-    reviewDbProvider = schema;
+  public TroubleItsFacade(final String pluginName, final PluginConfig cfg, final SchemaFactory<ReviewDb> schema,
+      final GitRepositoryManager repoManager, final WorkQueue workQueue) {
+    this.reviewDbProvider = schema;
     this.repoManager = repoManager;
 
     // Gerrit config
-    String url = cfg.getString("gerrit", null, "canonicalWebUrl");
+    String url = cfg.getString("gerritUrl");
     if (url == null) {
-      throw new IllegalArgumentException("gerrit.canonicalWebUrl not set in gerrit.config");
+      throw new IllegalArgumentException("plugin." + pluginName + ".gerritUrl is not set in gerrit.config");
     }
-    canonicalWebUrl = url.replaceFirst("/+$", "");
+    gerritUrl = url.replaceFirst("/+$", "");
 
     // Trouble API config
-    url = cfg.getString(ITS_NAME_TROUBLE, null, "url");
+    url = cfg.getString("troubleUrl");
     assert  url != null;  // This needs to be checked earlier
     baseApiUrl =  url.replaceFirst("/+$", "");
-    apiUser = cfg.getString(ITS_NAME_TROUBLE, null, "username");
+    apiUser = cfg.getString("username");
     if (apiUser == null) {
-      throw new IllegalArgumentException("trouble.username not set in gerrit.config");
+      throw new IllegalArgumentException("plugin." + pluginName + ".username is not set in gerrit.config");
     }
     apiUserAccount = getApiUserAccount();
     if (apiUserAccount == null) {
-      LOG.warn("trouble.username (" + apiUser + ") in gerrit.config is not valid Gerrit user");
+      LOG.warn("plugin." + pluginName + "." + apiUser + " in gerrit.config is not valid Gerrit user");
     }
-    apiPass = cfg.getString(ITS_NAME_TROUBLE, null, "password");
+    apiPass = cfg.getString("password");
     if (apiPass == null) {
-      throw new IllegalArgumentException("trouble.password not set in secure.config");
+      throw new IllegalArgumentException("plugin." + pluginName + ".password is not set in secure.config");
     }
     // TroubleWorkQueue config
-    int numThreads = cfg.getInt(ITS_NAME_TROUBLE, null, "poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
-    int retryLimit = cfg.getInt(ITS_NAME_TROUBLE, null, "retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
-    workQueue = new TroubleWorkQueue(numThreads, retryLimit);
+    int numThreads = cfg.getInt("poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
+    int retryLimit = cfg.getInt("retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
+    this.workQueue = new TroubleWorkQueue(pluginName, workQueue, numThreads, retryLimit);
   }
 
   @Override
@@ -420,7 +417,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
    * Create comment URL.
    */
   private String createCommentUrl(final String targetBranch, final String troublePackage, final int change) {
-    return String.format("\"%s@%s\":" + canonicalWebUrl + "/#/c/%d/", targetBranch, troublePackage, change);
+    return String.format("\"%s@%s\":" + gerritUrl + "/#/c/%d/", targetBranch, troublePackage, change);
   }
 
   /**

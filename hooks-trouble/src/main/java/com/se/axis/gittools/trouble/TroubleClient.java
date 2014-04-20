@@ -41,6 +41,7 @@ public final class TroubleClient {
   private static final String FORMAT_DELETE_PACKAGE_FROM_CORRECTION = "%s/tickets/%d/corrections/%d/packages/%d.json";
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
+  private static final GsonBuilder GSON = new GsonBuilder();
 
   private final String baseApiUrl;
   private final String apiUser;
@@ -48,8 +49,6 @@ public final class TroubleClient {
 
   private final String impersonatedUser;
   private final int ticketId;
-
-  private final GsonBuilder gson = new GsonBuilder();
 
   /**
    * Exception thrown when trouble responds with a non-successfult result code.
@@ -391,7 +390,7 @@ public final class TroubleClient {
     TroubleClient.Ticket ticket = null;
 
     String content = getRequest(url, apiUser, apiPass);
-    ticket = gson.create().fromJson(content, TroubleClient.Ticket.class); // deserialize!
+    ticket = GSON.create().fromJson(content, TroubleClient.Ticket.class); // deserialize!
     return ticket;
   }
 
@@ -416,7 +415,7 @@ public final class TroubleClient {
    */
   public void addComment(final String message) throws IOException {
     TroubleClient.Comment comment = new TroubleClient.Comment(message, impersonatedUser);
-    String json = gson.create().toJson(new CommentContainer(comment)); // serialize
+    String json = GSON.create().toJson(new CommentContainer(comment)); // serialize
     String url = String.format(FORMAT_COMMENT_POST, baseApiUrl, ticketId);
     sendJsonRequest(url, apiUser, apiPass, "POST", json);
   }
@@ -431,7 +430,7 @@ public final class TroubleClient {
     }
     try {
       String content = getRequest(url.toString(), apiUser, apiPass);
-      return gson.create().fromJson(content, TroubleClient.Package[].class); // deserialize!
+      return GSON.create().fromJson(content, TroubleClient.Package[].class); // deserialize!
     } catch (TroubleClient.HttpException e) { // POST
       if (e.responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
         throw e;
@@ -459,7 +458,7 @@ public final class TroubleClient {
       String url = String.format(FORMAT_PUT_DELETE_PACKAGE, baseApiUrl, ticketId, troublePackage.id);
       Integer id = troublePackage.id;
       troublePackage.id = null; // prevent serialization
-      json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
+      json = GSON.create().toJson(new PackageContainer(troublePackage)); // serialize
       troublePackage.id = id;
       json = sendJsonRequest(url, apiUser, apiPass, "PUT", json);
     } else { // create
@@ -467,10 +466,10 @@ public final class TroubleClient {
         troublePackage.assignedUsername = impersonatedUser;
       }
       String url = String.format(FORMAT_GET_POST_PACKAGE, baseApiUrl, ticketId);
-      json = gson.create().toJson(new PackageContainer(troublePackage)); // serialize
+      json = GSON.create().toJson(new PackageContainer(troublePackage)); // serialize
       json = sendJsonRequest(url, apiUser, apiPass, "POST", json);
     }
-    return gson.create().fromJson(json, TroubleClient.Package.class); // deserialize!
+    return GSON.create().fromJson(json, TroubleClient.Package.class); // deserialize!
   }
 
   /**
@@ -497,7 +496,7 @@ public final class TroubleClient {
     String content = getRequest(url.toString(), apiUser, apiPass);
 
     String magic = correctionTitle(targetBranch);
-    for (TroubleClient.Correction correction :  gson.create().fromJson(content, TroubleClient.Correction[].class)) {
+    for (TroubleClient.Correction correction :  GSON.create().fromJson(content, TroubleClient.Correction[].class)) {
       if (magic.equals(correction.title)) {
         return correction;
       }
@@ -521,10 +520,10 @@ public final class TroubleClient {
     TroubleClient.Correction correction = getCorrection(targetBranch);
     if (correction == null) { // create correction info
       correction = new TroubleClient.Correction(targetBranch, impersonatedUser);
-      String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
+      String json = GSON.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
       String url = String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId);
       String content = sendJsonRequest(url, apiUser, apiPass, "POST", json);
-      correction = gson.create().fromJson(content, TroubleClient.Correction.class);
+      correction = GSON.create().fromJson(content, TroubleClient.Correction.class);
     }
     correction.username = impersonatedUser; // set the acting user
     assert correction.id != null;
@@ -534,7 +533,7 @@ public final class TroubleClient {
 
     String url = String.format(FORMAT_PUT_DELETE_CORRECTION, baseApiUrl, ticketId, correction.id);
     correction.id = null; // do not serialize!
-    String json = gson.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
+    String json = GSON.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
     sendJsonRequest(url, apiUser, apiPass, "PUT", json);
   }
 

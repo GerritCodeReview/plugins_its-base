@@ -7,11 +7,11 @@ package com.se.axis.gittools.trouble;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gerrit.server.git.WorkQueue;
+
 import java.io.IOException;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,20 +38,20 @@ public class TroubleWorkQueue {
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleWorkQueue.class);
 
-  private final ExecutorService[] executors;
+  private final WorkQueue.Executor[] executors;
 
   private final int retryLimitMillis;
 
   /**
    * Constructor.
    */
-  public TroubleWorkQueue(final int numThreads, final int retryLimitSeconds) {
+  public TroubleWorkQueue(final String pluginName, final WorkQueue workQueue, final int numThreads, final int retryLimitSeconds) {
     retryLimitMillis = (int) TimeUnit.SECONDS.toMillis(retryLimitSeconds);
-    executors = new ExecutorService[numThreads];
+    executors = new WorkQueue.Executor[numThreads];
 
     // create the executors
     for (int i = 0; i < numThreads; i++) {
-      executors[i] = Executors.newSingleThreadExecutor();
+      executors[i] = workQueue.createQueue(1, pluginName + "-" + i + "-");
     }
   }
 
@@ -59,7 +59,7 @@ public class TroubleWorkQueue {
    * Stops all executors in an orderly fashion.
    */
   public final void shutdown() {
-    for (ExecutorService executor : executors) {
+    for (WorkQueue.Executor executor : executors) {
       executor.shutdownNow();
     }
   }
@@ -68,10 +68,10 @@ public class TroubleWorkQueue {
    * Submit a callable to the work queue associated with the given ticket.
    */
   public final void submit(final Integer ticket, final Callable<Void> task) {
-    Callable<Void> wrapper = new Callable<Void>() {
+    Runnable wrapper = new Runnable() {
       private int delayMillis = START_DELAY_MILLIS;
       private long deadline = System.currentTimeMillis() + retryLimitMillis;
-      public final Void call() throws Exception {
+      public final void run() {
         try {
           while (System.currentTimeMillis() < deadline) {
             LOG.debug("starting task: {}", task);
@@ -83,16 +83,14 @@ public class TroubleWorkQueue {
             } catch (IOException e2) {
               LOG.info("task failed: " + task, e2);
               LOG.info("retrying in {} millis ...", delayMillis);
-              Thread.sleep(delayMillis);
+              getExecutor(ticket).schedule(this, delayMillis, TimeUnit.MILLISECONDS);
               delayMillis *= 2; // wait more next time
             }
           }
           LOG.debug("task completed successfully: {}", task);
         } catch (Exception e) {
           LOG.error("task failed: " + task, e);
-          throw e;
         }
-        return null;
       }
     };
     getExecutor(ticket).submit(wrapper);
@@ -104,7 +102,7 @@ public class TroubleWorkQueue {
    * Its important that the SAME executor is used to do all the work
    * for the same ticket.
    */
-  private ExecutorService getExecutor(final Integer ticket) {
+  private WorkQueue.Executor getExecutor(final Integer ticket) {
     return executors[ticket % executors.length];
   }
 }
