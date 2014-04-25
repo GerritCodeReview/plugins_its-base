@@ -298,6 +298,10 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     GsonBuilder gson = new GsonBuilder();
     final VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
 
+    if (apiUser.equals(event.blame)) {
+      return; // Trouble does NOT accept svcgerrit as the impersonated user
+    }
+
     // create the tsk to be executed in the work queue
     Callable<Void> task = new Callable<Void>() {
       public final Void call() throws Exception {
@@ -349,21 +353,21 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     LOG.debug("resolved projectName: {}", projectName);
     TroubleClient.Package existingPackage = findPackage(packages, event.project);
 
-    String comment = null;
     String targetLink = createCommentUrl(event.branch, projectName, event.change);
     if (existingPackage != null && event.id.equals("change-abandoned")) { // delete package
       troubleClient.deletePackageFromFix(event.branch, existingPackage.id);
       troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
-      comment = String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink);
+      troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink));
     } else if (event.id.equals("patchset-created") || event.id.equals("change-restored")) { // add or update package
       Approvals approvals = null;
       if (event.id.equals("patchset-created")) { // reset approvals
         // create comment about the new patchset
-        comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
+        String comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
+        troubleClient.addComment(comment);
       } else { // change-restored
         // create comment about the restored review
-        comment = String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink);
+        troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink));
         approvals = resolveApprovals(event.patchSetId());
       }
 
@@ -373,6 +377,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         newPackage.id = existingPackage.id;
       }
       newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
+
       if (event.patchSet == 1 || event.id.equals("change-restored")) {
         // create a fix and add the package to it, putting the ticket into the reviewing state.
         troubleClient.createOrUpdateFix(event.branch, newPackage.id);
@@ -406,10 +411,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       if (newPackage.cbmApproved != null || newPackage.dailyBuildOk != null || newPackage.mergeRef != null) {
         newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
       }
-    }
-
-    if (comment != null) {
-      troubleClient.addComment(comment);
     }
   }
 

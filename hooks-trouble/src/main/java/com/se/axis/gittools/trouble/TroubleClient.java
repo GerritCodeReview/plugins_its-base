@@ -65,12 +65,19 @@ public final class TroubleClient {
     public final String responseMessage;
 
     /**
+     * The HTTP response body.
+     */
+    public final String responseBody;
+
+
+    /**
      * Constructor.
      */
-    public HttpException(final int responseCode, final String responseMessage) {
-      super(String.valueOf(responseCode) + " " + responseMessage);
-      this.responseCode = responseCode;
-      this.responseMessage = responseMessage;
+    public HttpException(final int code, final String message, final String body) {
+      super(String.valueOf(code) + " " + message);
+      this.responseCode = code;
+      this.responseMessage = message;
+      this.responseBody = body;
     }
   }
 
@@ -575,11 +582,12 @@ public final class TroubleClient {
     try {
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        LOG.info("<< {}", readAll(conn.getErrorStream()));
-        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
+        String body = readAll(conn.getErrorStream());
+        LOG.info("<< {}", body);
+        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage(), body);
       }
       String resp = readAll(conn.getInputStream());
-      LOG.info("<< {}", resp);
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -593,7 +601,7 @@ public final class TroubleClient {
       final String method, final String json) throws IOException {
     if (LOG.isDebugEnabled()) {
       LOG.info(">> {} {}", method, api);
-      LOG.info(">> {}", json);
+      LOG.debug(">> {}", json);
     }
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
@@ -601,16 +609,17 @@ public final class TroubleClient {
       conn.setDoOutput(true);
       conn.setRequestProperty("Content-Type", "application/json");
       conn.setRequestProperty("charset", "utf-8");
-      byte[] body = getBytes(json);
-      conn.setRequestProperty("Content-Length", "" + Integer.toString(body.length));
-      writeAll(conn.getOutputStream(), body);
+      byte[] content = getBytes(json);
+      conn.setRequestProperty("Content-Length", "" + Integer.toString(content.length));
+      writeAll(conn.getOutputStream(), content);
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK && conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-        LOG.info("<< {}", readAll(conn.getErrorStream()));
-        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
+        String body = readAll(conn.getErrorStream());
+        LOG.info("<< {}", body);
+        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage(), body);
       }
       String resp = readAll(conn.getInputStream());
-      LOG.info("<< {}", resp);
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -627,11 +636,12 @@ public final class TroubleClient {
       conn.setRequestMethod("DELETE");
       LOG.info("<< {} {}", conn.getResponseCode(), conn.getResponseMessage());
       if (conn.getResponseCode() !=  HttpURLConnection.HTTP_OK) {
-        LOG.info("<< {}", readAll(conn.getErrorStream()));
-        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage());
+        String body = readAll(conn.getErrorStream());
+        LOG.info("<< {}", body);
+        throw new TroubleClient.HttpException(conn.getResponseCode(), conn.getResponseMessage(), body);
       }
       String resp = readAll(conn.getInputStream());
-      LOG.info("<< {}", resp);
+      LOG.debug("<< {}", resp);
       return resp;
     } finally {
       conn.disconnect();
@@ -684,6 +694,9 @@ public final class TroubleClient {
    * Read all data from the given stream.
    */
   private static String readAll(final InputStream is, final boolean close) {
+    if (is == null) {
+      return "";
+    }
     try {
       Scanner scanner = new java.util.Scanner(is, "utf-8").useDelimiter("\\A");
       return scanner.hasNext() ? scanner.next() : "";

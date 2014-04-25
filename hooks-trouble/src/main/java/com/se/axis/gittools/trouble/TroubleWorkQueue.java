@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gerrit.server.git.WorkQueue;
 
 import java.io.IOException;
-
+import java.net.HttpURLConnection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -78,13 +78,15 @@ public class TroubleWorkQueue {
             try {
               task.call();
               break;
-            } catch (TroubleClient.HttpException e1) {
-              throw e1; // re-throw unrecoverable error
-            } catch (IOException e2) {
-              LOG.info("task failed: " + task, e2);
-              LOG.info("retrying in {} millis ...", delayMillis);
-              getExecutor(ticket).schedule(this, delayMillis, TimeUnit.MILLISECONDS);
-              delayMillis *= 2; // wait more next time
+            } catch (IOException ioe) {
+              if (!(ioe instanceof TroubleClient.HttpException) || isTicket61648((TroubleClient.HttpException) ioe)) {
+                LOG.info("task failed: " + task, ioe);
+                LOG.info("retrying in {} millis ...", delayMillis);
+                getExecutor(ticket).schedule(this, delayMillis, TimeUnit.MILLISECONDS);
+                delayMillis *= 2; // wait more next time
+              } else {
+                throw ioe; // re-throw unrecoverable error
+              }
             }
           }
           LOG.debug("task completed successfully: {}", task);
@@ -104,5 +106,13 @@ public class TroubleWorkQueue {
    */
   private WorkQueue.Executor getExecutor(final Integer ticket) {
     return executors[ticket % executors.length];
+  }
+
+  /**
+   * Checks whether the symptom is ticket 61648 is found.
+   */
+  private static boolean isTicket61648(final TroubleClient.HttpException e) {
+    return (e.responseCode == HttpURLConnection.HTTP_BAD_REQUEST
+        && e.responseBody.indexOf("Not possible to mark ticket as corrected") != -1);
   }
 }
