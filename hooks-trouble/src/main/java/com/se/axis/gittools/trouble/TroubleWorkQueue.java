@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gerrit.server.git.WorkQueue;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +33,7 @@ public class TroubleWorkQueue {
    */
   public static final int DEFAULT_RETRY_LIMIT_SECONDS = 86400; // number of seconds before a task is discarded
 
-  private static final int START_DELAY_MILLIS = 8000;
+  private static final int START_DELAY_MILLIS = 60000;
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleWorkQueue.class);
 
@@ -73,23 +72,21 @@ public class TroubleWorkQueue {
       private long deadline = System.currentTimeMillis() + retryLimitMillis;
       public final void run() {
         try {
-          while (System.currentTimeMillis() < deadline) {
-            LOG.debug("starting task: {}", task);
-            try {
-              task.call();
-              break;
-            } catch (IOException ioe) {
-              if (!(ioe instanceof TroubleClient.HttpException) || isTicket61648((TroubleClient.HttpException) ioe)) {
-                LOG.info("task failed: " + task, ioe);
-                LOG.info("retrying in {} millis ...", delayMillis);
-                getExecutor(ticket).schedule(this, delayMillis, TimeUnit.MILLISECONDS);
-                delayMillis *= 2; // wait more next time
-              } else {
-                throw ioe; // re-throw unrecoverable error
-              }
+          LOG.debug("starting task: {}", task);
+          try {
+            task.call();
+            LOG.debug("task completed successfully: {}", task);
+          } catch (TroubleClient.HttpException he) {
+            throw he; // unrecoverable
+          } catch (IOException ioe) {
+            if ((System.currentTimeMillis() + delayMillis) >= deadline) {
+              throw ioe; // not enough time
             }
+            LOG.info("task failed: " + task, ioe);
+            LOG.info("retrying in {} millis ...", delayMillis);
+            getExecutor(ticket).schedule(this, delayMillis, TimeUnit.MILLISECONDS);
+            delayMillis += START_DELAY_MILLIS; // wait more next time
           }
-          LOG.debug("task completed successfully: {}", task);
         } catch (Exception e) {
           LOG.error("task failed: " + task, e);
         }
@@ -106,13 +103,5 @@ public class TroubleWorkQueue {
    */
   private WorkQueue.Executor getExecutor(final Integer ticket) {
     return executors[ticket % executors.length];
-  }
-
-  /**
-   * Checks whether the symptom is ticket 61648 is found.
-   */
-  private static boolean isTicket61648(final TroubleClient.HttpException e) {
-    return (e.responseCode == HttpURLConnection.HTTP_BAD_REQUEST
-        && e.responseBody.indexOf("Not possible to mark ticket as corrected") != -1);
   }
 }
