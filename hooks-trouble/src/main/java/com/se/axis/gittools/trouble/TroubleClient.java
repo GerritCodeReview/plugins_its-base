@@ -608,7 +608,8 @@ public final class TroubleClient {
       conn.setRequestMethod(method);
       conn.setDoOutput(true);
       conn.setRequestProperty("Content-Type", "application/json");
-      conn.setRequestProperty("charset", "utf-8");
+      // We have to fake curl as a workaround for ticket 61954
+      conn.setRequestProperty("User-Agent", "curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.15 libssh2/1.2.6");
       byte[] content = getBytes(json);
       conn.setRequestProperty("Content-Length", "" + Integer.toString(content.length));
       writeAll(conn.getOutputStream(), content);
