@@ -512,7 +512,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
       itsFacade = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(itsFacade);
 
-      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null, null) {
+      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null) {
         @Override
         public boolean isEnabled(String project, String branch) {
           return true;

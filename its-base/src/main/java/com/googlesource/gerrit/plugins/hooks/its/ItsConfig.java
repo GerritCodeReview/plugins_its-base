@@ -17,7 +17,6 @@ package com.googlesource.gerrit.plugins.hooks.its;
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
@@ -31,7 +30,6 @@ import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +40,13 @@ public class ItsConfig {
   private final String pluginName;
   private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
-  private final Provider<CurrentUser> self;
 
   @Inject
   public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
-      PluginConfigFactory pluginCfgFactory, Provider<CurrentUser> self) {
+      PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
-    this.self = self;
   }
 
   public boolean isEnabled(ChangeEvent event) {
@@ -116,7 +112,6 @@ public class ItsConfig {
   }
 
   private boolean match(String branch, String refPattern) {
-    return RefPatternMatcher.getMatcher(refPattern)
-        .match(branch, self.get().getUserName());
+    return RefPatternMatcher.getMatcher(refPattern).match(branch, null);
   }
 }
