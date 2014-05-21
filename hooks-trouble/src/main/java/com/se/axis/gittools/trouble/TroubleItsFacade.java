@@ -150,6 +150,11 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
           dailyBuildOk = null;
         }
       }
+
+      if (blame.startsWith("svc")) { // some kind of service account
+        blame = "zalanb"; // blame zalanb until CR61857 is implemented
+      }
+
       return this;
     }
 
@@ -297,10 +302,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     // deserialize the VelocityComment
     GsonBuilder gson = new GsonBuilder();
     final VelocityComment event = gson.create().fromJson(json, VelocityComment.class).check(); // deserialize!
-
-    if (apiUser.equals(event.blame)) {
-      return; // Trouble does NOT accept svcgerrit as the impersonated user
-    }
 
     // create the tsk to be executed in the work queue
     Callable<Void> task = new Callable<Void>() {
