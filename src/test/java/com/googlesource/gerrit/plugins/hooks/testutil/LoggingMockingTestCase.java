@@ -23,7 +23,7 @@ import org.junit.After;
 import java.util.Iterator;
 import org.apache.log4j.Level;
 
-public abstract class LoggingMockingTestCase extends MockingTestCase {
+public class LoggingMockingTestCase extends MockingTestCase {
 
   private java.util.Collection<LoggingEvent> loggedEvents;
 

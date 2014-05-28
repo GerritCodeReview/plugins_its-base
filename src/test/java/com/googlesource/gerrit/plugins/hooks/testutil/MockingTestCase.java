@@ -29,7 +29,7 @@ import java.util.Collection;
 /**
  * Test case with some support for automatically verifying mocks.
  */
-public abstract class MockingTestCase extends TestCase {
+public class MockingTestCase extends TestCase {
   private Collection<Object> mocks;
   private Collection<IMocksControl> mockControls;
   private boolean mocksReplayed;
@@ -149,5 +149,10 @@ public abstract class MockingTestCase extends TestCase {
     // to verify mocks would bail out and might leave open resources from
     // subclasses open.
     verifyMocks();
+  }
+
+  public void testDummy() {
+    replayMocks();
+    assertTrue("Let's make Buck happy.", true);
   }
 }
