@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f876029_e92195bd",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-29T02:01:48Z",
+      "side": 1,
+      "message": "\"its-based\"\n\nShould \"its\" rather be upper case, i.e. \"ITS\"?",
+      "range": {
+        "startLine": 4,
+        "startChar": 22,
+        "endLine": 4,
+        "endChar": 31
+      },
+      "revId": "a43bb6437739d04d6c8219030da15ada0ab31a30",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f82641a_6a4d9781",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-29T02:01:48Z",
+      "side": 1,
+      "message": "plugins",
+      "range": {
+        "startLine": 4,
+        "startChar": 32,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "a43bb6437739d04d6c8219030da15ada0ab31a30",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f876029_094ee981",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-29T02:01:48Z",
+      "side": 1,
+      "message": "\"its-based\" or \"ITS-based\"",
+      "range": {
+        "startLine": 43,
+        "startChar": 14,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "a43bb6437739d04d6c8219030da15ada0ab31a30",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f82641a_8a41eb4d",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-29T02:01:48Z",
+      "side": 1,
+      "message": "I\u0027m not sure that it\u0027s necessary to add this example here.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 3
+      },
+      "revId": "a43bb6437739d04d6c8219030da15ada0ab31a30",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
