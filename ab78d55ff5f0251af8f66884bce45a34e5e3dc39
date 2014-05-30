@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bffbfccc_c4d97e8f",
+        "filename": "BUCK",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-30T01:56:02Z",
+      "side": 1,
+      "message": "Is this suffix intentional?  It doesn\u0027t follow the same pattern as the other plugins, and causes it to not build when following the instructions in the documentation.",
+      "range": {
+        "startLine": 13,
+        "startChar": 18,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "ab78d55ff5f0251af8f66884bce45a34e5e3dc39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bffbfccc_e4d47a57",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2014-05-30T01:56:02Z",
+      "side": 1,
+      "message": "This doesn\u0027t actually work.\n\n $ buck build plugins/its-base\n Using buckd.\n [-] PARSING BUILD FILES...FINISHED 0.1s\n [+] BUILDING...0.0s\n BUILD FAILED: No rule found when resolving target //plugins/its-base:its-base in build file //plugins/its-base/BUCK\n\nSeems you have to build it as `its-base:its-base__plugin`:\n\n $ buck build plugins/its-base:its-base__plugin\n Using buckd.\n [-] PARSING BUILD FILES...FINISHED 0.5s\n [-] BUILDING...FINISHED 0.2s\n Log:",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "ab78d55ff5f0251af8f66884bce45a34e5e3dc39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
