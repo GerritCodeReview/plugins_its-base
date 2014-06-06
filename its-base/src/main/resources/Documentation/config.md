@@ -35,7 +35,7 @@ for a project the project must have the following entry in its
 ```
 
 If `plugin.<its-name>.enabled` is not specified in the `project.config`
-file the value is inherited from the parent project. If it is also not
+file the value is inherited from the parent project. If it is not
 set on any parent project the issue integration is disabled for this
 project.
 
@@ -75,9 +75,9 @@ branch and all stable branches the following could be configured:
 Rule base for Actions
 ~~~~~~~~~~~~~~~~~~~~~
 
-In this part we describe, how to specify which events in Gerrit (E.g.:
+In this part we describe how to specify which events in Gerrit (E.g.:
 “Change Merged”, or “User ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a
-change”) trigger which action (e.g.: “Set issue's status to
+change”) trigger which actions (e.g.: “Set issue's status to
 ‘Resolved’”) on the ITS.
 
 Actions on the ITS and conditions for the action to take place are
@@ -100,7 +100,7 @@ A simple `etc/its/actions.config` may look like
 
 This snippet defines two rules ('rule1', and 'rule2'). On merging a
 change that's associated to some issues, 'rule1' adds a predefined
-standard comment for “Change Merge” to each such issue. If someone
+standard comment for “Change Merged” to each such issue. If someone
 adds a comment to a change that is associated to some issues and votes
 “-2”, or “-1” for “Code-Review”, 'rule2' adds the comment “Oh my
 Goodness! Someone gave a negative code review in Gerrit on an
@@ -172,7 +172,7 @@ The common properties for each event are
 'issue'::
   Issue to which this event is associated. Each event is associated to
   exactly one issue. If for example an event is fired for a commit
-  message, that would contain more than one issue id (say issue “23”,
+  message that contains more than one issue id (say issue “23”,
   and issue “47"), then the event is duplicated and sent once for each
   associated issue (i.e.: once with 'issue' being +23+, and once with
   'issue' being +47+).
@@ -248,7 +248,7 @@ ChangeAbandonedEvent
 
 In addition to the above properties, the event also provides
 properties for the abandoned <<event-properties-change,change>>, and
-it's most recent <<event-properties-patch-set,patch set>>.
+its most recent <<event-properties-patch-set,patch set>>.
 
 [[event-properties-ChangeMergedEvent]]
 ChangeMergedEvent
@@ -267,7 +267,7 @@ ChangeMergedEvent
 
 In addition to the above properties, the event also provides
 properties for the merged <<event-properties-change,change>>, and
-it's most recent <<event-properties-patch-set,patch set>>.
+its most recent <<event-properties-patch-set,patch set>>.
 
 [[event-properties-ChangeRestoredEvent]]
 ChangeRestoredEvent
@@ -288,7 +288,7 @@ ChangeRestoredEvent
 
 In addition to the above properties, the event also provides
 properties for the restored <<event-properties-change,change>>, and
-it's most recent <<event-properties-patch-set,patch set>>.
+its most recent <<event-properties-patch-set,patch set>>.
 
 [[event-properties-CommentAddedEvent]]
 CommentAddedEvent
@@ -323,7 +323,7 @@ value is added. So for example voting “-2” for the approval
 
 In addition to the above properties, the event also provides
 properties for the <<event-properties-change,change>> the comment was
-added for, and it's most recent <<event-properties-patch-set,patch
+added for, and its most recent <<event-properties-patch-set,patch
 set>>.
 
 [[event-properties-DraftPublishedEvent]]
