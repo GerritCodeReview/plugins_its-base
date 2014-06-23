@@ -151,10 +151,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         }
       }
 
-      if (blame.startsWith("svc")) { // some kind of service account
-        blame = "zalanb"; // blame zalanb until CR61857 is implemented
-      }
-
       return this;
     }
 
@@ -193,13 +189,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     public Approvals(final Boolean cbmApproved, final Boolean dailyBuildOk) {
       this.cbmApproved = cbmApproved;
       this.dailyBuildOk = dailyBuildOk;
-    }
-
-    /**
-     * Aggregated approval.
-     */
-    public boolean submittable() {
-      return cbmApproved != null && dailyBuildOk != null && cbmApproved && dailyBuildOk;
     }
   }
 
@@ -297,7 +286,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
   @Override
   public final void addComment(final String issueId, final String json) throws IOException {
-    LOG.debug("addComment({},{})", issueId, json);
+    LOG.info("addComment({},{})", issueId, json);
 
     // deserialize the VelocityComment
     GsonBuilder gson = new GsonBuilder();
@@ -346,6 +335,9 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private void handleAddComment(final VelocityComment event) throws IOException {
     // create the TroubleClient
     String username = event.blame.indexOf('.') != -1 ? apiUser : event.blame;
+    if (username.startsWith("svc")) { // some kind of service account
+      username = "zalanb"; // blame zalanb until CR61857 is implemented
+    }
     TroubleClient troubleClient = TroubleClient.create(baseApiUrl, apiUser, apiPass, event.ticket, username);
 
     // try find all package in the fix (same targetBranch)
@@ -389,23 +381,23 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       TroubleClient.Package newPackage = new TroubleClient.Package();
       newPackage.id = existingPackage.id;
 
-      if (event.blame.equals(apiUser) && approvals.submittable()) {
-        // handle Gerrit's comment about the auto-tag
+      if (!existingPackage.cbmApproved.equals(approvals.cbmApproved)) {
+        newPackage.cbmApproved = approvals.cbmApproved;
+        LOG.debug("cbmApproved: {}", newPackage.cbmApproved);
+      }
+      if (!existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
+        newPackage.dailyBuildOk = approvals.dailyBuildOk;
+        LOG.debug("dailyBuildOk: {}", newPackage.dailyBuildOk);
+      }
+
+      // handle Gerrit's comment about the auto-tag
+      if (event.blame.equals(apiUser) && newPackage.cbmApproved == null && newPackage.dailyBuildOk == null) {
         newPackage.mergeRef = findMergeTag(event.patchSetId()); // get the merge tag from the Review comments
         LOG.debug("found merge tag: {}", newPackage.mergeRef);
         if (newPackage.mergeRef.equals(existingPackage.mergeRef)) {
           newPackage.mergeRef = null; // block the update (same tag)
         }
         newPackage.username = "zalanb"; // See ticket 61387
-      } else { // handle approval related comments
-        if (!existingPackage.cbmApproved.equals(approvals.cbmApproved)) {
-          newPackage.cbmApproved = approvals.cbmApproved;
-          LOG.debug("cbmApproved: {}", newPackage.cbmApproved);
-        }
-        if (!existingPackage.dailyBuildOk.equals(approvals.dailyBuildOk)) {
-          newPackage.dailyBuildOk = approvals.dailyBuildOk;
-          LOG.debug("dailyBuildOk: {}", newPackage.dailyBuildOk);
-        }
       }
 
       // update the package
