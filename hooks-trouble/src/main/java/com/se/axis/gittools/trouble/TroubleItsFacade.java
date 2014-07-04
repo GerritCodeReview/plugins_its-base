@@ -613,10 +613,8 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(SLUG_TO_TITLE_MAP), "utf-8"));
         String line = null;
         while ((line = bufferedReader.readLine()) != null) {
-          String[] keyVal = line.split("\\s+", 2);
-          if (keyVal.length != 2) {
-            LOG.warn("slug2title file is corrupted {}", keyVal.length);
-          } else {
+          String[] keyVal = line.split("\\s+", 3);
+          if (keyVal.length >= 2) {
             newMap.put(keyVal[0], keyVal[1]);
           }
         }

@@ -7,6 +7,8 @@ package com.se.axis.gittools.trouble;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
+
 import com.google.gerrit.server.git.WorkQueue;
 
 import java.io.IOException;
@@ -78,6 +80,8 @@ public class TroubleWorkQueue {
             LOG.debug("task completed successfully: {}", task);
           } catch (TroubleClient.HttpException he) {
             throw he; // unrecoverable
+          } catch (RepositoryNotFoundException rnfe) {
+            throw rnfe; // unrecoverable
           } catch (IOException ioe) {
             if ((System.currentTimeMillis() + delayMillis) >= deadline) {
               throw ioe; // not enough time
