@@ -1,3 +1,5 @@
+bucklets
+.buckversion
 .idea
 target/
 .classpath
@@ -5,4 +7,6 @@ target/
 /.settings
 /hooks-its/.settings/org.maven.ide.eclipse.prefs
 /hooks-its/.settings/org.eclipse.m2e.core.prefs
+/buck-out
+/.buckd
 

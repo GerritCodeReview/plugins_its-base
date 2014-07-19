@@ -1,0 +1,15 @@
+include_defs('//bucklets/maven_jar.bucklet')
+include_defs('//bucklets/gerrit_plugin.bucklet')
+include_defs(align_path('its-base', '//VERSION'))
+
+VER = PLUGIN_VERSION
+REPO = MAVEN_LOCAL
+
+maven_jar(
+  name = 'plugin-api',
+  id = 'com.google.gerrit:gerrit-plugin-api:' + VER,
+  attach_source = False,
+  repository = REPO,
+  license = 'Apache2.0',
+)
+
