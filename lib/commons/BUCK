@@ -1,0 +1,27 @@
+include_defs('//bucklets/maven_jar.bucklet')
+
+maven_jar(
+  name = 'collections',
+  id = 'commons-collections:commons-collections:3.2.1',
+  sha1 = '761ea405b9b37ced573d2df0d1e3a4e0f9edc668',
+  license = 'Apache2.0',
+  exclude = ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt'],
+  attach_source = False,
+)
+
+maven_jar(
+  name = 'lang',
+  id = 'commons-lang:commons-lang:2.5',
+  sha1 = 'b0236b252e86419eef20c31a44579d2aee2f0a69',
+  license = 'Apache2.0',
+  exclude = ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt'],
+)
+
+maven_jar(
+  name = 'oro',
+  id = 'oro:oro:2.0.8',
+  sha1 = '5592374f834645c4ae250f4c9fbb314c9369d698',
+  license = 'Apache1.1',
+  attach_source = False,
+  exclude = ['META-INF/LICENSE'],
+)
