@@ -1,4 +1,10 @@
 include_defs('//bucklets/gerrit_plugin.bucklet')
+include_defs('//bucklets/java_sources.bucklet')
+include_defs('//bucklets/java_doc.bucklet')
+include_defs('//bucklets/maven_package.bucklet')
+include_defs(align_path('its-base', '//VERSION'))
+
+SRCS = glob(['src/main/java/**/*.java'])
 
 DEPS = [
   '//lib/commons:lang',
@@ -12,7 +18,7 @@ DEPS = [
 
 gerrit_plugin(
   name = 'its-base',
-  srcs = glob(['src/main/java/**/*.java']),
+  srcs = SRCS,
   provided_deps = DEPS,
 )
 
@@ -34,6 +40,16 @@ java_library(
   ],
 )
 
+maven_package(
+  repository = 'gerrit-maven-repository',
+  url = 'gs://gerrit-maven',
+  version = PLUGIN_VERSION,
+  group = 'com.googlesource.gerrit.plugins.its',
+  jar = {'its-base': ':its-base__plugin'},
+  src = {'its-base': ':its-base-src'},
+  doc = {'its-base': ':its-base-javadoc'},
+)
+
 java_test(
   name = 'its-base_tests',
   srcs = glob(
@@ -42,7 +58,7 @@ java_test(
   ),
   labels = ['its-base'],
   source_under_test = [':its-base__plugin'],
-  deps = DEPS + [
+  deps = GERRIT_PLUGIN_API + DEPS + [
     ':its-base__plugin',
     ':its-base_tests-utils',
     '//gerrit-plugin-api:lib',
@@ -57,4 +73,18 @@ java_test(
     '//lib/powermock:powermock-module-junit4',
     '//lib/powermock:powermock-module-junit4-common',
   ],
+)
+
+java_sources(
+  name = 'its-base-src',
+  srcs = SRCS,
+)
+
+java_doc(
+  name = 'its-base-javadoc',
+  title = 'ITS-Base API Documentation',
+  pkg = 'com.googlesource.gerrit.plugins.hooks',
+  paths = ['src/main/java'],
+  srcs = glob([n + '**/*.java' for n in SRCS]),
+  deps = GERRIT_PLUGIN_API,
 )

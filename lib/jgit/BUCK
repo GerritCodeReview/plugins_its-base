@@ -1,0 +1,25 @@
+include_defs('//bucklets/maven_jar.bucklet')
+
+VERS = '3.4.0.201406110918-r'
+
+maven_jar(
+  name = 'jgit',
+  id = 'org.eclipse.jgit:org.eclipse.jgit:' + VERS,
+  bin_sha1 = '60e74a29895be82ec7bd1fbb6304975e92b955a5',
+  src_sha1 = '69adaa263e2b5c21a84a25105c0c93761bdd8a80',
+  license = 'jgit',
+  unsign = True,
+  deps = [':ewah'],
+  exclude = [
+    'META-INF/eclipse.inf',
+    'about.html',
+    'plugin.properties',
+  ],
+)
+
+maven_jar(
+  name = 'ewah',
+  id = 'com.googlecode.javaewah:JavaEWAH:0.7.9',
+  sha1 = 'eceaf316a8faf0e794296ebe158ae110c7d72a5a',
+  license = 'Apache2.0',
+)
