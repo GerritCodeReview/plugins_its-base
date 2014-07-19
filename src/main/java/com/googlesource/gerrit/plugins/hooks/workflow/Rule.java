@@ -59,7 +59,7 @@ public class Rule {
   /**
    * Adds an action to the rule.
    *
-   * @param action The action to add.
+   * @param actionRequest The action to add.
    */
   public void addActionRequest(ActionRequest actionRequest) {
     actionRequests.add(actionRequest);

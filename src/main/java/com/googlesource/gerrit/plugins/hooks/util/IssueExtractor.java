@@ -43,7 +43,7 @@ public class IssueExtractor {
    * Gets issue ids from a string.
    *
    * @param haystack String to extract issue ids from
-   * @return array of {@link Strings}. Each String being a found issue id.
+   * @return array of {@link String}. Each String being a found issue id.
    */
   public String[] getIssueIds(String haystack) {
     Pattern pattern = getPattern();

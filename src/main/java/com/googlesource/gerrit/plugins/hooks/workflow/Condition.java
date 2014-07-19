@@ -24,6 +24,8 @@ import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
+import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
+
 /**
  * A condition as used in {@link Rule}, as precondition to {@link Action}s.
  * <p>
