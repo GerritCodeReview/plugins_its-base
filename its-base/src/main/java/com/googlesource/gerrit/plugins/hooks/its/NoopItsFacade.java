@@ -53,6 +53,14 @@ public class NoopItsFacade implements ItsFacade {
   }
 
   @Override
+  public String getStatus(String issueId) throws IOException {
+    if (log.isDebugEnabled()) {
+      log.debug("getStatus({})", issueId);
+    }
+    return "no status";
+  }
+
+  @Override
   public void performAction(String issueId, String actionName)
       throws IOException {
     if (log.isDebugEnabled()) {

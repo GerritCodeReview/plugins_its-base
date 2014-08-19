@@ -59,9 +59,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     RevCommit commit = createMock(RevCommit.class);
     CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
         commit, null);
+    expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.OPTIONAL).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+        .andReturn(new String[]{}).atLeastOnce();
+    expect(issueExtractor.getIssueIds("TestMessage")).andReturn(
+        new String[] {}).atLeastOnce();
     replayMocks();
 
     ret = ivc.onCommitReceived(event);
@@ -81,6 +86,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
     expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
         .andReturn("TestPattern").anyTimes();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+        .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -137,6 +144,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -163,6 +172,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.MANDATORY).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -189,6 +200,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -249,6 +262,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711, bug#42")
         .atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
@@ -277,6 +292,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.MANDATORY).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711, bug#42")
         .atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
@@ -305,6 +322,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711, bug#42")
         .atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
@@ -371,6 +390,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711, bug#42")
         .atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
@@ -437,6 +458,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL)).andReturn(
             ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{}).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("bug#4711, bug#42")
         .atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
@@ -468,6 +491,67 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(1).getMessage().contains("42"));
 
     assertLogMessageContains("4711");
+  }
+
+  public void testAllowedStatusMatching() throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
+        commit, null);
+    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL)).andReturn(
+            ItsAssociationPolicy.OPTIONAL).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{"IN_PROGRESS"}).atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
+        new String[] {"4711"}).atLeastOnce();
+    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
+    expect(itsFacade.getStatus("4711")).andReturn("IN_PROGRESS").atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEmptyList(ret);
+  }
+
+  public void testAllowedStatusNonMatching() throws CommitValidationException, IOException {
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
+        commit, null);
+    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL)).andReturn(
+            ItsAssociationPolicy.OPTIONAL).atLeastOnce();
+    expect(serverConfig.getStringList("commentLink", "ItsTestName", "allowedStatus"))
+            .andReturn(new String[]{"IN_PROGRESS"}).atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
+        new String[] {"4711"}).atLeastOnce();
+    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
+    expect(itsFacade.getStatus("4711")).andReturn("RESOLVED").atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue("Message of thrown CommitValidationException does not "
+          + "contain 'invalid state'", e.getMessage().contains("invalid state"));
+      assertEquals("Size of CommitValidationException messages does not match",
+        1, e.getMessages().size());
+      assertTrue("Message of thrown CommitValidationException does not "
+          + "contain 'IN_PROGRESS'", e.getMessages().get(0).getMessage().contains("IN_PROGRESS"));
+    }
   }
 
   public void assertEmptyList(List<CommitValidationMessage> list) {
