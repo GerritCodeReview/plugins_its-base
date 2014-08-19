@@ -36,6 +36,7 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+import java.util.Arrays;
 
 public class ItsValidateComment implements CommitValidationListener {
 
@@ -61,14 +62,14 @@ public class ItsValidateComment implements CommitValidationListener {
   private List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = getItsAssociationPolicy();
+    String commitMessage = commit.getFullMessage();
+    String[] issueIds = issueExtractor.getIssueIds(commitMessage);
+    String synopsis;
+    String details;
 
     switch (associationPolicy) {
       case MANDATORY:
       case SUGGESTED:
-        String commitMessage = commit.getFullMessage();
-        String[] issueIds = issueExtractor.getIssueIds(commitMessage);
-        String synopsis = null;
-        String details = null;
         if (issueIds.length > 0) {
           List<String> nonExistingIssueIds = Lists.newArrayList();
           for (String issueId : issueIds) {
@@ -132,12 +133,55 @@ public class ItsValidateComment implements CommitValidationListener {
       default:
         break;
     }
+
+    String[] itsAllowedStatus = getItsAllowedStatus();
+
+    if (itsAllowedStatus.length > 0) {
+      for (String issue : issueIds) {
+        try {
+          String status = client.getStatus(issue);
+          boolean correctStatus = Arrays.asList(itsAllowedStatus).contains(status);
+
+          if (!correctStatus) {
+            synopsis = "Attempting to associate to issue in invalid state";
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Commit ");
+            sb.append(commit.getId().getName());
+            sb.append(" cannot be patched to issue-id ");
+            sb.append(issue);
+            sb.append("\n");
+            sb.append("Hint: Issue-id must be in one of the following states:\n");
+            for (String state : itsAllowedStatus) {
+              sb.append("\t").append(state).append("\n");
+            }
+            sb.append("\n");
+            details = sb.toString();
+
+            throw new CommitValidationException(synopsis,
+                Collections.singletonList(new CommitValidationMessage(synopsis + "\n" + details, false)));
+          }
+        }
+        catch (IOException e) {
+            synopsis = "Failed to check whether or not issue " + issue
+                + " exists";
+            log.warn(synopsis, e);
+            details = e.toString();
+            ret.add(commitValidationFailure(synopsis, details));
+        }
+      }
+    }
+
     return ret;
   }
 
   private ItsAssociationPolicy getItsAssociationPolicy() {
     return gerritConfig.getEnum("commentLink", pluginName, "association",
         ItsAssociationPolicy.OPTIONAL);
+  }
+
+  private String[] getItsAllowedStatus() {
+    return gerritConfig.getStringList("commentLink", pluginName, "allowedStatus");
   }
 
   private CommitValidationMessage commitValidationFailure(
