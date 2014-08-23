@@ -335,9 +335,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private void handleAddComment(final VelocityComment event) throws IOException {
     // create the TroubleClient
     String username = event.blame.indexOf('.') != -1 ? apiUser : event.blame;
-    if (username.startsWith("svc")) { // some kind of service account
-      username = "zalanb"; // blame zalanb until CR61857 is implemented
-    }
     TroubleClient troubleClient = TroubleClient.create(baseApiUrl, apiUser, apiPass, event.ticket, username);
 
     // try find all package in the fix (same targetBranch)
@@ -397,7 +394,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         if (newPackage.mergeRef != null && newPackage.mergeRef.equals(existingPackage.mergeRef)) {
           newPackage.mergeRef = null; // block the update (same tag)
         }
-        newPackage.username = "zalanb"; // See ticket 61387
       }
 
       // update the package
