@@ -394,7 +394,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       if (event.blame.equals(apiUser) && newPackage.cbmApproved == null && newPackage.dailyBuildOk == null) {
         newPackage.mergeRef = findMergeTag(event.patchSetId()); // get the merge tag from the Review comments
         LOG.debug("found merge tag: {}", newPackage.mergeRef);
-        if (newPackage.mergeRef.equals(existingPackage.mergeRef)) {
+        if (newPackage.mergeRef != null && newPackage.mergeRef.equals(existingPackage.mergeRef)) {
           newPackage.mergeRef = null; // block the update (same tag)
         }
         newPackage.username = "zalanb"; // See ticket 61387

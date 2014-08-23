@@ -601,7 +601,7 @@ public final class TroubleClient {
       final String method, final String json) throws IOException {
     if (LOG.isDebugEnabled()) {
       LOG.info(">> {} {}", method, api);
-      LOG.debug(">> {}", json);
+      LOG.info(">> {}", json);
     }
     HttpURLConnection conn = openConnection(api, user, pass);
     try {
