@@ -16,11 +16,11 @@ package com.googlesource.gerrit.plugins.hooks.its;
 
 import com.google.common.base.Strings;
 import com.google.gerrit.common.data.RefConfigSection;
-import com.google.gerrit.pgm.init.AllProjectsConfig;
-import com.google.gerrit.pgm.init.AllProjectsNameOnInitProvider;
-import com.google.gerrit.pgm.init.InitStep;
-import com.google.gerrit.pgm.init.Section;
-import com.google.gerrit.pgm.util.ConsoleUI;
+import com.google.gerrit.pgm.init.api.AllProjectsConfig;
+import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
+import com.google.gerrit.pgm.init.api.InitStep;
+import com.google.gerrit.pgm.init.api.Section;
+import com.google.gerrit.pgm.init.api.ConsoleUI;
 
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
