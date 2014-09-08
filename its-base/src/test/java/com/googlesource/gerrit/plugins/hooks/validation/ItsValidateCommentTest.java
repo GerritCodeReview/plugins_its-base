@@ -93,6 +93,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ret = ivc.onCommitReceived(event);
 
     assertEquals("Size of returned CommitValidationMessages does not match",
+        1, 0);
+    assertEquals("Size of returned CommitValidationMessages does not match",
         1, ret.size());
     assertTrue("First CommitValidationMessages does not contain 'Missing " +
         "issue'",ret.get(0).getMessage().contains("Missing issue"));
