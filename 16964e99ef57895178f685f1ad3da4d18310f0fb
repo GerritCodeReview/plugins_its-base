@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "106cff13_f906b33e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2014-09-09T13:03:17Z",
+      "side": 1,
+      "message": "It\u0027s enouph to cut the change-id to only 9 chars:\n\n  I437f2c883",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "16964e99ef57895178f685f1ad3da4d18310f0fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d065072b_f7919a8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2014-09-09T13:03:17Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "16964e99ef57895178f685f1ad3da4d18310f0fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
