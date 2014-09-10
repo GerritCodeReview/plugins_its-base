@@ -39,6 +39,29 @@
       "revId": "16964e99ef57895178f685f1ad3da4d18310f0fb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "106cff13_5c4a356e",
+        "filename": "BUCK",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2014-09-10T10:59:35Z",
+      "side": 1,
+      "message": "This is wrong. Something like that should work.\n\n  DEPS \u003d [\n  \u0027//lib/commons:lang\u0027,\n  \u0027//lib:parboiled-core\u0027,\n  \u0027//lib:velocity\u0027,\n  ]\n  [...]\n  java_library(\n    name \u003d \u0027its-base_tests-utils\u0027,\n    srcs \u003d TEST_UTIL_SRC,\n    exported_deps \u003d GERRIT_PLUGIN_API,\n    deps \u003d DEPS + [\n      \u0027//lib/easymock:easymock\u0027,\n      \u0027//lib:junit\u0027,\n      \u0027//lib/powermock:powermock-api-easymock\u0027,\n      \u0027//lib/powermock:powermock-api-support\u0027,\n      \u0027//lib/powermock:powermock-core\u0027,\n      \u0027//lib/powermock:powermock-module-junit4\u0027,\n      \u0027//lib/powermock:powermock-module-junit4-common\u0027,\n    ],\n  )",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "16964e99ef57895178f685f1ad3da4d18310f0fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
