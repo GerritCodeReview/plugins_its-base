@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "106cff13_9c67ada0",
+        "filename": "BUCK",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2014-09-10T13:04:43Z",
+      "side": 1,
+      "message": "The whole block is repeated below. We should extract it in DEP_TESTS or something and use in both places. Or include it in exported_deps in test util library in wich case it would be included.",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 53
+      },
+      "revId": "c78194bb429c8a75e4abbf355ca485bc520a6dea",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
