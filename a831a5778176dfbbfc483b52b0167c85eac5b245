@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30dae333_227f30ec",
+        "filename": "src/main/resources/Documentation/about.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "references",
+      "range": {
+        "startLine": 22,
+        "startChar": 57,
+        "endLine": 22,
+        "endChar": 66
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d065072b_28e8d341",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "the git commit message",
+      "range": {
+        "startLine": 47,
+        "startChar": 12,
+        "endLine": 47,
+        "endChar": 30
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d065072b_88dda7a6",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "in the",
+      "range": {
+        "startLine": 51,
+        "startChar": 32,
+        "endLine": 51,
+        "endChar": 34
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d065072b_68e2cb63",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "is",
+      "range": {
+        "startLine": 51,
+        "startChar": 66,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30dae333_429194d0",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "The",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30dae333_629698cb",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "is",
+      "range": {
+        "startLine": 58,
+        "startChar": 58,
+        "endLine": 58,
+        "endChar": 61
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d065072b_c8d67f87",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "\"For each rule ...\" ?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 22
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30dae333_c29cc4e7",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "\"Any other option of a rule is considered ...\"",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 48
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30dae333_e2a9c802",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "better: \"and match (if \u0027value1\u0027 is not `!`)\"",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 34
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30dae333_427a74ca",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2014-09-12T12:37:16Z",
+      "side": 1,
+      "message": "no matching \u0027(\u0027",
+      "range": {
+        "startLine": 167,
+        "startChar": 55,
+        "endLine": 167,
+        "endChar": 56
+      },
+      "revId": "a831a5778176dfbbfc483b52b0167c85eac5b245",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
