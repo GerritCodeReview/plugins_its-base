@@ -75,9 +75,4 @@ public class NoopItsFacade implements ItsFacade {
     }
     return "";
   }
-
-  @Override
-  public String name() {
-    return "not configured";
-  }
 }

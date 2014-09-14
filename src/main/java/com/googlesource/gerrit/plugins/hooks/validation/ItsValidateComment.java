@@ -101,7 +101,7 @@ public class ItsValidateComment implements CommitValidationListener {
             sb.append(commit.getId().getName());
             sb.append(",\n");
             sb.append("but do not exist in ");
-            sb.append(client.name());
+            sb.append(pluginName);
             sb.append(" Issue-Tracker");
             details = sb.toString();
 
@@ -121,7 +121,7 @@ public class ItsValidateComment implements CommitValidationListener {
           sb.append(issueExtractor.getPattern().pattern());
           sb.append("\n");
           sb.append("      and are pointing to existing tickets on ");
-          sb.append(client.name());
+          sb.append(pluginName);
           sb.append(" Issue-Tracker");
           details = sb.toString();
 

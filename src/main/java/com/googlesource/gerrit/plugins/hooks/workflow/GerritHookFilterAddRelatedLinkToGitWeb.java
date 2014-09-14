@@ -28,10 +28,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.common.data.GitWebType;
 import com.google.gerrit.common.data.ParameterizedString;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.httpd.GitWebConfig;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
@@ -53,9 +55,12 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
   @Inject
   private IssueExtractor issueExtractor;
 
+  @Inject @PluginName
+  private String pluginName;
+
   @Override
   public void doFilter(RefUpdatedEvent hook) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnRefUpdatedGitWeb",
+    if (!(gerritConfig.getBoolean(pluginName, null, "commentOnRefUpdatedGitWeb",
         true))) {
       return;
     }

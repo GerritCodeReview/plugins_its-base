@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
@@ -32,6 +33,7 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gwtorm.server.OrmException;
 import com.google.gwtorm.server.ResultSet;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
@@ -53,6 +55,10 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
 
   @Inject
   private ReviewDb db;
+
+  @Inject @PluginName
+  private String pluginName;
+
 
   /**
    * Filter issues to those that occur for the first time in a change
@@ -97,14 +103,14 @@ public class GerritHookFilterAddRelatedLinkToChangeId extends
   @Override
   public void doFilter(PatchSetCreatedEvent patchsetCreated)
       throws IOException, OrmException {
-    boolean addPatchSetComment = gerritConfig.getBoolean(its.name(), null,
+    boolean addPatchSetComment = gerritConfig.getBoolean(pluginName, null,
         "commentOnPatchSetCreated", true);
 
     boolean addChangeComment = "1".equals(patchsetCreated.patchSet.number) &&
-        gerritConfig.getBoolean(its.name(), null, "commentOnChangeCreated",
+        gerritConfig.getBoolean(pluginName, null, "commentOnChangeCreated",
             false);
 
-    boolean addFirstLinkedPatchSetComment = gerritConfig.getBoolean(its.name(),
+    boolean addFirstLinkedPatchSetComment = gerritConfig.getBoolean(pluginName,
         null, "commentOnFirstLinkedPatchSetCreated", false);
 
     if (addPatchSetComment || addFirstLinkedPatchSetComment || addChangeComment) {

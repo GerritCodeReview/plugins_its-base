@@ -27,8 +27,6 @@ public interface ItsFacade {
     ACCESS
   }
 
-  public String name();
-
   public String healthCheck(Check check)
     throws IOException;
 

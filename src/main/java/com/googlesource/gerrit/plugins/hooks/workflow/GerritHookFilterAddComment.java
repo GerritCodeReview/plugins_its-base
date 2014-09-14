@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.eclipse.jgit.lib.Config;
 
 import com.google.common.base.Strings;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.AnonymousCowardName;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.data.AccountAttribute;
@@ -30,6 +31,7 @@ import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
@@ -48,9 +50,12 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
   @Inject
   private IssueExtractor issueExtractor;
 
+  @Inject @PluginName
+  private String pluginName;
+
   @Override
   public void doFilter(CommentAddedEvent hook) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnCommentAdded",
+    if (!(gerritConfig.getBoolean(pluginName, null, "commentOnCommentAdded",
         true))) {
       return;
     }
@@ -61,7 +66,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
 
   @Override
   public void doFilter(ChangeMergedEvent hook) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeMerged",
+    if (!(gerritConfig.getBoolean(pluginName, null, "commentOnChangeMerged",
         true))) {
       return;
     }
@@ -72,7 +77,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
 
   @Override
   public void doFilter(ChangeAbandonedEvent hook) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeAbandoned",
+    if (!(gerritConfig.getBoolean(pluginName, null, "commentOnChangeAbandoned",
         true))) {
       return;
     }
@@ -82,7 +87,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
 
   @Override
   public void doFilter(ChangeRestoredEvent hook) throws IOException {
-    if (!(gerritConfig.getBoolean(its.name(), null, "commentOnChangeRestored",
+    if (!(gerritConfig.getBoolean(pluginName, null, "commentOnChangeRestored",
         true))) {
       return;
     }

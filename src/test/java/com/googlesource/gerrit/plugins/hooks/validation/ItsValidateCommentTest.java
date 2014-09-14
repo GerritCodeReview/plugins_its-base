@@ -86,7 +86,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("TestMessage")).andReturn(
         new String[] {}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
 
     replayMocks();
 
@@ -112,7 +111,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("TestMessage")).andReturn(
         new String[] {}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
 
     replayMocks();
 
@@ -142,7 +140,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
         new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
 
     replayMocks();
@@ -168,7 +165,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
         new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
 
     replayMocks();
@@ -194,7 +190,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
         new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
 
     replayMocks();
@@ -224,7 +219,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(
         new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
 
     replayMocks();
@@ -255,7 +249,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
 
@@ -283,7 +276,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
 
@@ -311,7 +303,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
 
@@ -345,7 +336,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
 
@@ -377,7 +367,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
 
@@ -411,7 +400,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42")).andReturn(
         new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
 
@@ -443,7 +431,6 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"}).atLeastOnce();
-    expect(itsFacade.name()).andReturn("TestFacade").anyTimes();
     expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1"))
         .atLeastOnce();
     expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
