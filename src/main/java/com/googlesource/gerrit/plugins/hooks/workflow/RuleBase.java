@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import com.google.common.collect.Lists;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 
@@ -35,18 +36,23 @@ public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
   /**
-   * File (relative to site) to load rules from
+   * File beginning (relative to site) to load rules from
    */
-  private static final String ITS_CONFIG_FILE = "etc" + File.separatorChar +
-      "its" + File.separator + "actions.config";
+  private static final String ITS_CONFIG_FILE_START = "etc" +
+      File.separatorChar + "its" + File.separator + "actions";
 
   /**
-   * The section for rules within {@link #ITS_CONFIG_FILE}
+   * File end to load rules from
+   */
+  private static final String ITS_CONFIG_FILE_END = ".config";
+
+  /**
+   * The section for rules within rulebases
    */
   private static final String RULE_SECTION = "rule";
 
   /**
-   * The key for actions within {@link #ITS_CONFIG_FILE}
+   * The key for actions within rulebases
    */
   private static final String ACTION_KEY = "action";
 
@@ -54,6 +60,7 @@ public class RuleBase {
   private final Rule.Factory ruleFactory;
   private final Condition.Factory conditionFactory;
   private final ActionRequest.Factory actionRequestFactory;
+  private final String pluginName;
 
   private Collection<Rule> rules;
 
@@ -64,11 +71,13 @@ public class RuleBase {
   @Inject
   public RuleBase(@SitePath File sitePath, Rule.Factory ruleFactory,
       Condition.Factory conditionFactory,
-      ActionRequest.Factory actionRequestFactory) {
+      ActionRequest.Factory actionRequestFactory,
+      @PluginName String pluginName) {
     this.sitePath = sitePath;
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;
+    this.pluginName = pluginName;
     reloadRules();
   }
 
@@ -109,8 +118,6 @@ public class RuleBase {
         }
         rules.add(rule);
       }
-    } else {
-      log.warn("ITS actions configuration file (" + ruleFile + ") does not exist.");
     }
   }
 
@@ -138,8 +145,26 @@ public class RuleBase {
     }
 
     // Add global rules
-    File globalRuleFile = new File(sitePath, ITS_CONFIG_FILE);
+    File globalRuleFile = new File(sitePath, ITS_CONFIG_FILE_START +
+        ITS_CONFIG_FILE_END);
     addRulesFromFile(globalRuleFile);
+
+    // Add its-specific rules
+    File itsSpecificRuleFile = new File(sitePath, ITS_CONFIG_FILE_START + "-" +
+        pluginName + ITS_CONFIG_FILE_END);
+    addRulesFromFile(itsSpecificRuleFile);
+
+    if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
+      try {
+        log.warn("Neither global rule file "
+            + globalRuleFile.getCanonicalPath() + " nor Its specific rule file"
+            + itsSpecificRuleFile.getCanonicalPath() + " exist. Please configure "
+            + "rules.");
+      } catch (IOException e) {
+        log.warn("Neither global rule file nor Its specific rule files exist. "
+            + "Please configure rules.");
+      }
+    }
   }
 
   /**
