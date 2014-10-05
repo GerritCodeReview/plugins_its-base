@@ -127,6 +127,11 @@ The common properties for each event are
 : How the issue of property `issue` got associated to this event.
   See [Property: `association`][property-association].
 
+`its-name`
+: Name of this plugin (i.e.: `@PLUGIN@`). This property can be used to
+  make a rule in the rulebase match only for certain ITS plugins, if
+  more than one is installed.
+
 
 The further properties are listed in the event's
 corresponding subsection below:
