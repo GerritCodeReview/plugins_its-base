@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90571041_97a944a0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-07T21:14:43Z",
+      "side": 1,
+      "message": "if you have both files (action.config and actions.config), rules from both files will get loaded?  I guess that\u0027s ok.",
+      "revId": "3c224915a3fdb5582844718799a52f6ff9f34771",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
