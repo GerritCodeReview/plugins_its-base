@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0d12ce3_12c96c34",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-08T16:41:00Z",
+      "side": 1,
+      "message": "no check for faultyNameRuleFile?  Also how about do this check before attempting to load any of the possible actions files?  Another option would be to check the rules object for actions at the end?",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90571041_f78d203e",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-08T16:41:00Z",
+      "side": 1,
+      "message": "line too long, please wrap.",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90571041_d78a9c23",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBaseTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-08T16:41:00Z",
+      "side": 1,
+      "message": "would be nice to verify the converse of this, \u0027testNoRuleBaseFilesAreLoaded() ?",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
