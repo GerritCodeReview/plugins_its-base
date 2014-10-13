@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "10cb2096_d3a4b4c2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-10-13T21:13:39Z",
+      "side": 1,
+      "message": "\u003e no check for faultyNameRuleFile?\n\nRight, no check for faultyNameRuleFile.\nThat\u0027s on purpose.\nfaultyNameRuleFile is the special case covered above.\nAt some point we remove that.\n\n\u003e Also how about do this check before attempting to load\n\u003e any of the possible actions files?\n\u003e Another option would be to check the rules object for\n\u003e actions at the end?\n\nWhat problems would get solved by that reshuffling?",
+      "parentUuid": "f0d12ce3_12c96c34",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90571041_f78d203e",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "f0e5ac1c_128b4c2a",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-10-13T21:13:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90571041_f78d203e",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90571041_d78a9c23",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBaseTest.java",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2014-10-08T16:41:00Z",
       "side": 1,
       "message": "would be nice to verify the converse of this, \u0027testNoRuleBaseFilesAreLoaded() ?",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0e5ac1c_f206880d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBaseTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-10-13T21:13:39Z",
+      "side": 1,
+      "message": "Does the test\n  testWarnNonExistingRuleBase\n\n(in line 54ff) do what you are asking for?",
+      "parentUuid": "90571041_d78a9c23",
       "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
