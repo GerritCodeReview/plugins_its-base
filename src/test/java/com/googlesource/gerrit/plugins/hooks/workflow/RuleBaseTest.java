@@ -218,16 +218,103 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     assertEquals("Matched actionRequests do not match", expected, actual);
   }
 
+  public void testWarnExistingFaultyNameRuleBaseFile() throws IOException {
+    injectRuleBase("", true);
+
+    replayMocks();
+
+    createRuleBase();
+
+    assertLogMessageContains("Please migrate"); // Migration warning for old name
+    assertLogMessageContains("does not exist"); // For global rule file at new name
+  }
+
+  public void testSimpleFaultyNameRuleBase() throws IOException {
+    injectRuleBase("[rule \"rule1\"]\n" +
+        "\tconditionA = value1\n" +
+        "\taction = action1", true);
+
+    Rule rule1 = createMock(Rule.class);
+    expect(ruleFactory.create("rule1")).andReturn(rule1);
+
+    Condition condition1 = createMock(Condition.class);
+    expect(conditionFactory.create("conditionA", "value1")).andReturn(condition1);
+    rule1.addCondition(condition1);
+
+    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
+    rule1.addActionRequest(actionRequest1);
+
+    replayMocks();
+
+    createRuleBase();
+
+    assertLogMessageContains("Please migrate"); // Migration warning for old name
+    assertLogMessageContains("does not exist"); // For global rule file at new name
+  }
+
+  public void testGlobalRuleBaseFileAndFaultyNameFileAreLoaded() throws IOException {
+    injectRuleBase("[rule \"rule1\"]\n" +
+        "\taction = action1", false);
+
+    injectRuleBase("[rule \"rule2\"]\n" +
+        "\taction = action2", true);
+
+    Collection<Property> properties = Collections.emptySet();
+
+    Rule rule1 = createMock(Rule.class);
+    expect(ruleFactory.create("rule1")).andReturn(rule1);
+
+    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
+    rule1.addActionRequest(actionRequest1);
+
+    List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(1);
+    rule1Match.add(actionRequest1);
+    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
+
+    Rule rule2 = createMock(Rule.class);
+    expect(ruleFactory.create("rule2")).andReturn(rule2);
+
+    ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    expect(actionRequestFactory.create("action2")).andReturn(actionRequest2);
+    rule2.addActionRequest(actionRequest2);
+
+    List<ActionRequest> rule2Match = Lists.newArrayListWithCapacity(1);
+    rule1Match.add(actionRequest2);
+    expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match);
+
+    replayMocks();
+
+    RuleBase ruleBase = createRuleBase();
+
+    Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
+
+    List<ActionRequest> expected = Lists.newArrayListWithCapacity(2);
+    expected.add(actionRequest1);
+    expected.add(actionRequest2);
+
+    assertEquals("Matched actionRequests do not match", expected, actual);
+
+    assertLogMessageContains("Please migrate"); // Migration warning for old name
+  }
+
   private RuleBase createRuleBase() {
     return injector.getInstance(RuleBase.class);
   }
 
   private void injectRuleBase(String rules) throws IOException {
+    injectRuleBase(rules, false);
+  }
+
+  private void injectRuleBase(String rules, Boolean faultyName) throws IOException {
     File ruleBaseFile = new File(sitePath, "etc" + File.separatorChar + "its" +
-        File.separator + "action.config");
+        File.separator + "action" + (faultyName ? "" : "s") + ".config");
     File ruleBaseParentFile = ruleBaseFile.getParentFile();
-    assertTrue("Failed to create parent (" + ruleBaseParentFile + ") for " +
-        "rule base", ruleBaseParentFile.mkdirs());
+    if (!ruleBaseParentFile.exists()) {
+      assertTrue("Failed to create parent (" + ruleBaseParentFile + ") for " +
+          "rule base", ruleBaseParentFile.mkdirs());
+    }
     FileWriter unbufferedWriter = new FileWriter(ruleBaseFile);
     BufferedWriter writer = new BufferedWriter(unbufferedWriter);
     writer.write(rules);

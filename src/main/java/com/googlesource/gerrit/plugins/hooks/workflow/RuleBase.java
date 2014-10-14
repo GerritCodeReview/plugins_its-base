@@ -15,16 +15,16 @@
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 
+import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class RuleBase {
    * File (relative to site) to load rules from
    */
   private static final String ITS_CONFIG_FILE = "etc" + File.separatorChar +
-      "its" + File.separator + "action.config";
+      "its" + File.separator + "actions.config";
 
   /**
    * The section for rules within {@link #ITS_CONFIG_FILE}
@@ -69,22 +69,26 @@ public class RuleBase {
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;
-    loadRules();
+    reloadRules();
   }
 
   /**
-   * Loads the rules for the RuleBase.
+   * Adds rules from a file to the the RuleBase.
+   * <p>
+   * If the given file does not exist, it is silently ignored
    *
-   * Consider using {@link #loadRules()@}, as that method only loads the rules,
-   * if they have not yet been loaded.
+   * @param ruleFile File from which to read the rules
    */
-  private void forceLoadRules() throws Exception {
-    File configFile = new File(sitePath, ITS_CONFIG_FILE);
-    if (configFile.exists()) {
-      FileBasedConfig cfg = new FileBasedConfig(configFile, FS.DETECTED);
-      cfg.load();
+  private void addRulesFromFile(File ruleFile) {
+    if (ruleFile.exists()) {
+      FileBasedConfig cfg = new FileBasedConfig(ruleFile, FS.DETECTED);
+      try {
+        cfg.load();
+      } catch (IOException | ConfigInvalidException e) {
+        log.error("Invalid ITS action configuration", e);
+        return;
+      }
 
-      rules = Lists.newArrayList();
       Collection<String> subsections = cfg.getSubsections(RULE_SECTION);
       for (String subsection : subsections) {
         Rule rule = ruleFactory.create(subsection);
@@ -106,24 +110,36 @@ public class RuleBase {
         rules.add(rule);
       }
     } else {
-      // configFile does not exist.
-      log.warn("ITS actions configuration file (" + configFile + ") does not exist.");
-      rules = Collections.emptySet();
+      log.warn("ITS actions configuration file (" + ruleFile + ") does not exist.");
     }
   }
 
   /**
-   * Loads the rules for the RuleBase, if they have not yet been loaded.
+   * Loads the rules for the RuleBase.
    */
-  private void loadRules() {
-    if (rules == null) {
-      try {
-        forceLoadRules();
-      } catch (Exception e) {
-        log.error("Invalid ITS action configuration", e);
-        rules = Collections.emptySet();
-      }
+  private void reloadRules() {
+    rules = Lists.newArrayList();
+
+    // Add rules from file with typo in filename
+    //
+    // While the documentation called for "actions.config" (Trailing "s" in
+    // "actions"), the code previously only loaded "action.config" (No
+    // trailing "s" in "action"). To give users time to gracefully migrate to
+    // "actions.config" (with trailing "s", we (for now) load files from both
+    // locations, but consider "actions.config" (with trailing "s" the
+    // canonical place.
+    File faultyNameRuleFile = new File(sitePath, "etc" + File.separatorChar
+        + "its" + File.separator + "action.config");
+    if (faultyNameRuleFile.exists()) {
+      log.warn("Loading rules from deprecated 'etc/its/action.config' (No "
+          + "trailing 's' in 'action'). Please migrate to "
+          + "'etc/its/actions.config' (Trailing 's' in 'actions').");
+      addRulesFromFile(faultyNameRuleFile);
     }
+
+    // Add global rules
+    File globalRuleFile = new File(sitePath, ITS_CONFIG_FILE);
+    addRulesFromFile(globalRuleFile);
   }
 
   /**
