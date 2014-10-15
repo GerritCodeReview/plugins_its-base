@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "302ae414_944ba475",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-15T22:24:49Z",
+      "side": 1,
+      "message": "Taking another look.  Not sure why, maybe it was one of those late night reviews.  /me head to desk.   I was thinking it might be better to do an initial check for to see if any of the possible actions files to exits, if they don\u0027t we can just exit early.  I didn\u0027t think about the implications of removing faultyNameRuleFile in the future because it\u0027s a special case.  Your implementation makes perfect sense.  Really, you can just ignore me :)",
+      "parentUuid": "10cb2096_d3a4b4c2",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90571041_f78d203e",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 2
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Does the test\n  testWarnNonExistingRuleBase\n\n(in line 54ff) do what you are asking for?",
       "parentUuid": "90571041_d78a9c23",
+      "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f00e8cb4_cad98339",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/workflow/RuleBaseTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-15T22:24:49Z",
+      "side": 1,
+      "message": "yes this is exactly what i was suggesting.  sorry i somehow missed that.",
+      "parentUuid": "f0e5ac1c_f206880d",
       "revId": "6b2996fe8c343d0442bcafb9bbcbb8a045008268",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
