@@ -119,6 +119,30 @@ configured through a [rule base][rule-base] in
 
 
 
+[multiple-its]: #multiple-its
+<a name="mutiple-its">Multiple ITS</a>
+-----------------------------------------------------
+
+Although not a common setup the @PLUGIN@ plugin supports connecting
+Gerrit to multiple issue tracking systems.
+
+For example users may want to reference issues from two independent
+issue tracking systems (i.e. a Bugzilla and a Jira instance).  In
+this configuration you can simply install both its plugins and
+configure them as described.
+
+In situations where users wants to reference issues from multiple
+instances of the same issue tracking system (i.e. two independent
+Bugzilla instances) you can simply create two it-bugzilla plugin
+files with different names (i.e. its-bugzilla-external.jar and
+its-bugzilla-internal.jar).  Gerrit will give each plugin the same
+name as the file name (minus the extension).  You can view the names
+by going to the Gerrit UI under menu Plugins -> Installed.  Now you
+just need to use the appropriate name to configure each plugin.
+
+
+
+
 [legacy-configuration]: #legacy-configuration
 <a name="legacy-configuration">Legacy configuration</a>
 -------------------------------------------------------
