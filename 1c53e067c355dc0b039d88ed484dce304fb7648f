@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f00e8cb4_6a65f7b8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-16T18:03:29Z",
+      "side": 1,
+      "message": "Was wondering if there was a way to validate that the user specified its-name is installed?  Would be nice to provide feedback, even if it\u0027s just a debug log message, that the pluginName couldn\u0027t be found.",
+      "revId": "1c53e067c355dc0b039d88ed484dce304fb7648f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f00e8cb4_8ae38be7",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2014-10-16T18:03:29Z",
+      "side": 1,
+      "message": "It would be nice to provide an example for this.  Maybe something like..\n\nExample to make Gerrit update Bugzilla and Jira with two different messages for a negative code review vote: \n\n[rule \"rule1\"]\n    its-name \u003d its-bugzilla\n    approval-Code-Review \u003d -2,-1\n    action \u003d add-comment The change for this stinks, please try to freshen up.\n[rule \"rule2\"]\n    its-name \u003d its-jira\n    approval-Code-Review \u003d -2,-1\n    action \u003d add-comment This change for this needs re-work.\n\nComment in rule 1 is only sent to the Bugzilla issue while comment in rule 2 is only sent to the Jira issue.",
+      "revId": "1c53e067c355dc0b039d88ed484dce304fb7648f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
