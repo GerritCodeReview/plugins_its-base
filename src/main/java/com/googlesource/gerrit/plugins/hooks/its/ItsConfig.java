@@ -104,7 +104,7 @@ public class ItsConfig {
       return true;
     }
     for (String refPattern : refPatterns) {
-      if (RefConfigSection.isValid(refPattern) && match(branch, refPattern)) {
+      if (match(branch, refPattern)) {
         return true;
       }
     }

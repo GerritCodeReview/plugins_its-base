@@ -14,10 +14,7 @@
 
 package com.googlesource.gerrit.plugins.hooks.its;
 
-import com.google.common.base.Strings;
-import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.pgm.init.api.AllProjectsConfig;
-import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.InitStep;
 import com.google.gerrit.pgm.init.api.Section;
 import com.google.gerrit.pgm.init.api.ConsoleUI;
@@ -43,16 +40,13 @@ public class InitIts implements InitStep {
   private final String itsDisplayName;
   protected final ConsoleUI ui;
   private final AllProjectsConfig allProjectsConfig;
-  private final AllProjectsNameOnInitProvider allProjects;
 
   public InitIts(String pluginName, String itsDisplayName, ConsoleUI ui,
-      AllProjectsConfig allProjectsConfig,
-      AllProjectsNameOnInitProvider allProjects) {
+      AllProjectsConfig allProjectsConfig) {
     this.pluginName = pluginName;
     this.itsDisplayName = itsDisplayName;
     this.ui = ui;
     this.allProjectsConfig = allProjectsConfig;
-    this.allProjects = allProjects;
   }
 
   @Override
@@ -61,7 +55,7 @@ public class InitIts implements InitStep {
 
   @Override
   public void postRun() throws IOException, ConfigInvalidException {
-    Config cfg = allProjectsConfig.load();
+    Config cfg = allProjectsConfig.load().getConfig();
     ui.message("\n");
     ui.header(itsDisplayName + " Integration");
 
@@ -80,11 +74,9 @@ public class InitIts implements InitStep {
     switch (itsintegration) {
       case ENFORCED:
         cfg.setString("plugin", pluginName, "enabled", "enforced");
-        configureBranches(cfg);
         break;
       case ENABLED:
         cfg.setBoolean("plugin", pluginName, "enabled", true);
-        configureBranches(cfg);
         break;
       case DISABLED:
         cfg.unset("plugin", pluginName, "enabled");
@@ -94,36 +86,6 @@ public class InitIts implements InitStep {
             + itsintegration.name());
     }
     allProjectsConfig.save(pluginName, "Initialize " + itsDisplayName + " Integration");
-  }
-
-  private void configureBranches(Config cfg) {
-    String[] branches = cfg.getStringList("plugin", pluginName, "branch");
-    if (branches.length > 1) {
-      ui.message("The issue tracker integration is configured for multiple branches."
-          + " Please adapt the configuration in the 'project.config' file of the '%s' project.\n",
-          allProjects.get());
-      return;
-    }
-
-    String branch = branches.length == 1 ? branches[0] : null;
-    if (Strings.isNullOrEmpty(branch)) {
-      branch = "refs/heads/*";
-    }
-
-    boolean validRef;
-    do {
-      String v = ui.readString(branch, "Branches for which the issue tracker integration"
-          + " should be enabled (ref, ref pattern or regular expression)");
-      validRef = RefConfigSection.isValid(v);
-      if (validRef) {
-        branch = v;
-      } else {
-        ui.message(
-            "'%s' is not valid. Please specify a valid ref, ref pattern or regular expression\n", v);
-      }
-    } while (!validRef);
-
-    cfg.setString("plugin", pluginName, "branch", branch);
   }
 
   public boolean isConnectivityRequested(String url) {
