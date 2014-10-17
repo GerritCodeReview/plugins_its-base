@@ -90,8 +90,10 @@ integration for all child projects by setting
 
 The issue tracker system integration can be limited to specific
 branches by setting `plugin.@PLUGIN@.branch`. The branches may be
-configured using explicit branch names, ref patterns, or regular
-expressions. Multiple branches may be specified.
+configured using an explicit branch name or a regular expression
+that matches multiple branch names.  Multiple branch settings may
+be specified.  The default configuration (above example) is to not
+set any branches which mean all branches are enabled.
 
 E.g. to limit the issue tracker system integration to the `master`
 branch and all stable branches the following could be configured:
@@ -99,8 +101,8 @@ branch and all stable branches the following could be configured:
 ```
   [plugin "@PLUGIN@"]
     enabled = true
-    branch = refs/heads/master
-    branch = ^refs/heads/stable-.*
+    branch = master
+    branch = ^stable-.*
 ```
 
 

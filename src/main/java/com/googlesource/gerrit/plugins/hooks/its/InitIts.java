@@ -61,7 +61,7 @@ public class InitIts implements InitStep {
 
   @Override
   public void postRun() throws IOException, ConfigInvalidException {
-    Config cfg = allProjectsConfig.load();
+    Config cfg = allProjectsConfig.load().getConfig();
     ui.message("\n");
     ui.header(itsDisplayName + " Integration");
 

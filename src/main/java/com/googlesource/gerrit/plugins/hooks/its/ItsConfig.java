@@ -97,14 +97,14 @@ public class ItsConfig {
   }
 
   private boolean isEnabledForBranch(ProjectState project, String branch) {
-    String[] refPatterns =
+    String[] enabledBranches =
         pluginCfgFactory.getFromProjectConfigWithInheritance(project,
             pluginName).getStringList("branch");
-    if (refPatterns.length == 0) {
+    if (enabledBranches.length == 0) {
       return true;
     }
-    for (String refPattern : refPatterns) {
-      if (RefConfigSection.isValid(refPattern) && match(branch, refPattern)) {
+    for (String enabledBranch : enabledBranches) {
+      if (match(branch, enabledBranch)) {
         return true;
       }
     }
