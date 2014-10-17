@@ -14,8 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.its;
 
-import com.google.common.base.Strings;
-import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.pgm.init.api.AllProjectsConfig;
 import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.InitStep;
@@ -26,6 +24,7 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class InitIts implements InitStep {
 
@@ -43,7 +42,6 @@ public class InitIts implements InitStep {
   private final String itsDisplayName;
   protected final ConsoleUI ui;
   private final AllProjectsConfig allProjectsConfig;
-  private final AllProjectsNameOnInitProvider allProjects;
 
   public InitIts(String pluginName, String itsDisplayName, ConsoleUI ui,
       AllProjectsConfig allProjectsConfig,
@@ -52,7 +50,6 @@ public class InitIts implements InitStep {
     this.itsDisplayName = itsDisplayName;
     this.ui = ui;
     this.allProjectsConfig = allProjectsConfig;
-    this.allProjects = allProjects;
   }
 
   @Override
@@ -98,32 +95,7 @@ public class InitIts implements InitStep {
 
   private void configureBranches(Config cfg) {
     String[] branches = cfg.getStringList("plugin", pluginName, "branch");
-    if (branches.length > 1) {
-      ui.message("The issue tracker integration is configured for multiple branches."
-          + " Please adapt the configuration in the 'project.config' file of the '%s' project.\n",
-          allProjects.get());
-      return;
-    }
-
-    String branch = branches.length == 1 ? branches[0] : null;
-    if (Strings.isNullOrEmpty(branch)) {
-      branch = "refs/heads/*";
-    }
-
-    boolean validRef;
-    do {
-      String v = ui.readString(branch, "Branches for which the issue tracker integration"
-          + " should be enabled (ref, ref pattern or regular expression)");
-      validRef = RefConfigSection.isValid(v);
-      if (validRef) {
-        branch = v;
-      } else {
-        ui.message(
-            "'%s' is not valid. Please specify a valid ref, ref pattern or regular expression\n", v);
-      }
-    } while (!validRef);
-
-    cfg.setString("plugin", pluginName, "branch", branch);
+    cfg.setStringList("plugin", pluginName, "branch", Arrays.asList(branches));
   }
 
   public boolean isConnectivityRequested(String url) {
