@@ -22,6 +22,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -38,6 +39,7 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
@@ -465,5 +467,20 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   private class DummyChangeEvent extends ChangeEvent {
+	  public String getType() {
+		  return null;
+	  }
+
+	  public Project.NameKey getProjectNameKey() {
+		  return null;
+	  }
+
+	  public Change.Key getChangeKey() {
+		  return null;
+	  }
+
+	  public String getRefName() {
+		  return null;
+	  }
   }
 }
