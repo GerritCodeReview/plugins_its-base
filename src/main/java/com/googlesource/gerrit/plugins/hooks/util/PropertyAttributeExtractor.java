@@ -58,6 +58,7 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
+    properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
     properties.add(propertyFactory.create("change-id", changeAttribute.id));
     properties.add(propertyFactory.create("change-number", changeAttribute.number));
     properties.add(propertyFactory.create("change-url", changeAttribute.url));
