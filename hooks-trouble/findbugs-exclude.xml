@@ -10,6 +10,10 @@
     <Bug pattern="URF_UNREAD_FIELD" />
   </Match>
   <Match>
+    <Class name="~.*\.TroubleClient.*" />
+    <Bug pattern="URF_UNWRITTEN_FIELD" />
+  </Match>
+  <Match>
     <Class name="com.se.axis.gittools.trouble.TroubleWorkQueue" />
     <Method name="submit" />
     <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />

@@ -228,6 +228,8 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
   private final Account apiUserAccount;
 
+  private final HashMap<String, Integer> branchToProjectMap = new HashMap<String, Integer>();
+
   private static HashMap<String, String> slugToTitleMap = new HashMap<String, String>();
   private static long slugToTitleRip = 0;
 
@@ -262,10 +264,21 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     if (apiPass == null) {
       throw new IllegalArgumentException("plugin." + pluginName + ".password is not set in secure.config");
     }
+
     // TroubleWorkQueue config
     int numThreads = cfg.getInt("poolSize", TroubleWorkQueue.DEFAULT_POOL_SIZE);
     int retryLimit = cfg.getInt("retryLimit", TroubleWorkQueue.DEFAULT_RETRY_LIMIT_SECONDS);
     this.workQueue = new TroubleWorkQueue(pluginName, workQueue, numThreads, retryLimit);
+
+    // branchToProjectMap
+    String[] mappings = cfg.getStringList("branchToProject");
+    for (String mapping : mappings) {
+      String[] parts = mapping.split("\\s*:+\\s*", 3);
+      if (parts.length != 2) {
+        throw new IllegalArgumentException("plugin." + pluginName + ".branchToProject value " + mapping + " is not valid");
+      }
+      branchToProjectMap.put(parts[0], Integer.parseInt(parts[1]));
+    }
   }
 
   @Override
@@ -399,6 +412,12 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       // update the package
       if (newPackage.cbmApproved != null || newPackage.dailyBuildOk != null || newPackage.mergeRef != null) {
         newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
+      }
+
+      // Add to the "LFP master" Project when CBM approved
+      if (branchToProjectMap.containsKey(event.branch) && Boolean.TRUE.equals(newPackage.cbmApproved)
+                                                       && Boolean.TRUE.equals(newPackage.dailyBuildOk)) {
+        troubleClient.addFixToProject(branchToProjectMap.get(event.branch), event.branch);
       }
     }
   }

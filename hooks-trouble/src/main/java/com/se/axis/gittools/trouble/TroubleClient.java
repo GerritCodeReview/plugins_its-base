@@ -37,8 +37,11 @@ public final class TroubleClient {
   private static final String FORMAT_GET_POST_PACKAGE = "%s/tickets/%d/packages.json";
   private static final String FORMAT_PUT_DELETE_PACKAGE = "%s/tickets/%d/packages/%d.json";
   private static final String FORMAT_GET_POST_CORRECTION = "%s/tickets/%d/corrections.json";
+  private static final String FORMAT_GET_PACKAGES_IN_CORRECTION = "%s/tickets/%d/corrections/%s/packages.json";
   private static final String FORMAT_PUT_DELETE_CORRECTION = "%s/tickets/%d/corrections/%d.json";
   private static final String FORMAT_DELETE_PACKAGE_FROM_CORRECTION = "%s/tickets/%d/corrections/%d/packages/%d.json";
+  private static final String FORMAT_GET_ENTRIES = "%s/tickets/%d/entries.json?project_id=%d";
+  private static final String FORMAT_PUT_ENTRY = "%s/tickets/%d/entries/%d.json";
 
   private static final Logger LOG = LoggerFactory.getLogger(TroubleClient.class);
   private static final GsonBuilder GSON = new GsonBuilder();
@@ -191,6 +194,57 @@ public final class TroubleClient {
      */
     private Package(final Integer id) {
       this.packageId = id;
+    }
+  }
+
+  /**
+   * A (project) entry.
+   */
+  private static class Entry {
+    /**
+     * Default constructor for serialization.
+     */
+    public Entry() {
+    }
+
+    /**
+     * Default constructor for serialization.
+     */
+    private Entry(final String username, final Integer correctionId) {
+        this.username = username;
+        this.correctionId = correctionId;
+    }
+
+    /**
+     * Trouble's entry identifier.
+     */
+    private Integer id;
+
+    /**
+     * The impersonated user name.
+     */
+    public String username;
+
+    /**
+     * The aggregated entry state.
+     */
+    @SerializedName("correction_id") public Integer correctionId;
+  }
+
+  /**
+   * Entry update object.
+   */
+  private static final class EntryContainer {
+    /**
+     * The entry.
+     */
+    private Entry entry;
+
+    /**
+     * Helper constructor.
+     */
+    private EntryContainer(final String username, final Integer correctionId) {
+      this.entry = new Entry(username, correctionId);
     }
   }
 
@@ -498,18 +552,74 @@ public final class TroubleClient {
   /**
    * Get a correction identifier (if any) from Trouble.
    */
-  public TroubleClient.Correction getCorrection(final String targetBranch) throws IOException {
+  public TroubleClient.Correction getCorrection(final String targetBranch, final Boolean includePackages) throws IOException {
     StringBuilder url = new StringBuilder(String.format(FORMAT_GET_POST_CORRECTION, baseApiUrl, ticketId));
     String content = getRequest(url.toString(), apiUser, apiPass);
 
     String magic = correctionTitle(targetBranch);
     for (TroubleClient.Correction correction :  GSON.create().fromJson(content, TroubleClient.Correction[].class)) {
       if (magic.equals(correction.title)) {
+        if (includePackages) {
+          correction.packages = getPackagesInCorrection(correction.id);
+        }
         return correction;
       }
     }
 
     return null;
+  }
+
+  /**
+   * Get a correction identifier (if any) from Trouble.
+   */
+  public TroubleClient.Package[] getPackagesInCorrection(final Integer correctionId) throws IOException {
+    StringBuilder url = new StringBuilder(String.format(FORMAT_GET_PACKAGES_IN_CORRECTION, baseApiUrl, ticketId, correctionId));
+    String content = getRequest(url.toString(), apiUser, apiPass);
+    return GSON.create().fromJson(content, TroubleClient.Package[].class);
+  }
+
+  /**
+   * Returns all entries for the given project.
+   */
+  public TroubleClient.Entry[] getEntries(final Integer projectId) throws IOException {
+    StringBuilder url = new StringBuilder(String.format(FORMAT_GET_ENTRIES, baseApiUrl, ticketId, projectId));
+    String content = getRequest(url.toString(), apiUser, apiPass);
+    return GSON.create().fromJson(content, TroubleClient.Entry[].class);
+  }
+
+  /**
+   * Returns all entries for the given project.
+   */
+  public void addFixToProject(final Integer projectId, final String targetBranch) throws IOException {
+    // find the entry
+    TroubleClient.Entry[] entries = getEntries(projectId);
+    if (entries.length == 0) {
+      LOG.info("Project {} has not been added to ticket {}", projectId, ticketId);
+      return;
+    }
+
+    // Look up the fix including all packages
+    TroubleClient.Correction correction = getCorrection(targetBranch, true);
+    if (correction == null || correction.packages == null || correction.packages.length == 0) {
+      LOG.warn("Correction for target branch {} does not exist", targetBranch);
+      return;
+    }
+    for (TroubleClient.Package pkg : correction.packages) {
+      if (pkg.preMergeRef == null || !Boolean.TRUE.equals(pkg.cbmApproved) || !Boolean.TRUE.equals(pkg.dailyBuildOk)) {
+        LOG.info("Package {} is not ready for integration", pkg.name);
+        return;
+      }
+    }
+
+    for (TroubleClient.Entry entry : entries) {
+      if (entry.correctionId == null) {  // we only add the fix if the entry has NO fixes
+        String url = String.format(FORMAT_PUT_ENTRY, baseApiUrl, ticketId, entry.id);
+        String json = GSON.create().toJson(new TroubleClient.EntryContainer(impersonatedUser, correction.id)); // serialize
+        sendJsonRequest(url, apiUser, apiPass, "PUT", json);
+      } else {
+        LOG.info("Entry {} has already a fix", entry.id);
+      }
+    }
   }
 
   /**
@@ -524,7 +634,7 @@ public final class TroubleClient {
   public void createOrUpdateFix(final String targetBranch, final int packageId) throws IOException {
 
     // get the correction id
-    TroubleClient.Correction correction = getCorrection(targetBranch);
+    TroubleClient.Correction correction = getCorrection(targetBranch, false);
     if (correction == null) { // create correction info
       correction = new TroubleClient.Correction(targetBranch, impersonatedUser);
       String json = GSON.create().toJson(new TroubleClient.CorrectionContainer(correction)); // serialize
@@ -548,7 +658,7 @@ public final class TroubleClient {
    * Delete a package in Trouble.
    */
   public void deletePackageFromFix(final String targetBranch, final int packageId) throws IOException {
-    TroubleClient.Correction correction = getCorrection(targetBranch);
+    TroubleClient.Correction correction = getCorrection(targetBranch, false);
     if (correction == null) {
       LOG.debug("Correction for target branch {} does not exist", targetBranch);
       return;
@@ -609,7 +719,8 @@ public final class TroubleClient {
       conn.setDoOutput(true);
       conn.setRequestProperty("Content-Type", "application/json");
       // We have to fake curl as a workaround for ticket 61954
-      conn.setRequestProperty("User-Agent", "curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.15 libssh2/1.2.6");
+      conn.setRequestProperty("User-Agent", "curl/7.21.0 (x86_64-pc-linux-gnu) "
+                                          + "libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.15 libssh2/1.2.6");
       byte[] content = getBytes(json);
       conn.setRequestProperty("Content-Length", "" + Integer.toString(content.length));
       writeAll(conn.getOutputStream(), content);
