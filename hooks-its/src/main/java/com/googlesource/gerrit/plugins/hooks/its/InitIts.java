@@ -30,6 +30,10 @@ public class InitIts implements InitStep {
   public void run() throws Exception {
   }
 
+  @Override
+  public void postRun() throws Exception {
+  }
+
   public boolean isConnectivityRequested(ConsoleUI ui, String url) {
     return ui.yesno(false, "Test connectivity to %s", url);
   }
