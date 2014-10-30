@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
   <artifactId>hooks-trouble</artifactId>
   <groupId>com.se.axis.gittools</groupId>
-  <version>v1.0.0</version>
+  <version>v1.1.0</version>
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
     <artifactId>hooks-its-parent</artifactId>
@@ -117,14 +117,6 @@ limitations under the License.
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <linkXRef>false</linkXRef>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.5.3</version>
-        <configuration>
-          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
         </configuration>
       </plugin>
       <plugin>

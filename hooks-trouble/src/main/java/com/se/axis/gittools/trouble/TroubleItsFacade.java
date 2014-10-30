@@ -20,6 +20,8 @@ import com.google.gerrit.reviewdb.client.PatchSetApproval;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.PluginConfig;
+import com.google.gerrit.server.project.ProjectCache;
+import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.gwtorm.server.OrmException;
@@ -193,6 +195,62 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   }
 
   /**
+   * Static Trouble project mapping.
+   *
+   * Reviews with the matching (Gerrit) parent project towards the given target
+   * branch are automatically added to the given trouble project, when all packages
+   * have met integration criterias (CBM Approval, Daily Built).
+   */
+  private static class TroubleProject {
+    /**
+     * Default constructor for serialization.
+     */
+    public TroubleProject() {
+    }
+
+    /**
+     * The target branch.
+     */
+    public String branch;
+
+    /**
+     * The Gerrit parent Project.
+     */
+    public String parent;
+
+
+    /**
+     * The Trouble project identifier.
+     */
+    public Integer id;
+
+
+    /**
+     * Pretty platform name.
+     *
+     * Derived from parent name if omitted.
+     */
+    public String platform;
+
+    /**
+     * Make sure that all mandatory variables are set.
+     */
+    public TroubleProject check() {
+      if (parent == null) {
+        throw new IllegalArgumentException("*.troubleProject has no parent");
+      }
+      if (branch == null) {
+        throw new IllegalArgumentException("*.troubleProject has no target branch");
+      }
+
+      if (id == null) {
+        throw new IllegalArgumentException("*.troubleProject has no Trouble Project id");
+      }
+      return this;
+    }
+  }
+
+  /**
    * Gerrit configuration section name.
    */
   public static final String ITS_NAME_TROUBLE = "trouble";
@@ -210,7 +268,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
   private static final String GERRIT_CONFIG_PASSWORD = "password";
   private static final String GERRIT_CONFIG_URL = "url";
 
-  private static final String FORMAT_COMMENT_REVIEW = "Gerrit Review %s for target: %s.";
+  private static final String FORMAT_COMMENT_REVIEW = "Gerrit Review %s for target: %s";
 
   private static final String PATTERN_SHA1 = "[a-fA-F0-9]{40}";
 
@@ -218,6 +276,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
   private final SchemaFactory<ReviewDb> reviewDbProvider;
   private final GitRepositoryManager repoManager;
+  private final ProjectCache projectCache;
 
   private final TroubleWorkQueue workQueue;
 
@@ -228,7 +287,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
   private final Account apiUserAccount;
 
-  private final HashMap<String, Integer> branchToProjectMap = new HashMap<String, Integer>();
+  private final TroubleProject[] troubleProjects;
 
   private static HashMap<String, String> slugToTitleMap = new HashMap<String, String>();
   private static long slugToTitleRip = 0;
@@ -237,9 +296,10 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
    * Constructor.
    */
   public TroubleItsFacade(final String pluginName, final PluginConfig cfg, final SchemaFactory<ReviewDb> schema,
-      final GitRepositoryManager repoManager, final WorkQueue workQueue) {
+      final GitRepositoryManager repoManager, final ProjectCache projectCache, final WorkQueue workQueue) {
     this.reviewDbProvider = schema;
     this.repoManager = repoManager;
+    this.projectCache = projectCache;
 
     // Gerrit config
     String url = cfg.getString("gerritUrl");
@@ -271,14 +331,20 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
     this.workQueue = new TroubleWorkQueue(pluginName, workQueue, numThreads, retryLimit);
 
     // branchToProjectMap
-    String[] mappings = cfg.getStringList("branchToProject");
-    for (String mapping : mappings) {
-      String[] parts = mapping.split("\\s*:+\\s*", 3);
-      if (parts.length != 2) {
-        throw new IllegalArgumentException("plugin." + pluginName + ".branchToProject value " + mapping + " is not valid");
-      }
-      branchToProjectMap.put(parts[0], Integer.parseInt(parts[1]));
+    troubleProjects = loadTroubleProjects(cfg);
+  }
+
+  /**
+   * Loads the static trouble project configuration file.
+   */
+  private TroubleProject[] loadTroubleProjects(final PluginConfig cfg) {
+    GsonBuilder gson = new GsonBuilder();
+    String[] jsonProjects = cfg.getStringList("troubleProject");
+    TroubleProject[] projects = new TroubleProject[jsonProjects.length];
+    for (int i = 0; i < jsonProjects.length; i++) {
+      projects[i] = gson.create().fromJson(jsonProjects[i], TroubleProject.class).check();  // deserialize and validate!
     }
+    return projects;
   }
 
   @Override
@@ -358,7 +424,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
     String targetLink = createCommentUrl(event.branch, projectName, event.change);
     if (existingPackage != null && event.id.equals("change-abandoned")) { // delete package
-      troubleClient.deletePackageFromFix(event.branch, existingPackage.id);
+      troubleClient.deletePackageFromFix(getPlatform(event.project, event.branch), event.branch, existingPackage.id);
       troubleClient.deletePackage(existingPackage.id);
       // create comment about the abandoned review
       troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink));
@@ -383,7 +449,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
       if (event.patchSet == 1 || event.id.equals("change-restored")) {
         // create a fix and add the package to it, putting the ticket into the reviewing state.
-        troubleClient.createOrUpdateFix(event.branch, newPackage.id);
+        troubleClient.createOrUpdateFix(getPlatform(event.project, event.branch), event.branch, newPackage.id);
       }
     } else if (existingPackage != null && event.id.equals("comment-added")) {
       // create a new (untampered) package
@@ -415,11 +481,57 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
 
       // Add to the "LFP master" Project when CBM approved
-      if (branchToProjectMap.containsKey(event.branch) && Boolean.TRUE.equals(newPackage.cbmApproved)
-                                                       && Boolean.TRUE.equals(newPackage.dailyBuildOk)) {
-        troubleClient.addFixToProject(branchToProjectMap.get(event.branch), event.branch);
+      if (Boolean.TRUE.equals(newPackage.cbmApproved) && Boolean.TRUE.equals(newPackage.dailyBuildOk)) {
+        TroubleProject troubleProject = findTroubleProject(event.project, event.branch);
+        if (troubleProject != null) {
+          troubleClient.addFixToProject(troubleProject.id, getPlatform(event.project, event.branch), event.branch);
+        }
       }
     }
+  }
+
+  /**
+   * Get the name of the Parent project.
+   */
+  private String getParentProjectName(final String project) {
+    String parentName = null;
+    ProjectState projectState = projectCache.get(new Project.NameKey(project));
+    if (projectState != null) {
+      parentName = projectState.getProject().getParentName();
+    }
+    return parentName != null ? parentName : "All-Projects";
+  }
+
+  /**
+   * Find the trouble project object if any.
+   */
+  private TroubleProject findTroubleProject(final String project, final String branch) {
+    String parentName = getParentProjectName(project);
+
+    // Check static troubleProject mapping for the pretty platform names
+    for (TroubleProject proj : troubleProjects) {
+      if (parentName.equals(proj.parent) && branch.equals(proj.branch)) {
+        return proj;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the name of the platform.
+   */
+  private String getPlatform(final String project, final String branch) {
+    String parentName = getParentProjectName(project);
+
+    // Check static troubleProject mapping for the pretty platform names
+    for (TroubleProject proj : troubleProjects) {
+      if (proj.platform != null && parentName.equals(proj.parent) && branch.equals(proj.branch)) {
+        return proj.platform;
+      }
+    }
+
+    return parentName.replace("-Projects", "").toUpperCase();
   }
 
   /**
