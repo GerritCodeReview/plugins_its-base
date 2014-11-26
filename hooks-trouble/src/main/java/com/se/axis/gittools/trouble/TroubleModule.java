@@ -44,7 +44,7 @@ public class TroubleModule extends AbstractModule {
   public TroubleModule(@PluginName final String pluginName, final PluginConfigFactory configFactory, final WorkQueue workQueue,
       final SchemaFactory<ReviewDb> schema, final GitRepositoryManager repoManager, final ProjectCache projectCache) {
     this.pluginName = pluginName;
-    this.config = configFactory.getFromGerritConfig(pluginName);
+    this.config = configFactory.getFromGerritConfig(pluginName, true);
     this.reviewDbProvider = schema;
     this.repoManager = repoManager;
     this.workQueue = workQueue;
