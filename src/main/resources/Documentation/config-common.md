@@ -113,7 +113,7 @@ Setting up which event in Gerrit (E.g.: “Change Merged”, or “User
 ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a change”) should trigger
 which action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
 configured through a [rule base][rule-base] in
-`etc/its/action.config`.
+`etc/its/actions.config`.
 
 [rule-base]: config-rulebase-common.html
 

@@ -44,7 +44,7 @@ adds a comment to a change that is associated to some issues and votes
 Goodness! Someone gave a negative code review in Gerrit on an
 associated change.” to each such issue.
 
-The order of rules in `etc/its/action.config` need not be
+The order of rules in `etc/its/actions.config` need not be
 respected. So in the above example, do not rely on `rule1` being
 evaluated before `rule2`.
 
