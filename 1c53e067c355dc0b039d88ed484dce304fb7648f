@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "415b10e1_05e8d20a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-12-21T22:20:46Z",
+      "side": 1,
+      "message": "There might be a way, but I am not sure it\u0027s worth it.\n\nWe do not check for other properties whether or not they\nmake sense (Like we allow to check for the condition \n\n  approval-Foo \u003d -4711\n\nalthough the label Foo need not exist and need not allow\nthe value 4711).\n\nAlso each Its plugin reports it\u0027s the value it is using in\nthe rulebase configuration.",
+      "parentUuid": "f00e8cb4_6a65f7b8",
+      "revId": "1c53e067c355dc0b039d88ed484dce304fb7648f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f00e8cb4_8ae38be7",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-10-16T18:03:29Z",
       "side": 1,
       "message": "It would be nice to provide an example for this.  Maybe something like..\n\nExample to make Gerrit update Bugzilla and Jira with two different messages for a negative code review vote: \n\n[rule \"rule1\"]\n    its-name \u003d its-bugzilla\n    approval-Code-Review \u003d -2,-1\n    action \u003d add-comment The change for this stinks, please try to freshen up.\n[rule \"rule2\"]\n    its-name \u003d its-jira\n    approval-Code-Review \u003d -2,-1\n    action \u003d add-comment This change for this needs re-work.\n\nComment in rule 1 is only sent to the Bugzilla issue while comment in rule 2 is only sent to the Jira issue.",
+      "revId": "1c53e067c355dc0b039d88ed484dce304fb7648f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1dfa47d_02d44a51",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-12-21T22:20:46Z",
+      "side": 1,
+      "message": "Done in PS2.",
+      "parentUuid": "f00e8cb4_8ae38be7",
       "revId": "1c53e067c355dc0b039d88ed484dce304fb7648f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
