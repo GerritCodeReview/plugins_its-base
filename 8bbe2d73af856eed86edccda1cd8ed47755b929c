@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "415b10e1_e5f7b6ea",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/util/PropertyAttributeExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-12-21T23:27:09Z",
+      "side": 1,
+      "message": "The new properly also needs to get added to the docs at\n\n  src/main/resources/Documentation/config-rulebase-common.md",
+      "revId": "8bbe2d73af856eed86edccda1cd8ed47755b929c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
