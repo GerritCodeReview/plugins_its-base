@@ -27,10 +27,12 @@ import java.util.UUID;
 import org.eclipse.jgit.util.FileUtils;
 
 import com.google.common.collect.Lists;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
 public class RuleBaseTest extends LoggingMockingTestCase {
@@ -43,12 +45,18 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
   private boolean cleanupSitePath;
 
+  private enum RuleBaseKind {
+      GLOBAL,
+      ITS,
+      FAULTY
+  }
+
   public void testWarnNonExistingRuleBase() {
     replayMocks();
 
     createRuleBase();
 
-    assertLogMessageContains("does not exist");
+    assertLogMessageContains("Neither global");
   }
 
   public void testEmptyRuleBase() throws IOException {
@@ -219,20 +227,20 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testWarnExistingFaultyNameRuleBaseFile() throws IOException {
-    injectRuleBase("", true);
+    injectRuleBase("", RuleBaseKind.FAULTY);
 
     replayMocks();
 
     createRuleBase();
 
     assertLogMessageContains("Please migrate"); // Migration warning for old name
-    assertLogMessageContains("does not exist"); // For global rule file at new name
+    assertLogMessageContains("Neither global"); // For rule file at at usual places
   }
 
   public void testSimpleFaultyNameRuleBase() throws IOException {
     injectRuleBase("[rule \"rule1\"]\n" +
         "\tconditionA = value1\n" +
-        "\taction = action1", true);
+        "\taction = action1", RuleBaseKind.FAULTY);
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -250,15 +258,39 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     createRuleBase();
 
     assertLogMessageContains("Please migrate"); // Migration warning for old name
-    assertLogMessageContains("does not exist"); // For global rule file at new name
+    assertLogMessageContains("Neither global"); // For rule file at at usual places
   }
 
-  public void testGlobalRuleBaseFileAndFaultyNameFileAreLoaded() throws IOException {
+  public void testSimpleItsRuleBase() throws IOException {
     injectRuleBase("[rule \"rule1\"]\n" +
-        "\taction = action1", false);
+        "\tconditionA = value1\n" +
+        "\taction = action1", RuleBaseKind.ITS);
+
+    Rule rule1 = createMock(Rule.class);
+    expect(ruleFactory.create("rule1")).andReturn(rule1);
+
+    Condition condition1 = createMock(Condition.class);
+    expect(conditionFactory.create("conditionA", "value1")).andReturn(condition1);
+    rule1.addCondition(condition1);
+
+    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
+    rule1.addActionRequest(actionRequest1);
+
+    replayMocks();
+
+    createRuleBase();
+  }
+
+  public void testAllRuleBaseFilesAreLoaded() throws IOException {
+    injectRuleBase("[rule \"rule1\"]\n" +
+        "\taction = action1", RuleBaseKind.FAULTY);
 
     injectRuleBase("[rule \"rule2\"]\n" +
-        "\taction = action2", true);
+        "\taction = action2", RuleBaseKind.GLOBAL);
+
+    injectRuleBase("[rule \"rule3\"]\n" +
+        "\taction = action3", RuleBaseKind.ITS);
 
     Collection<Property> properties = Collections.emptySet();
 
@@ -281,8 +313,19 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     rule2.addActionRequest(actionRequest2);
 
     List<ActionRequest> rule2Match = Lists.newArrayListWithCapacity(1);
-    rule1Match.add(actionRequest2);
+    rule2Match.add(actionRequest2);
     expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match);
+
+    Rule rule3 = createMock(Rule.class);
+    expect(ruleFactory.create("rule3")).andReturn(rule3);
+
+    ActionRequest actionRequest3 = createMock(ActionRequest.class);
+    expect(actionRequestFactory.create("action3")).andReturn(actionRequest3);
+    rule3.addActionRequest(actionRequest3);
+
+    List<ActionRequest> rule3Match = Lists.newArrayListWithCapacity(1);
+    rule3Match.add(actionRequest3);
+    expect(rule3.actionRequestsFor(properties)).andReturn(rule3Match);
 
     replayMocks();
 
@@ -290,9 +333,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
 
-    List<ActionRequest> expected = Lists.newArrayListWithCapacity(2);
+    List<ActionRequest> expected = Lists.newArrayListWithCapacity(3);
     expected.add(actionRequest1);
     expected.add(actionRequest2);
+    expected.add(actionRequest3);
 
     assertEquals("Matched actionRequests do not match", expected, actual);
 
@@ -304,12 +348,27 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   private void injectRuleBase(String rules) throws IOException {
-    injectRuleBase(rules, false);
+    injectRuleBase(rules, RuleBaseKind.GLOBAL);
   }
 
-  private void injectRuleBase(String rules, Boolean faultyName) throws IOException {
+  private void injectRuleBase(String rules, RuleBaseKind ruleBaseKind) throws IOException {
+    String baseName = "";
+    switch (ruleBaseKind) {
+      case GLOBAL:
+        baseName = "actions";
+        break;
+      case ITS:
+        baseName = "actions-ItsTestName";
+        break;
+      case FAULTY:
+        baseName = "action";
+        break;
+      default:
+        fail("Unknown ruleBaseKind");
+    }
     File ruleBaseFile = new File(sitePath, "etc" + File.separatorChar + "its" +
-        File.separator + "action" + (faultyName ? "" : "s") + ".config");
+        File.separator + baseName + ".config");
+
     File ruleBaseParentFile = ruleBaseFile.getParentFile();
     if (!ruleBaseParentFile.exists()) {
       assertTrue("Failed to create parent (" + ruleBaseParentFile + ") for " +
@@ -345,6 +404,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
+
+      bind(String.class).annotatedWith(PluginName.class)
+          .toInstance("ItsTestName");
 
       sitePath = randomTargetFile();
       assertFalse("sitePath already (" + sitePath + ") already exists",

@@ -18,13 +18,16 @@ change”) trigger which actions (e.g.: “Set issue's status to
 ‘Resolved’”) on the ITS.
 
 Actions on the ITS and conditions for the action to take place are
-configured through the rule base in `etc/its/actions.config` in the
-site directory. The rule base is a git config file, and may contain an
-arbitrary number of rules. Each rule can have an arbitrary number of
-conditions and actions. A rule fires all associated actions, once all
-of its conditions are met.
+configured through the rule bases in `etc/its/actions.config` (for global rules
+to be picked up by all configured ITS plugins) and
+`etc/its/actions-@PLUGIN@.config` (for rules to be picked up only by @PLUGIN@)
+in the site directory. A rule base is a git config file, and may contain an
+arbitrary number of rules. Each rule can have an arbitrary number of conditions
+and actions. A rule fires all associated actions, once all of its conditions are
+met.
 
-A simple `etc/its/actions.config` may look like
+A simple `etc/its/actions.config` (or
+`etc/its/actions-@PLUGIN@.config`) may look like
 
 ```
 [rule "rule1"]
