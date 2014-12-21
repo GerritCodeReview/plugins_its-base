@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1dfa47d_e2d84687",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/InitIts.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2014-12-21T22:29:52Z",
+      "side": 1,
+      "message": "Since this part removes the ui.readString(...), this method\nnever acutally asks for which branches to set.\n\nIt only reads the current config value, and then sets it again.\n\nBut is the whole method still needed then?\n\nIf not, can we just remove it?",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "4dc225842efca0dfb4ed793642b2e8c9013c5c9d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
