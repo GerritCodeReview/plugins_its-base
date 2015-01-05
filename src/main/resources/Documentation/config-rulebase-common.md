@@ -397,6 +397,9 @@ and the [Change][event-properties-change] it belongs to.
 `subject`
 : first line of the change's most recent patch set's commit message.
 
+`commit-message`
+: full commit message of the most recent patch set
+
 `status`
 :	status of the change (`null`, `NEW`, `SUBMITTED`, `DRAFT`, `MERGED`,
 	or `ABANDONED` )
