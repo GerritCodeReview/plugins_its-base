@@ -20,7 +20,7 @@ limitations under the License.
   <modelVersion>4.0.0</modelVersion>
   <artifactId>hooks-trouble</artifactId>
   <groupId>com.se.axis.gittools</groupId>
-  <version>v1.1.1</version>
+  <version>v1.1.2</version>
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
     <artifactId>hooks-its-parent</artifactId>
@@ -122,7 +122,7 @@ limitations under the License.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.5.2</version>
         <configuration>
           <formats>
             <format>html</format>

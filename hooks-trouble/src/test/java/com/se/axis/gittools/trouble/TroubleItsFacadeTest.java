@@ -54,4 +54,13 @@ public class TroubleItsFacadeTest {
     assertEquals("test-package", actual);
   }
 
+  @Test()
+  public void testIsSameChange() throws Exception {
+    String nullStr = null;
+    assertEquals(false, Whitebox.invokeMethod(TroubleItsFacade.class, "isSameChange", nullStr, ""));
+    assertEquals(false, Whitebox.invokeMethod(TroubleItsFacade.class, "isSameChange", "", nullStr));
+    assertEquals(true, Whitebox.invokeMethod(TroubleItsFacade.class, "isSameChange", "refs/changes/23/123/4", "refs/changes/23/123/4"));
+    assertEquals(false, Whitebox.invokeMethod(TroubleItsFacade.class, "isSameChange", "refs/changes/12/123/4", "refs/changes/23/123/4"));
+  }
+
 }

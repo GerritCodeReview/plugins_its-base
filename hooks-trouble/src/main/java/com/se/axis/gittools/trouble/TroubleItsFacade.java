@@ -424,10 +424,13 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
 
     String targetLink = createCommentUrl(event.branch, projectName, event.change);
     if (existingPackage != null && event.id.equals("change-abandoned")) { // delete package
-      troubleClient.deletePackageFromFix(getPlatform(event.project, event.branch), event.branch, existingPackage.id);
-      troubleClient.deletePackage(existingPackage.id);
-      // create comment about the abandoned review
-      troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink));
+      // only remove the package if the pre-merge reference matches
+      if (isSameChange(String.valueOf(existingPackage.preMergeRef), event.ref)) {
+        troubleClient.deletePackageFromFix(getPlatform(event.project, event.branch), event.branch, existingPackage.id);
+        troubleClient.deletePackage(existingPackage.id);
+        // create comment about the abandoned review
+        troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink));
+      }
     } else if (event.id.equals("patchset-created") || event.id.equals("change-restored")) { // add or update package
       Approvals approvals = null;
       if (event.id.equals("patchset-created")) { // reset approvals
@@ -722,6 +725,18 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
    */
   private static String titleToSlug(final String title) {
     return title.toLowerCase().replaceFirst("[^a-z0-9_]+$", "").replaceAll("[^a-z0-9_]+", "-");
+  }
+
+  /**
+   * Compares two refs and returns true if it is the same change.
+   */
+  private static boolean isSameChange(final String ref1, final String ref2) {
+    if (ref1 == null || ref2 == null) {
+      return false;
+    }
+    String change1 = ref1.replaceFirst("(.*)/\\d+", "$1");
+    String change2 = ref2.replaceFirst("(.*)/\\d+", "$1");
+    return change1.equals(change2);
   }
 
   /**
