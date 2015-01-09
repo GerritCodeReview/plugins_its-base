@@ -22,6 +22,29 @@
       "revId": "f3090a7a6086eaae44e5e252199969f709363b4d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae0839ac_08e44737",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2015-01-09T08:20:56Z",
+      "side": 0,
+      "message": "Does this mean that we don\u0027t support anymore the full ref name?\nWhat about if I want to use this plugin to define constraints on refs/meta/config?",
+      "range": {
+        "startLine": 102,
+        "startChar": 13,
+        "endLine": 102,
+        "endChar": 24
+      },
+      "revId": "f3090a7a6086eaae44e5e252199969f709363b4d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
