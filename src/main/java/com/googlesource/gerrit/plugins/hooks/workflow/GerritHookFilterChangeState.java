@@ -141,7 +141,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
       return;
     }
 
-    String gitComment = change.subject;
+    String gitComment = change.commitMessage;
     String[] issues = issueExtractor.getIssueIds(gitComment);
 
     for (String issue : issues) {
