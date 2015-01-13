@@ -22,6 +22,30 @@
       "revId": "26329f4350ae6d94616eb6a8a8ea06b53de46958",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e728991_34da907b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-01-13T06:37:59Z",
+      "side": 1,
+      "message": "Sorry about that.  I think my commit message is confusing and I tried to do two fixes in one.  I have created an issue and linked this change to it.  I also will create a separate change to allow support for multiple enabled branches in project.config.",
+      "parentUuid": "ae0839ac_28e70b40",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "26329f4350ae6d94616eb6a8a8ea06b53de46958",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }

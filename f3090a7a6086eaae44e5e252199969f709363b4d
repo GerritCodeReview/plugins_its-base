@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e728991_74e40839",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-01-13T06:37:59Z",
+      "side": 0,
+      "message": "undecided at this time.  The problem is that the \u0027branch\u0027 name returned by the stream event is different for All-Projects than for child projects.  Please read comment I made to Luca it has more detail.",
+      "parentUuid": "61781470_16259c46",
+      "range": {
+        "startLine": 107,
+        "startChar": 10,
+        "endLine": 107,
+        "endChar": 46
+      },
+      "revId": "f3090a7a6086eaae44e5e252199969f709363b4d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae0839ac_08e44737",
         "filename": "src/main/resources/Documentation/config-common.md",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2015-01-09T08:20:56Z",
       "side": 0,
       "message": "Does this mean that we don\u0027t support anymore the full ref name?\nWhat about if I want to use this plugin to define constraints on refs/meta/config?",
+      "range": {
+        "startLine": 102,
+        "startChar": 13,
+        "endLine": 102,
+        "endChar": 24
+      },
+      "revId": "f3090a7a6086eaae44e5e252199969f709363b4d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e728991_54e70c3e",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-01-13T06:37:59Z",
+      "side": 0,
+      "message": "I may need to think about this a little more.  I just realized that All-Projects is a special case.  The code compares this setting with the \u0027branch\u0027 setting that comes from the stream events.  For All-Projects it\u0027s \"refs/meta/config\" for any other project it\u0027s just \"master\".  \n\n\n\nStream event for All-Projects:\n\n{\"type\":\"change-abandoned\",\"change\":{\"project\":\"All-Projects\",\"branch\":\"refs/meta/config\",\"id\":\"Iaa41199b2e26f38f513b118aef04897af25d3b61\",\"number\":\"5236\",\"subject\":\"My mom says I should Modify access rules\",\"owner\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"url\":\"https://review-dev.openstack.org/5236\",\"commitMessage\":\"My mom says I should Modify access rules\\n\",\"status\":\"ABANDONED\"},\"patchSet\":{\"number\":\"4\",\"revision\":\"cbc25764c8e368429a42dc4d05e58ef65dde1522\",\"parents\":[\"1335cdcfacc2bc8dac2990c40883c7cecf736fe3\"],\"ref\":\"refs/changes/36/5236/4\",\"uploader\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"createdOn\":1403815727,\"author\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"isDraft\":false,\"sizeInsertions\":0,\"sizeDeletions\":0},\"abandoner\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"reason\":\"me eats you for lunch\"}\n\n\n\n\nStream event for child projects:\n\n{\"type\":\"comment-added\",\"change\":{\"project\":\"gtest-org/gtest\",\"branch\":\"master\",\"topic\":\"5303\",\"id\":\"I96bf4f1315dbfd6b07238f36433a2b606dca5645\",\"number\":\"5303\",\"subject\":\"commit to test upgrade\",\"owner\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"url\":\"https://review-dev.openstack.org/5303\",\"commitMessage\":\"commit to test upgrade\\n\\nChange-Id: I96bf4f1315dbfd6b07238f36433a2b606dca5645\\n\",\"status\":\"NEW\"},\"patchSet\":{\"number\":\"2\",\"revision\":\"8b047a9eb524c2eeec6c8a84186ca7521fe2a2b9\",\"parents\":[\"9d7407bf23aacb3ce90cab9ce517108106810601\"],\"ref\":\"refs/changes/03/5303/2\",\"uploader\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"createdOn\":1420738788,\"author\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"isDraft\":false,\"sizeInsertions\":2,\"sizeDeletions\":-7},\"author\":{\"name\":\"Khai Do\",\"email\":\"zippo05@gmail.com\",\"username\":\"zippo05\"},\"approvals\":[{\"type\":\"Code-Review\",\"description\":\"Code-Review\",\"value\":\"2\"}],\"comment\":\"Patch Set 2: Code-Review+2\\n\\nme likes this\"}",
+      "parentUuid": "ae0839ac_08e44737",
       "range": {
         "startLine": 102,
         "startChar": 13,
