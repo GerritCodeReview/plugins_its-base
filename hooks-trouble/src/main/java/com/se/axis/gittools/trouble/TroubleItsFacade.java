@@ -431,9 +431,10 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
         // create comment about the abandoned review
         troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "ABANDONED", targetLink));
       }
-    } else if (event.id.equals("patchset-created") || event.id.equals("change-restored")) { // add or update package
+    } else if (event.id.equals("patchset-created") || event.id.equals("change-restored") || event.id.equals("draft-published")) {
+      // add or update package
       Approvals approvals = null;
-      if (event.id.equals("patchset-created")) { // reset approvals
+      if (event.id.equals("patchset-created") || event.id.equals("draft-published")) { // reset approvals
         // create comment about the new patchset
         String comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
         troubleClient.addComment(comment);
@@ -450,7 +451,7 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
       newPackage = troubleClient.addOrUpdatePackage(newPackage); // create/update the new package
 
-      if (event.patchSet == 1 || event.id.equals("change-restored")) {
+      if (event.patchSet == 1 || !event.id.equals("patchset-created")) {
         // create a fix and add the package to it, putting the ticket into the reviewing state.
         troubleClient.createOrUpdateFix(getPlatform(event.project, event.branch), event.branch, newPackage.id);
       }
