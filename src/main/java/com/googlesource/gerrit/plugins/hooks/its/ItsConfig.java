@@ -20,10 +20,10 @@ import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
-import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
@@ -49,7 +49,7 @@ public class ItsConfig {
     this.pluginCfgFactory = pluginCfgFactory;
   }
 
-  public boolean isEnabled(ChangeEvent event) {
+  public boolean isEnabled(Event event) {
     if (event instanceof PatchSetCreatedEvent) {
       PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
       return isEnabled(e.change.project, e.change.branch);

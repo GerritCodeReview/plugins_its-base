@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -48,7 +49,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    actionController.onChangeEvent(event);
+    actionController.onEvent(event);
   }
 
   public void testNoActions() {
@@ -68,7 +69,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    actionController.onChangeEvent(event);
+    actionController.onEvent(event);
   }
 
   public void testNoIssues() {
@@ -90,7 +91,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    actionController.onChangeEvent(event);
+    actionController.onEvent(event);
   }
 
   public void testSinglePropertySetSingleActionSingleIssue() {
@@ -122,7 +123,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    actionController.onChangeEvent(event);
+    actionController.onEvent(event);
   }
 
   public void testMultiplePropertySetsMultipleActionMultipleIssue() {
@@ -175,7 +176,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    actionController.onChangeEvent(event);
+    actionController.onEvent(event);
   }
   private ActionController createActionController() {
     return injector.getInstance(ActionController.class);
@@ -200,7 +201,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null) {
         @Override
-        public boolean isEnabled(ChangeEvent event) {
+        public boolean isEnabled(Event event) {
           return true;
         }
       });

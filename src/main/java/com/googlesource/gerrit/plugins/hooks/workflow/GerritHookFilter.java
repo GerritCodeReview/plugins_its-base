@@ -14,17 +14,12 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gerrit.common.ChangeListener;
+import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
-import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gwtorm.server.OrmException;
@@ -33,7 +28,12 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.util.CommitMessageFetcher;
 
-public class GerritHookFilter implements ChangeListener {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+public class GerritHookFilter implements EventListener {
   private static final Logger log = LoggerFactory.getLogger(GerritHookFilter.class);
 
   @Inject
@@ -69,7 +69,7 @@ public class GerritHookFilter implements ChangeListener {
   }
 
   @Override
-  public void onChangeEvent(ChangeEvent event) {
+  public void onEvent(Event event) {
     if (!itsConfig.isEnabled(event)) {
       return;
     }

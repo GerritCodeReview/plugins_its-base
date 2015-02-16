@@ -15,14 +15,10 @@ package com.googlesource.gerrit.plugins.hooks.util;
 
 import static org.easymock.EasyMock.expect;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -30,20 +26,21 @@ import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
-import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.DraftPublishedEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
-import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class PropertyExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -58,13 +55,13 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     Property property1 = createMock(Property.class);
     expect(propertyFactory.create("event", "com.googlesource.gerrit.plugins." +
-        "hooks.util.PropertyExtractorTest$DummyChangeEvent"))
+        "hooks.util.PropertyExtractorTest$DummyEvent"))
         .andReturn(property1);
 
     replayMocks();
 
     Set<Set<Property>> actual = propertyExtractor.extractFrom(
-        new DummyChangeEvent());
+        new DummyEvent());
 
     Set<Set<Property>> expected = Sets.newHashSet();
     assertEquals("Properties do not match", expected, actual);
@@ -375,7 +372,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     eventHelper(event, "RefUpdatedEvent", "ref-updated", common, false);
   }
 
-  private void eventHelper(ChangeEvent event, String className, String type,
+  private void eventHelper(Event event, String className, String type,
       Set<Property> common, boolean withRevision) {
     PropertyExtractor propertyExtractor = injector.getInstance(
         PropertyExtractor.class);
@@ -466,21 +463,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     }
   }
 
-  private class DummyChangeEvent extends ChangeEvent {
-	  public String getType() {
-		  return null;
-	  }
-
-	  public Project.NameKey getProjectNameKey() {
-		  return null;
-	  }
-
-	  public Change.Key getChangeKey() {
-		  return null;
-	  }
-
-	  public String getRefName() {
-		  return null;
-	  }
+  private class DummyEvent extends Event {
+    public DummyEvent() {
+      super(null);
+    }
   }
 }

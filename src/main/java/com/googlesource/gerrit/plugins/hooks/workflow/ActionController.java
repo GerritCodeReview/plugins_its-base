@@ -14,15 +14,15 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.util.Collection;
-import java.util.Set;
-
-import com.google.gerrit.common.ChangeListener;
-import com.google.gerrit.server.events.ChangeEvent;
+import com.google.gerrit.common.EventListener;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
+
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Controller that takes actions according to {@code ChangeEvents@}.
@@ -30,7 +30,7 @@ import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
  * The taken actions are typically Its related (e.g.: adding an Its comment, or
  * changing an issue's status).
  */
-public class ActionController implements ChangeListener {
+public class ActionController implements EventListener {
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
@@ -46,7 +46,7 @@ public class ActionController implements ChangeListener {
   }
 
   @Override
-  public void onChangeEvent(ChangeEvent event) {
+  public void onEvent(Event event) {
     if (!itsConfig.isEnabled(event)) {
       return;
     }

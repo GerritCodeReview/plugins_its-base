@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.hooks;
 
-import com.google.gerrit.common.ChangeListener;
+import com.google.gerrit.common.EventListener;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -57,17 +57,17 @@ public class ItsHookModule extends FactoryModule {
         .annotatedWith(Exports.named("enabled"))
         .toInstance(new ItsHookEnabledConfigEntry(pluginName, pluginCfgFactory));
     bind(ItsConfig.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(
+    DynamicSet.bind(binder(), EventListener.class).to(
         GerritHookFilterAddRelatedLinkToChangeId.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(
+    DynamicSet.bind(binder(), EventListener.class).to(
         GerritHookFilterAddComment.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(
+    DynamicSet.bind(binder(), EventListener.class).to(
         GerritHookFilterChangeState.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(
+    DynamicSet.bind(binder(), EventListener.class).to(
         GerritHookFilterAddRelatedLinkToGitWeb.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(
         ItsValidateComment.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(
+    DynamicSet.bind(binder(), EventListener.class).to(
         ActionController.class);
     factory(ActionRequest.Factory.class);
     factory(Property.Factory.class);
