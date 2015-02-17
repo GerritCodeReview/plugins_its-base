@@ -22,7 +22,7 @@ limitations under the License.
   <parent>
     <groupId>com.googlesource.gerrit.plugins.its</groupId>
     <artifactId>its-base-parent</artifactId>
-    <version>2.9-SNAPSHOT</version>
+    <version>2.9</version>
   </parent>
   <artifactId>its-base</artifactId>
   <name>Gerrit Code Review - Commit validation and Workflow</name>
