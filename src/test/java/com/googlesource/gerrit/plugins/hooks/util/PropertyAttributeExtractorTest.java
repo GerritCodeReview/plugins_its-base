@@ -96,6 +96,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.number = "4711";
     changeAttribute.url = "http://www.example.org/test";
     changeAttribute.owner = owner;
+    changeAttribute.commitMessage = "Commit Message";
 
     Property propertyProject = createMock(Property.class);
     expect(propertyFactory.create("project", "testProject"))
@@ -141,6 +142,10 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("owner-username", "testUsername"))
         .andReturn(propertyUsername);
 
+    Property propertyCommitMessage = createMock(Property.class);
+    expect(propertyFactory.create("commit-message", "Commit Message"))
+        .andReturn(propertyCommitMessage);
+
 
     replayMocks();
 
@@ -161,6 +166,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyEmail);
     expected.add(propertyName);
     expected.add(propertyUsername);
+    expected.add(propertyCommitMessage);
     assertEquals("Properties do not match", expected, actual);
   }
 
@@ -180,6 +186,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.url = "http://www.example.org/test";
     changeAttribute.status = Status.ABANDONED;
     changeAttribute.owner = owner;
+    changeAttribute.commitMessage = "Commit Message";
 
     Property propertyProject = createMock(Property.class);
     expect(propertyFactory.create("project", "testProject"))
@@ -225,6 +232,10 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("owner-username", "testUsername"))
         .andReturn(propertyUsername);
 
+    Property propertyCommitMessage = createMock(Property.class);
+    expect(propertyFactory.create("commit-message", "Commit Message"))
+        .andReturn(propertyCommitMessage);
+
 
     replayMocks();
 
@@ -245,6 +256,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyEmail);
     expected.add(propertyName);
     expected.add(propertyUsername);
+    expected.add(propertyCommitMessage);
     assertEquals("Properties do not match", expected, actual);
   }
 
