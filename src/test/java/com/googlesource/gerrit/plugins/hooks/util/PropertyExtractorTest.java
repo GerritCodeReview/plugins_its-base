@@ -467,18 +467,22 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   private class DummyChangeEvent extends ChangeEvent {
+	  @SuppressWarnings("unused")
 	  public String getType() {
 		  return null;
 	  }
 
+	  @SuppressWarnings("unused")
 	  public Project.NameKey getProjectNameKey() {
 		  return null;
 	  }
 
+	  @SuppressWarnings("unused")
 	  public Change.Key getChangeKey() {
 		  return null;
 	  }
 
+	  @SuppressWarnings("unused")
 	  public String getRefName() {
 		  return null;
 	  }
