@@ -22,6 +22,30 @@
       "revId": "07dc35784a3613788ab274942391900a548b8ce7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c32476a6_76955040",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-03-26T20:40:41Z",
+      "side": 1,
+      "message": "Back then, I could not get the indented, fenced code block to\nrender right without the tabs.\n\nIn PS3 it seems to work now without the tabs.\n\nThanks!\n\nDone in PS3.",
+      "parentUuid": "61781470_567c7421",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 6
+      },
+      "revId": "07dc35784a3613788ab274942391900a548b8ce7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
