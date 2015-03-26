@@ -1,0 +1,15 @@
+#!/bin/sh
+
+for dir in $(git config --get-all axis.hooks.directory) /usr/share/ahooks/hooks.d; do
+	ahooks=$(dirname "$dir")
+	hook=$ahooks/scripts/add_change_id
+	[ ! -x "$hook" ] || break
+done
+
+if [ ! -x "$hook" ]; then
+	echo "Could not find the add_change_id hook!" >&2
+	echo "You need to install the latest AHooks (version 1.13.0 or later) before you can commit!" >&2
+	exit 1
+fi
+
+exec "$hook" "$@"
