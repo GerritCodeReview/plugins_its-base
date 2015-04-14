@@ -433,7 +433,6 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       }
     } else if (event.id.equals("patchset-created") || event.id.equals("change-restored") || event.id.equals("draft-published")) {
       // add or update package
-      Approvals approvals = null;
       if (event.id.equals("patchset-created") || event.id.equals("draft-published")) { // reset approvals
         // create comment about the new patchset
         String comment = String.format(FORMAT_COMMENT_REVIEW, event.patchSet == 1 ? "STARTED" : "UPDATED", targetLink);
@@ -441,10 +440,10 @@ public class TroubleItsFacade extends NoopItsFacade implements LifecycleListener
       } else { // change-restored
         // create comment about the restored review
         troubleClient.addComment(String.format(FORMAT_COMMENT_REVIEW, "RESTORED", targetLink));
-        approvals = resolveApprovals(event.patchSetId());
       }
 
       // create a new (untampered) package
+      Approvals approvals = resolveApprovals(event.patchSetId());
       TroubleClient.Package newPackage = createPackage(projectName, event.branch, event.rev, event.ref, approvals);
       if (existingPackage != null) {
         newPackage.id = existingPackage.id;
