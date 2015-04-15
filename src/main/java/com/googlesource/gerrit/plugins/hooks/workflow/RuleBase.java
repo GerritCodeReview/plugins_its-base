@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 import com.google.common.collect.Lists;
@@ -56,7 +57,7 @@ public class RuleBase {
    */
   private static final String ACTION_KEY = "action";
 
-  private final File sitePath;
+  private final Path sitePath;
   private final Rule.Factory ruleFactory;
   private final Condition.Factory conditionFactory;
   private final ActionRequest.Factory actionRequestFactory;
@@ -69,7 +70,7 @@ public class RuleBase {
   }
 
   @Inject
-  public RuleBase(@SitePath File sitePath, Rule.Factory ruleFactory,
+  public RuleBase(@SitePath Path sitePath, Rule.Factory ruleFactory,
       Condition.Factory conditionFactory,
       ActionRequest.Factory actionRequestFactory,
       @PluginName String pluginName) {
@@ -135,7 +136,7 @@ public class RuleBase {
     // "actions.config" (with trailing "s", we (for now) load files from both
     // locations, but consider "actions.config" (with trailing "s" the
     // canonical place.
-    File faultyNameRuleFile = new File(sitePath, "etc" + File.separatorChar
+    File faultyNameRuleFile = new File(sitePath.toFile(), "etc" + File.separatorChar
         + "its" + File.separator + "action.config");
     if (faultyNameRuleFile.exists()) {
       log.warn("Loading rules from deprecated 'etc/its/action.config' (No "
@@ -145,12 +146,12 @@ public class RuleBase {
     }
 
     // Add global rules
-    File globalRuleFile = new File(sitePath, ITS_CONFIG_FILE_START +
+    File globalRuleFile = new File(sitePath.toFile(), ITS_CONFIG_FILE_START +
         ITS_CONFIG_FILE_END);
     addRulesFromFile(globalRuleFile);
 
     // Add its-specific rules
-    File itsSpecificRuleFile = new File(sitePath, ITS_CONFIG_FILE_START + "-" +
+    File itsSpecificRuleFile = new File(sitePath.toFile(), ITS_CONFIG_FILE_START + "-" +
         pluginName + ITS_CONFIG_FILE_END);
     addRulesFromFile(itsSpecificRuleFile);
 
