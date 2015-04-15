@@ -15,8 +15,8 @@
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
