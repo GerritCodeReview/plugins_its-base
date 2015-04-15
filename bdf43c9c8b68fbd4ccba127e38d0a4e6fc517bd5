@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0527e22_664ece4f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/GerritHookFilterChangeState.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-04-15T13:16:23Z",
+      "side": 1,
+      "message": "nit: imports should be in order.",
+      "revId": "bdf43c9c8b68fbd4ccba127e38d0a4e6fc517bd5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
