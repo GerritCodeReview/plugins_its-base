@@ -16,6 +16,9 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,7 +53,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
 
   @Inject
   @SitePath
-  private File sitePath;
+  private Path sitePath;
 
   @Inject
   private IssueExtractor issueExtractor;
@@ -150,7 +153,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
   }
 
   private List<Transition> loadTransitions() {
-    File configFile = new File(sitePath, "etc/issue-state-transition.config");
+    File configFile = new File(sitePath.toFile(), "etc/issue-state-transition.config");
     FileBasedConfig cfg = new FileBasedConfig(configFile, FS.DETECTED);
     try {
       cfg.load();
