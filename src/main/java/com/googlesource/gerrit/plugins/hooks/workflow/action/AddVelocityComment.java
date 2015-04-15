@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -56,11 +57,11 @@ public class AddVelocityComment implements Action {
       "its" + File.separator + "templates";
 
   private final ItsFacade its;
-  private final File sitePath;
+  private final Path sitePath;
   private final RuntimeInstance velocityRuntime;
 
   @Inject
-  public AddVelocityComment(RuntimeInstance velocityRuntime, @SitePath File sitePath, ItsFacade its) {
+  public AddVelocityComment(RuntimeInstance velocityRuntime, @SitePath Path sitePath, ItsFacade its) {
     this.velocityRuntime = velocityRuntime;
     this.sitePath = sitePath;
     this.its = its;
@@ -104,7 +105,7 @@ public class AddVelocityComment implements Action {
       if (templateName.isEmpty()) {
         log.error("No template name given in " + actionRequest);
       } else {
-        File templateFile = new File(sitePath, ITS_TEMPLATE_DIR +
+        File templateFile = new File(sitePath.toFile(), ITS_TEMPLATE_DIR +
             File.separator + templateName + ".vm");
         if (templateFile.canRead()) {
           template = FileUtils.readAllText(templateFile);
