@@ -18,6 +18,25 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.collect.Sets;
+import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.server.config.SitePath;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
+import org.easymock.IAnswer;
+import org.eclipse.jgit.util.FileUtils;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -27,24 +46,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime.RuntimeInstance;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.easymock.IAnswer;
-import org.eclipse.jgit.util.FileUtils;
-
-import com.google.common.collect.Sets;
-import com.google.gerrit.server.config.FactoryModule;
-import com.google.gerrit.server.config.SitePath;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
 
 public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private Injector injector;

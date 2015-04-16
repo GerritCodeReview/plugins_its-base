@@ -14,11 +14,11 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
-import java.io.IOException;
-import java.util.Set;
-
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Interface for actions on an issue tracking system

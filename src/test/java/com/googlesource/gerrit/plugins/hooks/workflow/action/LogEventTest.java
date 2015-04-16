@@ -15,19 +15,20 @@ package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
 import static org.easymock.EasyMock.expect;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.log4j.Level;
-
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import org.apache.log4j.Level;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LogEventTest extends LoggingMockingTestCase {
   private Injector injector;

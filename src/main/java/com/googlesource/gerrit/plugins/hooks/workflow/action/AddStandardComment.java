@@ -14,16 +14,17 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Adds a short predefined comments to an issue.

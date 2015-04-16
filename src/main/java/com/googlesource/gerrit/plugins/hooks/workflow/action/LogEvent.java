@@ -14,15 +14,16 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
-import java.io.IOException;
-import java.util.Set;
+import com.google.inject.Inject;
+
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.hooks.workflow.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Dumps the event's properties to the log.

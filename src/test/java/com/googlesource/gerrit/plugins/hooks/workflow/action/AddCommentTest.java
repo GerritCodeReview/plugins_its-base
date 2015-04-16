@@ -15,16 +15,17 @@ package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
 import static org.easymock.EasyMock.expect;
 
-import java.io.IOException;
-import java.util.HashSet;
-
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.io.IOException;
+import java.util.HashSet;
 
 public class AddCommentTest extends LoggingMockingTestCase {
   private Injector injector;

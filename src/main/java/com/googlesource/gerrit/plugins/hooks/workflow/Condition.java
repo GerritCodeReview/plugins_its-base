@@ -14,10 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.common.Nullable;
@@ -25,6 +21,10 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A condition as used in {@link Rule}, as precondition to {@link Action}s.

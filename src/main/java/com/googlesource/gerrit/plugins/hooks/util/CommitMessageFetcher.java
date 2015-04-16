@@ -1,7 +1,5 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
-import java.io.IOException;
-
 import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
@@ -12,6 +10,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class CommitMessageFetcher {
   private static final Logger log = LoggerFactory.getLogger(

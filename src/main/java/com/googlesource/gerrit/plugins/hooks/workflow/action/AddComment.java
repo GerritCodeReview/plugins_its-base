@@ -14,16 +14,17 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
-import java.io.IOException;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Adds a fixed comment to an issue.

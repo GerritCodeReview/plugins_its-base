@@ -14,8 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.util;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -25,6 +23,8 @@ import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.util.Set;
 
 /**
  * Extractor to translate the various {@code *Attribute}s to

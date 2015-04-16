@@ -15,16 +15,6 @@ package com.googlesource.gerrit.plugins.hooks.util;
 
 import static org.easymock.EasyMock.expect;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.jgit.lib.Config;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -40,6 +30,16 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+
+import org.eclipse.jgit.lib.Config;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PatchSet.class,RevId.class})

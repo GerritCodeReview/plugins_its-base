@@ -15,14 +15,15 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import static org.easymock.EasyMock.expect;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.google.common.collect.Lists;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class ConditionTest  extends LoggingMockingTestCase {
   private Injector injector;

@@ -14,10 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.IOException;
-
-import org.eclipse.jgit.lib.Config;
-
 import com.google.common.base.Strings;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.AnonymousCowardName;
@@ -34,6 +30,10 @@ import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+
+import org.eclipse.jgit.lib.Config;
+
+import java.io.IOException;
 
 public class GerritHookFilterAddComment extends GerritHookFilter  {
 

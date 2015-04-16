@@ -14,10 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.SitePath;
@@ -28,6 +24,10 @@ import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Collection and matcher agains {@link Rule}s.

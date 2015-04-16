@@ -1,10 +1,5 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -16,9 +11,13 @@ import com.google.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jgit.lib.Config;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IssueExtractor {
   private static final Logger log = LoggerFactory.getLogger(

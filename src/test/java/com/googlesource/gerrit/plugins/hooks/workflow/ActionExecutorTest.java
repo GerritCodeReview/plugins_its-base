@@ -16,20 +16,21 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
 import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Set;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;

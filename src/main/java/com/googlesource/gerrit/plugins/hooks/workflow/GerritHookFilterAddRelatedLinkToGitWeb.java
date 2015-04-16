@@ -14,18 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gerrit.common.data.GitWebType;
 import com.google.gerrit.common.data.ParameterizedString;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -36,6 +24,18 @@ import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
 

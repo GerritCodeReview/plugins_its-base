@@ -15,10 +15,6 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import static org.easymock.EasyMock.expect;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.config.FactoryModule;
@@ -30,6 +26,10 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
   private Injector injector;

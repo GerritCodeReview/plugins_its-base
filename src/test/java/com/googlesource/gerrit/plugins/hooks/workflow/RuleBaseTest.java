@@ -15,17 +15,6 @@ package com.googlesource.gerrit.plugins.hooks.workflow;
 
 import static org.easymock.EasyMock.expect;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
-import org.eclipse.jgit.util.FileUtils;
-
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.FactoryModule;
@@ -34,6 +23,17 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+
+import org.eclipse.jgit.util.FileUtils;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class RuleBaseTest extends LoggingMockingTestCase {
   private Injector injector;

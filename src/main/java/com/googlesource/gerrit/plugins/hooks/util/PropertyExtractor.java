@@ -14,9 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.util;
 
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -33,6 +30,9 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Extractor to translate an {@link ChangeEvent} to

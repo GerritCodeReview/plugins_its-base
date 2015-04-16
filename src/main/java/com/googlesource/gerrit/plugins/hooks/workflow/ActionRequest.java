@@ -14,11 +14,11 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.util.Arrays;
-
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import com.google.gerrit.common.Nullable;
+
+import java.util.Arrays;
 
 /**
  * An action to take for an {@code ChangeEvent}.

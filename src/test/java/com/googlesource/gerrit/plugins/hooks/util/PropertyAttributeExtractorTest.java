@@ -15,8 +15,6 @@ package com.googlesource.gerrit.plugins.hooks.util;
 
 import static org.easymock.EasyMock.expect;
 
-import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change.Status;
@@ -28,8 +26,11 @@ import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+
+import java.util.Set;
 
 public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
   private Injector injector;

@@ -15,13 +15,14 @@
 package com.googlesource.gerrit.plugins.hooks.testutil;
 
 import com.google.common.collect.Lists;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.log.LogUtil;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
 import java.util.Iterator;
-import org.apache.log4j.Level;
 
 public abstract class LoggingMockingTestCase extends MockingTestCase {
 

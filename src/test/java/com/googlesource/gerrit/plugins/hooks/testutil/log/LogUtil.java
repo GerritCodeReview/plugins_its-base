@@ -18,7 +18,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 
-
 import java.util.Collection;
 
 public class LogUtil {

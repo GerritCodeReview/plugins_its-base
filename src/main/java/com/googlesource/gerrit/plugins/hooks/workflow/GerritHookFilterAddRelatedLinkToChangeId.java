@@ -14,15 +14,6 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
@@ -36,6 +27,15 @@ import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 public class GerritHookFilterAddRelatedLinkToChangeId extends
     GerritHookFilter  {

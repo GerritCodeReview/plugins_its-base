@@ -14,11 +14,11 @@
 
 package com.googlesource.gerrit.plugins.hooks.its;
 
-import java.io.IOException;
-import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * An ITS facade doing nothing, it's configured when no ITS are referenced in

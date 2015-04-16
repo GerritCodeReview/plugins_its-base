@@ -15,19 +15,6 @@ package com.googlesource.gerrit.plugins.hooks.validation;
 
 import static org.easymock.EasyMock.expect;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.transport.ReceiveCommand;
-
-import org.junit.runner.RunWith;
-
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.FactoryModule;
@@ -42,6 +29,17 @@ import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.ReceiveCommand;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RevCommit.class})

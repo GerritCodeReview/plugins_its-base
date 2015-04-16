@@ -13,13 +13,14 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ActionRequestTest extends LoggingMockingTestCase {
   private Injector injector;

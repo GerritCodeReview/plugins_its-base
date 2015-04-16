@@ -14,11 +14,13 @@
 
 package com.googlesource.gerrit.plugins.hooks.workflow.action;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Set;
+import com.google.common.base.Strings;
+import com.google.gerrit.server.config.SitePath;
+import com.google.inject.Inject;
+
+import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
+import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.hooks.workflow.Property;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
@@ -27,12 +29,11 @@ import org.parboiled.common.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-import com.google.gerrit.server.config.SitePath;
-import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Adds a short predefined comments to an issue.
