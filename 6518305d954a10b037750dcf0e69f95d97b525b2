@@ -22,6 +22,30 @@
       "revId": "6518305d954a10b037750dcf0e69f95d97b525b2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70471268_a38a7ab1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2015-04-16T13:25:20Z",
+      "side": 1,
+      "message": "Don\u0027t know, it just happened to me that I committed this file accidentally. Fortunately I noticed it before pushing. Maybe I was just unlucky...",
+      "parentUuid": "d0527e22_66548eaa",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "6518305d954a10b037750dcf0e69f95d97b525b2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
