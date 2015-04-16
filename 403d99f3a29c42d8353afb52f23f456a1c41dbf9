@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b04d0a88_45206a52",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/GerritHookFilterChangeState.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-04-16T04:32:41Z",
+      "side": 1,
+      "message": "The import ordering is messed up across the whole codebase.\n\nI\u0027ve fixed it in a separate change, and rebased this on top of it.",
+      "parentUuid": "70471268_6396c24c",
+      "revId": "403d99f3a29c42d8353afb52f23f456a1c41dbf9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "505f6e27_ea2ba77b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/workflow/GerritHookFilterChangeState.java",
         "patchSetId": 4
