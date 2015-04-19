@@ -115,7 +115,7 @@ public class GerritHookFilterAddRelatedLinkToGitWeb extends GerritHookFilter {
     String revUrl = gitWebType.getRevision();
 
     ParameterizedString pattern = new ParameterizedString(revUrl);
-    final Map<String, String> p = new HashMap<String, String>();
+    final Map<String, String> p = new HashMap<>();
     p.put("project", URLEncoder.encode(
         gitWebType.replacePathSeparator(hook.refUpdate.project), "US-ASCII"));
     p.put("commit", hook.refUpdate.newRev);

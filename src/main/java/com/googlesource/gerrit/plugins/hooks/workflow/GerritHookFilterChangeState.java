@@ -66,7 +66,7 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
   @Override
   public void doFilter(CommentAddedEvent hook) throws IOException {
     try {
-      List<Condition> conditions = new ArrayList<Condition>();
+      List<Condition> conditions = new ArrayList<>();
       conditions.add(new Condition("change", "commented"));
 
       if (hook.approvals != null) {
@@ -165,10 +165,10 @@ public class GerritHookFilterChangeState extends GerritHookFilter {
       return Collections.emptyList();
     }
 
-    List<Transition> transitions = new ArrayList<Transition>();
+    List<Transition> transitions = new ArrayList<>();
     Set<String> sections = cfg.getSubsections("action");
     for (String section : sections) {
-      List<Condition> conditions = new ArrayList<Condition>();
+      List<Condition> conditions = new ArrayList<>();
       Set<String> keys = cfg.getNames("action", section);
       for (String key : keys) {
         String val = cfg.getString("action", section, key);

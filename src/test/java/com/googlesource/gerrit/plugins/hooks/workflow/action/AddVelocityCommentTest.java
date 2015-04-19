@@ -124,7 +124,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud");
-    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    Capture<VelocityContext> contextCapture = new Capture<>();
     expect(velocityRuntime.evaluate(capture(contextCapture),
         (Writer)anyObject(), (String)anyObject(), eq("${subject}")))
         .andAnswer(answer);
@@ -186,7 +186,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     properties.add(propertyReason);
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud Life Rosebud");
-    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    Capture<VelocityContext> contextCapture = new Capture<>();
     expect(velocityRuntime.evaluate(capture(contextCapture),
         (Writer)anyObject(), (String)anyObject(),
         eq("${subject} ${reason} ${subject}"))).andAnswer(answer);
@@ -214,7 +214,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
         new String[] {"inline", "Simple-Text"});
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
-    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    Capture<VelocityContext> contextCapture = new Capture<>();
     expect(velocityRuntime.evaluate(capture(contextCapture),
         (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
         .andAnswer(answer);
@@ -250,7 +250,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
         new String[] {"inline", "Simple-Text"});
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
-    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    Capture<VelocityContext> contextCapture = new Capture<>();
     expect(velocityRuntime.evaluate(capture(contextCapture),
         (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
         .andAnswer(answer);
@@ -331,7 +331,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     IAnswer<Boolean> answer = new VelocityWriterFiller(
         "Test Template with subject: Rosebud.\n" +
         "Life is the reason for Rosebud.");
-    Capture<VelocityContext> contextCapture = new Capture<VelocityContext>();
+    Capture<VelocityContext> contextCapture = new Capture<>();
     expect(velocityRuntime.evaluate(capture(contextCapture),
         (Writer)anyObject(), (String)anyObject(),
         eq("Test Template with subject: ${subject}.\n" +

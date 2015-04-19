@@ -136,8 +136,8 @@ public abstract class MockingTestCase extends TestCase {
       usePowerMock = PowerMockRunner.class.isAssignableFrom(runWith.value());
     }
 
-    mocks = new ArrayList<Object>();
-    mockControls = new ArrayList<IMocksControl>();
+    mocks = new ArrayList<>();
+    mockControls = new ArrayList<>();
     mocksReplayed = false;
   }
 
