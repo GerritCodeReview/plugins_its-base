@@ -302,6 +302,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     action.execute("176", actionRequest, properties);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
 

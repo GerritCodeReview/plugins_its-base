@@ -381,12 +381,14 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     unbufferedWriter.close();
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     cleanupSitePath = false;
     injector = Guice.createInjector(new TestModule());
   }
 
+  @Override
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
       if (sitePath.exists()) {

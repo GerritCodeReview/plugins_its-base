@@ -136,6 +136,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     return injector.getInstance(LogEvent.class);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());
@@ -155,6 +156,7 @@ public class LogEventTest extends LoggingMockingTestCase {
       this.toString = toString;
     }
 
+    @Override
     public String toString() {
       return toString;
     }

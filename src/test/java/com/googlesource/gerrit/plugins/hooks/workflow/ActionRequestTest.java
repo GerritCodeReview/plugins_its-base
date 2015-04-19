@@ -218,6 +218,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
     return factory.create(specification);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());

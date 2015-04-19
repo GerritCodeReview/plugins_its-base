@@ -427,6 +427,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     assertEquals("Properties do not match", expected, actual);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());

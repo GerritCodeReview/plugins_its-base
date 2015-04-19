@@ -200,6 +200,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     return injector.getInstance(ActionExecutor.class);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());

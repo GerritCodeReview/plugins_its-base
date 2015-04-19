@@ -182,6 +182,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     return injector.getInstance(ActionController.class);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());

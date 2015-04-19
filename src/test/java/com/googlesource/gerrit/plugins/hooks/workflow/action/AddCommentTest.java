@@ -60,6 +60,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     return injector.getInstance(AddComment.class);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());
