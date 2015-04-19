@@ -43,6 +43,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -50,7 +53,7 @@ import java.util.UUID;
 public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private Injector injector;
 
-  private File sitePath;
+  private Path sitePath;
   private ItsFacade its;
   private RuntimeInstance velocityRuntime;
 
@@ -354,8 +357,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   }
 
   private void injectTestTemplate(String template) throws IOException {
-    File templateParentFile = new File(sitePath, "etc" + File.separatorChar + "its" +
-        File.separator + "templates");
+    File templateParentFile = new File(sitePath.toFile(), "etc" +
+        File.separatorChar + "its" + File.separator + "templates");
     assertTrue("Failed to create parent (" + templateParentFile + ") for " +
         "rule base", templateParentFile.mkdirs());
     File templateFile = new File(templateParentFile, "test-template.vm");
@@ -375,27 +378,26 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
 
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
-      if (sitePath.exists()) {
-        FileUtils.delete(sitePath, FileUtils.RECURSIVE);
+      if (Files.exists(sitePath)) {
+        FileUtils.delete(sitePath.toFile(), FileUtils.RECURSIVE);
       }
     }
     super.tearDown();
   }
 
-  private File randomTargetFile() {
-    final File t = new File("target");
-    return new File(t, "random-name-" + UUID.randomUUID().toString());
+  private Path randomTargetPath() {
+    return Paths.get("target", "random-name-" + UUID.randomUUID().toString());
   }
 
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      sitePath = randomTargetFile();
+      sitePath = randomTargetPath();
       assertFalse("sitePath already (" + sitePath + ") already exists",
-          sitePath.exists());
+          Files.exists(sitePath));
       cleanupSitePath = true;
 
-      bind(File.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
 
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);

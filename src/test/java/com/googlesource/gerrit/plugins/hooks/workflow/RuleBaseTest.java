@@ -30,6 +30,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +41,7 @@ import java.util.UUID;
 public class RuleBaseTest extends LoggingMockingTestCase {
   private Injector injector;
 
-  private File sitePath;
+  private Path sitePath;
   private Rule.Factory ruleFactory;
   private Condition.Factory conditionFactory;
   private ActionRequest.Factory actionRequestFactory;
@@ -366,8 +369,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       default:
         fail("Unknown ruleBaseKind");
     }
-    File ruleBaseFile = new File(sitePath, "etc" + File.separatorChar + "its" +
-        File.separator + baseName + ".config");
+    File ruleBaseFile = new File(sitePath.toFile(),
+        "etc" + File.separatorChar + "its" + File.separator +
+        baseName + ".config");
 
     File ruleBaseParentFile = ruleBaseFile.getParentFile();
     if (!ruleBaseParentFile.exists()) {
@@ -389,16 +393,15 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
-      if (sitePath.exists()) {
-        FileUtils.delete(sitePath, FileUtils.RECURSIVE);
+      if (Files.exists(sitePath)) {
+        FileUtils.delete(sitePath.toFile(), FileUtils.RECURSIVE);
       }
     }
     super.tearDown();
   }
 
-  private File randomTargetFile() {
-    final File t = new File("target");
-    return new File(t, "random-name-" + UUID.randomUUID().toString());
+  private Path randomTargetPath() {
+    return Paths.get("target", "random-name-" + UUID.randomUUID().toString());
   }
 
   private class TestModule extends FactoryModule {
@@ -408,12 +411,12 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       bind(String.class).annotatedWith(PluginName.class)
           .toInstance("ItsTestName");
 
-      sitePath = randomTargetFile();
+      sitePath = randomTargetPath();
       assertFalse("sitePath already (" + sitePath + ") already exists",
-          sitePath.exists());
+          Files.exists(sitePath));
       cleanupSitePath = true;
 
-      bind(File.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
 
       ruleFactory = createMock(Rule.Factory.class);
       bind(Rule.Factory.class).toInstance(ruleFactory);
