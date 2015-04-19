@@ -42,7 +42,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -206,8 +205,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   }
 
   public void testItsWrapperFormatLink1Parameter() throws IOException,
-      SecurityException, NoSuchMethodException, IllegalArgumentException,
-      IllegalAccessException, InvocationTargetException {
+      SecurityException, IllegalArgumentException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
     expect(actionRequest.getParameters()).andReturn(
@@ -242,8 +240,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   }
 
   public void testItsWrapperFormatLink2Parameters() throws IOException,
-      SecurityException, NoSuchMethodException, IllegalArgumentException,
-      IllegalAccessException, InvocationTargetException {
+      SecurityException, IllegalArgumentException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
     expect(actionRequest.getParameters()).andReturn(

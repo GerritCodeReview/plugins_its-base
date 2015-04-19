@@ -95,7 +95,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         "issue'",ret.get(0).getMessage().contains("Missing issue"));
   }
 
-  public void testMandatoryNonMatching() throws CommitValidationException {
+  public void testMandatoryNonMatching() {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);
@@ -203,7 +203,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   }
 
   public void testMandatoryMatchingSingleNonExisting()
-      throws CommitValidationException, IOException {
+      throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = createMock(ReceiveCommand.class);
     RevCommit commit = createMock(RevCommit.class);

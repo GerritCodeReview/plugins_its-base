@@ -47,24 +47,55 @@ public class GerritHookFilter implements EventListener {
     return commitMessageFetcher.fetch(projectName, commitId);
   }
 
+  /**
+   * Filter patch set created event.
+   * @param hook
+   * @throws IOException
+   * @throws OrmException
+   */
   public void doFilter(PatchSetCreatedEvent hook) throws IOException,
       OrmException {
   }
 
+  /**
+   * Filter comment added event.
+   * @param hook
+   * @throws IOException
+   */
   public void doFilter(CommentAddedEvent hook) throws IOException {
   }
 
+  /**
+   * Filter change merged event.
+   * @param hook
+   * @throws IOException
+   */
   public void doFilter(ChangeMergedEvent hook) throws IOException {
   }
 
+  /**
+   * Filter change abandoned event.
+   * @param changeAbandonedHook
+   * @throws IOException
+   */
   public void doFilter(ChangeAbandonedEvent changeAbandonedHook)
       throws IOException {
   }
 
+  /**
+   * Filter change restored event.
+   * @param changeRestoredHook
+   * @throws IOException
+   */
   public void doFilter(ChangeRestoredEvent changeRestoredHook)
       throws IOException {
   }
 
+  /**
+   * Filter ref updated event.
+   * @param refUpdatedHook
+   * @throws IOException
+   */
   public void doFilter(RefUpdatedEvent refUpdatedHook) throws IOException {
   }
 

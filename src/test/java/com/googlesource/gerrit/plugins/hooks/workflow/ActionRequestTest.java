@@ -19,13 +19,12 @@ import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class ActionRequestTest extends LoggingMockingTestCase {
   private Injector injector;
 
-  public void testUnparsedParameterless() throws IOException {
+  public void testUnparsedParameterless() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action");
@@ -33,7 +32,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getUnparsed());
   }
 
-  public void testUnparsedNull() throws IOException {
+  public void testUnparsedNull() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest(null);
@@ -41,7 +40,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getUnparsed());
   }
 
-  public void testUnparsedSingleParameter() throws IOException {
+  public void testUnparsedSingleParameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param");
@@ -49,7 +48,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getUnparsed());
   }
 
-  public void testUnparsedMultipleParameters() throws IOException {
+  public void testUnparsedMultipleParameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2");
@@ -57,7 +56,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getUnparsed());
   }
 
-  public void testNameParameterless() throws IOException {
+  public void testNameParameterless() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action");
@@ -65,7 +64,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getName());
   }
 
-  public void testNameSingleParameter() throws IOException {
+  public void testNameSingleParameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param");
@@ -73,7 +72,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getName());
   }
 
-  public void testNameMultipleParameters() throws IOException {
+  public void testNameMultipleParameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2");
@@ -81,7 +80,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getName());
   }
 
-  public void testNameNull() throws IOException {
+  public void testNameNull() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest(null);
@@ -89,7 +88,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getName());
   }
 
-  public void testParameter1Parameterless() throws IOException {
+  public void testParameter1Parameterless() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action");
@@ -97,7 +96,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(1));
   }
 
-  public void testParameter1Null() throws IOException {
+  public void testParameter1Null() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest(null);
@@ -105,7 +104,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(1));
   }
 
-  public void testParameter1SingleParameter() throws IOException {
+  public void testParameter1SingleParameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param");
@@ -113,7 +112,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(1));
   }
 
-  public void testParemeter1MultipleParameters() throws IOException {
+  public void testParemeter1MultipleParameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2");
@@ -121,7 +120,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(1));
   }
 
-  public void testParameter3Parameterless() throws IOException {
+  public void testParameter3Parameterless() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action");
@@ -129,7 +128,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParameter3Null() throws IOException {
+  public void testParameter3Null() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest(null);
@@ -137,7 +136,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParameter3SingleParameter() throws IOException {
+  public void testParameter3SingleParameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param");
@@ -145,7 +144,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParemeter3With2Parameters() throws IOException {
+  public void testParemeter3With2Parameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2");
@@ -153,7 +152,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParemeter3With3Parameters() throws IOException {
+  public void testParemeter3With3Parameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2 " +
@@ -162,7 +161,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParemeter3With4Parameters() throws IOException {
+  public void testParemeter3With4Parameters() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2 " +
@@ -171,7 +170,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         actionRequest.getParameter(3));
   }
 
-  public void testParametersParameterless() throws IOException {
+  public void testParametersParameterless() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action");
@@ -181,7 +180,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         Arrays.asList(actionRequest.getParameters()));
   }
 
-  public void testParametersNull() throws IOException {
+  public void testParametersNull() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest(null);
@@ -191,7 +190,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         Arrays.asList(actionRequest.getParameters()));
   }
 
-  public void testParametersSingleParameter() throws IOException {
+  public void testParametersSingleParameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param");
@@ -201,7 +200,7 @@ public class ActionRequestTest extends LoggingMockingTestCase {
         Arrays.asList(actionRequest.getParameters()));
   }
 
-  public void testParameters3Parameter() throws IOException {
+  public void testParameters3Parameter() {
     replayMocks();
 
     ActionRequest actionRequest = createActionRequest("action param1 param2 " +
