@@ -113,6 +113,7 @@ public class PropertyTest  extends LoggingMockingTestCase {
     return factory.create(key, value);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
 

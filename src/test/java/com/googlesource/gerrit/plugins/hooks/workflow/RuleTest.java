@@ -121,6 +121,7 @@ public class RuleTest extends LoggingMockingTestCase {
     return factory.create(name);
   }
 
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());
