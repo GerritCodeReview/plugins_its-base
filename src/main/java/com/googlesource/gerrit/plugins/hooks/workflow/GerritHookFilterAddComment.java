@@ -170,7 +170,7 @@ public class GerritHookFilterAddComment extends GerritHookFilter  {
 
   private void addComment(ChangeAttribute change, String comment)
       throws IOException {
-    String gitComment = change.subject;;
+    String gitComment = change.subject;
     String[] issues = issueExtractor.getIssueIds(gitComment);
 
     for (String issue : issues) {

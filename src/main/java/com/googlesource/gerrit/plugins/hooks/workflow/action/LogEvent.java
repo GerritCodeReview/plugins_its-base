@@ -34,7 +34,7 @@ import java.util.Set;
 public class LogEvent implements Action {
   private static final Logger log = LoggerFactory.getLogger(LogEvent.class);
 
-  private enum Level { ERROR, WARN, INFO, DEBUG };
+  private enum Level { ERROR, WARN, INFO, DEBUG }
 
   public interface Factory {
     LogEvent create();
