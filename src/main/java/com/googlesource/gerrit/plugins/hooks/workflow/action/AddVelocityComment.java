@@ -84,7 +84,7 @@ public class AddVelocityComment implements Action {
     return velocityContext;
   }
 
-  private String velocify(String template, Set<Property> properties) throws IOException {
+  private String velocify(String template, Set<Property> properties) {
     VelocityContext context = getVelocityContext(properties);
     StringWriter w = new StringWriter();
     velocityRuntime.evaluate(context, w, "ItsComment", template);
