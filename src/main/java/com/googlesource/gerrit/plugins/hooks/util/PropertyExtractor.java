@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -42,14 +43,17 @@ public class PropertyExtractor {
   private IssueExtractor issueExtractor;
   private Property.Factory propertyFactory;
   private PropertyAttributeExtractor propertyAttributeExtractor;
+  private final String pluginName;
 
   @Inject
   PropertyExtractor(IssueExtractor issueExtractor,
       Property.Factory propertyFactory,
-      PropertyAttributeExtractor propertyAttributeExtractor) {
+      PropertyAttributeExtractor propertyAttributeExtractor,
+      @PluginName String pluginName) {
     this.issueExtractor = issueExtractor;
     this.propertyFactory = propertyFactory;
     this.propertyAttributeExtractor = propertyAttributeExtractor;
+    this.pluginName = pluginName;
   }
 
   /**
@@ -225,6 +229,8 @@ public class PropertyExtractor {
       for (String issue : associations.keySet()) {
         Set<Property> properties = Sets.newHashSet();
         Property property = propertyFactory.create("issue", issue);
+        properties.add(property);
+        property = propertyFactory.create("its-name", pluginName);
         properties.add(property);
         for (String occurrence: associations.get(issue)) {
           property = propertyFactory.create("association", occurrence);

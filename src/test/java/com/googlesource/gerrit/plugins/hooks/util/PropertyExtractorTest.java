@@ -17,6 +17,7 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.config.FactoryModule;
@@ -377,6 +378,10 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     PropertyExtractor propertyExtractor = injector.getInstance(
         PropertyExtractor.class);
 
+    Property propertyItsName = createMock(Property.class);
+    expect(propertyFactory.create("its-name", "ItsTestName"))
+        .andReturn(propertyItsName).anyTimes();
+
     Property propertyEvent = createMock(Property.class);
     expect(propertyFactory.create("event", "com.google.gerrit.server.events." +
         className)).andReturn(propertyEvent);
@@ -423,6 +428,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     Set<Set<Property>> expected = Sets.newHashSet();
     Set<Property> properties = Sets.newHashSet();
+    properties.add(propertyItsName);
     properties.add(propertyEvent);
     properties.add(propertyEventType);
     properties.add(propertyAssociationAnywhere);
@@ -432,6 +438,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     expected.add(properties);
 
     properties = Sets.newHashSet();
+    properties.add(propertyItsName);
     properties.add(propertyEvent);
     properties.add(propertyEventType);
     properties.add(propertyAssociationAnywhere);
@@ -451,6 +458,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
+      bind(String.class).annotatedWith(PluginName.class)
+          .toInstance("ItsTestName");
+
       issueExtractor = createMock(IssueExtractor.class);
       bind(IssueExtractor.class).toInstance(issueExtractor);
 

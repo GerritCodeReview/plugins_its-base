@@ -130,6 +130,28 @@ The common properties for each event are
 : How the issue of property `issue` got associated to this event.
   See [Property: `association`][property-association].
 
+`its-name`
+:   Name of this plugin (i.e.: `@PLUGIN@`). This property can be used to
+    make a rule in the rulebase match only for certain ITS plugins, if more
+    than one is installed.
+
+    For example
+
+    ```
+    [rule "someRuleForBugzillaOnly"]
+      its-name = its-bugzilla
+      approval-Code-Review = -2
+      action = add-comment Heya Bugzilla users, the change had a -2 Code-Review approval.
+    [rule "someRuleForJiraOnly"]
+      its-name = its-jira
+      approval-Code-Review = -2
+      action = add-comment Dear JIRA users, the change had a -2 Code-Review approval.
+    ```
+
+    would report the “Heya Bugzilla...” text only through its-bugzilla for
+    changes that had a -2 Code-Review and have an association through
+    its-bugzilla. And for changes that had a -2 Code-Review and have an
+    association through its-jira, its-jira would report “Dear Jira users, ...”.
 
 The further properties are listed in the event's
 corresponding subsection below:
