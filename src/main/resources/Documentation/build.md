@@ -29,19 +29,6 @@ To execute the tests run:
   buck test --all --include its-base
 ```
 
-Note that for compatibility reasons a Maven build is provided, but is
-considered to be deprecated and will be removed in a future version of
-this plugin.
-
-To build with Maven, change directory to the plugin folder and issue the
-command:
-
-```
-  mvn clean package
-```
-
-When building with Maven, the Gerrit Plugin API must be available.
-
 Note that the ITS-based plugins require `its-base__plugin` library:
 
 ```
