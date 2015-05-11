@@ -52,19 +52,19 @@ public class ItsConfig {
   public boolean isEnabled(Event event) {
     if (event instanceof PatchSetCreatedEvent) {
       PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
-      return isEnabled(e.change.project, e.change.branch);
+      return isEnabled(e.change.project, e.getRefName());
     } else if (event instanceof CommentAddedEvent) {
       CommentAddedEvent e = (CommentAddedEvent) event;
-      return isEnabled(e.change.project, e.change.branch);
+      return isEnabled(e.change.project, e.getRefName());
     } else if (event instanceof ChangeMergedEvent) {
       ChangeMergedEvent e = (ChangeMergedEvent) event;
-      return isEnabled(e.change.project, e.change.branch);
+      return isEnabled(e.change.project, e.getRefName());
     } else if (event instanceof ChangeAbandonedEvent) {
       ChangeAbandonedEvent e = (ChangeAbandonedEvent) event;
-      return isEnabled(e.change.project, e.change.branch);
+      return isEnabled(e.change.project, e.getRefName());
     } else if (event instanceof ChangeRestoredEvent) {
       ChangeRestoredEvent e = (ChangeRestoredEvent) event;
-      return isEnabled(e.change.project, e.change.branch);
+      return isEnabled(e.change.project, e.getRefName());
     } else if (event instanceof RefUpdatedEvent) {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
       return isEnabled(e.refUpdate.project, e.refUpdate.refName);
@@ -74,7 +74,7 @@ public class ItsConfig {
     }
   }
 
-  public boolean isEnabled(String project, String branch) {
+  public boolean isEnabled(String project, String refName) {
     ProjectState projectState = projectCache.get(new Project.NameKey(project));
     if (projectState == null) {
       log.error("Failed to check if " + pluginName + " is enabled for project "
@@ -86,17 +86,17 @@ public class ItsConfig {
       PluginConfig parentCfg =
           pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
       if ("enforced".equals(parentCfg.getString("enabled"))
-          && isEnabledForBranch(parentState, branch)) {
+          && isEnabledForBranch(parentState, refName)) {
         return true;
       }
     }
 
     return pluginCfgFactory.getFromProjectConfigWithInheritance(
         projectState, pluginName).getBoolean("enabled", false)
-        && isEnabledForBranch(projectState, branch);
+        && isEnabledForBranch(projectState, refName);
   }
 
-  private boolean isEnabledForBranch(ProjectState project, String branch) {
+  private boolean isEnabledForBranch(ProjectState project, String refName) {
     String[] refPatterns =
         pluginCfgFactory.getFromProjectConfigWithInheritance(project,
             pluginName).getStringList("branch");
@@ -104,14 +104,14 @@ public class ItsConfig {
       return true;
     }
     for (String refPattern : refPatterns) {
-      if (RefConfigSection.isValid(refPattern) && match(branch, refPattern)) {
+      if (RefConfigSection.isValid(refPattern) && match(refName, refPattern)) {
         return true;
       }
     }
     return false;
   }
 
-  private boolean match(String branch, String refPattern) {
-    return RefPatternMatcher.getMatcher(refPattern).match(branch, null);
+  private boolean match(String refName, String refPattern) {
+    return RefPatternMatcher.getMatcher(refPattern).match(refName, null);
   }
 }

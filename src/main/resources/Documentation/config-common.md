@@ -90,7 +90,7 @@ integration for all child projects by setting
 
 The issue tracker system integration can be limited to specific
 branches by setting `plugin.@PLUGIN@.branch`. The branches may be
-configured using explicit branch names, ref patterns, or regular
+configured using explicit ref names, ref patterns, or regular
 expressions. Multiple branches may be specified.
 
 E.g. to limit the issue tracker system integration to the `master`
