@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edb7a9b3_e76c2205",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-05-12T18:46:17Z",
+      "side": 1,
+      "message": "You have changed this method to handle refs so maybe change the prototype from \u0027String branch\u0027 to \u0027String refName\u0027 to be more clear?",
+      "revId": "d075b1a53a49c0fe182873337860d9d73b0a2fd2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
