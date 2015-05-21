@@ -526,7 +526,7 @@ If no parameters are given, no comment gets added.
 ### <a name="action-add-standard-comment">Action: add-standard-comment</a>
 
 The `add-standard-comment` action adds predefined comments to
-associated issues for change abandoned, merged, restored, and patch
+associated issues for change abandoned, merged, restored, commented and patch
 set created events. For other events, no comment is added to the
 associated issues.
 

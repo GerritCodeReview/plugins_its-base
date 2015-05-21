@@ -68,6 +68,10 @@ public class AddStandardComment implements Action {
     if (!subject.isEmpty()) {
       ret += ":\n" + subject;
     }
+    String comment = Strings.nullToEmpty(map.get("comment"));
+    if (!comment.isEmpty()) {
+      ret += "\n" + comment;
+    }
     String reason = Strings.nullToEmpty(map.get("reason"));
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
@@ -89,6 +93,10 @@ public class AddStandardComment implements Action {
 
   private String getCommentChangeRestored(Map<String, String> map) {
     return getCommentChangeEvent("restored", "restorer", map);
+  }
+
+  private String getCommentChangeCommented(Map<String, String> map) {
+    return getCommentChangeEvent("commented", "commenter", map);
   }
 
   private String getCommentPatchSetCreated(Map<String, String> map) {
@@ -120,6 +128,8 @@ public class AddStandardComment implements Action {
       comment = getCommentChangeMerged(map);
     } else if ("change-restored".equals(eventType)) {
       comment = getCommentChangeRestored(map);
+    } else if ("comment-added".equals(eventType)) {
+      comment = getCommentChangeCommented(map);
     } else if ("patchset-created".equals(eventType)) {
       comment = getCommentPatchSetCreated(map);
     }
