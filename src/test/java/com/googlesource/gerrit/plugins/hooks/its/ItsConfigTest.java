@@ -15,131 +15,415 @@
 package com.googlesource.gerrit.plugins.hooks.its;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
-import org.easymock.EasyMockSupport;
-import org.junit.Before;
-import org.junit.Test;
+import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ItsConfigTest {
-  private EasyMockSupport easyMock;
-  private String pluginName = "its-base";
-  private PluginConfig pluginConfig;
-  private PluginConfig pluginConfigWithInheritance;
-  private ItsConfig itsConfig;
-  private PatchSetCreatedEvent pscEvent;
+public class ItsConfigTest extends LoggingMockingTestCase {
+  private Injector injector;
 
-  @Before
-  public void setup() {
-    easyMock = new EasyMockSupport();
-    ProjectCache projectCache = easyMock.createNiceMock(ProjectCache.class);
-    PluginConfigFactory pluginCfgFactory = easyMock.createNiceMock(PluginConfigFactory.class);
-    ProjectState projectState = easyMock.createNiceMock(ProjectState.class);
-    pluginConfig = easyMock.createNiceMock(PluginConfig.class);
-    pluginConfigWithInheritance = easyMock.createNiceMock(PluginConfig.class);
-    itsConfig = new ItsConfig(pluginName, projectCache, pluginCfgFactory);
+  private ProjectCache projectCache;
+  private PluginConfigFactory pluginConfigFactory;
 
-    pscEvent = new PatchSetCreatedEvent();
-    pscEvent.change = new ChangeAttribute();
-    pscEvent.change.project = "testProject";
-    pscEvent.change.branch = "testBranch";
-    ArrayList<ProjectState> listProjectState = new ArrayList<>(1);
-    listProjectState.add(projectState);
+  public void setupIsEnabled(String enabled, String parentEnabled,
+      String[] branches) {
+    ProjectState projectState = createMock(ProjectState.class);
 
-    expect(projectCache.get(new Project.NameKey("testProject"))).andReturn(
-        projectState).once();
-    expect(projectState.treeInOrder()).andReturn(listProjectState);
-    expect(pluginCfgFactory.getFromProjectConfig(projectState, pluginName))
-    .andStubReturn(pluginConfig);
-    expect(
-        pluginCfgFactory.getFromProjectConfigWithInheritance(projectState,
-            pluginName)).andStubReturn(pluginConfigWithInheritance);
+    expect(projectCache.get(new Project.NameKey("testProject")))
+        .andReturn(projectState).anyTimes();
+    expect(projectCache.get(new Project.NameKey("parentProject")))
+        .andReturn(projectState).anyTimes();
+
+    Iterable<ProjectState> parents;
+    if (parentEnabled == null) {
+      parents = Arrays.asList(projectState);
+    } else {
+      ProjectState parentProjectState = createMock(ProjectState.class);
+
+      PluginConfig parentPluginConfig = createMock(PluginConfig.class);
+
+      expect(pluginConfigFactory.getFromProjectConfig(
+          parentProjectState, "ItsTestName")).andReturn(parentPluginConfig);
+
+      expect(parentPluginConfig.getString("enabled")).andReturn(parentEnabled)
+          .anyTimes();
+
+      PluginConfig parentPluginConfigWI = createMock(PluginConfig.class);
+
+      expect(pluginConfigFactory.getFromProjectConfigWithInheritance(
+          parentProjectState, "ItsTestName")).andReturn(parentPluginConfigWI)
+          .anyTimes();
+
+      String[] parentBranches = { "refs/heads/testBranch" };
+      expect(parentPluginConfigWI.getStringList("branch"))
+          .andReturn(parentBranches).anyTimes();
+
+      parents = Arrays.asList(parentProjectState, projectState);
+    }
+    expect(projectState.treeInOrder()).andReturn(parents);
+
+    PluginConfig pluginConfig = createMock(PluginConfig.class);
+
+    expect(pluginConfigFactory.getFromProjectConfig(
+        projectState, "ItsTestName")).andReturn(pluginConfig).anyTimes();
+
+    expect(pluginConfig.getString("enabled")).andReturn(enabled).anyTimes();
+
+    PluginConfig pluginConfigWI = createMock(PluginConfig.class);
+
+    expect(pluginConfigFactory.getFromProjectConfigWithInheritance(
+        projectState, "ItsTestName")).andReturn(pluginConfigWI).anyTimes();
+
+    expect(pluginConfigWI.getBoolean("enabled", false))
+        .andReturn("true".equals(enabled)).anyTimes();
+
+    expect(pluginConfigWI.getStringList("branch")).andReturn(branches)
+        .anyTimes();
   }
 
-  @Test
-  public void testEnforcedWithRegex() {
-    String[] refPatterns = {"^refs/heads/test.*"};
-    setUpEnforced(refPatterns);
+  public void testIsEnabledRefNoParentNoBranchEnabled() {
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
 
-    assertTrue(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testEnforcedWithExact() {
-    String[] refPatterns = {"refs/heads/testBranch"};
-    setUpEnforced(refPatterns);
+  public void testIsEnabledRefNoParentNoBranchDisabled() {
+    String[] branches = {};
+    setupIsEnabled("false", null, branches);
 
-    assertTrue(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testEnforcedForAll() {
-    String[] refPatterns = new String[0];
-    setUpEnforced(refPatterns);
+  public void testIsEnabledRefNoParentNoBranchEnforced() {
+    String[] branches = {};
+    setupIsEnabled("enforced", null, branches);
 
-    assertTrue(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testEnabledWithRegex() {
-    String[] refPatterns = {"^refs/heads/test.*"};
-    setUpEnabled(refPatterns);
+  public void testIsEnabledRefNoParentMatchingBranchEnabled() {
+    String[] branches = {"^refs/heads/test.*"};
+    setupIsEnabled("true", null, branches);
 
-    assertTrue(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testEnabledWithExact() {
-    String[] refPatterns = {"refs/heads/testBranch"};
-    setUpEnabled(refPatterns);
+  public void testIsEnabledRefNoParentMatchingBranchDisabled() {
+    String[] branches = {"^refs/heads/test.*"};
+    setupIsEnabled("false", null, branches);
 
-    assertTrue(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testDisabled() {
-    String[] refPatterns = {"refs/heads/testBranch1"};
-    setUpEnabled(refPatterns);
+  public void testIsEnabledRefNoParentMatchingBranchEnforced() {
+    String[] branches = {"^refs/heads/test.*"};
+    setupIsEnabled("enforced", null, branches);
 
-    assertFalse(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  @Test
-  public void testInvalidPattern() {
-    String[] refPatterns = {"testBranch"};
-    setUpEnabled(refPatterns);
+  public void testIsEnabledRefNoParentNonMatchingBranchEnabled() {
+    String[] branches = {"^refs/heads/foo.*"};
+    setupIsEnabled("true", null, branches);
 
-    assertFalse(itsConfig.isEnabled(pscEvent));
-    easyMock.verifyAll();
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  private void setUpEnforced(String[] refPatterns) {
-    expect(pluginConfig.getString("enabled")).andReturn("enforced").once();
-    expect(pluginConfigWithInheritance.getStringList("branch")).andReturn(refPatterns);
-    easyMock.replayAll();
+  public void testIsEnabledRefNoParentNonMatchingBranchDisabled() {
+    String[] branches = {"^refs/heads/foo.*"};
+    setupIsEnabled("false", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
   }
 
-  private void setUpEnabled(String[] refPatterns) {
-    expect(pluginConfig.getString("enabled")).andReturn("true");
-    expect(pluginConfigWithInheritance.getBoolean("enabled", false)).andReturn(true);
-    expect(pluginConfigWithInheritance.getStringList("branch")).andReturn(refPatterns);
-    easyMock.replayAll();
+  public void testIsEnabledRefNoParentNonMatchingBranchEnforced() {
+    String[] branches = {"^refs/heads/foo.*"};
+    setupIsEnabled("enforced", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefNoParentMatchingBranchMiddleEnabled() {
+    String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
+    setupIsEnabled("true", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefNoParentMatchingBranchMiddleDisabled() {
+    String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
+    setupIsEnabled("false", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefNoParentMatchingBranchMiddleEnforced() {
+    String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
+    setupIsEnabled("enforced", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefParentNoBranchEnabled() {
+    String[] branches = {};
+    setupIsEnabled("false", "true", branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefParentNoBranchDisabled() {
+    String[] branches = {};
+    setupIsEnabled("false", "false", branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledRefParentNoBranchEnforced() {
+    String[] branches = {};
+    setupIsEnabled("false", "enforced", branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+  }
+
+  public void testIsEnabledEventNoBranches() {
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventSingleBranchExact() {
+    String[] branches = {"refs/heads/testBranch"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventSingleBranchRegExp() {
+    String[] branches = {"^refs/heads/test.*"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventSingleBranchNonMatchingRegExp() {
+    String[] branches = {"^refs/heads/foo.*"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventMultiBranchExact() {
+    String[] branches = {"refs/heads/foo", "refs/heads/testBranch"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventMultiBranchRegExp() {
+    String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventMultiBranchMixedMatchExact() {
+    String[] branches = {"refs/heads/testBranch", "refs/heads/foo.*"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
+    String[] branches = {"refs/heads/foo", "^refs/heads/test.*"};
+    setupIsEnabled("true", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledEventDisabled() {
+    String[] branches = {"^refs/heads/testBranch"};
+    setupIsEnabled("false", null, branches);
+
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled(event));
+  }
+
+  private ItsConfig createItsConfig() {
+    return injector.getInstance(ItsConfig.class);
+  }
+
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+    injector = Guice.createInjector(new TestModule());
+  }
+
+  private class TestModule extends FactoryModule {
+    @Override
+    protected void configure() {
+      projectCache = createMock(ProjectCache.class);
+      bind(ProjectCache.class).toInstance(projectCache);
+
+      pluginConfigFactory = createMock(PluginConfigFactory.class);
+      bind(PluginConfigFactory.class).toInstance(pluginConfigFactory);
+
+      bind(String.class).annotatedWith(PluginName.class)
+        .toInstance("ItsTestName");
+    }
   }
 }
