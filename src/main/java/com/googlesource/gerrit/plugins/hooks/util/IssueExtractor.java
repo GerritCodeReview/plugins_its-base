@@ -50,8 +50,8 @@ public class IssueExtractor {
     Set<String> issues = Sets.newHashSet();
     Matcher matcher = pattern.matcher(haystack);
 
+    int groupIdx = itsConfig.getIssuePatternGroupIndex();
     while (matcher.find()) {
-      int groupIdx = Math.min(matcher.groupCount(), 1);
       String issueId = matcher.group(groupIdx);
       if (issueId != null && !issueId.isEmpty()) {
         issues.add(issueId);
