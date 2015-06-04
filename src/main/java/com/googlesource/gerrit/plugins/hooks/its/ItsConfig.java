@@ -130,13 +130,30 @@ public class ItsConfig {
   // Issue association --------------------------------------------------------
 
   /**
+   * Gets the name of the comment link that should be used
+   *
+   * @return name of the comment link that should be used
+   */
+  public String getCommentLinkName() {
+    String ret;
+
+    ret = gerritConfig.getString(pluginName, null, "commentlink");
+    if (ret == null) {
+      ret = pluginName;
+    }
+
+    return ret;
+  }
+
+  /**
    * Gets the regular expression used to identify issue ids.
    * @return the regular expression, or {@code null}, if there is no pattern
    *    to match issue ids.
    */
   public Pattern getIssuePattern() {
     Pattern ret = null;
-    String match = gerritConfig.getString("commentlink", pluginName, "match");
+    String match = gerritConfig.getString("commentlink",
+        getCommentLinkName(), "match");
     if (match != null) {
       ret = Pattern.compile(match);
     }
@@ -148,7 +165,7 @@ public class ItsConfig {
    * @return policy on how necessary association with issues is
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentlink", pluginName, "association",
-        ItsAssociationPolicy.OPTIONAL);
+    return gerritConfig.getEnum("commentlink", getCommentLinkName(),
+        "association", ItsAssociationPolicy.OPTIONAL);
   }
 }
