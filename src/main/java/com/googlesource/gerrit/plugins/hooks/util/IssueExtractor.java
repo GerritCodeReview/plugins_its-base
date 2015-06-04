@@ -52,7 +52,10 @@ public class IssueExtractor {
 
     while (matcher.find()) {
       int groupIdx = Math.min(matcher.groupCount(), 1);
-      issues.add(matcher.group(groupIdx));
+      String issueId = matcher.group(groupIdx);
+      if (issueId != null && !issueId.isEmpty()) {
+        issues.add(issueId);
+      }
     }
 
     return issues.toArray(new String[issues.size()]);
