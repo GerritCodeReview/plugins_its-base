@@ -118,7 +118,7 @@ public class ItsValidateComment implements CommitValidationListener {
           sb.append("Hint: insert one or more issue-id anywhere in the ");
           sb.append("commit message.\n");
           sb.append("      Issue-ids are strings matching ");
-          sb.append(issueExtractor.getPattern().pattern());
+          sb.append(itsConfig.getIssuePattern().pattern());
           sb.append("\n");
           sb.append("      and are pointing to existing tickets on ");
           sb.append(pluginName);
