@@ -147,6 +147,10 @@ public class ItsConfig {
 
   /**
    * Gets the regular expression used to identify issue ids.
+   * <p>
+   * The index of the group that holds the issue id is
+   * {@link #getIssuePatternGroupIndex()}.
+   *
    * @return the regular expression, or {@code null}, if there is no pattern
    *    to match issue ids.
    */
@@ -158,6 +162,24 @@ public class ItsConfig {
       ret = Pattern.compile(match);
     }
     return ret;
+  }
+
+  /**
+   * Gets the index of the group in the issue pattern that holds the issue id.
+   * <p>
+   * The corresponding issue pattern is {@link #getIssuePattern()}
+   *
+   * @return the group index for {@link #getIssuePattern()} that holds the
+   *     issue id. The group index is guaranteed to be a valid group index.
+   */
+  public int getIssuePatternGroupIndex() {
+    Pattern pattern = getIssuePattern();
+    int groupCount = pattern.matcher("").groupCount();
+    int index = gerritConfig.getInt(pluginName, "commentlinkGroupIndex", 1);
+    if (index < 0 || index > groupCount) {
+      index = (groupCount == 0 ? 0 : 1);
+    }
+    return index;
   }
 
   /**
