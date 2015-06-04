@@ -13,6 +13,7 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.hooks.workflow;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Lists;
@@ -37,6 +38,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   private PropertyExtractor propertyExtractor;
   private RuleBase ruleBase;
   private ActionExecutor actionExecutor;
+  private ItsConfig itsConfig;
 
   public void testNoPropertySets() {
     ActionController actionController = createActionController();
@@ -182,10 +184,17 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     return injector.getInstance(ActionController.class);
   }
 
+  private void setupCommonMocks() {
+    expect(itsConfig.isEnabled(anyObject(Event.class))).andReturn(true)
+        .anyTimes();
+  }
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
     injector = Guice.createInjector(new TestModule());
+
+    setupCommonMocks();
   }
 
   private class TestModule extends FactoryModule {
@@ -200,12 +209,8 @@ public class ActionControllerTest extends LoggingMockingTestCase {
       actionExecutor = createMock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);
 
-      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null) {
-        @Override
-        public boolean isEnabled(Event event) {
-          return true;
-        }
-      });
+      itsConfig = createMock(ItsConfig.class);
+      bind(ItsConfig.class).toInstance(itsConfig);
     }
   }
 }

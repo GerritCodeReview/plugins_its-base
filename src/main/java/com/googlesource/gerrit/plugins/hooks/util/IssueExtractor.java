@@ -2,15 +2,14 @@ package com.googlesource.gerrit.plugins.hooks.util;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
+
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,19 +22,17 @@ public class IssueExtractor {
   private static final Logger log = LoggerFactory.getLogger(
       IssueExtractor.class);
 
-  private final Config gerritConfig;
-  private final String pluginName;
   private final CommitMessageFetcher commitMessageFetcher;
   private final ReviewDb db;
+  private final ItsConfig itsConfig;
 
   @Inject
-  IssueExtractor(@GerritServerConfig Config gerritConfig,
-      @PluginName String pluginName, CommitMessageFetcher commitMessageFetcher,
+  IssueExtractor(ItsConfig itsConfig,
+      CommitMessageFetcher commitMessageFetcher,
       ReviewDb db) {
-    this.gerritConfig = gerritConfig;
-    this.pluginName = pluginName;
     this.commitMessageFetcher = commitMessageFetcher;
     this.db = db;
+    this.itsConfig = itsConfig;
   }
 
   /**
@@ -45,7 +42,7 @@ public class IssueExtractor {
    * @return array of {@link String}. Each String being a found issue id.
    */
   public String[] getIssueIds(String haystack) {
-    Pattern pattern = getPattern();
+    Pattern pattern = itsConfig.getIssuePattern();
     if (pattern == null) return new String[] {};
 
     log.debug("Matching '" + haystack + "' against " + pattern.pattern());
@@ -59,20 +56,6 @@ public class IssueExtractor {
     }
 
     return issues.toArray(new String[issues.size()]);
-  }
-
-  /**
-   * Gets the regular expression used to identify issue ids.
-   * @return the regular expression, or {@code null}, if there is no pattern
-   *    to match issue ids.
-   */
-  public Pattern getPattern() {
-    Pattern ret = null;
-    String match = gerritConfig.getString("commentLink", pluginName, "match");
-    if (match != null) {
-      ret = Pattern.compile(match);
-    }
-    return ret;
   }
 
   /**

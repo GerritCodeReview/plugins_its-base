@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.hooks.its;
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
@@ -31,8 +32,13 @@ import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
 
+import java.util.regex.Pattern;
+
+import org.eclipse.jgit.lib.Config;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class ItsConfig {
   private static final Logger log = LoggerFactory.getLogger(ItsConfig.class);
@@ -40,14 +46,18 @@ public class ItsConfig {
   private final String pluginName;
   private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
+  private final Config gerritConfig;
 
   @Inject
   public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
-      PluginConfigFactory pluginCfgFactory) {
+      PluginConfigFactory pluginCfgFactory, @GerritServerConfig Config gerritConfig) {
     this.pluginName = pluginName;
     this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
+    this.gerritConfig = gerritConfig;
   }
+
+  // Plugin enablement --------------------------------------------------------
 
   public boolean isEnabled(Event event) {
     if (event instanceof PatchSetCreatedEvent) {
@@ -113,5 +123,21 @@ public class ItsConfig {
 
   private boolean match(String refName, String refPattern) {
     return RefPatternMatcher.getMatcher(refPattern).match(refName, null);
+  }
+
+  // Issue association --------------------------------------------------------
+
+  /**
+   * Gets the regular expression used to identify issue ids.
+   * @return the regular expression, or {@code null}, if there is no pattern
+   *    to match issue ids.
+   */
+  public Pattern getIssuePattern() {
+    Pattern ret = null;
+    String match = gerritConfig.getString("commentLink", pluginName, "match");
+    if (match != null) {
+      ret = Pattern.compile(match);
+    }
+    return ret;
   }
 }
