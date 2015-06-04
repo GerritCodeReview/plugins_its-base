@@ -51,6 +51,8 @@ OPTIONAL
 :	 Bug-ids are liked when found in the git commit message, no warning is
 	 displayed otherwise.
 
+[upstream-comment-link-doc]: ../../../Documentation/config-gerrit.html#commentlink
+
 
 
 [enabling-its-integration]: #enabling-its-integration
