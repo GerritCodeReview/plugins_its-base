@@ -21,7 +21,7 @@ issue id.
 So for example having
 
 ```
-[commentLink "@PLUGIN@"]
+[commentlink "@PLUGIN@"]
     match = [Bb][Uu][Gg][ ]*([1-9][0-9]*)
     html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
     association = SUGGESTED
