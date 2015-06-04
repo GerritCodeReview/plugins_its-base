@@ -401,6 +401,102 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   }
 
+  public void testPatternGroupIndexGroupDefault() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("(foo)(bar)(baz)").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(1).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        1, itsConfig.getIssuePatternGroupIndex());
+  }
+
+  public void testPatternGroupIndexGroupDefaultGroupless() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(1).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        0, itsConfig.getIssuePatternGroupIndex());
+  }
+
+  public void testPatternGroupIndexGroup1() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("(foo)(bar)(baz)").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(1).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        1, itsConfig.getIssuePatternGroupIndex());
+  }
+
+  public void testPatternGroupIndexGroup3() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("(foo)(bar)(baz)").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(3).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        3, itsConfig.getIssuePatternGroupIndex());
+  }
+
+  public void testPatternGroupIndexGroupTooHigh() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("(foo)(bar)(baz)").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(5).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        1, itsConfig.getIssuePatternGroupIndex());
+  }
+
+  public void testPatternGroupIndexGroupTooHighGroupless() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+        .andReturn(5).atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and actual group index do not match",
+        0, itsConfig.getIssuePatternGroupIndex());
+  }
+
   public void testItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
