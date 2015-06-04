@@ -48,6 +48,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private Config serverConfig;
   private IssueExtractor issueExtractor;
   private ItsFacade itsFacade;
+  private ItsConfig itsConfig;
+
   private Project project = new Project(new Project.NameKey("myProject"));
 
   public void testOptional() throws CommitValidationException {
@@ -468,7 +470,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   }
 
   private void setupCommonMocks() {
-    expect(issueExtractor.getPattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+    expect(itsConfig.getIssuePattern())
+        .andReturn(Pattern.compile("bug#(\\d+)")).anyTimes();
+    expect(itsConfig.isEnabled("myProject", null)).andReturn(true)
         .anyTimes();
   }
 
@@ -497,12 +501,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
       itsFacade = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(itsFacade);
 
-      bind(ItsConfig.class).toInstance(new ItsConfig(null, null, null) {
-        @Override
-        public boolean isEnabled(String project, String branch) {
-          return true;
-        }
-      });
+      itsConfig = createMock(ItsConfig.class);
+      bind(ItsConfig.class).toInstance(itsConfig);
     }
   }
 }

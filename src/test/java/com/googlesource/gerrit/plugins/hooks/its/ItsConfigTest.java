@@ -19,6 +19,7 @@ import static org.easymock.EasyMock.expect;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -30,6 +31,8 @@ import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
+import org.eclipse.jgit.lib.Config;
+
 import java.util.Arrays;
 
 public class ItsConfigTest extends LoggingMockingTestCase {
@@ -37,6 +40,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   private ProjectCache projectCache;
   private PluginConfigFactory pluginConfigFactory;
+  private Config serverConfig;
 
   public void setupIsEnabled(String enabled, String parentEnabled,
       String[] branches) {
@@ -339,6 +343,30 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     assertFalse(itsConfig.isEnabled(event));
   }
 
+  public void testPatternNullMatch() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+        .andReturn(null).atLeastOnce();
+
+    replayMocks();
+
+    assertNull("Pattern for null match is not null",
+        itsConfig.getIssuePattern());
+  }
+
+  public void testPattern() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+        .andReturn("TestPattern").atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated pattern are not equal",
+        "TestPattern", itsConfig.getIssuePattern().pattern());
+  }
+
   private ItsConfig createItsConfig() {
     return injector.getInstance(ItsConfig.class);
   }
@@ -360,6 +388,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
       bind(String.class).annotatedWith(PluginName.class)
         .toInstance("ItsTestName");
+
+      serverConfig = createMock(Config.class);
+      bind(Config.class).annotatedWith(GerritServerConfig.class)
+          .toInstance(serverConfig);
     }
   }
 }
