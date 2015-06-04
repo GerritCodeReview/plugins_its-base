@@ -17,21 +17,19 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.RevId;
 import com.google.gerrit.reviewdb.server.PatchSetAccess;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.config.FactoryModule;
-import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
 
-import org.eclipse.jgit.lib.Config;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -40,44 +38,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PatchSet.class,RevId.class})
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
-  private Config serverConfig;
+  private ItsConfig itsConfig;
   private CommitMessageFetcher commitMessageFetcher;
   private ReviewDb db;
-
-  public void testPatternNullMatch() {
-    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn(null).atLeastOnce();
-
-    replayMocks();
-
-    assertNull("Pattern for null match is not null",
-        issueExtractor.getPattern());
-  }
-
-  public void testPattern() {
-    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("TestPattern").atLeastOnce();
-
-    replayMocks();
-
-    assertEquals("Expected and generated pattern are not equal",
-        "TestPattern", issueExtractor.getPattern().pattern());
-  }
 
   public void testIssueIdsNullPattern() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn(null).atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(null)
+        .atLeastOnce();
 
     replayMocks();
 
@@ -87,8 +62,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsNoMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -100,8 +76,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsFullMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -114,8 +91,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -128,8 +106,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsGrouplessMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#\\d+").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#\\d+"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -142,8 +121,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsMultiGroupMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d)(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern())
+        .andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
 
     replayMocks();
 
@@ -156,8 +136,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsMulipleMatches() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -173,8 +154,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsMulipleMatchesWithDuplicates() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-        .andReturn("bug#(\\d+)").atLeastOnce();
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     replayMocks();
 
@@ -190,8 +172,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssue() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -217,8 +199,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssues() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -245,8 +227,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssuesMultipleTimes() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -273,8 +255,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssueBody() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -303,8 +285,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssueFooter() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -334,8 +316,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssuesFooter() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -374,8 +356,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentParts() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -408,8 +390,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsEmptySubject() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -441,8 +423,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsLinePastFooter() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -475,8 +457,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsLinesPastFooter() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -510,8 +492,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooter() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -537,8 +519,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLine() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -564,8 +546,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLines() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -592,8 +574,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitEmpty() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("");
@@ -613,8 +595,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitBlankLine() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n");
@@ -632,8 +614,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitBlankLines() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n\n");
@@ -651,8 +633,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMoreBlankLines() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n\n\n");
@@ -670,8 +652,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMixed() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -710,8 +692,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedEmptyFirst() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("");
@@ -732,8 +714,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueFirst() {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -768,8 +750,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -830,8 +812,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -891,8 +873,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -953,8 +935,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -1017,8 +999,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedSubjectFooter()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -1085,8 +1067,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
   public void testIssueIdsCommitWAddedMultiple()
       throws OrmException {
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
-    .andReturn("bug#(\\d+)").atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
+        .atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -1164,12 +1146,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      bind(String.class).annotatedWith(PluginName.class)
-          .toInstance("ItsTestName");
-
-      serverConfig = createMock(Config.class);
-      bind(Config.class).annotatedWith(GerritServerConfig.class)
-          .toInstance(serverConfig);
+      itsConfig = createMock(ItsConfig.class);
+      bind(ItsConfig.class).toInstance(itsConfig);
 
       commitMessageFetcher = createMock(CommitMessageFetcher.class);
       bind(CommitMessageFetcher.class).toInstance(commitMessageFetcher);
