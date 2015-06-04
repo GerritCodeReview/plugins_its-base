@@ -74,6 +74,20 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
+  public void testIssueIdsEmptyGroup() {
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(X*)(\\d+)"))
+        .atLeastOnce();
+
+    replayMocks();
+
+    String ret[] = issueExtractor.getIssueIds("bug#4711");
+    assertEquals("Number of found ids do not match", 0, ret.length);
+
+    assertLogMessageContains("Matching");
+  }
+
   public void testIssueIdsFullMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 

@@ -1,5 +1,6 @@
 package com.googlesource.gerrit.plugins.hooks.util;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -52,7 +53,10 @@ public class IssueExtractor {
 
     while (matcher.find()) {
       int groupIdx = Math.min(matcher.groupCount(), 1);
-      issues.add(matcher.group(groupIdx));
+      String issueId = matcher.group(groupIdx);
+      if (!Strings.isNullOrEmpty(issueId)) {
+        issues.add(issueId);
+      }
     }
 
     return issues.toArray(new String[issues.size()]);
