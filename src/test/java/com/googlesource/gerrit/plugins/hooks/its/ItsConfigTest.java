@@ -411,7 +411,23 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testPatternNullMatch() {
     ItsConfig itsConfig = createItsConfig();
 
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .andReturn(null).atLeastOnce();
+
+    replayMocks();
+
+    assertNull("Pattern for null match is not null",
+        itsConfig.getIssuePattern());
+  }
+
+  public void testPatternNullMatchWCommentLink() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getString("commentlink", "foo", "match"))
         .andReturn(null).atLeastOnce();
 
     replayMocks();
@@ -423,6 +439,8 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testPattern() {
     ItsConfig itsConfig = createItsConfig();
 
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("TestPattern").atLeastOnce();
 
@@ -432,10 +450,43 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         "TestPattern", itsConfig.getIssuePattern().pattern());
   }
 
+  public void testPatternWCommentLink() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getString("commentlink", "foo", "match"))
+        .andReturn("TestPattern").atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated pattern are not equal",
+        "TestPattern", itsConfig.getIssuePattern().pattern());
+
+  }
+
   public void testItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.OPTIONAL)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.OPTIONAL, itsConfig.getItsAssociationPolicy());
+  }
+
+  public void testItsAssociationPolicyOptionalWCommentLink() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getEnum("commentlink", "foo", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.OPTIONAL)
         .atLeastOnce();
@@ -449,7 +500,25 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testItsAssociationPolicySuggested() {
     ItsConfig itsConfig = createItsConfig();
 
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.SUGGESTED)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.SUGGESTED, itsConfig.getItsAssociationPolicy());
+  }
+
+  public void testItsAssociationPolicySuggestedWCommentLink() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getEnum("commentlink", "foo", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.SUGGESTED)
         .atLeastOnce();
@@ -463,7 +532,25 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testItsAssociationPolicyMandatory() {
     ItsConfig itsConfig = createItsConfig();
 
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.MANDATORY, itsConfig.getItsAssociationPolicy());
+  }
+
+  public void testItsAssociationPolicyMandatoryWCommentLink() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+        .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getEnum("commentlink", "foo", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.MANDATORY)
         .atLeastOnce();

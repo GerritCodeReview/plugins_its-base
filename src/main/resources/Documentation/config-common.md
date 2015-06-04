@@ -5,6 +5,7 @@ Common configuration for `its-base`-based plugins
 * [Identifying ITS ids][identifying-its-ids]
 * [Enabling ITS integration][enabling-its-integration]
 * [Configuring rules of when to take which actions in the ITS][configure-rules]
+* [Further common configuration details][config-common-detail]
 
 
 
@@ -13,7 +14,7 @@ Common configuration for `its-base`-based plugins
 -----------------------------------------------------
 
 In order to extract ITS ids from commit messages, @PLUGIN@ uses
-[commentlink][upstream-comment-link-doc]s of name "`@PLUGIN@`".
+[commentlink][upstream-comment-link-doc]s of ([per default][common-config-commentlink]) name "`@PLUGIN@`".
 
 The first group of `commentlink.@PLUGIN@.match` is considered the
 issue id.
@@ -138,6 +139,24 @@ its-bugzilla-internal.jar).  Gerrit will give each plugin the same
 name as the file name (minus the extension).  You can view the names
 by going to the Gerrit UI under menu Plugins -> Installed.  Now you
 just need to use the appropriate name to configure each plugin.
+
+
+
+[config-common-detail]: #config-common-detail
+<a name="config-common-detail">Further common configuration details</a>
+-----------------------------------------------------------------------
+
+[common-config-commentlink]: #common-config-commentlink
+
+<a name="common-config-commentlink">`@PLUGIN@.commentlink`
+:   The name of the comment link to use to extract issue ids.
+
+    This setting is useful to reuse the same comment link from different Its
+    plugins. For example, if you set `@PLUGIN@.commentlink` to `foo`, then the
+    comment link `foo` is used (instead of the comment link `@PLUGIN@`) to
+    extract issue ids.
+
+    Default is `@PLUGIN@`
 
 [Back to @PLUGIN@ documentation index][index]
 
