@@ -411,7 +411,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testPatternNullMatch() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn(null).atLeastOnce();
 
     replayMocks();
@@ -423,7 +423,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testPattern() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("commentLink", "ItsTestName", "match"))
+    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("TestPattern").atLeastOnce();
 
     replayMocks();
@@ -435,7 +435,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+    expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.OPTIONAL)
         .atLeastOnce();
@@ -449,7 +449,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testItsAssociationPolicySuggested() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+    expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.SUGGESTED)
         .atLeastOnce();
@@ -463,7 +463,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testItsAssociationPolicyMandatory() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+    expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.MANDATORY)
         .atLeastOnce();

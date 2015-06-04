@@ -136,7 +136,7 @@ public class ItsConfig {
    */
   public Pattern getIssuePattern() {
     Pattern ret = null;
-    String match = gerritConfig.getString("commentLink", pluginName, "match");
+    String match = gerritConfig.getString("commentlink", pluginName, "match");
     if (match != null) {
       ret = Pattern.compile(match);
     }
@@ -148,7 +148,7 @@ public class ItsConfig {
    * @return policy on how necessary assiaction with issues is
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentLink", pluginName, "association",
+    return gerritConfig.getEnum("commentlink", pluginName, "association",
         ItsAssociationPolicy.OPTIONAL);
   }
 }
