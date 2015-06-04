@@ -65,6 +65,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -79,6 +80,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(X*)(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -93,6 +95,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -108,6 +111,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -123,6 +127,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#\\d+"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(0).atLeastOnce();
 
     replayMocks();
 
@@ -133,11 +138,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsMultiGroupMatch() {
+  public void testIssueIdsMultiGroupMatchGroup1() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
     expect(itsConfig.getIssuePattern())
         .andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -148,11 +154,28 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
+  public void testIssueIdsMultiGroupMatchGroup2() {
+    IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
+
+    expect(itsConfig.getIssuePattern())
+        .andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(2).atLeastOnce();
+
+    replayMocks();
+
+    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bar");
+    assertEquals("Number of found ids do not match", 1, ret.length);
+    assertEquals("Found issue id does not match", "711", ret[0]);
+
+    assertLogMessageContains("Matching");
+  }
+
   public void testIssueIdsMulipleMatches() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -171,6 +194,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
@@ -188,6 +212,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitSingleIssue() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -215,6 +240,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitMultipleIssues() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -243,6 +269,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitMultipleIssuesMultipleTimes() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -271,6 +298,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitSingleIssueBody() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -301,6 +329,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitSingleIssueFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -332,6 +361,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitMultipleIssuesFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -372,6 +402,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentParts() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -406,6 +437,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsEmptySubject() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -439,6 +471,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsLinePastFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -473,6 +506,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsLinesPastFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -508,6 +542,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsNoFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -535,6 +570,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLine() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -562,6 +598,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLines() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -590,6 +627,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitEmpty() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("");
@@ -611,6 +649,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitBlankLine() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n");
@@ -630,6 +669,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitBlankLines() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n\n");
@@ -649,6 +689,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitMoreBlankLines() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("\n\n\n");
@@ -668,6 +709,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitMixed() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn(
@@ -708,6 +750,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitWAddedEmptyFirst() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "1234567891123456789212345678931234567894")).andReturn("");
@@ -730,6 +773,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsCommitWAddedSingleSubjectIssueFirst() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -766,6 +810,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -828,6 +873,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -889,6 +935,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -951,6 +998,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -1015,6 +1063,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
@@ -1083,6 +1132,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       throws OrmException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
+    expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
