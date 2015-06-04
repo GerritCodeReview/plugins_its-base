@@ -30,6 +30,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
 
 import org.eclipse.jgit.lib.Config;
 
@@ -429,6 +430,48 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
 
     assertEquals("Expected and generated pattern are not equal",
         "TestPattern", itsConfig.getIssuePattern().pattern());
+  }
+
+  public void testItsAssociationPolicyOptional() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.OPTIONAL)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.OPTIONAL, itsConfig.getItsAssociationPolicy());
+  }
+
+  public void testItsAssociationPolicySuggested() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.SUGGESTED)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.SUGGESTED, itsConfig.getItsAssociationPolicy());
+  }
+
+  public void testItsAssociationPolicyMandatory() {
+    ItsConfig itsConfig = createItsConfig();
+
+    expect(serverConfig.getEnum("commentLink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+
+    replayMocks();
+
+    assertEquals("Expected and generated associated policy do not match",
+        ItsAssociationPolicy.MANDATORY, itsConfig.getItsAssociationPolicy());
   }
 
   private ItsConfig createItsConfig() {

@@ -16,7 +16,6 @@ package com.googlesource.gerrit.plugins.hooks.validation;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
@@ -27,7 +26,6 @@ import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
 
-import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
 import org.slf4j.Logger;
@@ -45,10 +43,6 @@ public class ItsValidateComment implements CommitValidationListener {
   @Inject
   private ItsFacade client;
 
-  @Inject
-  @GerritServerConfig
-  private Config gerritConfig;
-
   @Inject @PluginName
   private String pluginName;
 
@@ -60,7 +54,7 @@ public class ItsValidateComment implements CommitValidationListener {
 
   private List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
-    ItsAssociationPolicy associationPolicy = getItsAssociationPolicy();
+    ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
 
     switch (associationPolicy) {
       case MANDATORY:
@@ -135,16 +129,11 @@ public class ItsValidateComment implements CommitValidationListener {
     return ret;
   }
 
-  private ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentLink", pluginName, "association",
-        ItsAssociationPolicy.OPTIONAL);
-  }
-
   private CommitValidationMessage commitValidationFailure(
       String synopsis, String details) throws CommitValidationException {
     CommitValidationMessage ret =
         new CommitValidationMessage(synopsis + "\n" + details, false);
-    if (getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
+    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
       throw new CommitValidationException(synopsis,
           Collections.singletonList(ret));
     }

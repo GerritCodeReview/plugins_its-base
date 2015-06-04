@@ -32,6 +32,8 @@ import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
 
+import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
+
 import java.util.regex.Pattern;
 
 import org.eclipse.jgit.lib.Config;
@@ -139,5 +141,14 @@ public class ItsConfig {
       ret = Pattern.compile(match);
     }
     return ret;
+  }
+
+  /**
+   * Gets how necessary it is to associate commits with issues
+   * @return policy on how necessary association with issues is
+   */
+  public ItsAssociationPolicy getItsAssociationPolicy() {
+    return gerritConfig.getEnum("commentLink", pluginName, "association",
+        ItsAssociationPolicy.OPTIONAL);
   }
 }
