@@ -17,8 +17,8 @@ In order to extract ITS ids from commit messages, @PLUGIN@ uses
 [commentlink][upstream-comment-link-doc]s of
 ([per default][common-config-commentlink]) name "`@PLUGIN@`".
 
-The first group of `commentlink.@PLUGIN@.match` is considered the
-issue id.
+The ([per default][common-config-commentlinkGroupIndex]) first group of
+`commentlink.@PLUGIN@.match` is considered the issue id.
 
 So for example having
 
@@ -148,6 +148,7 @@ just need to use the appropriate name to configure each plugin.
 -----------------------------------------------------------------------
 
 [common-config-commentlink]: #common-config-commentlink
+[common-config-commentlinkGroupIndex]: #common-config-commentlinkGroupIndex
 
 <a name="common-config-commentlink">`@PLUGIN@.commentlink`
 :   The name of the comment link to use to extract issue ids.
@@ -158,6 +159,13 @@ just need to use the appropriate name to configure each plugin.
     extract issue ids.
 
     Default is `@PLUGIN@`
+
+<a name="common-config-commentlinkGroupIndex">`@PLUGIN@.commentlinkGroupIndex`
+:   The group index within `@PLUGIN@.commentlink` that holds the issue id.
+
+    Default is `1`, if there are are groups within the regular expression for
+    the `@PLUGIN@.commentlink` comment link, and the default is `0`, if there
+    are no such groups.
 
 [Back to @PLUGIN@ documentation index][index]
 
