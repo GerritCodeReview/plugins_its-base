@@ -504,7 +504,7 @@ The following actions are available:
 
 [Further actions][further-actions] may be provided by @PLUGIN@.
 
-[further-actions]: config-rulebase-plugin-actions.md
+[further-actions]: config-rulebase-plugin-actions.html
 
 [action-add-comment]: #action-add-comment
 ### <a name="action-add-comment">Action: add-comment</a>
