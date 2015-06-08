@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59e6bc29_3203f042",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-08T05:40:55Z",
+      "side": 1,
+      "message": "Almost all Gerrit plugins support standalone build mode:\n\n  $ git clone --recursive \u003cplugin\u003e \u0026\u0026 cd foo \u0026\u0026 buck build plugin\n\nEven though its-* plugins don\u0027t support standalone build mode today, I wonder what is the plan to reuse binary atifacts from its-base, both production and test artifacts?\n\nOne approach would be to install the artifacts on maven Central, and re-use them with maven_jar() rule.",
+      "revId": "c52b40d16838ef2b39876f8eb934bdf6fcc1bcd7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
