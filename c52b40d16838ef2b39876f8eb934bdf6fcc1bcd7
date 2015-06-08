@@ -16,6 +16,24 @@
       "revId": "c52b40d16838ef2b39876f8eb934bdf6fcc1bcd7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39e908fb_f1fe887c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-08T23:53:40Z",
+      "side": 1,
+      "message": "\u003e Almost all Gerrit plugins support standalone build mode:\n\ns/Almost all/About a third/\n:-)\n\n\u003e  $ git clone --recursive \u003cplugin\u003e \u0026\u0026 cd foo \u0026\u0026 buck build plugin\n\nAnd you also need to clone bucklets,\nAnd you also need to link it in or keep it updated.\n\nAnd you have to make sure that the gerrit SNAPSHOT artifact that you\nbuild against is recent enough, otherwise you\u0027ll run into issues like\ndelete-project currently does. It fails [1] as the used gerrit artifact\nstill uses ProjectCreationFailedException which got nuked on gerrit\u0027s\nmaster 9 weeks ago [2] :-/\n\nAnd it makes it necessary to manually bump gerrit api version numbers\nagain within the plugin.\n\n\n\nBeing able to build outside of the gerrit tree is nice. It\u0027s on my\nradar. But it\u0027s not free, and it\u0027s nothing I\u0027ll plan to work on (or\nmaintain) in the near future. The its-* plugins have more pressing\nneeds that they need to address. Like making maintenance simpler\n(i.e.: things like this commit). Like they did not see a real release\nat all. Like they do need automated integration tests against real\nbugzillas, jiras, ... :-)\n\n\n--------------------------------------------\n\n[1]\n\n  /home/christian/sources/Wikimedia/gerrit/dev/master/plugins-all/delete-project/src/main/java/com/googlesource/gerrit/plugins/deleteproject/HideProject.java:99: error: exception org.eclipse.jgit.errors.ConfigInvalidException is never thrown in body of corresponding try statement\n        } catch (BadRequestException | UnprocessableEntityException\n          ^\n  /home/christian/sources/Wikimedia/gerrit/dev/master/plugins-all/delete-project/src/main/java/com/googlesource/gerrit/plugins/deleteproject/HideProject.java:97: error: unreported exception com.google.gerrit.common.errors.ProjectCreationFailedException; must be caught or declared to be thrown\n          createProjectFactory.create(projectName).apply(\n                                                      ^\nErrors: 2. Warnings: 1.\nBUILT //:delete-project__plugin (11/12 JOBS)\nBUILD FAILED: //:delete-project__plugin failed with exit code 1:\n\n[2] https://gerrit-review.googlesource.com/#/c/66941/",
+      "parentUuid": "59e6bc29_3203f042",
+      "revId": "c52b40d16838ef2b39876f8eb934bdf6fcc1bcd7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
