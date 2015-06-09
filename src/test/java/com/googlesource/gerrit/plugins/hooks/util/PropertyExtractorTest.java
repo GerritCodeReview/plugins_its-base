@@ -38,7 +38,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.its.util.IssueExtractor;
+import com.googlesource.gerrit.plugins.its.util.PropertyAttributeExtractor;
+import com.googlesource.gerrit.plugins.its.util.PropertyExtractor;
+import com.googlesource.gerrit.plugins.its.workflow.Property;
 
 import java.util.HashMap;
 import java.util.Set;

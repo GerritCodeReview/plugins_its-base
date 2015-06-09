@@ -19,10 +19,11 @@ import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.workflow.Property;
+import com.googlesource.gerrit.plugins.its.workflow.action.AddComment;
 
 import java.io.IOException;
 import java.util.HashSet;

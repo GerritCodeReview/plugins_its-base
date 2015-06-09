@@ -23,9 +23,14 @@ import com.google.gerrit.server.events.Event;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
+import com.googlesource.gerrit.plugins.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.util.PropertyExtractor;
+import com.googlesource.gerrit.plugins.its.workflow.ActionController;
+import com.googlesource.gerrit.plugins.its.workflow.ActionExecutor;
+import com.googlesource.gerrit.plugins.its.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.workflow.Property;
+import com.googlesource.gerrit.plugins.its.workflow.RuleBase;
 
 import java.util.Collection;
 import java.util.Collections;

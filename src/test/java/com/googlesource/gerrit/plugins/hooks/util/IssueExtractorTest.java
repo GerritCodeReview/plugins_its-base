@@ -30,6 +30,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.util.CommitMessageFetcher;
+import com.googlesource.gerrit.plugins.its.util.IssueExtractor;
 
 import org.eclipse.jgit.lib.Config;
 import org.junit.runner.RunWith;

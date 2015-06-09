@@ -26,6 +26,8 @@ import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 
+import com.googlesource.gerrit.plugins.its.ItsConfig;
+
 import org.easymock.EasyMockSupport;
 import org.junit.Before;
 import org.junit.Test;

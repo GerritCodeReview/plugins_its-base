@@ -21,6 +21,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.workflow.Condition;
+import com.googlesource.gerrit.plugins.its.workflow.Property;
 
 import java.util.Collection;
 import java.util.Collections;

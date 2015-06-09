@@ -18,6 +18,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.workflow.Property;
 
 public class PropertyTest  extends LoggingMockingTestCase {
   private Injector injector;
