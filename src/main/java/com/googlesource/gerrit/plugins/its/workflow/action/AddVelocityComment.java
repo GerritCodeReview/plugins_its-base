@@ -127,10 +127,10 @@ public class AddVelocityComment implements Action {
   // it up, if it is public.
   public class VelocityAdapterItsFacade {
 
-    private final ItsFacade its;
+    private final ItsFacade facade;
 
-    private VelocityAdapterItsFacade(ItsFacade its) {
-      this.its = its;
+    private VelocityAdapterItsFacade(ItsFacade facade) {
+      this.facade = facade;
     }
 
     /**
@@ -141,7 +141,7 @@ public class AddVelocityComment implements Action {
      * @return Link to the given URL in the used Its' syntax.
      */
     public String formatLink(String url, String caption) {
-      return its.createLinkForWebui(url, caption);
+      return facade.createLinkForWebui(url, caption);
     }
 
     /**
@@ -153,7 +153,7 @@ public class AddVelocityComment implements Action {
      * @return Link to the given URL in the used Its' syntax.
      */
     public String formatLink(String url) {
-      return its.createLinkForWebui(url, url);
+      return facade.createLinkForWebui(url, url);
     }
   }
 }
