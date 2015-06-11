@@ -22,6 +22,30 @@
       "revId": "f962021c3d6a0780f327ff679a5b6930be9c3cda",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b94258dc_3d006f32",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/util/IssueExtractor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-11T07:34:26Z",
+      "side": 1,
+      "message": "\u003e Use `!Strings.isNullOrEmpty(issueId)`?\n\nDone in PS3.\n\n\u003e Or is is possible to fix the matcher so it doesn\u0027t pick up\n\u003e empty issues in the first place?\n\nSince the RepExp used for the matcher is coming straight from\nthe user, there are no guarantees on the RegExp. So I guess\nwe need to check against empty issue ids.",
+      "parentUuid": "39e3c84b_01c1ea73",
+      "range": {
+        "startLine": 56,
+        "startChar": 10,
+        "endLine": 56,
+        "endChar": 47
+      },
+      "revId": "f962021c3d6a0780f327ff679a5b6930be9c3cda",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
