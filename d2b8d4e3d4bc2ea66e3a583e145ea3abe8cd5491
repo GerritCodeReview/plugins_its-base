@@ -22,6 +22,30 @@
       "revId": "d2b8d4e3d4bc2ea66e3a583e145ea3abe8cd5491",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9972f48f_94b6042b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/util/IssueExtractor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-13T22:22:09Z",
+      "side": 1,
+      "message": "Yes, sure it is possible. But that\u0027s less of a concern, because\ngetting rid of spaces can easily be done in the commentlink\u0027s match.\nSite admins should handle that.\n\nSkipping for empty groups (which is done by this change) cannot be\nachieved easily (at least not without duplication) through a\ncommentlink\u0027s match.\n\n\n\nWhat is this useful for in first place?\n\nAssume, you have a company that has two issue trackers ... say\nbugzilla (Ids are just numbers) and phabricator (Ids are “T” followed\nby a number). Given the company has a page that accepts any bug id and\nforwards to the correct bug, then a commentlink might look like\n\n  [commentlink \"bug\"]\n    match\u003d\"bug (([0-9]+)|(T[0-9+))\"\n    link\u003d\"https://bugs.company.org/$1\"\n\nThen both its-bugzilla, and its-phabricator can reuse this commentlink to\nextract issues.\nits-bugzilla would use $2 to extract issue ids.\nits-phabricator would use $3 to extract issue ids..\n\nE.g: For the text\n\n  bug 4711\n\nits-bugzilla would trigger, as the commentlink matches. $2 is “4711”\nand the corresponing actions would take place on the bugzilla issue 4711.\n\nBut for the same text, also its-phabricator would trigger, as they\nshare the commentlink. But as its-phabricator cares for the empty $3,\nit would trigger with an empty issue id. That\u0027d only be confusing.\n\nAfter this changes, its-phabricator would no longer trigger on the\nempty $3 and the framework would do the expected thing and (for the\ntext given above) only act on its-bugzilla.\n\nSo the “empty issue id” thing is not just a sloppy regexp, it\u0027s\nsomething that otherwise cannot be achived by the limited subset of\nregexp permitted in a commentlink\u0027s match.",
+      "parentUuid": "39e3c84b_41cbf293",
+      "range": {
+        "startLine": 57,
+        "startChar": 33,
+        "endLine": 57,
+        "endChar": 40
+      },
+      "revId": "d2b8d4e3d4bc2ea66e3a583e145ea3abe8cd5491",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
