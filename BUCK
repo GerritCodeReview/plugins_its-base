@@ -6,7 +6,9 @@ DEPS = [
   '//lib/guice:guice',
   '//lib/jgit:jgit',
   '//lib/log:api',
-  '//lib:parboiled-core',
+  '//lib:grappa', # used for it's parboiled part. See
+  # core's 0db7612e092b37c6ea04883a5a45f51c6d9ae433
+  # for details
   '//lib:velocity',
 ]
 
