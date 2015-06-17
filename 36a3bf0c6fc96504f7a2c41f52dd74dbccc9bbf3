@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9972f48f_1496741c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-17T15:57:10Z",
+      "side": 1,
+      "message": "Done in PS4",
+      "parentUuid": "b9c5f8ce_e57b1672",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 36
+      },
+      "revId": "36a3bf0c6fc96504f7a2c41f52dd74dbccc9bbf3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c5f8ce_a59abe4b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2015-06-17T15:19:20Z",
       "side": 1,
       "message": "be",
+      "range": {
+        "startLine": 133,
+        "startChar": 51,
+        "endLine": 133,
+        "endChar": 54
+      },
+      "revId": "36a3bf0c6fc96504f7a2c41f52dd74dbccc9bbf3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b93898b1_cd2549e5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-17T15:57:10Z",
+      "side": 1,
+      "message": "Done in PS4",
+      "parentUuid": "b9c5f8ce_a59abe4b",
       "range": {
         "startLine": 133,
         "startChar": 51,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b93898b1_ed2a05b4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-17T15:57:10Z",
+      "side": 1,
+      "message": "Done in PS4",
+      "parentUuid": "b9c5f8ce_859fc23b",
+      "range": {
+        "startLine": 134,
+        "startChar": 50,
+        "endLine": 134,
+        "endChar": 53
+      },
+      "revId": "36a3bf0c6fc96504f7a2c41f52dd74dbccc9bbf3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c5f8ce_8586a2eb",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "9972f48f_f48018d1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-17T15:57:10Z",
+      "side": 1,
+      "message": "according to the docs, that would get you\n\n  [plugin \u0027its-bugzilla\u0027]\n    commentlink \u003d [...]\n\ninstead of\n\n  [its-bugzilla]\n    commentlink \u003d [...]",
+      "parentUuid": "b9c5f8ce_8586a2eb",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 15
+      },
+      "revId": "36a3bf0c6fc96504f7a2c41f52dd74dbccc9bbf3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d91c6c21_16be5cb0",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2015-06-17T15:19:20Z",
       "side": 1,
       "message": "use once()\n\nThis method should only be called once. Same comment applies elsewhere in file",
+      "range": {
+        "startLine": 415,
+        "startChar": 25,
+        "endLine": 415,
+        "endChar": 38
+      },
+      "revId": "36a3bf0c6fc96504f7a2c41f52dd74dbccc9bbf3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9972f48f_d47b1c72",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-06-17T15:57:10Z",
+      "side": 1,
+      "message": "\u003e This method should only be called once.\n\nWhy?\nWe don\u0027t do white-box testing here, but plain-jane\nunit testing. Hence, we can and should be as permissive as\npossible.",
+      "parentUuid": "d91c6c21_16be5cb0",
       "range": {
         "startLine": 415,
         "startChar": 25,
