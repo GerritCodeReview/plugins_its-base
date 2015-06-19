@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d91c6c21_56c8d443",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-19T14:54:32Z",
+      "side": 1,
+      "message": "Extract this into a variable \"pluginName\" and use it in the tests.\n\nThis will be useful for the other changes in the series.",
+      "range": {
+        "startLine": 426,
+        "startChar": 20,
+        "endLine": 426,
+        "endChar": 33
+      },
+      "revId": "6de7bd236c674395fdfb4bcdc97bbdec40a2d5b7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
