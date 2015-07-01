@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73c9e19b_b331381a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2015-07-01T16:02:03Z",
+      "side": 1,
+      "message": "Do we really need these comments?",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 79
+      },
+      "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73c9e19b_93363c0e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2015-07-01T16:02:03Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 79
+      },
+      "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
