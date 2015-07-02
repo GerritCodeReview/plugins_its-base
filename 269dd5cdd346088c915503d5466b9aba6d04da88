@@ -93,6 +93,23 @@
       "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5365bdc2_1ac93d9d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-02T21:26:58Z",
+      "side": 1,
+      "message": "nit: Looks like you took this from issueExtractorTest.  it would be nice to follow the test naming pattern that was established in this file.  So for this test I would name it something like \u0027testGetIssuePatternNonMatchingPattern\u0027\n\n\nI would also add an additional \u0027testGetIssuePatternMatchingPattern\u0027 but I think that could also be a follow on patch.",
+      "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
