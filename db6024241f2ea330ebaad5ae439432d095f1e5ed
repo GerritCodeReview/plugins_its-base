@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5365bdc2_5ad3b548",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-02T23:25:02Z",
+      "side": 1,
+      "message": "Would be nice to check that the user specified value is valid however since this change is specifically for just moving this functionality then it can done in another change.  Just noting to keep in mind :)",
+      "revId": "db6024241f2ea330ebaad5ae439432d095f1e5ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
