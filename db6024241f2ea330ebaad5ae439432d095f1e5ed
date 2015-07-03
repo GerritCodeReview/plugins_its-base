@@ -16,6 +16,24 @@
       "revId": "db6024241f2ea330ebaad5ae439432d095f1e5ed",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13650596_a822fbab",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-07-03T19:27:38Z",
+      "side": 1,
+      "message": "`getEnum` guarantees that an ItsAssociationPolicy is returned.\nSo the returned value is always a valid ItsAssociationPolicy.\n\nWhat kind of check did you have in mind?",
+      "parentUuid": "5365bdc2_5ad3b548",
+      "revId": "db6024241f2ea330ebaad5ae439432d095f1e5ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
