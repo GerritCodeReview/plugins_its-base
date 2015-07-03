@@ -408,7 +408,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     assertFalse(itsConfig.isEnabled(event));
   }
 
-  public void testPatternNullMatch() {
+  public void testGetIssuePatternNullMatch() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -422,7 +422,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         itsConfig.getIssuePattern());
   }
 
-  public void testPatternNullMatchWCommentLink() {
+  public void testGetIssuePatternNullMatchWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -436,7 +436,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         itsConfig.getIssuePattern());
   }
 
-  public void testPattern() {
+  public void testGetIssuePattern() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -450,7 +450,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         "TestPattern", itsConfig.getIssuePattern().pattern());
   }
 
-  public void testPatternWCommentLink() {
+  public void testGetIssuePatternWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -465,7 +465,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
 
   }
 
-  public void testPatternGroupIndexGroupDefault() {
+  public void testGetIssuePatternGroupIndexGroupDefault() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -481,7 +481,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         1, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testPatternGroupIndexGroupDefaultGroupless() {
+  public void testGetIssuePatternGroupIndexGroupDefaultGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -497,7 +497,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         0, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testPatternGroupIndexGroup1() {
+  public void testGetIssuePatternGroupIndexGroup1() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -513,7 +513,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         1, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testPatternGroupIndexGroup3() {
+  public void testGetIssuePatternGroupIndexGroup3() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -529,7 +529,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         3, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testPatternGroupIndexGroupTooHigh() {
+  public void testGetIssuePatternGroupIndexGroupTooHigh() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -545,7 +545,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         1, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testPatternGroupIndexGroupTooHighGroupless() {
+  public void testGetIssuePatternGroupIndexGroupTooHighGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -561,7 +561,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         0, itsConfig.getIssuePatternGroupIndex());
   }
 
-  public void testItsAssociationPolicyOptional() {
+  public void testGetItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -577,7 +577,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         ItsAssociationPolicy.OPTIONAL, itsConfig.getItsAssociationPolicy());
   }
 
-  public void testItsAssociationPolicyOptionalWCommentLink() {
+  public void testGetItsAssociationPolicyOptionalWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -593,7 +593,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         ItsAssociationPolicy.OPTIONAL, itsConfig.getItsAssociationPolicy());
   }
 
-  public void testItsAssociationPolicySuggested() {
+  public void testGetItsAssociationPolicySuggested() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -609,7 +609,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         ItsAssociationPolicy.SUGGESTED, itsConfig.getItsAssociationPolicy());
   }
 
-  public void testItsAssociationPolicySuggestedWCommentLink() {
+  public void testGetItsAssociationPolicySuggestedWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -625,7 +625,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         ItsAssociationPolicy.SUGGESTED, itsConfig.getItsAssociationPolicy());
   }
 
-  public void testItsAssociationPolicyMandatory() {
+  public void testGetItsAssociationPolicyMandatory() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
@@ -641,7 +641,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
         ItsAssociationPolicy.MANDATORY, itsConfig.getItsAssociationPolicy());
   }
 
-  public void testItsAssociationPolicyMandatoryWCommentLink() {
+  public void testGetItsAssociationPolicyMandatoryWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
     expect(serverConfig.getString("ItsTestName", null, "commentlink"))
