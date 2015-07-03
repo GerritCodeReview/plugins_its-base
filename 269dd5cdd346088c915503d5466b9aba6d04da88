@@ -110,6 +110,24 @@
       "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13650596_6835e3df",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-07-03T22:41:13Z",
+      "side": 1,
+      "message": "\u003e it would be nice to follow the test naming pattern that was\n\u003e established in this file.\n\nGood observation :-)\nSince this change is about plain moving (as you correctly\npointed out), I put the re-naming of tests into a separate\nchange at:\n\n  I3f81f267e46196d5eadd34b70b536451a92d3b6c\n\n\u003e I would also add an additional\n\u003e \u0027testGetIssuePatternMatchingPattern\u0027\n\nI am probably missing the obvious, but I am not sure what\nthat test would be about.\n\ntestPattern tests that a given pattern is constructed.\n\nWhether or not the returned pattern matches something\nis not of much concern to the method.",
+      "parentUuid": "5365bdc2_1ac93d9d",
+      "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
