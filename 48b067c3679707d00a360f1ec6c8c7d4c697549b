@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5365bdc2_7ad0793b",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-03T22:28:52Z",
+      "side": 1,
+      "message": "nit: line is too long, please wrap\n\n\nNot your fault but the \u0027[upstream-comment-link-doc]\u0027 reference doesn\u0027t work,  I think what you need is something like  \n  (../../../Documentation/config-gerrit.html#commentlink)\n\n\nThere is a similar reference in build.md",
+      "revId": "48b067c3679707d00a360f1ec6c8c7d4c697549b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "739481c1_bbe04710",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-03T22:28:52Z",
+      "side": 1,
+      "message": "shouldn\u0027t `@PLUGIN@.commentlink` be `commentlink.@PLUGIN@` instead? because a valid configs are \u0027[commentlink \"its-bugzilla\"]\u0027 or \u0027[commentlink \"foo\"]\u0027 right?",
+      "revId": "48b067c3679707d00a360f1ec6c8c7d4c697549b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
