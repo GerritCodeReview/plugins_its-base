@@ -34,6 +34,24 @@
       "revId": "db6024241f2ea330ebaad5ae439432d095f1e5ed",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5365bdc2_bae05110",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfig.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-03T21:28:40Z",
+      "side": 1,
+      "message": "Ahh, I mistakenly thought getEnum only gets the value not actually checks that it is a valid ItsAssociationPolicy.  Cool, that was what I was suggesting.",
+      "parentUuid": "13650596_a822fbab",
+      "revId": "db6024241f2ea330ebaad5ae439432d095f1e5ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
