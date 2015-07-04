@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.testutil;
 
 import junit.framework.TestCase;
 
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.After;
@@ -149,5 +150,14 @@ public abstract class MockingTestCase extends TestCase {
     // to verify mocks would bail out and might leave open resources from
     // subclasses open.
     verifyMocks();
+  }
+
+  /**
+   * Create a new Capture.
+   *
+   * @return The created Capture.
+   */
+  protected final <T> Capture<T> createCapture() {
+    return EasyMock.newCapture();
   }
 }
