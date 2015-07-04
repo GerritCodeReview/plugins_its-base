@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f367919d_670e723e",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-07-04T11:01:47Z",
+      "side": 1,
+      "message": "\u003e nit: line is too long, please wrap\n\nDone in PS7.\n\n\u003e Not your fault but the \u0027[upstream-comment-link-doc]\u0027 reference doesn\u0027t work,\n\nThere\u0027s a corresponding change for that at\n\n  https://gerrit-review.googlesource.com/#/c/68378/\n\nThose unrelated changes are so easy to miss with so many open\nits-base changes. I guess now\u0027s the time I overrule the\nwaiting agreement of the its-base maintainers, and I\u0027ll just\nself-merge those changes.\n\n\n\u003e There is a similar reference in build.md\n\nI could not find a dangling link in build.md.\nCould you point me to the line number of the dangling link?",
+      "parentUuid": "5365bdc2_7ad0793b",
+      "revId": "48b067c3679707d00a360f1ec6c8c7d4c697549b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "739481c1_bbe04710",
         "filename": "src/main/resources/Documentation/config-common.md",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2015-07-03T22:28:52Z",
       "side": 1,
       "message": "shouldn\u0027t `@PLUGIN@.commentlink` be `commentlink.@PLUGIN@` instead? because a valid configs are \u0027[commentlink \"its-bugzilla\"]\u0027 or \u0027[commentlink \"foo\"]\u0027 right?",
+      "revId": "48b067c3679707d00a360f1ec6c8c7d4c697549b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f367919d_071bf67a",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-07-04T11:01:47Z",
+      "side": 1,
+      "message": "\u003e valid configs are \u0027[commentlink \"its-bugzilla\"]\u0027 or\n\u003e \u0027[commentlink \"foo\"]\u0027 right?\n\nThat\u0027s true. That\u0027s what valid commentlinks look like.\nBut this setting is not trying to /be/ a commentlink, but\ntrying to /reference/ an already existing commentlink.\n\nSo \u0027@PLUGIN@.commentlink\u0027 is intended.\n\nThis allows different its-* plugins to reference the same\ncommentlink.\n\nExample:\nLet\u0027s assume a company that has two bugzillas.\nSay bugzillaFoo and bugzillaBar.\n\nFor project foo they use bugzillaFoo and for project bar\nthey use bugzillaBar.\n\nBoth projectFoo and projectBar are hosted in the same gerrit\ninstance.\n\nNow they install its-bugzilla twice. Once as\nits-bugzilla-foo (with a connection string to bugzillaFoo),\nand once as its-bugzilla-bar (with a connection string to\nbugzillaBar).\n\nTo make the its plugins pick up the right changes, they\u0027d\nneed to set up two commentlinks. One for its-bugzilla-foo,\nand one for its-bugzilla-bar.\n\nBut since both of them are for a bugzilla system, the\ncommentlinks agree, and one would end up with doubled\nmarkup. In such a setting, Gerrit garbles up the links.\n\nTo work around it, one could use per-project commentlinks.\nBut that is against DRY, as the commentlinks would agree\nfor project foo and project bar.\n\nWith the introduction of ​@PLUGIN@.commentlink it is now\npossible to have a single \u0027bugzilla\u0027 commentlink. And\nits-bugzilla-foo can be told to look for that commentlink\nby adding\n\nits-bugzilla-foo.commentlink \u003d \u0027bugzilla\u0027\n\nto the config. In the same manner, its-bugzilla-bar can be\ntold to look for that commentlink by adding\n\nits-bugzilla-bar.commentlink \u003d \u0027bugzilla\u0027\n\nto the config. So both Its plugins find a good usable\ncommentlink /and/ gerrit does not garble up the links,\nas (from gerrit\u0027s point of view) there is only a single\ncommentlink. Also, we got around DRY.",
+      "parentUuid": "739481c1_bbe04710",
       "revId": "48b067c3679707d00a360f1ec6c8c7d4c697549b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
