@@ -35,6 +35,7 @@ java_library(
     '//lib/powermock:powermock-module-junit4',
     '//lib/powermock:powermock-module-junit4-common',
   ],
+  visibility = ['PUBLIC'],
 )
 
 java_test(
