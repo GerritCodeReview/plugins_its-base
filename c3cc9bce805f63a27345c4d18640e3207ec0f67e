@@ -22,6 +22,30 @@
       "revId": "c3cc9bce805f63a27345c4d18640e3207ec0f67e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f367919d_e79d8242",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/workflow/action/AddVelocityCommentTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-07-04T16:00:37Z",
+      "side": 1,
+      "message": "Done in PS3.",
+      "parentUuid": "39e908fb_51be74b1",
+      "range": {
+        "startLine": 127,
+        "startChar": 46,
+        "endLine": 127,
+        "endChar": 67
+      },
+      "revId": "c3cc9bce805f63a27345c4d18640e3207ec0f67e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
