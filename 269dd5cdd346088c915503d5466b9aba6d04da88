@@ -128,6 +128,24 @@
       "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "739481c1_fbdacf57",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/hooks/its/ItsConfigTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2015-07-04T05:43:20Z",
+      "side": 1,
+      "message": "You are correct for some reason i thought this the getIssuePattern did more.  Sorry about that, I wasn\u0027t thinking straight.",
+      "parentUuid": "13650596_6835e3df",
+      "revId": "269dd5cdd346088c915503d5466b9aba6d04da88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
