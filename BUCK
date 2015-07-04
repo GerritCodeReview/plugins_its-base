@@ -19,7 +19,7 @@ gerrit_plugin(
   provided_deps = DEPS,
 )
 
-TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/hooks/testutil/**/*.java'])
+TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java'])
 
 java_library(
   name = 'its-base_tests-utils',
