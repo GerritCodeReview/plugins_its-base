@@ -30,7 +30,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
+import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
 
 import org.eclipse.jgit.lib.Config;
 

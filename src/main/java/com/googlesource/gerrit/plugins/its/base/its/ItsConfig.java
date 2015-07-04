@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.its;
+package com.googlesource.gerrit.plugins.its.base.its;
 
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -32,12 +32,11 @@ import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.validation.ItsAssociationPolicy;
+import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
 
 import java.util.regex.Pattern;
 
 import org.eclipse.jgit.lib.Config;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

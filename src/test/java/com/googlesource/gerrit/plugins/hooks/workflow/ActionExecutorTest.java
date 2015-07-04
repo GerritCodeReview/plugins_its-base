@@ -21,12 +21,15 @@ import com.google.gerrit.server.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionExecutor;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 import java.io.IOException;
 import java.util.Collections;

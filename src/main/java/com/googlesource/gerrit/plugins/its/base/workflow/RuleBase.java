@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.workflow;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 
 import com.google.common.collect.Lists;

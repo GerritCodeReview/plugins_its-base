@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.validation;
+package com.googlesource.gerrit.plugins.its.base.validation;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -22,9 +22,9 @@ import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;

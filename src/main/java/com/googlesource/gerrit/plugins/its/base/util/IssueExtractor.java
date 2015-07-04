@@ -1,4 +1,4 @@
-package com.googlesource.gerrit.plugins.hooks.util;
+package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
@@ -8,7 +8,7 @@ import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

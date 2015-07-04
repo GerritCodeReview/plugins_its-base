@@ -21,8 +21,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 import org.apache.log4j.Level;
 

@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.workflow;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.Action;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddStandardComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.AddVelocityComment;
-import com.googlesource.gerrit.plugins.hooks.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

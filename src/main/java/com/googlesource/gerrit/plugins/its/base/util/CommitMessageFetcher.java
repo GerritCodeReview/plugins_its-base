@@ -1,4 +1,4 @@
-package com.googlesource.gerrit.plugins.hooks.util;
+package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.git.GitRepositoryManager;

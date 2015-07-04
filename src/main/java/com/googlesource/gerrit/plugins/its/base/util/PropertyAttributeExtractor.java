@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.util;
+package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.common.collect.Sets;
 import com.google.gerrit.server.data.AccountAttribute;
@@ -22,7 +22,7 @@ import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 
 import java.util.Set;
 

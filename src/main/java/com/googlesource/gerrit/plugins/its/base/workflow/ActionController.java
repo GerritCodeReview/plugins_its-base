@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.workflow;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
-import com.googlesource.gerrit.plugins.hooks.util.PropertyExtractor;
+import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 
 import java.util.Collection;
 import java.util.Set;

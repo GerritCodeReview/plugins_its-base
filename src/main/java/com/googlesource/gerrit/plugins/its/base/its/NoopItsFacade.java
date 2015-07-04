@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.its;
+package com.googlesource.gerrit.plugins.its.base.its;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

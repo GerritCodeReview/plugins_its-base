@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.inject.Inject;
 
-import com.googlesource.gerrit.plugins.hooks.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.hooks.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

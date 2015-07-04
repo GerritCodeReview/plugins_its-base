@@ -25,10 +25,12 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.googlesource.gerrit.plugins.hooks.its.ItsConfig;
-import com.googlesource.gerrit.plugins.hooks.its.ItsFacade;
 import com.googlesource.gerrit.plugins.hooks.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.hooks.util.IssueExtractor;
+import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
+import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
+import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
 
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.revwalk.RevCommit;

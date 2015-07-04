@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.its;
+package com.googlesource.gerrit.plugins.its.base.its;
 
 import com.google.common.base.Strings;
 import com.google.gerrit.common.data.RefConfigSection;

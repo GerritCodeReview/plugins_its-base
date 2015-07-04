@@ -12,15 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.hooks.its;
+package com.googlesource.gerrit.plugins.its.base.validation;
 
-import java.io.IOException;
-
-public class InvalidTransitionException extends IOException {
-
-  private static final long serialVersionUID = 1L;
-
-  public InvalidTransitionException(String message) {
-    super(message);
-  }
+public enum ItsAssociationPolicy {
+    MANDATORY, SUGGESTED, OPTIONAL;
 }
