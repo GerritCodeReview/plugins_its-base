@@ -30,9 +30,9 @@ import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.DraftPublishedEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
-import com.google.gerrit.server.events.TopicChangedEvent;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
@@ -474,8 +474,8 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     assertTrue(itsConfig.isEnabled(event));
   }
 
-  public void testIsIgnoredTopicChangedEvent() {
-    TopicChangedEvent event = new TopicChangedEvent();
+  public void testIsEnabledUnknownEvent() {
+    Event event = new Event("foo") {};
 
     ItsConfig itsConfig = createItsConfig();
 
