@@ -25,13 +25,13 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
-import org.parboiled.common.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
@@ -105,12 +105,12 @@ public class AddVelocityComment implements Action {
       if (templateName.isEmpty()) {
         log.error("No template name given in " + actionRequest);
       } else {
-        File templateFile = new File(sitePath.toFile(), ITS_TEMPLATE_DIR +
-            File.separator + templateName + ".vm");
-        if (templateFile.canRead()) {
-          template = FileUtils.readAllText(templateFile);
+        Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
+        Path templatePath = templateDir.resolve(templateName + ".vm");
+        if (Files.isReadable(templatePath)) {
+          template = new String(Files.readAllBytes(templatePath));
         } else {
-          log.error("Cannot read template " + templateFile);
+          log.error("Cannot read template " + templatePath);
         }
       }
     }
