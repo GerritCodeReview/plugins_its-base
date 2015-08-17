@@ -23,7 +23,16 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.data.ChangeAttribute;
+import com.google.gerrit.server.data.RefUpdateAttribute;
+import com.google.gerrit.server.events.ChangeAbandonedEvent;
+import com.google.gerrit.server.events.ChangeEvent;
+import com.google.gerrit.server.events.ChangeMergedEvent;
+import com.google.gerrit.server.events.ChangeRestoredEvent;
+import com.google.gerrit.server.events.CommentAddedEvent;
+import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.events.TopicChangedEvent;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
@@ -407,6 +416,73 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     replayMocks();
 
     assertFalse(itsConfig.isEnabled(event));
+  }
+
+  public void testIsEnabledCommentAddedEvent() {
+    testIsEnabledEvent(CommentAddedEvent.class);
+  }
+
+  public void testIsEnabledChangeMergedEvent() {
+    testIsEnabledEvent(ChangeMergedEvent.class);
+  }
+
+  public void testIsEnabledChangeAbandonedEvent() {
+    testIsEnabledEvent(ChangeAbandonedEvent.class);
+  }
+
+  public void testIsEnabledChangeRestoredEvent() {
+    testIsEnabledEvent(ChangeRestoredEvent.class);
+  }
+
+  public void testIsEnabledDraftPublishedEvent() {
+    testIsEnabledEvent(DraftPublishedEvent.class);
+  }
+
+  private <T extends ChangeEvent> void testIsEnabledEvent(Class<T> clazz) {
+    try {
+      String[] branches = {};
+      setupIsEnabled("true", null, branches);
+
+      T event = clazz.newInstance();
+      event.change = new ChangeAttribute();
+      event.change.project = "testProject";
+      event.change.branch = "testBranch";
+
+      ItsConfig itsConfig = createItsConfig();
+
+      replayMocks();
+
+      assertTrue(itsConfig.isEnabled(event));
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new RuntimeException("Unable to implement event class " + clazz.getCanonicalName(), e);
+    }
+  }
+
+  public void testIsEnabledRefUpdatedEvent() {
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    RefUpdatedEvent event = new RefUpdatedEvent();
+    event.refUpdate = new RefUpdateAttribute();
+    event.refUpdate.project = "testProject";
+    event.refUpdate.refName = "refs/heads/testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsIgnoredTopicChangedEvent() {
+    TopicChangedEvent event = new TopicChangedEvent();
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled(event));
+    assertLogMessageContains("not recognised and ignored");
   }
 
   public void testGetIssuePatternNullMatch() {
