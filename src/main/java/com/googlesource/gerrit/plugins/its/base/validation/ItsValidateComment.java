@@ -27,7 +27,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.transport.ReceiveCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +51,8 @@ public class ItsValidateComment implements CommitValidationListener {
   @Inject
   private IssueExtractor issueExtractor;
 
-  private List<CommitValidationMessage> validCommit(ReceiveCommand cmd, RevCommit commit) throws CommitValidationException {
+  private List<CommitValidationMessage> validCommit(RevCommit commit)
+      throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
 
@@ -144,7 +144,7 @@ public class ItsValidateComment implements CommitValidationListener {
   public List<CommitValidationMessage> onCommitReceived(
       CommitReceivedEvent receiveEvent) throws CommitValidationException {
     if (itsConfig.isEnabled(receiveEvent.project.getName(), receiveEvent.refName)) {
-      return validCommit(receiveEvent.command, receiveEvent.commit);
+      return validCommit(receiveEvent.commit);
     } else {
       return Collections.emptyList();
     }
