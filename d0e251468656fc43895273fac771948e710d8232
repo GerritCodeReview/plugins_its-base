@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "449b398d_a1d79e33",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-08-17T20:58:53Z",
+      "side": 1,
+      "message": "That change seems unrelated.\nIt should go into a separate change.\nI dropped it in PS3.\n\nAlso, `event.getType()` need not be unique [1] which makes\nthe log entry vague.\n\n\n[1] Others can create Event instances on their own. And if\nthey fail to properly initialize the type\n(e.g.: uninitialized, or copy/paste from other Event), we\u0027d\nbe left with misleading log entries. Hence, I\u0027d leave `event`\nin, so we have the unambiguous class name in the logs.",
+      "revId": "d0e251468656fc43895273fac771948e710d8232",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
