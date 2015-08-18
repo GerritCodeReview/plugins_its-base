@@ -16,6 +16,24 @@
       "revId": "d0e251468656fc43895273fac771948e710d8232",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "449b398d_41e7b21f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1021312
+      },
+      "writtenOn": "2015-08-18T08:05:34Z",
+      "side": 1,
+      "message": "My idea was to be able to match the message in the logs for the test. But I realize that it was not necessary.",
+      "parentUuid": "449b398d_a1d79e33",
+      "revId": "d0e251468656fc43895273fac771948e710d8232",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
