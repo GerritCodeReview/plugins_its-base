@@ -419,43 +419,83 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   }
 
   public void testIsEnabledCommentAddedEvent() {
-    testIsEnabledEvent(CommentAddedEvent.class);
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    CommentAddedEvent event = new CommentAddedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
   }
 
   public void testIsEnabledChangeMergedEvent() {
-    testIsEnabledEvent(ChangeMergedEvent.class);
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    ChangeMergedEvent event = new ChangeMergedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
   }
 
   public void testIsEnabledChangeAbandonedEvent() {
-    testIsEnabledEvent(ChangeAbandonedEvent.class);
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    ChangeAbandonedEvent event = new ChangeAbandonedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
   }
 
   public void testIsEnabledChangeRestoredEvent() {
-    testIsEnabledEvent(ChangeRestoredEvent.class);
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
+
+    ChangeRestoredEvent event = new ChangeRestoredEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertTrue(itsConfig.isEnabled(event));
   }
 
   public void testIsEnabledDraftPublishedEvent() {
-    testIsEnabledEvent(DraftPublishedEvent.class);
-  }
+    String[] branches = {};
+    setupIsEnabled("true", null, branches);
 
-  private <T extends ChangeEvent> void testIsEnabledEvent(Class<T> clazz) {
-    try {
-      String[] branches = {};
-      setupIsEnabled("true", null, branches);
+    DraftPublishedEvent event = new DraftPublishedEvent();
+    event.change = new ChangeAttribute();
+    event.change.project = "testProject";
+    event.change.branch = "testBranch";
 
-      T event = clazz.newInstance();
-      event.change = new ChangeAttribute();
-      event.change.project = "testProject";
-      event.change.branch = "testBranch";
+    ItsConfig itsConfig = createItsConfig();
 
-      ItsConfig itsConfig = createItsConfig();
+    replayMocks();
 
-      replayMocks();
-
-      assertTrue(itsConfig.isEnabled(event));
-    } catch (InstantiationException | IllegalAccessException e) {
-      throw new RuntimeException("Unable to implement event class " + clazz.getCanonicalName(), e);
-    }
+    assertTrue(itsConfig.isEnabled(event));
   }
 
   public void testIsEnabledRefUpdatedEvent() {
