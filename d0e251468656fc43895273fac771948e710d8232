@@ -34,6 +34,24 @@
       "revId": "d0e251468656fc43895273fac771948e710d8232",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64983d90_62f3d6db",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-08-18T10:12:09Z",
+      "side": 1,
+      "message": "Oh. I see :-)\n\nThanks for your patch.",
+      "parentUuid": "449b398d_41e7b21f",
+      "revId": "d0e251468656fc43895273fac771948e710d8232",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
