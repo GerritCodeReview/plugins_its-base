@@ -24,8 +24,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 
 import java.io.IOException;
 import java.util.Set;

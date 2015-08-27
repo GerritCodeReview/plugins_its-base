@@ -29,8 +29,6 @@ import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.util.CommitMessageFetcher;
-import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
