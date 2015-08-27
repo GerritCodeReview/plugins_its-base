@@ -19,7 +19,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Sets;
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

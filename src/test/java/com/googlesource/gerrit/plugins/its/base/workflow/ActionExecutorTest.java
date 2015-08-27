@@ -17,7 +17,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
 import com.google.common.collect.Sets;
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
