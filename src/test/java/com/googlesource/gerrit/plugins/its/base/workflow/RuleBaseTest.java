@@ -17,7 +17,7 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

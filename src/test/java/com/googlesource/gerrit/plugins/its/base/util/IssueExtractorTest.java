@@ -17,12 +17,12 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.RevId;
 import com.google.gerrit.reviewdb.server.PatchSetAccess;
 import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

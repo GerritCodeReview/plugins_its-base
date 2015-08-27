@@ -17,8 +17,8 @@ package com.googlesource.gerrit.plugins.its.base.its;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
