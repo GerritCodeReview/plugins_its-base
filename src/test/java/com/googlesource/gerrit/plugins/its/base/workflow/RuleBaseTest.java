@@ -17,17 +17,12 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
-import com.googlesource.gerrit.plugins.its.base.workflow.RuleBase;
 
 import org.eclipse.jgit.util.FileUtils;
 

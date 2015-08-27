@@ -18,7 +18,7 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Guice;
@@ -27,11 +27,6 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionController;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionExecutor;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import com.googlesource.gerrit.plugins.its.base.workflow.RuleBase;
 
 import java.util.Collection;
 import java.util.Collections;

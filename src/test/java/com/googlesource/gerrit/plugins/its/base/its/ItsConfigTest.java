@@ -17,15 +17,14 @@ package com.googlesource.gerrit.plugins.its.base.its;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
-import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
@@ -38,7 +37,6 @@ import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
 

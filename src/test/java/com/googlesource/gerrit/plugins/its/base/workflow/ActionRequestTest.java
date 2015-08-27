@@ -13,12 +13,11 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 
 import java.util.Arrays;
 

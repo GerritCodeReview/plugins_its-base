@@ -17,8 +17,8 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change.Status;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -28,7 +28,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.util.PropertyAttributeExtractor;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 
 import java.util.Set;

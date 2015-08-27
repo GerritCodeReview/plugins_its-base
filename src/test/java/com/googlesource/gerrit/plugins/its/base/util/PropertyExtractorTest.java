@@ -18,9 +18,9 @@ import static org.easymock.EasyMock.expect;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -38,9 +38,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
-import com.googlesource.gerrit.plugins.its.base.util.PropertyAttributeExtractor;
-import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 
 import java.util.HashMap;

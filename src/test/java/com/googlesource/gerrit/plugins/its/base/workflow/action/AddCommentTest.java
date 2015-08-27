@@ -15,7 +15,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import static org.easymock.EasyMock.expect;
 
-import com.google.gerrit.server.config.FactoryModule;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -23,7 +23,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 
 import java.io.IOException;
 import java.util.HashSet;

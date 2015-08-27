@@ -16,8 +16,8 @@ package com.googlesource.gerrit.plugins.its.base.validation;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.config.FactoryModule;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationMessage;
@@ -28,8 +28,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
-import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
-import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
