@@ -28,8 +28,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
-import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
-import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
