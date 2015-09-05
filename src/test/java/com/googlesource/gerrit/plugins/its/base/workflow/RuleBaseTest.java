@@ -378,11 +378,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       assertTrue("Failed to create parent (" + ruleBaseParentFile + ") for " +
           "rule base", ruleBaseParentFile.mkdirs());
     }
-    FileWriter unbufferedWriter = new FileWriter(ruleBaseFile);
-    BufferedWriter writer = new BufferedWriter(unbufferedWriter);
-    writer.write(rules);
-    writer.close();
-    unbufferedWriter.close();
+    try(FileWriter unbufferedWriter = new FileWriter(ruleBaseFile);
+        BufferedWriter writer = new BufferedWriter(unbufferedWriter)) {
+      writer.write(rules);
+    }
   }
 
   @Override
