@@ -360,11 +360,10 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
         "rule base", templateParentFile.mkdirs());
     File templateFile = new File(templateParentFile, "test-template.vm");
 
-    FileWriter unbufferedWriter = new FileWriter(templateFile);
-    BufferedWriter writer = new BufferedWriter(unbufferedWriter);
-    writer.write(template);
-    writer.close();
-    unbufferedWriter.close();
+    try (FileWriter unbufferedWriter = new FileWriter(templateFile);
+        BufferedWriter writer = new BufferedWriter(unbufferedWriter)) {
+      writer.write(template);
+    }
   }
 
   @Override
