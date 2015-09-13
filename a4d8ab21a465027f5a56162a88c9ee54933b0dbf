@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4416da01_74cd089c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-09-13T20:30:35Z",
+      "side": 1,
+      "message": "Done in PS2.",
+      "parentUuid": "649cbed8_6de43514",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "a4d8ab21a465027f5a56162a88c9ee54933b0dbf",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "649cbed8_2dea2de4",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "649cbed8_4de17902",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-09-13T20:30:35Z",
+      "side": 1,
+      "message": "Done in PS2.",
+      "parentUuid": "649cbed8_2dea2de4",
+      "revId": "a4d8ab21a465027f5a56162a88c9ee54933b0dbf",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "649cbed8_0de7711a",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddVelocityCommentTest.java",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2015-09-13T20:29:59Z",
       "side": 1,
       "message": "Nit: Upstream gerrit typically [1] has a space between the \"try\" and the\n\"(\" even for try statements with multiple resources. We should follow\nthat lead.\n\n\n[1]\n  _________________________________________________________________\n  christian@spencer // jobs: 1 // time: 22:25:41 // exit code: 0\n  cwd: ~/sources/Gerrit/builder/master/gerrit\n  grep -R \u0027[^a-zA-Z]try (.*;\u0027 */src | wc -l\n  65\n  \n  _________________________________________________________________\n  christian@spencer // jobs: 1 // time: 22:25:49 // exit code: 0\n  cwd: ~/sources/Gerrit/builder/master/gerrit\n  grep -R \u0027[^a-zA-Z]try(.*;\u0027 */src | wc -l\n  1",
+      "revId": "a4d8ab21a465027f5a56162a88c9ee54933b0dbf",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4416da01_54ca8c85",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddVelocityCommentTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2015-09-13T20:30:35Z",
+      "side": 1,
+      "message": "Done in PS2.",
+      "parentUuid": "649cbed8_0de7711a",
       "revId": "a4d8ab21a465027f5a56162a88c9ee54933b0dbf",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
