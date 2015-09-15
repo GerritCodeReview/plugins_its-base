@@ -1,0 +1,23 @@
+include_defs('//bucklets/maven_jar.bucklet')
+
+VER = '2.12-SNAPSHOT'
+# TODO(davido): Replace this with MAVEN_CENTRAL for stable Plugin API
+# or with SNAPSHOT repository name
+# (once snapshot Plugin API is available fot Gerrit Code Review)
+REPO = MAVEN_LOCAL
+
+maven_jar(
+  name = 'plugin-api',
+  id = 'com.google.gerrit:gerrit-plugin-api:' + VER,
+  license = 'Apache2.0',
+  attach_source = False,
+  repository = REPO,
+)
+
+maven_jar(
+  name = 'acceptance-framework',
+  id = 'com.google.gerrit:gerrit-acceptance-framework:' + VER,
+  license = 'Apache2.0',
+  attach_source = False,
+  repository = REPO,
+)

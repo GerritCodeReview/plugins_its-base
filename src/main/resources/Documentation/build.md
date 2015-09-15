@@ -3,6 +3,72 @@ Build
 
 This base library for ITS-based plugins is built with Buck.
 
+Two build modes are supported: Standalone and in Gerrit tree. Standalone
+build mode is recommended, as this mode doesn't require local Gerrit
+tree to exist.
+
+Build standalone
+----------------
+
+Clone bucklets library:
+
+```
+  git clone https://gerrit.googlesource.com/bucklets
+
+```
+and link it to its-base directory:
+
+```
+  cd its-base && ln -s ../bucklets .
+```
+Add link to the .buckversion file:
+
+```
+  cd its-base && ln -s bucklets/buckversion .buckversion
+```
+
+To build the plugin, issue the following command:
+
+```
+  buck build plugin
+```
+
+The output is created in
+
+```
+  buck-out/gen/its-base.jar
+```
+
+To execute the tests run:
+
+```
+  buck test
+```
+
+To deploy jar, source and javadoc artifacts to local Maven repository, the
+following command is used:
+
+```
+  buck build mvn_install
+```
+
+To deploy jar, source and javadoc artifacts to Maven Central, the following
+command is used:
+
+```
+  buck build mvn_deploy
+```
+
+To build all artifacts plugin, javadocs and sources with one command, the
+following command is used:
+
+```
+  buck build all
+```
+
+Build in Gerrit tree
+--------------------
+
 Clone or link this plugin to the plugins directory of Gerrit's source
 tree, and issue the command:
 
@@ -26,7 +92,7 @@ This project can be imported into the Eclipse IDE:
 To execute the tests run:
 
 ```
-  buck test --all --include its-base
+  buck test --include its-base
 ```
 
 Note that the ITS-based plugins require `its-base__plugin` library:
