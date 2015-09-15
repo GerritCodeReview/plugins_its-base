@@ -1,9 +1,13 @@
 include_defs('//bucklets/gerrit_plugin.bucklet')
+include_defs('//bucklets/java_sources.bucklet')
+
+SOURCES = glob(['src/main/java/**/*.java'])
+RESOURCES = glob(['src/main/resources/**/*'])
 
 gerrit_plugin(
   name = 'its-base',
-  srcs = glob(['src/main/java/**/*.java']),
-  resources = glob(['src/main/resources/**/*']),
+  srcs = SOURCES,
+  resources = RESOURCES,
 )
 
 TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java'])
@@ -13,6 +17,16 @@ java_library(
   srcs = TEST_UTIL_SRC,
   deps = GERRIT_PLUGIN_API,
   visibility = ['PUBLIC'],
+)
+
+java_library(
+  name = 'classpath',
+  deps = GERRIT_PLUGIN_API,
+)
+
+java_sources(
+  name = 'its-base-sources',
+  srcs = SOURCES + RESOURCES,
 )
 
 java_test(
