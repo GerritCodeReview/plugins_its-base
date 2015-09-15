@@ -1,0 +1,29 @@
+include_defs('//bucklets/maven_jar.bucklet')
+
+maven_jar(
+  name = 'easymock',
+  id = 'org.easymock:easymock:3.3.1',
+  sha1 = 'a497d7f00c9af78b72b6d8f24762d9210309148a',
+  license = 'DO_NOT_DISTRIBUTE',
+  deps = [
+    ':cglib-2_2',
+    ':objenesis',
+  ],
+)
+
+maven_jar(
+  name = 'cglib-2_2',
+  id = 'cglib:cglib-nodep:2.2.2',
+  sha1 = '00d456bb230c70c0b95c76fb28e429d42f275941',
+  license = 'DO_NOT_DISTRIBUTE',
+  attach_source = False,
+)
+
+maven_jar(
+  name = 'objenesis',
+  id = 'org.objenesis:objenesis:2.1',
+  sha1 = '87c0ea803b69252868d09308b4618f766f135a96',
+  license = 'DO_NOT_DISTRIBUTE',
+  visibility = ['//lib/powermock:powermock-reflect'],
+  attach_source = False,
+)
