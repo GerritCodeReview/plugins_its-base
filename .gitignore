@@ -1,8 +1,9 @@
-.idea
-target/
+.buckd/
+.buckversion
 .classpath
+.idea
 .project
-/.settings
-/hooks-its/.settings/org.maven.ide.eclipse.prefs
-/hooks-its/.settings/org.eclipse.m2e.core.prefs
-
+.settings/
+.watchmanconfig
+buck-out/
+bucklets
