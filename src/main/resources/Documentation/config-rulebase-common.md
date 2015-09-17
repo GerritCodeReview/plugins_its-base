@@ -534,9 +534,6 @@ The added comments contain the person responsible for the event
 (abandoner, merger, ...), the change's subject, a reason (if one has
 been given), and a link to the change.
 
-[action-add-comment]: #action-add-comment
-### <a name="action-add-comment">Action: add-comment</a>
-
 [action-add-velocity-comment]: #action-add-velocity-comment
 ### <a name="action-add-velocity-comment">Action: add-velocity-comment</a>
 
