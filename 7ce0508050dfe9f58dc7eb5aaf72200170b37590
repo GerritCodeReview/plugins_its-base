@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "898d4b47_ee0fdf61",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Is all this stuff ready needed in standalone build mode? I mean we should ship (almost) everything listed above in gerrit-plugin-api, right? You could check the buld mode with (borrowed from x-docs plugin):\n\n  if STANDALONE_MODE:\n    ASCIIDOCTOR \u003d \u0027//lib/asciidoctor:asciidoc_lib\u0027\n    DAISYDIFF \u003d \u0027//lib/daisydiff:daisydiff_lib\u0027\n    DOCX4J \u003d \u0027//lib/docx4j:docx4j_lib\u0027\n  else:\n    ASCIIDOCTOR \u003d \u0027//plugins/x-docs/lib/asciidoctor:asciidoc_lib\u0027\n    DAISYDIFF \u003d \u0027//plugins/x-docs/lib/daisydiff:daisydiff_lib\u0027\n    DOCX4J \u003d \u0027//plugins/x-docs/lib/docx4j:docx4j_lib\u0027\n\nSo just try something like:\n\n  DEPS \u003d []\n  if not STANDALONE_MODE:\n    DEPS \u003d [\n      \u0027//lib/commons:lang\u0027,\n      \u0027//lib:guava\u0027,\n      \u0027//lib/guice:guice\u0027,\n      \u0027//lib/jgit:jgit\u0027,\n      \u0027//lib/log:api\u0027,\n      \u0027//lib:velocity\u0027\n    ]\n\nAnd remove all these dependences, that are already shipped in gerrit-plugin-api again. If you are missing something there, that this and other plugins may need, just go ahead, and add it to be shipped in gerit-plugin-api. Recently, we Edwin added lot of stuff there, so it shouldn\u0027t be a problem  to add one or another lib in addition to already shipped 47 libs.",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 19
+      },
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4997d354_ecf60bc6",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Should be already in gerrit-plugin-api, in standalone build mode?",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4997d354_2c2ad3bd",
+        "filename": "lib/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Is in gerrit-plugin-api already and can be dropped?",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 1
+      },
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "898d4b47_2e4f27ab",
+        "filename": "lib/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Is already in gerrit-plugin-api or can be easily added?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 1
+      },
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4997d354_0c2517ef",
+        "filename": "lib/guice/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Is in gerrit-plugin-api already and can be dropped?",
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "898d4b47_0e4a6b9a",
+        "filename": "lib/jgit/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-19T06:05:06Z",
+      "side": 1,
+      "message": "Is in gerrit-plugin-api already and can be dropped?",
+      "revId": "7ce0508050dfe9f58dc7eb5aaf72200170b37590",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
