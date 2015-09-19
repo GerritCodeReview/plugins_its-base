@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4997d354_ac15e379",
+        "filename": "lib/gerrit/BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2015-09-19T22:32:58Z",
+      "side": 1,
+      "message": "This basically means that who\u0027s building it *needs* anyway to have built and published Gerrit to his local maven repo: what the added value then of a standalone BUCK build?\n\nI thought the value was \"you don\u0027t have to build Gerrit first\" ... but this is not the case.",
+      "range": {
+        "startLine": 4,
+        "startChar": 7,
+        "endLine": 4,
+        "endChar": 18
+      },
+      "revId": "dd21a47d809d38b7bf5070d48ea1a9a2055dc603",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4997d354_cc122f8f",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2015-09-19T22:32:58Z",
+      "side": 1,
+      "message": "I would disagree: it is *NOT* recommended as it is more complex and it would require anyway a separate Gerrit build beforehand.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 14
+      },
+      "revId": "dd21a47d809d38b7bf5070d48ea1a9a2055dc603",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
