@@ -1,19 +1,9 @@
 include_defs('//bucklets/gerrit_plugin.bucklet')
 
-DEPS = [
-  '//lib/commons:lang',
-  '//lib:guava',
-  '//lib/guice:guice',
-  '//lib/jgit:jgit',
-  '//lib/log:api',
-  '//lib:velocity',
-]
-
 gerrit_plugin(
   name = 'its-base',
   srcs = glob(['src/main/java/**/*.java']),
   resources = glob(['src/main/resources/**/*']),
-  provided_deps = DEPS,
 )
 
 TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java'])
@@ -21,17 +11,7 @@ TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/te
 java_library(
   name = 'its-base_tests-utils',
   srcs = TEST_UTIL_SRC,
-  deps = DEPS + [
-    '//lib/easymock:easymock',
-    '//lib/log:impl_log4j',
-    '//lib/log:log4j',
-    '//lib:junit',
-    '//lib/powermock:powermock-api-easymock',
-    '//lib/powermock:powermock-api-support',
-    '//lib/powermock:powermock-core',
-    '//lib/powermock:powermock-module-junit4',
-    '//lib/powermock:powermock-module-junit4-common',
-  ],
+  deps = GERRIT_PLUGIN_API,
   visibility = ['PUBLIC'],
 )
 
@@ -43,19 +23,8 @@ java_test(
   ),
   labels = ['its-base'],
   source_under_test = [':its-base__plugin'],
-  deps = DEPS + [
+  deps = GERRIT_PLUGIN_API + [
     ':its-base__plugin',
     ':its-base_tests-utils',
-    '//gerrit-plugin-api:lib',
-    '//lib:gwtorm',
-    '//lib/easymock:easymock',
-    '//lib/log:impl_log4j',
-    '//lib/log:log4j',
-    '//lib:junit',
-    '//lib/powermock:powermock-api-easymock',
-    '//lib/powermock:powermock-api-support',
-    '//lib/powermock:powermock-core',
-    '//lib/powermock:powermock-module-junit4',
-    '//lib/powermock:powermock-module-junit4-common',
   ],
 )
