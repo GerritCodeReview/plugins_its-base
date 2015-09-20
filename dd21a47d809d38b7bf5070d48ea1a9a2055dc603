@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "898d4b47_ae5a3765",
+        "filename": "lib/gerrit/BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-09-20T11:31:05Z",
+      "side": 1,
+      "message": "\u003e I thought the value was \"you don\u0027t have to build Gerrit first\" ... but this is not the case.\n\nYou are right: the value is: \"You don\u0027t have to build Gerrit first but instead consume the existing plugin API from someone elses build\". This obviously works as expected when building against stable Gerrit Plugin API releases: [1].\n\n  git clone --recursive https://github.com/davido/gerrit-oauth-provider.git\n  cd gerrit-oauth-provider \u0026\u0026 buck build plugin\n\nYou see, I havn\u0027t cloned, built and published Gerrit Plugin API first?\n\nUnortunately, the current status with publishing nightly/snapshot Plugin APIs artifacts is unchanged since Gerrit Plugin API publishing toolchain was migrated from Google storage bucket to Maven central: [2]. No SNAPSHOT artifacts are published to any public repositories: Central/Bintray/Artifactory. \n\nOnce this is fixed, the line 4 would be:\n\n  VER \u003d \u00272.12.0-SNAPSHOT-20151010.054544-1\u0027\n  REPO \u003d MAVEN_SNAPSHOT #(or Bintray or Artifactory, or ...)\n\nSee, for example, how non-intrusive and trivial it was to replace the consumption of GWT from 2.7 release to GWT snapshot 2.8 release (GWT project still hasn\u0027t released 2.8 release, but their nightly/snapshot build artifacts considered to be production ready) in our build toolchain: [3].\n\nIronically, it was you who raised the same issue already years ago: [4]. I wonder if new and shiny Gerrit CI servers that you and Christian maintain, could publish nightly Plugin API artifacts? Like you are already publishing native Linux packages to Bintray? This would be very much appreciated!\n\nBut ... this is not a issue of this change, that nightly/snapshot artifacts of Plugin API weren\u0027t published for 2.12 release line yet. I assumed all I said above was clear, but since you\u0027ve asked I added a comment on line 4 to clarify it.\n\n* [1] https://github.com/davido/gerrit-oauth-provider/blob/master/lib/gerrit/BUCK#L3,L13\n* [2] https://groups.google.com/d/topic/repo-discuss/w9iROIZQoEQ/discussion\n* [3] https://gerrit-review.googlesource.com/#/c/67921/3/lib/gwt/BUCK\n* [4] https://groups.google.com/d/topic/repo-discuss/wqo9dWzlg-c/discussion",
+      "parentUuid": "4997d354_ac15e379",
+      "range": {
+        "startLine": 4,
+        "startChar": 7,
+        "endLine": 4,
+        "endChar": 18
+      },
+      "revId": "dd21a47d809d38b7bf5070d48ea1a9a2055dc603",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4997d354_cc122f8f",
         "filename": "src/main/resources/Documentation/build.md",
         "patchSetId": 2
