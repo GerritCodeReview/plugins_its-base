@@ -1,3 +1,14 @@
+# This plugin currently does not support a standalone build, as a
+# standalone build was deemed too much maintenance overhead in its
+# present (2015-09-20) form.
+#
+# Once the standalone build does no longer come with a maintenance
+# overhead, a first shot at the standalone build for this plugin can
+# be found at:
+#
+#   https://gerrit-review.googlesource.com/#/c/70896/
+#
+
 include_defs('//bucklets/gerrit_plugin.bucklet')
 
 DEPS = [
