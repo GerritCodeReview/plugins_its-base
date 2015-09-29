@@ -22,7 +22,7 @@ TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/te
 java_library(
   name = 'its-base_tests-utils',
   srcs = TEST_UTIL_SRC,
-  deps = GERRIT_PLUGIN_API,
+  deps = GERRIT_PLUGIN_API + GERRIT_TESTS,
   visibility = ['PUBLIC'],
 )
 
@@ -34,7 +34,7 @@ java_test(
   ),
   labels = ['its-base'],
   source_under_test = [':its-base__plugin'],
-  deps = GERRIT_PLUGIN_API + [
+  deps = GERRIT_PLUGIN_API + GERRIT_TESTS + [
     ':its-base__plugin',
     ':its-base_tests-utils',
   ],
