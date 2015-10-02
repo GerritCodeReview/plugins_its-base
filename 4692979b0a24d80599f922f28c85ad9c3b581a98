@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75d9d26e_2e6ca70e",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2015-10-02T14:36:19Z",
+      "side": 1,
+      "message": "This is only cloning the default master branch of buckets ... but they evolve over time isn\u0027t it?\nHow are we sure that we are referring to the *correct* version of buckets we are compatible with?",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "4692979b0a24d80599f922f28c85ad9c3b581a98",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
