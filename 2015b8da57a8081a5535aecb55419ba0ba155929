@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75d9d26e_ee20dfdc",
+        "filename": "fake_pom_deploy.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-10-02T06:32:23Z",
+      "side": 1,
+      "message": "This section was shamelessly stolen from Gerrit core and should be probably adjusted.",
+      "revId": "2015b8da57a8081a5535aecb55419ba0ba155929",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
