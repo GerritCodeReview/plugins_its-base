@@ -25,15 +25,11 @@ public class CommitMessageFetcher {
   }
 
   public String fetch(String projectName, String commitId) throws IOException {
-    final Repository repo =
-        repoManager.openRepository(new NameKey(projectName));
-    try {
-      RevWalk revWalk = new RevWalk(repo);
+    try (Repository repo = repoManager.openRepository(new NameKey(projectName));
+        RevWalk revWalk = new RevWalk(repo)){
       RevCommit commit = revWalk.parseCommit(ObjectId.fromString(commitId));
 
       return commit.getFullMessage();
-    } finally {
-      repo.close();
     }
   }
 
