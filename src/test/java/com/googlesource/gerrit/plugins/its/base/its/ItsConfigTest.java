@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.its;
 
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.base.Suppliers;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
@@ -277,13 +278,12 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -293,9 +293,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -309,9 +310,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -325,9 +327,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -341,9 +344,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -357,9 +361,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -373,9 +378,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -389,9 +395,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -405,9 +412,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("false", null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -421,9 +429,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     CommentAddedEvent event = new CommentAddedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -437,9 +446,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     ChangeMergedEvent event = new ChangeMergedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -453,9 +463,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     ChangeAbandonedEvent event = new ChangeAbandonedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -469,9 +480,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     ChangeRestoredEvent event = new ChangeRestoredEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -485,9 +497,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     DraftPublishedEvent event = new DraftPublishedEvent();
-    event.change = new ChangeAttribute();
-    event.change.project = "testProject";
-    event.change.branch = "testBranch";
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
+    changeAttribute.branch = "testBranch";
+    event.change = Suppliers.ofInstance(changeAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -501,9 +514,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     RefUpdatedEvent event = new RefUpdatedEvent();
-    event.refUpdate = new RefUpdateAttribute();
-    event.refUpdate.project = "testProject";
-    event.refUpdate.refName = "refs/heads/testBranch";
+
+    RefUpdateAttribute refUpdate = new RefUpdateAttribute();
+    refUpdate.project = "testProject";
+    refUpdate.refName = "refs/heads/testBranch";
+    event.refUpdate = Suppliers.ofInstance(refUpdate);
 
     ItsConfig itsConfig = createItsConfig();
 
