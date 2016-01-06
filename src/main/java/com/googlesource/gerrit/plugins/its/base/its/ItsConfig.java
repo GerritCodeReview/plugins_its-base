@@ -64,25 +64,25 @@ public class ItsConfig {
   public boolean isEnabled(Event event) {
     if (event instanceof PatchSetCreatedEvent) {
       PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof CommentAddedEvent) {
       CommentAddedEvent e = (CommentAddedEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof ChangeMergedEvent) {
       ChangeMergedEvent e = (ChangeMergedEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof ChangeAbandonedEvent) {
       ChangeAbandonedEvent e = (ChangeAbandonedEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof ChangeRestoredEvent) {
       ChangeRestoredEvent e = (ChangeRestoredEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof DraftPublishedEvent) {
       DraftPublishedEvent e = (DraftPublishedEvent) event;
-      return isEnabled(e.change.project, e.getRefName());
+      return isEnabled(e.change.get().project, e.getRefName());
     } else if (event instanceof RefUpdatedEvent) {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
-      return isEnabled(e.refUpdate.project, e.refUpdate.refName);
+      return isEnabled(e.refUpdate.get().project, e.refUpdate.get().refName);
     } else {
       log.debug("Event " + event + " not recognised and ignored");
       return false;
