@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "27349edb_0cc2975c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-01-11T17:14:29Z",
+      "side": 1,
+      "message": "DRYing your code is one of the refactoring patterns :-) As I said, I like it and I would be more than happy to review and accept it, but in a different commit.",
+      "parentUuid": "ca3667c7_096829f6",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 3
+      },
+      "revId": "c8020e287866b5b954d9551e6a9f11442529467e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca3667c7_a978fdcc",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Upstream started to use Suppliers.\n\nSo users of events have to mess with `.get()`-ing the objects.\n\nHowever, Events provide helper methods that allow to avoid\nhaving to deal with `.get()`-ing.\nFor example `getProjectNameKey`\n\nWe used strings before, but `getProjectNameKey` returns a\nProject.NameKey. So to avoid unboxing the getProjectNameKey\nonly to box it again afterwards into a Project.NameKey when\nusing in method calls, it\u0027s easier to just keep the\nProject.NameKey that Event\u0027s helper method provides.\n\nHence, we have to update those parts that used Strings before\nto Project.NameKey",
       "parentUuid": "ca3667c7_a978fdcc",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 72
+      },
+      "revId": "c8020e287866b5b954d9551e6a9f11442529467e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27349edb_ecd62b21",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-01-11T17:14:29Z",
+      "side": 1,
+      "message": "Makes sense, again happy to +2 from my side, once we fix compilation issues first :-)",
+      "parentUuid": "ca3667c7_e972f5e8",
       "range": {
         "startLine": 119,
         "startChar": 0,
