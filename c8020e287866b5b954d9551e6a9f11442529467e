@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ca3667c7_096829f6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-01-11T10:02:54Z",
+      "side": 1,
+      "message": "You may call it refactoring.\n\nI call it:\n\n  Avoiding to introduce `.get()`s everywhere\n\n:-)",
+      "parentUuid": "2a48e34e_ccdc6f0d",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 3
+      },
+      "revId": "c8020e287866b5b954d9551e6a9f11442529467e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca3667c7_a978fdcc",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-01-11T09:53:23Z",
       "side": 1,
       "message": "Do we really need to change itsConfig.isEnabled() here?",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 72
+      },
+      "revId": "c8020e287866b5b954d9551e6a9f11442529467e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca3667c7_e972f5e8",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-01-11T10:02:54Z",
+      "side": 1,
+      "message": "Upstream started to use Suppliers.\n\nSo users of events have to mess with `.get()`-ing the objects.\n\nHowever, Events provide helper methods that allow to avoid\nhaving to deal with `.get()`-ing.\nFor example `getProjectNameKey`\n\nWe used strings before, but `getProjectNameKey` returns a\nProject.NameKey. So to avoid unboxing the getProjectNameKey\nonly to box it again afterwards into a Project.NameKey when\nusing in method calls, it\u0027s easier to just keep the\nProject.NameKey that Event\u0027s helper method provides.\n\nHence, we have to update those parts that used Strings before\nto Project.NameKey",
+      "parentUuid": "ca3667c7_a978fdcc",
       "range": {
         "startLine": 119,
         "startChar": 0,
