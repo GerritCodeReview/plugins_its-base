@@ -64,36 +64,36 @@ public class ItsConfig {
   public boolean isEnabled(Event event) {
     if (event instanceof PatchSetCreatedEvent) {
       PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof CommentAddedEvent) {
       CommentAddedEvent e = (CommentAddedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof ChangeMergedEvent) {
       ChangeMergedEvent e = (ChangeMergedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof ChangeAbandonedEvent) {
       ChangeAbandonedEvent e = (ChangeAbandonedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof ChangeRestoredEvent) {
       ChangeRestoredEvent e = (ChangeRestoredEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof DraftPublishedEvent) {
       DraftPublishedEvent e = (DraftPublishedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.getRefName());
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof RefUpdatedEvent) {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
-      return isEnabled(e.getProjectNameKey().get(), e.refUpdate.get().refName);
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else {
       log.debug("Event " + event + " not recognised and ignored");
       return false;
     }
   }
 
-  public boolean isEnabled(String project, String refName) {
-    ProjectState projectState = projectCache.get(new Project.NameKey(project));
+  public boolean isEnabled(Project.NameKey projectNK, String refName) {
+    ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
       log.error("Failed to check if " + pluginName + " is enabled for project "
-          + project + ": Project " + project + " not found");
+          + projectNK.get() + ": Project " + projectNK.get() + " not found");
       return false;
     }
 

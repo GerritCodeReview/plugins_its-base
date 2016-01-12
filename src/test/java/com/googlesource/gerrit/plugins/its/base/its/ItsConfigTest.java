@@ -116,7 +116,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentNoBranchDisabled() {
@@ -127,7 +128,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentNoBranchEnforced() {
@@ -138,7 +140,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchEnabled() {
@@ -149,7 +152,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchDisabled() {
@@ -160,7 +164,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchEnforced() {
@@ -171,7 +176,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentNonMatchingBranchEnabled() {
@@ -182,7 +188,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentNonMatchingBranchDisabled() {
@@ -193,7 +200,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentNonMatchingBranchEnforced() {
@@ -204,7 +212,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchMiddleEnabled() {
@@ -215,7 +224,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchMiddleDisabled() {
@@ -226,7 +236,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefNoParentMatchingBranchMiddleEnforced() {
@@ -237,7 +248,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefParentNoBranchEnabled() {
@@ -248,7 +260,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefParentNoBranchDisabled() {
@@ -259,7 +272,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledRefParentNoBranchEnforced() {
@@ -270,7 +284,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertTrue(itsConfig.isEnabled("testProject", "refs/heads/testBranch"));
+    Project.NameKey projectNK = new Project.NameKey("testProject");
+    assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
   public void testIsEnabledEventNoBranches() {
@@ -516,11 +531,10 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     setupIsEnabled("true", null, branches);
 
     RefUpdatedEvent event = new RefUpdatedEvent();
-
-    RefUpdateAttribute refUpdate = new RefUpdateAttribute();
-    refUpdate.project = "testProject";
-    refUpdate.refName = "refs/heads/testBranch";
-    event.refUpdate = Suppliers.ofInstance(refUpdate);
+    RefUpdateAttribute refUpdateAttribute = new RefUpdateAttribute();
+    refUpdateAttribute.project = "testProject";
+    refUpdateAttribute.refName = "refs/heads/testBranch";
+    event.refUpdate = Suppliers.ofInstance(refUpdateAttribute);
 
     ItsConfig itsConfig = createItsConfig();
 

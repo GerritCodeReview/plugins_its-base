@@ -467,7 +467,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private void setupCommonMocks() {
     expect(itsConfig.getIssuePattern())
         .andReturn(Pattern.compile("bug#(\\d+)")).anyTimes();
-    expect(itsConfig.isEnabled("myProject", null)).andReturn(true)
+    Project.NameKey projectNK = new Project.NameKey("myProject");
+    expect(itsConfig.isEnabled(projectNK, null)).andReturn(true)
         .anyTimes();
   }
 
