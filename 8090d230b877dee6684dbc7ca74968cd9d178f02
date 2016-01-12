@@ -46,6 +46,30 @@
       "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27157e84_c4313e2b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-01-12T10:47:10Z",
+      "side": 1,
+      "message": "\u003e This was Claudio\u0027s original change, [...]\n\nNow that with Patch Set 1 is visible, I agree.\nOnly Patch Sets 2+3 were visible back then :-/\n(Drafts FTW)\n\n\u003e [...] however it would trigger the de-memoisation even if\n\u003e ITS-* isn\u0027t enabled\n\nAs of the current master (a3377608c6af8df4ee7adc34b57d8016df758c06)\ngetProjectNameKey is implemented as\n\n  @Override\n  public Project.NameKey getProjectNameKey() {\n    return new Project.NameKey(change.get().project);\n  }\n\nwhich also does the `change.get()`, hence unconditional de-memoisation.\n\nSo with your hasty merge, you baked in \u0027de-memoisation even\nif the its-* isn\u0027t enabled\u0027 and you additionally used a more\ncomplex than necessary compilation fix.\n\nBy your comments here and on the other change, it seems you\nbadly wanted to avoid both :-)\n\nAnyways: It\u0027s merged. So let\u0027s move on.",
+      "parentUuid": "27157e84_e45b9a7c",
+      "range": {
+        "startLine": 67,
+        "startChar": 25,
+        "endLine": 67,
+        "endChar": 50
+      },
+      "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
