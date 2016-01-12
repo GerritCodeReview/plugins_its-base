@@ -22,6 +22,30 @@
       "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27157e84_e45b9a7c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-01-12T09:55:15Z",
+      "side": 1,
+      "message": "This was Claudio\u0027s original change, however it would trigger the de-memoisation even if ITS-* isn\u0027t enabled :-(\nThat\u0027s why if you see the change history I requested Claudio to change it to getProjectNameKey() and I\u0027m working on a Gerrit change to make sure that getting the project name isn\u0027t triggering the de-memoisation anymore :-)",
+      "parentUuid": "2a48e34e_ece12bbc",
+      "range": {
+        "startLine": 67,
+        "startChar": 25,
+        "endLine": 67,
+        "endChar": 50
+      },
+      "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
