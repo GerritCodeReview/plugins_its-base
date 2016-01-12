@@ -19,6 +19,8 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.data.ApprovalAttribute;
+import com.google.gerrit.server.data.ChangeAttribute;
+import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
@@ -27,6 +29,7 @@ import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 
@@ -72,54 +75,42 @@ public class PropertyExtractor {
     }
   }
 
-  private Map<String,Set<String>> extractFrom(ChangeAbandonedEvent event,
+  private Map<String,Set<String>> extractFrom(PatchSetEvent event,
       Set<Property> common) {
     common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
+    ChangeAttribute change = event.change.get();
+    PatchSetAttribute patchSet = event.patchSet.get();
+    common.addAll(propertyAttributeExtractor.extractFrom(change));
+    common.addAll(propertyAttributeExtractor.extractFrom(patchSet));
+    PatchSet.Id patchSetId = newPatchSetId(change.number, patchSet.number);
+    return issueExtractor.getIssueIds(change.project,
+        patchSet.revision, patchSetId);
+  }
+
+  private Map<String,Set<String>> extractFrom(ChangeAbandonedEvent event,
+      Set<Property> common) {
     common.addAll(propertyAttributeExtractor.extractFrom(event.abandoner.get(), "abandoner"));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
     common.add(propertyFactory.create("reason", event.reason));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   private Map<String,Set<String>> extractFrom(ChangeMergedEvent event,
       Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   private Map<String,Set<String>> extractFrom(ChangeRestoredEvent event,
       Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
     common.addAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
     common.add(propertyFactory.create("reason", event.reason));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   private Map<String,Set<String>> extractFrom(DraftPublishedEvent event,
       Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
     common.addAll(propertyAttributeExtractor.extractFrom(event.uploader.get(), "uploader"));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   private Map<String,Set<String>> extractFrom(RefUpdatedEvent event,
@@ -127,27 +118,18 @@ public class PropertyExtractor {
     common.add(propertyFactory.create("event-type", event.type));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
-    return issueExtractor.getIssueIds(event.refUpdate.get().project,
+    return issueExtractor.getIssueIds(event.getProjectNameKey().get(),
         event.refUpdate.get().newRev);
   }
 
   private Map<String,Set<String>> extractFrom(PatchSetCreatedEvent event,
       Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
     common.addAll(propertyAttributeExtractor.extractFrom(event.uploader.get(), "uploader"));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   private Map<String,Set<String>> extractFrom(CommentAddedEvent event,
       Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.change.get()));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.patchSet.get()));
     common.addAll(propertyAttributeExtractor.extractFrom(event.author.get(), "commenter"));
     if (event.approvals != null) {
       for (ApprovalAttribute approvalAttribute : event.approvals.get()) {
@@ -156,10 +138,7 @@ public class PropertyExtractor {
       }
     }
     common.add(propertyFactory.create("comment", event.comment));
-    PatchSet.Id patchSetId = newPatchSetId(event.change.get().number,
-        event.patchSet.get().number);
-    return issueExtractor.getIssueIds(event.change.get().project,
-        event.patchSet.get().revision, patchSetId);
+    return extractFrom((PatchSetEvent) event, common);
   }
 
   /**
