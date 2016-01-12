@@ -70,6 +70,30 @@
       "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27157e84_64968a35",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-01-12T10:51:56Z",
+      "side": 1,
+      "message": "Yep, the getProjectNameKey() is still using the change.get().project which is insane IMHO as the project name is known at the time the change event is triggered, even without requiring the de-memoisation.\n\nI\u0027m preparing a patch on it on Gerrit core ... posting by today COB :-)",
+      "parentUuid": "27157e84_c4313e2b",
+      "range": {
+        "startLine": 67,
+        "startChar": 25,
+        "endLine": 67,
+        "endChar": 50
+      },
+      "revId": "8090d230b877dee6684dbc7ca74968cd9d178f02",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
