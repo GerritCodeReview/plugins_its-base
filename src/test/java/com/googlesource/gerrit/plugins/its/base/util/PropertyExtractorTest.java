@@ -70,7 +70,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testChangeAbandonedEvent() {
-    ChangeAbandonedEvent event = new ChangeAbandonedEvent();
+    ChangeAbandonedEvent event =
+        new ChangeAbandonedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -111,7 +112,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testChangeMergedEvent() {
-    ChangeMergedEvent event = new ChangeMergedEvent();
+    ChangeMergedEvent event =
+        new ChangeMergedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -145,7 +147,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testChangeRestoredEvent() {
-    ChangeRestoredEvent event = new ChangeRestoredEvent();
+    ChangeRestoredEvent event =
+        new ChangeRestoredEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -185,7 +188,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testCommentAddedEventWOApprovals() {
-    CommentAddedEvent event = new CommentAddedEvent();
+    CommentAddedEvent event =
+        new CommentAddedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -225,7 +229,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testCommentAddedEventWApprovals() {
-    CommentAddedEvent event = new CommentAddedEvent();
+    CommentAddedEvent event =
+        new CommentAddedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -279,7 +284,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testDraftPublishedEvent() {
-    DraftPublishedEvent event = new DraftPublishedEvent();
+    DraftPublishedEvent event =
+        new DraftPublishedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -314,7 +320,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testPatchSetCreatedEvent() {
-    PatchSetCreatedEvent event = new PatchSetCreatedEvent();
+    PatchSetCreatedEvent event =
+        new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);

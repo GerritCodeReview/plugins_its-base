@@ -15,6 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.testutil;
 
 import com.google.common.collect.Lists;
+import com.google.gerrit.reviewdb.client.Account;
+import com.google.gerrit.reviewdb.client.Branch;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.Project;
 
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 
@@ -22,9 +26,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 
 public abstract class LoggingMockingTestCase extends MockingTestCase {
+
+  protected final Change.Key testChangeKey = new Change.Key(
+      "Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");
+  protected final Change.Id testChangeId = new Change.Id(1);
+  protected final Account.Id testAccountId = new Account.Id(1);
 
   private java.util.Collection<LoggingEvent> loggedEvents;
 
@@ -103,5 +113,11 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
     // to verify mocks would bail out and might leave open resources from
     // subclasses open.
     assertNoUnassertedLogEvents();
+  }
+
+  protected Change testChange(String project, String branch) {
+    return new Change(testChangeKey, testChangeId, testAccountId,
+        new Branch.NameKey(new Project.NameKey(project), branch),
+        new Timestamp(System.currentTimeMillis()));
   }
 }
