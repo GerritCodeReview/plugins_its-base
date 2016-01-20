@@ -28,8 +28,27 @@ So for example having
     html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
     association = SUGGESTED
 ```
+in `etc/gerrit.config` would allow to match the issues `4711`, `167`
+from a commit message like
+
+```
+Sample commit message relating to bug 4711, and bug 167.
+```
+
+While this more complex configuration
+
+```
+[commentlink "@PLUGIN@"]
+    match = [Bb][Uu][Gg][ ]*([1-9][0-9]*)
+    html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
+    association = WORKFLOW
+    associationState = ReadyForDevelopment
+    associationState = InProgress
+
+```
 
 in `etc/gerrit.config` would allow to match the issues `4711`, `167`
+and accept the commit only if the issues are 'ReadyForDevelopment' or 'InProgress' state
 from a commit message like
 
 ```
@@ -51,6 +70,10 @@ SUGGESTED
 OPTIONAL
 :	 Bug-ids are liked when found in the git commit message, no warning is
 	 displayed otherwise.
+
+WORKFLOW
+:	Like MANDATORY all issue-ids are required to exist and must be in one of
+    the allowed states
 
 [upstream-comment-link-doc]: ../../../Documentation/config-gerrit.html#commentlink
 
