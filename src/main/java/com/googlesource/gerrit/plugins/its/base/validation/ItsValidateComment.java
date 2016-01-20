@@ -59,6 +59,7 @@ public class ItsValidateComment implements CommitValidationListener {
     switch (associationPolicy) {
       case MANDATORY:
       case SUGGESTED:
+      case WORKFLOW:
         String commitMessage = commit.getFullMessage();
         String[] issueIds = issueExtractor.getIssueIds(commitMessage);
         String synopsis = null;
