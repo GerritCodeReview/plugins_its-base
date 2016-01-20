@@ -39,6 +39,7 @@ import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -192,5 +193,15 @@ public class ItsConfig {
   public ItsAssociationPolicy getItsAssociationPolicy() {
     return gerritConfig.getEnum("commentlink", getCommentLinkName(),
         "association", ItsAssociationPolicy.OPTIONAL);
+  }
+
+  /**
+   * Gets the list of the allowed states when committing with WORKFLOW
+   * policy
+   * @return a list of the allowed states
+   */
+  public String[] getItsAssociationStates() {
+    return gerritConfig.getStringList("commentlink", getCommentLinkName(),
+        "associationState");
   }
 }
