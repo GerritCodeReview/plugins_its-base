@@ -22,6 +22,30 @@
       "revId": "9b3e32e3c23ba2a9fbd6ae190d92a8fa4e9ff416",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6776964c_ce12e339",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/LoggingMockingTestCase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-01-20T08:46:08Z",
+      "side": 1,
+      "message": "Those are the values used in testChange() and could be useful to be referred in the subclasses of this abstract test case. That\u0027s why are protected and not private.",
+      "parentUuid": "c785825a_d1d124f6",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 11
+      },
+      "revId": "9b3e32e3c23ba2a9fbd6ae190d92a8fa4e9ff416",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
