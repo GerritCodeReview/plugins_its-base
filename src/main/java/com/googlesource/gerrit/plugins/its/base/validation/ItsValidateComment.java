@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class ItsValidateComment implements CommitValidationListener {
     switch (associationPolicy) {
       case MANDATORY:
       case SUGGESTED:
+      case WORKFLOW:
         String commitMessage = commit.getFullMessage();
         String[] issueIds = issueExtractor.getIssueIds(commitMessage);
         String synopsis = null;
@@ -100,6 +102,55 @@ public class ItsValidateComment implements CommitValidationListener {
             details = sb.toString();
 
             ret.add(commitValidationFailure(synopsis, details));
+          } else {
+            // WORKFLOW mode will check states only if all issues exist
+            if (associationPolicy == ItsAssociationPolicy.WORKFLOW) {
+              List<String> allowedStates =
+                  Arrays.asList(itsConfig.getItsAssociationStates());
+              List<String> invalidStateIssueIds = Lists.newArrayList();
+              if (allowedStates.size() > 0) {
+                for (String issueId : issueIds) {
+                  boolean valid = false;
+                  try {
+                    String currentState = client.getState(issueId);
+                    valid = allowedStates.contains(currentState);
+                  } catch (IOException e) {
+                    synopsis =
+                        "Issue " + issueId + " not in an acceptable state "
+                            + allowedStates.toString();
+                    log.warn(synopsis, e);
+                    details = e.toString();
+                    ret.add(commitValidationFailure(synopsis, details));
+                  }
+                  if (!valid) {
+                    invalidStateIssueIds.add(issueId);
+                  }
+                }
+              }
+
+              if (!invalidStateIssueIds.isEmpty()) {
+                synopsis =
+                    "Invalid state issue ids referenced in commit message";
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("The issue-ids\n");
+                for (String issueId : invalidStateIssueIds) {
+                  sb.append("    * ");
+                  sb.append(issueId);
+                  sb.append("\n");
+                }
+                sb.append("are referenced in the commit message of\n");
+                sb.append(commit.getId().getName());
+                sb.append(",\n");
+                sb.append("but are not in an allowed state ");
+                sb.append(allowedStates.toString() + " for ");
+                sb.append(pluginName);
+                sb.append(" Issue-Tracker");
+                details = sb.toString();
+
+                ret.add(commitValidationFailure(synopsis, details));
+              }
+            }
           }
         } else {
           synopsis = "Missing issue-id in commit message";
@@ -133,7 +184,8 @@ public class ItsValidateComment implements CommitValidationListener {
       String synopsis, String details) throws CommitValidationException {
     CommitValidationMessage ret =
         new CommitValidationMessage(synopsis + "\n" + details, false);
-    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
+    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY
+        || itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.WORKFLOW) {
       throw new CommitValidationException(synopsis,
           Collections.singletonList(ret));
     }

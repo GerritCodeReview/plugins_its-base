@@ -193,4 +193,14 @@ public class ItsConfig {
     return gerritConfig.getEnum("commentlink", getCommentLinkName(),
         "association", ItsAssociationPolicy.OPTIONAL);
   }
+
+  /**
+   * Gets the list of the allowed states when committing with WORKFLOW
+   * policy
+   * @return a list of the allowed states
+   */
+  public String[] getItsAssociationStates() {
+    return gerritConfig.getStringList("commentlink", getCommentLinkName(),
+        "associationState");
+  }
 }
