@@ -452,6 +452,78 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertLogMessageContains("4711");
   }
 
+  public void testWorkflowNonMatchingStates()
+      throws IOException {
+
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
+        commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.WORKFLOW).atLeastOnce();
+
+    expect(itsConfig.getItsAssociationStates())
+        .andReturn(new String[]{ "inProgress", "submit"}).atLeastOnce();
+
+    expect(commit.getFullMessage()).andReturn("bug#4711")
+        .atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711"))
+        .andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacade.exists("4711")).andReturn(true)
+        .atLeastOnce();
+    expect(itsFacade.getState("4711")).andReturn("closed")
+        .atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue("Message of thrown CommitValidationException does not "
+          + "contain 'Invalid State'", e.getMessage().contains("Invalid State"));
+    }
+  }
+
+  public void testWorkflowMatchingState()
+      throws CommitValidationException, IOException {
+
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = new CommitReceivedEvent(command, project, null,
+        commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.WORKFLOW).atLeastOnce();
+
+    expect(itsConfig.getItsAssociationStates())
+        .andReturn(new String[]{ "inProgress", "submit"}).atLeastOnce();
+
+    expect(commit.getFullMessage()).andReturn("bug#4711")
+        .atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711"))
+        .andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacade.exists("4711")).andReturn(true)
+        .atLeastOnce();
+    expect(itsFacade.getState("4711")).andReturn("inProgress")
+        .atLeastOnce();
+
+    replayMocks();
+
+    ret=ivc.onCommitReceived(event);
+
+    assertEmptyList(ret);
+  }
+
   public void assertEmptyList(List<CommitValidationMessage> list) {
     if (!list.isEmpty()) {
       StringBuffer sb = new StringBuffer();

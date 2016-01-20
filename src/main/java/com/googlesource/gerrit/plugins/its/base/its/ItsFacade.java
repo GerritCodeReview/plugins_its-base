@@ -42,5 +42,8 @@ public interface ItsFacade {
   public boolean exists(final String issueId)
       throws IOException;
 
+  public String getState(final String issueId)
+      throws IOException;
+
   public String createLinkForWebui(String url, String text);
 }
