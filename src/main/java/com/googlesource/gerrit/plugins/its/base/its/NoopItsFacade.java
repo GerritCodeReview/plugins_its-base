@@ -75,4 +75,12 @@ public class NoopItsFacade implements ItsFacade {
     }
     return "";
   }
+
+  @Override
+  public String getState(String issueId) throws IOException {
+    if (log.isDebugEnabled()) {
+      log.debug("getState({})", issueId);
+    }
+    return "";
+  }
 }
