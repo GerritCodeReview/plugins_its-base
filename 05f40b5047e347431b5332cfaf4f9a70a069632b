@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "222c912d_7525a888",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2016-02-26T18:01:42Z",
+      "side": 1,
+      "message": "Trailing spaces",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 4
+      },
+      "revId": "05f40b5047e347431b5332cfaf4f9a70a069632b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "222c912d_153234d4",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2016-02-26T18:01:42Z",
+      "side": 1,
+      "message": "Trailing space",
+      "range": {
+        "startLine": 50,
+        "startChar": 68,
+        "endLine": 50,
+        "endChar": 69
+      },
+      "revId": "05f40b5047e347431b5332cfaf4f9a70a069632b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "222c912d_352f3069",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2016-02-26T18:01:42Z",
+      "side": 1,
+      "message": "Trailing spaces",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 2
+      },
+      "revId": "05f40b5047e347431b5332cfaf4f9a70a069632b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
