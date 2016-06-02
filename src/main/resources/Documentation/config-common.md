@@ -5,6 +5,7 @@ Common configuration for `its-base`-based plugins
 * [Identifying ITS ids][identifying-its-ids]
 * [Enabling ITS integration][enabling-its-integration]
 * [Configuring rules of when to take which actions in the ITS][configure-rules]
+* [Legacy configuration][legacy-configuration]
 
 
 
@@ -138,6 +139,69 @@ its-bugzilla-internal.jar).  Gerrit will give each plugin the same
 name as the file name (minus the extension).  You can view the names
 by going to the Gerrit UI under menu Plugins -> Installed.  Now you
 just need to use the appropriate name to configure each plugin.
+
+
+
+
+[legacy-configuration]: #legacy-configuration
+<a name="legacy-configuration">Legacy configuration</a>
+-------------------------------------------------------
+
+In this section we present the legacy configuration that uses
+`etc/gerrit.config` directly. As this legacy part will be removed at
+some point, please upgrade to the rule [rule based
+approach][rule-base].
+
+The following configuration settings are available:
+
+`@PLUGIN@.commentOnChangeAbandoned`
+:	If true, abandoning a change adds an ITS comment to the change's
+	associated issue.
+
+	Default is `true`.
+
+`@PLUGIN@.commentOnChangeCreated`
+:	If true, creating a change adds an ITS comment to the change's
+	associated issue.
+
+	Default is `false`.
+
+`@PLUGIN@.commentOnChangeMerged`
+:	If true, merging a change's patch set adds an ITS comment to
+	the change's associated issue.
+
+	Default is `true`.
+
+`@PLUGIN@.commentOnChangeRestored`
+:	If true, restoring an abandoned change adds an ITS comment to
+	the change's associated issue.
+
+	Default is `true`.
+
+`@PLUGIN@.commentOnCommentAdded`
+:	If true, adding a comment and/or review to a change in Gerrit
+	adds an ITS comment to the change's associated issue.
+
+	Default is `true`.
+
+`@PLUGIN@.commentOnFirstLinkedPatchSetCreated`
+:	If true, creating a patch set for a change adds an ITS comment
+	to the change's associated issue, if the issue has not been
+	mentioned in previous patch sets of the same change.
+
+	Default is `false`.
+
+`@PLUGIN@.commentOnPatchSetCreated`
+:	If true, creating a patch set for a change adds an ITS comment
+	to the change's associated issue.
+
+	Default is `true`.
+
+`@PLUGIN@.commentOnRefUpdatedGitWeb`
+:	If true, updating a ref adds a GitWeb link to the associated
+	issue.
+
+	Default is `true`.
 
 [Back to @PLUGIN@ documentation index][index]
 
