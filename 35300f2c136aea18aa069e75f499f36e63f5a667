@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6118244_1a987d7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-06-02T21:18:27Z",
+      "side": 1,
+      "message": "No, it has not been lost.\n\nConfiguration is done (as usual) through the `actions.config` file.\n\nThe actions you can set depend on the ITS plugin, as different ITSs allow different actions.\n\nFor example Bugzilla allows to specify resolution and status. The corresponding `its-bugzilla` the documentation is here:\n\n  http://builds.quelltextlich.at/gerrit/nightly/master/latest-ok/docs/manual/plugins/its-bugzilla/Documentation/config-rulebase-plugin-actions.html\n\nThe corresponding code is here:\n\nhttps://gerrit.googlesource.com/plugins/its-bugzilla/+/master/src/main/java/com/googlesource/gerrit/plugins/its/bugzilla/BugzillaItsFacade.java#92\nhttps://gerrit.googlesource.com/plugins/its-bugzilla/+/master/src/main/java/com/googlesource/gerrit/plugins/its/bugzilla/BugzillaClient.java#78\nhttps://gerrit.googlesource.com/plugins/its-bugzilla/+/master/src/main/java/com/googlesource/gerrit/plugins/its/bugzilla/BugzillaClient.java#81\n\nSame for the other plugins. Whatever the Facade\u0027s `performAction` allows can be used. \n\nTo have another example, here\u0027s the code for `its-jira`\n\nhttps://gerrit.googlesource.com/plugins/its-jira/+/e09ae019d6084d22cddb6d04763ddfcf47734ab7/src/main/java/com/googlesource/gerrit/plugins/its/jira/JiraItsFacade.java#92\n\n\n----------------------------------\n\nBottom-line: \u0027State Transitions\u0027 functionality is still there. And now (through `actions.config`) you even have fine control over when/how the state transition should happen.",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 10,
+        "endChar": 45
+      },
+      "revId": "35300f2c136aea18aa069e75f499f36e63f5a667",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
