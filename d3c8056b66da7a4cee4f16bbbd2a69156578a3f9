@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79357b61_a2853e04",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-08-09T22:21:02Z",
+      "side": 1,
+      "message": "Are we sure to remove ALL the spaces? or do we want just to trim them at beginning / end?",
+      "range": {
+        "startLine": 70,
+        "startChar": 17,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
