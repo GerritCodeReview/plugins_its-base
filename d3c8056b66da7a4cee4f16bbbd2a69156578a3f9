@@ -22,6 +22,24 @@
       "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9945351_6cf69b92",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1012623
+      },
+      "writtenOn": "2016-08-09T23:18:10Z",
+      "side": 1,
+      "message": "It\u0027s the spaces between the list of events, like this \u0027change-abandoned, change-restored\u0027.  We want to remove the spaces otherwise the values and property will not match in isMetBy function (line 100 below).",
+      "parentUuid": "79357b61_a2853e04",
+      "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
