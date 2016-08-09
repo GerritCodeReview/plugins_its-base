@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.common.Nullable;
@@ -66,7 +67,8 @@ public class Condition {
     if (values == null) {
       modifyableValues = Collections.emptySet();
     } else {
-      List<String> valueList = Lists.newArrayList(values.split(","));
+      List<String> valueList = Lists.newArrayList(
+          Splitter.on(',').trimResults().split(values));
       if (!valueList.isEmpty() && "!".equals(valueList.get(0))) {
         modifyableNegated = true;
         valueList.remove(0);

@@ -123,6 +123,26 @@ public class ConditionTest  extends LoggingMockingTestCase {
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
+  public void testIsMetByOredMultipleWithSpaces() {
+    Condition condition = createCondition("testKey", "value1, value2, value3");
+
+    Property property1 = createMock(Property.class);
+    expect(property1.getKey()).andReturn("testKey").anyTimes();
+    expect(property1.getValue()).andReturn("value1").anyTimes();
+
+    Property property2 = createMock(Property.class);
+    expect(property2.getKey()).andReturn("testKey").anyTimes();
+    expect(property2.getValue()).andReturn("value3").anyTimes();
+
+    Collection<Property> properties = Lists.newArrayListWithCapacity(2);
+    properties.add(property1);
+    properties.add(property2);
+
+    replayMocks();
+
+    assertTrue("isMetBy gave false", condition.isMetBy(properties));
+  }
+
   public void testIsMetByOredAll() {
     Condition condition = createCondition("testKey", "value1,value2,value3");
 
