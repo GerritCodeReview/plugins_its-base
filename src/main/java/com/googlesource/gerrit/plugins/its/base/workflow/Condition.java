@@ -66,7 +66,8 @@ public class Condition {
     if (values == null) {
       modifyableValues = Collections.emptySet();
     } else {
-      List<String> valueList = Lists.newArrayList(values.split(","));
+      List<String> valueList = Lists.newArrayList(
+          values.replaceAll("\\s", "").split(","));
       if (!valueList.isEmpty() && "!".equals(valueList.get(0))) {
         modifyableNegated = true;
         valueList.remove(0);
