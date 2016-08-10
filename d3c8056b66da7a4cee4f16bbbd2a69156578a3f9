@@ -40,6 +40,48 @@
       "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "395ce304_b88059f5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-08-10T23:55:40Z",
+      "side": 1,
+      "message": "\u003e Are we sure to remove ALL the spaces? or do we want just to trim\n \u003e them at beginning / end?\n\nBy the way `key` and `values` are read in, they are trimmed\nalready at the beginning/end.\n\n\nBut of course, trimming `key` and `values` at beginning/end\nagain would not do any harm.",
+      "parentUuid": "79357b61_a2853e04",
+      "range": {
+        "startLine": 70,
+        "startChar": 17,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "395ce304_d8850d04",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2016-08-10T23:55:40Z",
+      "side": 1,
+      "message": "While I can see that it would be nice for\n\n  change-abandoned, change-restored\n\nit would break uses where spaces are important. Like\n\n  submitter-name \u003d Khai Do\n\nwould now be condensed to KhaiDo after the change and\nno longer match.\n\nA simple way to make both use-cases work, would be to\nexplicitly trim each item of valueList at the beginning/end.",
+      "parentUuid": "b9945351_6cf69b92",
+      "revId": "d3c8056b66da7a4cee4f16bbbd2a69156578a3f9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
