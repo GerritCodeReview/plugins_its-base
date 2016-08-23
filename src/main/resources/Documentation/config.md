@@ -9,9 +9,9 @@ Configuring @PLUGIN@ is a five step process:
 4. Restart gerrit, so the config changes take effect.
 5. Install the @PLUGIN@ jar in your gerrit site.
 
-[config-connectivity]: config-connectivity.html
-[config-common]: config-common.html
-[config-rulebase-common]: config-rulebase-common.html
+[config-connectivity]: config-connectivity.md
+[config-common]: config-common.md
+[config-rulebase-common]: config-rulebase-common.md
 
 Done :-)
 

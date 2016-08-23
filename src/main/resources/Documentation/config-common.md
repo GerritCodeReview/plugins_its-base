@@ -118,7 +118,7 @@ which action on the ITS (e.g.: “Set issue's status to ‘Resolved’”) is
 configured through a [rule base][rule-base] in
 `etc/its/actions.config`.
 
-[rule-base]: config-rulebase-common.html
+[rule-base]: config-rulebase-common.md
 
 
 
