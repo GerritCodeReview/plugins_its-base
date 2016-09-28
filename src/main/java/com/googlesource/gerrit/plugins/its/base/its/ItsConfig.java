@@ -100,14 +100,14 @@ public class ItsConfig {
     for (ProjectState parentState : projectState.treeInOrder()) {
       PluginConfig parentCfg =
           pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
-      if ("enforced".equals(parentCfg.getString("enabled"))
+      if (!"false".equals(parentCfg.getString("enabled"))
           && isEnabledForBranch(parentState, refName)) {
         return true;
       }
     }
 
-    return pluginCfgFactory.getFromProjectConfigWithInheritance(
-        projectState, pluginName).getBoolean("enabled", false)
+    return !"false".equals(pluginCfgFactory.getFromProjectConfigWithInheritance(
+        projectState, pluginName).getString("enabled", "false"))
         && isEnabledForBranch(projectState, refName);
   }
 
