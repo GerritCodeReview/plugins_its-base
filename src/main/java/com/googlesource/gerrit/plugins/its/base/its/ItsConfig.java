@@ -97,6 +97,17 @@ public class ItsConfig {
       return false;
     }
 
+    if(isEnforcedByAnyParentProject(refName, projectState)) {
+      return true;
+    }
+
+    return !"false".equals(pluginCfgFactory.getFromProjectConfigWithInheritance(
+        projectState, pluginName).getString("enabled", "false"))
+        && isEnabledForBranch(projectState, refName);
+  }
+
+  private boolean isEnforcedByAnyParentProject(String refName,
+      ProjectState projectState) {
     for (ProjectState parentState : projectState.treeInOrder()) {
       PluginConfig parentCfg =
           pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
@@ -105,10 +116,7 @@ public class ItsConfig {
         return true;
       }
     }
-
-    return pluginCfgFactory.getFromProjectConfigWithInheritance(
-        projectState, pluginName).getBoolean("enabled", false)
-        && isEnabledForBranch(projectState, refName);
+    return false;
   }
 
   private boolean isEnabledForBranch(ProjectState project, String refName) {
