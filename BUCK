@@ -33,7 +33,6 @@ java_test(
     excludes = TEST_UTIL_SRC
   ),
   labels = ['its-base'],
-  source_under_test = [':its-base__plugin'],
   deps = GERRIT_PLUGIN_API + GERRIT_TESTS + [
     ':its-base__plugin',
     ':its-base_tests-utils',
