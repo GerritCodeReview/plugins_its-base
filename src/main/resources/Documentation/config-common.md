@@ -67,6 +67,10 @@ NOTE: Historically the association has been defined in the Gerrit's commentLink 
 That setting is deprecated but still supported for the current release. You are encouraged to
 move the association policy to the plugin section.
 
+The association can be overridden at project level in the project.config
+using the same syntax used in the gerrit.config. Project's hierarchy will be respected
+when evaluating the links configuration and association policy.
+
 [enabling-its-integration]: #enabling-its-integration
 <a name="enabling-its-integration">Enabling ITS integration</a>
 ---------------------------------------------------------------

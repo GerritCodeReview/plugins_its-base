@@ -143,6 +143,8 @@ public class ItsValidateComment implements CommitValidationListener {
   @Override
   public List<CommitValidationMessage> onCommitReceived(
       CommitReceivedEvent receiveEvent) throws CommitValidationException {
+    ItsConfig.setCurrentProjectName(receiveEvent.getProjectNameKey());
+
     if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {
       return validCommit(receiveEvent.commit);
     } else {
