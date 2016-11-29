@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "70e76057_636efca9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-11-29T09:01:13Z",
+      "side": 1,
+      "message": "True, it was a real mess :-(\nI\u0027ve amended the definition and set the association at plugin config level only.",
+      "parentUuid": "50ec1c3c_c2c42454",
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50ec1c3c_82ecdcd9",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 254,
         "endChar": 28
       },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ec1c3c_22b6b0db",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-11-29T09:01:13Z",
+      "side": 1,
+      "message": "Unfortunately *IT IS* possible and it is mainly due to tests, a LOT OF THEM.",
+      "parentUuid": "50ec1c3c_82ecdcd9",
       "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "50ec1c3c_82c33c44",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-11-29T09:01:13Z",
+      "side": 1,
+      "message": "Not really, if there is no plugin configuration for the project, better to return an empty one, isn\u0027t it?",
+      "parentUuid": "70e76057_035d7006",
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50ec1c3c_62e9d8c7",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 3
@@ -88,6 +142,24 @@
         "endLine": 146,
         "endChar": 70
       },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70e76057_c379c872",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2016-11-29T09:01:13Z",
+      "side": 1,
+      "message": "Yes, it was the lesser of the damages. Otherwise a huge refactoring was needed :-(",
+      "parentUuid": "50ec1c3c_62e9d8c7",
       "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
