@@ -14,9 +14,14 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -28,6 +33,7 @@ import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
@@ -39,6 +45,8 @@ import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -49,6 +57,18 @@ public class ItsConfig {
   private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
   private final Config gerritConfig;
+
+  private static final ThreadLocal<Project.NameKey> currentProjectName =
+      new ThreadLocal<Project.NameKey>() {
+        @Override
+        protected Project.NameKey initialValue() {
+          return null;
+        }
+      };
+
+  public static void setCurrentProjectName(Project.NameKey projectName) {
+    currentProjectName.set(projectName);
+  }
 
   @Inject
   public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
@@ -140,7 +160,7 @@ public class ItsConfig {
   public String getCommentLinkName() {
     String ret;
 
-    ret = gerritConfig.getString(pluginName, null, "commentlink");
+    ret = getConfigString(pluginName, null, "commentlink");
     if (ret == null) {
       ret = pluginName;
     }
@@ -158,9 +178,26 @@ public class ItsConfig {
    *    to match issue ids.
    */
   public Pattern getIssuePattern() {
+    String match =
+        FluentIterable
+            .from(getCommitLinkInfo(getCommentLinkName()))
+            .filter(new Predicate<CommentLinkInfo>() {
+              @Override
+              public boolean apply(CommentLinkInfo input) {
+                return input.match != null && !input.match.trim().isEmpty();
+              }
+            })
+            .transform(new Function<CommentLinkInfo, String>() {
+              @Override
+              public String apply(CommentLinkInfo input) {
+                return input.match;
+              }
+            })
+            .last()
+            .or(gerritConfig.getString("commentlink", getCommentLinkName(),
+                "match"));
     Pattern ret = null;
-    String match = gerritConfig.getString("commentlink",
-        getCommentLinkName(), "match");
+
     if (match != null) {
       ret = Pattern.compile(match);
     }
@@ -178,7 +215,7 @@ public class ItsConfig {
   public int getIssuePatternGroupIndex() {
     Pattern pattern = getIssuePattern();
     int groupCount = pattern.matcher("").groupCount();
-    int index = gerritConfig.getInt(pluginName, "commentlinkGroupIndex", 1);
+    int index = getConfigInt(pluginName, null, "commentlinkGroupIndex", 1);
     if (index < 0 || index > groupCount) {
       index = (groupCount == 0 ? 0 : 1);
     }
@@ -187,10 +224,58 @@ public class ItsConfig {
 
   /**
    * Gets how necessary it is to associate commits with issues
+   *
    * @return policy on how necessary association with issues is
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentlink", getCommentLinkName(),
-        "association", ItsAssociationPolicy.OPTIONAL);
+    return getConfigEnum("commentlink", getCommentLinkName(), "association",
+        ItsAssociationPolicy.OPTIONAL);
+  }
+
+  private String getConfigString(String section, String subsection, String key) {
+    return getCurrentPluginConfig().getString(key,
+        gerritConfig.getString(section, subsection, key));
+  }
+
+  private int getConfigInt(String section, String subsection, String key,
+      int defaultValue) {
+    return getCurrentPluginConfig().getInt(key,
+        gerritConfig.getInt(section, subsection, key, defaultValue));
+  }
+
+  private <T extends Enum<?>> T getConfigEnum(String section,
+      String subsection, String key, T defaultValue) {
+    return getCurrentPluginConfig().getEnum(key,
+        gerritConfig.getEnum(section, subsection, key, defaultValue));
+  }
+
+  private PluginConfig getCurrentPluginConfig() {
+    NameKey projectName = currentProjectName.get();
+    if (projectName != null) {
+      try {
+        return pluginCfgFactory.getFromProjectConfigWithInheritance(
+            projectName, pluginName);
+      } catch (NoSuchProjectException e) {
+        log.error("Cannot access " + projectName + " configuration for plugin "
+            + pluginName, e);
+      }
+    }
+    return new PluginConfig(pluginName, new Config());
+  }
+
+  private List<CommentLinkInfo> getCommitLinkInfo(final String commentLinkName) {
+    NameKey projectName = currentProjectName.get();
+    if (projectName != null) {
+      List<CommentLinkInfo> commentLinks =
+          projectCache.get(projectName).getCommentLinks();
+      FluentIterable.from(commentLinks)
+          .filter(new Predicate<CommentLinkInfo>() {
+            @Override
+            public boolean apply(CommentLinkInfo input) {
+              return input.name.equals(commentLinkName);
+            }
+          }).toList();
+    }
+    return Collections.emptyList();
   }
 }
