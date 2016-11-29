@@ -198,7 +198,11 @@ public class ItsConfig {
    * @return policy on how necessary association with issues is
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
-    return gerritConfig.getEnum("commentlink", getCommentLinkName(),
-        "association", ItsAssociationPolicy.OPTIONAL);
+    ItsAssociationPolicy legacyAssociatonPolicy =
+        gerritConfig.getEnum("commentlink", getCommentLinkName(),
+            "association", ItsAssociationPolicy.OPTIONAL);
+
+    return gerritConfig.getEnum("plugin", pluginName, "association",
+        legacyAssociatonPolicy);
   }
 }
