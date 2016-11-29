@@ -26,7 +26,6 @@ So for example having
 [commentlink "@PLUGIN@"]
     match = [Bb][Uu][Gg][ ]*([1-9][0-9]*)
     html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
-    association = SUGGESTED
 ```
 
 in `etc/gerrit.config` would allow to match the issues `4711`, `167`
@@ -36,7 +35,9 @@ from a commit message like
 Sample commit message relating to bug 4711, and bug 167.
 ```
 
-By setting a `commentlink`'s `association` (see above's example), it
+[upstream-comment-link-doc]: ../../../Documentation/config-gerrit.html#commentlink
+
+By setting a `commentlink`'s `association` on the plugin's @PLUGIN@ configuration, it
 is possible to require commits to carry ITS references; the following
 values are supported (default is `OPTIONAL`):
 
@@ -52,9 +53,20 @@ OPTIONAL
 :	 Bug-ids are liked when found in the git commit message, no warning is
 	 displayed otherwise.
 
-[upstream-comment-link-doc]: ../../../Documentation/config-gerrit.html#commentlink
+Example:
 
+```
+[plugin "@PLUGIN@"]
+    association = MANDATORY
+```
 
+in `etc/gerrit.config` would accept only commits that contain a valid issue id
+in the comment, matching the commentLink defined previously.
+
+NOTE: Historically the association has been defined in the Gerrit's commentLink
+section. That setting is deprecated but still supported for the current release. 
+You are encouraged to move the association policy to the plugin section, the
+commentLink.association will be discontinued in the next major release.
 
 [enabling-its-integration]: #enabling-its-integration
 <a name="enabling-its-integration">Enabling ITS integration</a>
