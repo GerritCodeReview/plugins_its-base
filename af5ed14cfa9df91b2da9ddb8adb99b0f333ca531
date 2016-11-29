@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50ec1c3c_c2c42454",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2016-11-29T05:49:42Z",
+      "side": 1,
+      "message": "Nobody can understand the interface of these methods. For a key, it is trying to access plugin specific section in the project config and as the fallback retrieving non-plugin specific section, section name, key in gerrit.config:\n\nPlugin specific in project.config\n\n  [plugin \"its-jira\"]\n  assosiation \u003d mandatory\n\nNon plugin specific in gerrit config\n\n  [commentlink \"its-jira\"]\n  assosiation \u003d optional\n\nCan you add a comment to one of those methods? May be also rename it in getEnumFromProjectConfigWithInheritanceOrFromGerritConfig() and similar?",
+      "range": {
+        "startLine": 246,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 54
+      },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ec1c3c_82ecdcd9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2016-11-29T05:49:42Z",
+      "side": 1,
+      "message": "How is this possible?",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 28
+      },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70e76057_035d7006",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2016-11-29T05:49:42Z",
+      "side": 1,
+      "message": "Just throw IllegalStateException?",
+      "range": {
+        "startLine": 263,
+        "startChar": 4,
+        "endLine": 263,
+        "endChar": 54
+      },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ec1c3c_62e9d8c7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2016-11-29T05:49:42Z",
+      "side": 1,
+      "message": "Hm, well this is ugly to mess around with thread local. But I guess given how the current code organized, it couldn\u0027t be avoided.",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 146,
+        "endChar": 70
+      },
+      "revId": "af5ed14cfa9df91b2da9ddb8adb99b0f333ca531",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
