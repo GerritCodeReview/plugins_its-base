@@ -158,6 +158,6 @@ public abstract class MockingTestCase extends TestCase {
    * @return The created Capture.
    */
   protected final <T> Capture<T> createCapture() {
-    return new Capture();
+    return new Capture<>();
   }
 }

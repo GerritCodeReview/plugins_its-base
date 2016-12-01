@@ -145,8 +145,8 @@ public class ItsValidateComment implements CommitValidationListener {
       CommitReceivedEvent receiveEvent) throws CommitValidationException {
     if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {
       return validCommit(receiveEvent.commit);
-    } else {
-      return Collections.emptyList();
     }
+
+    return Collections.emptyList();
   }
 }
