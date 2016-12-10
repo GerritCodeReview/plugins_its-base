@@ -1,20 +1,40 @@
 Build
 =====
 
-This base library for ITS-based plugins is built with Buck.
+This base library for ITS-based plugins is built with Bazel.
 
-Clone or link this plugin to the plugins directory of Gerrit's source
-tree, and issue the command:
+Two build modes are supported: Standalone and in Gerrit tree.
+The standalone build mode is recommended, as this mode doesn't require
+the Gerrit tree to exist locally.
+
+### Build standalone
 
 ```
-  buck build plugins/its-base
+  bazel build its-base
 ```
 
 The output is created in
 
 ```
-  buck-out/gen/plugins/its-base/its-base.jar
-  buck-out/gen/plugins/its-base/lib__its-base__plugin__output/its-base__plugin.jar
+  bazel-genfiles/its-base.jar
+```
+
+To execute the tests run:
+
+```
+  bazel test :its_base_tests
+```
+
+### Build in Gerrit tree
+
+```
+  bazel build plugins/its-base
+```
+
+The output is created in
+
+```
+  bazel-genfiles/plugins/its-base/its-base.jar
 ```
 
 This project can be imported into the Eclipse IDE:
@@ -26,7 +46,7 @@ This project can be imported into the Eclipse IDE:
 To execute the tests run:
 
 ```
-  buck test --all --include its-base
+  bazel test plugins/its-base:its_base_tests
 ```
 
 Note that the ITS-based plugins require `its-base__plugin` library:
