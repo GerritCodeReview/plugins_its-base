@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63d768f0_435fa788",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-24T08:15:47Z",
+      "side": 1,
+      "message": "After fixing the name of the WORKSPACE, and testing this change, I\u0027m getting this breakage:\n\n  $ bazel build its-base\n  ERROR: /home/davido/projects/its-base/BUILD:37:12:\t\t  \n  glob([\"src/test/java/**/*.java\"], exclu...)\n  unexpected keyword \u0027excludes\u0027 in call to glob(include: sequence of strings, *, exclude: sequence of strings \u003d [], exclude_directories: int \u003d 1).\n  ERROR: error loading package \u0027\u0027: Package \u0027\u0027 contains errors.\n\nWhich raises the question, after copy/pasting the Bazel build implementation from verify-status plugin and Buck build file content as Bazel build files from its-base plugin, have you tested your changes? If the answer is no, I don\u0027t know what to say. If the answer is yes, and you know they are totally broken/not working, why don\u0027t you add WIP: prefix in the subject of the commit message and place something like:\n\n  TODO: doesn\u0027t work, I don\u0027t know how to fix that.\n  I tried so far:\n\n* 1. this\n* 2. that\n* ...",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 14
+      },
+      "revId": "bd825353e336c2e27132a84e081422ed79f16092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8edba9d_c19db31f",
+        "filename": "WORKSPACE",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-24T08:15:47Z",
+      "side": 1,
+      "message": "I think that \"-\" char is not supported. This should be called \"its_base\".",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 26
+      },
+      "revId": "bd825353e336c2e27132a84e081422ed79f16092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b2bcb50_cfcb5a31",
+        "filename": "tools/workspace-status.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-24T08:15:47Z",
+      "side": 1,
+      "message": "It wouldn\u0027t hurt to run:\n\n  chmod +x ./tools/workspace-status.sh\n\nTo make this build actualy work. That\u0027s becasue Bazel spawn this process, and cannot execute it, and crashing with non actually helping error (that is surprisingly hard to track downm which is a know UX-issue, see the comments on https://github.com/bazelbuild/bazel/issues/2040):\n\n  $ bazel build its-base__plugin --verbose_failures  --subcommands --verbose_explanations --explain\u003dfoo.log\n  INFO: Found 1 target...\n  INFO: Writing explanation of rebuilds to \u0027foo.log\u0027\n  ERROR: Process exited with status 126.\n  Target //:its-base__plugin up-to-date:\n    bazel-bin/libits-base__plugin.jar\n  INFO: Elapsed time: 0.126s, Critical Path: 0.00s",
+      "revId": "bd825353e336c2e27132a84e081422ed79f16092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff8431de_c175df02",
+        "filename": "tools/workspace-status.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-24T08:15:47Z",
+      "side": 1,
+      "message": "May be change it to ITS-BASE?",
+      "range": {
+        "startLine": 17,
+        "startChar": 19,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "bd825353e336c2e27132a84e081422ed79f16092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
