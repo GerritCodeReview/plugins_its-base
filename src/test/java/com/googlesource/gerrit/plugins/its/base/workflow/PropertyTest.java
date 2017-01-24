@@ -42,11 +42,6 @@ public class PropertyTest  extends LoggingMockingTestCase {
     assertEquals("Value does not match", "testValue", property.getValue());
   }
 
-  public void testEqualsSelf() {
-    Property property = createProperty("testKey", "testValue");
-    assertTrue("Property not equal to itself", property.equals(property));
-  }
-
   public void testEqualsSimilar() {
     Property propertyA = createProperty("testKey", "testValue");
     Property propertyB = createProperty("testKey", "testValue");
