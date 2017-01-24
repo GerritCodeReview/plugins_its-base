@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63ecdc12_a396bee5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-01-24T23:44:34Z",
+      "side": 1,
+      "message": "\"won\u0027t compile with Bazel\"\n\nor \n\n\"can\u0027t be compiled by Bazel\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "27187549036288cb996fd11fce60a7c155605254",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
