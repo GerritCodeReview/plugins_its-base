@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8513198_c19e4c6d",
+        "filename": ".gitignore",
+        "patchSetId": 16
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-01-25T07:28:21Z",
+      "side": 0,
+      "message": "Did you intend to add bazel related files?",
+      "revId": "1022dae1cff2d24fe871041061f51e51b9f927e6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
