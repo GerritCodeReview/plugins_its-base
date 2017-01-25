@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "8060e031_ba4882ab",
+        "filename": "BUILD",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-25T07:39:47Z",
+      "side": 1,
+      "message": "Done",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 1
+      },
+      "revId": "647386465caf372afb7beacd3d8ae63c616ea270",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85c569be_bf223bc7",
         "filename": "WORKSPACE",
         "patchSetId": 16
@@ -48,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "b62eca4c_875c38aa",
+        "filename": "WORKSPACE",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-25T07:39:47Z",
+      "side": 1,
+      "message": "Done.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 74
+      },
+      "revId": "647386465caf372afb7beacd3d8ae63c616ea270",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6b000b3_13c7e11c",
         "filename": "src/main/resources/Documentation/build.md",
         "patchSetId": 16
@@ -59,6 +105,29 @@
       "writtenOn": "2017-01-25T07:28:21Z",
       "side": 1,
       "message": "According to the BUILD file:  This plugin currently does not support a standalone build",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 61
+      },
+      "revId": "647386465caf372afb7beacd3d8ae63c616ea270",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e2f739b_46e3fbb2",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-25T07:39:47Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 6,
         "startChar": 0,
