@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb330279_3b382ecc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-01-25T08:07:40Z",
+      "side": 1,
+      "message": "Note, that when this change is merged, we would need to remove strip_jar() declaration and invocation from its provider plugins.",
+      "revId": "36599be73533b29ce79c9b7ebdf43430bbf76c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
