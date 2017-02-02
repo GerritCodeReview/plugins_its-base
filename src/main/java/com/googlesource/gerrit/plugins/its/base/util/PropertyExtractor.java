@@ -82,7 +82,9 @@ public class PropertyExtractor {
     PatchSetAttribute patchSet = event.patchSet.get();
     common.addAll(propertyAttributeExtractor.extractFrom(change));
     common.addAll(propertyAttributeExtractor.extractFrom(patchSet));
-    PatchSet.Id patchSetId = newPatchSetId(change.number, patchSet.number);
+    PatchSet.Id patchSetId =
+        newPatchSetId(Integer.toString(change.number),
+            Integer.toString(patchSet.number));
     return issueExtractor.getIssueIds(change.project,
         patchSet.revision, patchSetId);
   }
