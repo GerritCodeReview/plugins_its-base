@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7585a0b_7c66e96d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "Feb 2, 2017 3:41:27 PM",
+      "side": 1,
+      "message": "It would be helpful to mention the change(s) on master that changed them from String to int.",
+      "revId": "17a199df7442aab665b43f02170bd549ede638d7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d3803db_3794be71",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "Feb 2, 2017 3:41:27 PM",
+      "side": 1,
+      "message": "Maybe better to use String.valueOf(...) here?",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 24
+      },
+      "revId": "17a199df7442aab665b43f02170bd549ede638d7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
