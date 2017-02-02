@@ -94,7 +94,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.topic = "testTopic";
     changeAttribute.subject = "testSubject";
     changeAttribute.id = "testId";
-    changeAttribute.number = "4711";
+    changeAttribute.number = 4711;
     changeAttribute.url = "http://www.example.org/test";
     changeAttribute.owner = owner;
     changeAttribute.commitMessage = "Commit Message";
@@ -183,7 +183,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.topic = "testTopic";
     changeAttribute.subject = "testSubject";
     changeAttribute.id = "testId";
-    changeAttribute.number = "4711";
+    changeAttribute.number = 4711;
     changeAttribute.url = "http://www.example.org/test";
     changeAttribute.status = Status.ABANDONED;
     changeAttribute.owner = owner;
@@ -274,7 +274,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     PatchSetAttribute patchSetAttribute = new PatchSetAttribute();
     patchSetAttribute.revision = "1234567891123456789212345678931234567894";
-    patchSetAttribute.number = "42";
+    patchSetAttribute.number = 42;
     patchSetAttribute.ref = "testRef";
     patchSetAttribute.createdOn = 1234567890L;
     patchSetAttribute.parents = Lists.newArrayList("parent1", "parent2");
