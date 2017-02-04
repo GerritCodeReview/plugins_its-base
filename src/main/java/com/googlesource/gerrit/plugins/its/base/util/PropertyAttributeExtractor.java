@@ -60,7 +60,8 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
     properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
     properties.add(propertyFactory.create("change-id", changeAttribute.id));
-    properties.add(propertyFactory.create("change-number", changeAttribute.number));
+    properties.add(propertyFactory.create("change-number",
+        String.valueOf(changeAttribute.number)));
     properties.add(propertyFactory.create("change-url", changeAttribute.url));
     String status = null;
     if (changeAttribute.status != null) {
@@ -76,7 +77,7 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("revision",
         patchSetAttribute.revision));
     properties.add(propertyFactory.create("patch-set-number",
-        patchSetAttribute.number));
+        String.valueOf(patchSetAttribute.number)));
     properties.add(propertyFactory.create("ref", patchSetAttribute.ref));
     properties.add(propertyFactory.create("created-on",
         patchSetAttribute.createdOn.toString()));
