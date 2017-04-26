@@ -26,6 +26,7 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
 
 import java.io.IOException;
+import java.util.EnumSet;
 
 public class InitIts implements InitStep {
 
@@ -76,6 +77,7 @@ public class InitIts implements InitStep {
     }
     itsintegration =
         ui.readEnum(itsintegration,
+            EnumSet.allOf(ItsIntegration.class),
             "Issue tracker integration for all projects?");
     switch (itsintegration) {
       case ENFORCED:
