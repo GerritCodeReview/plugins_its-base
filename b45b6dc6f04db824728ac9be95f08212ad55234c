@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81b96c29_9911b89f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-05-02T14:47:04Z",
+      "side": 1,
+      "message": "Use \u0027git merge --log\u0027 to include the list of commits included",
+      "revId": "b45b6dc6f04db824728ac9be95f08212ad55234c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
