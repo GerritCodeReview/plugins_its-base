@@ -71,7 +71,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
       expect(pluginConfigFactory.getFromProjectConfig(
           parentProjectState, "ItsTestName")).andReturn(parentPluginConfig);
 
-      expect(parentPluginConfig.getString("enabled")).andReturn(parentEnabled)
+      expect(parentPluginConfig.getString("enabled", "false")).andReturn(parentEnabled)
           .anyTimes();
 
       PluginConfig parentPluginConfigWI = createMock(PluginConfig.class);
@@ -93,15 +93,15 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     expect(pluginConfigFactory.getFromProjectConfig(
         projectState, "ItsTestName")).andReturn(pluginConfig).anyTimes();
 
-    expect(pluginConfig.getString("enabled")).andReturn(enabled).anyTimes();
+    expect(pluginConfig.getString("enabled", "false")).andReturn(enabled).anyTimes();
 
     PluginConfig pluginConfigWI = createMock(PluginConfig.class);
 
     expect(pluginConfigFactory.getFromProjectConfigWithInheritance(
         projectState, "ItsTestName")).andReturn(pluginConfigWI).anyTimes();
 
-    expect(pluginConfigWI.getBoolean("enabled", false))
-        .andReturn("true".equals(enabled)).anyTimes();
+    expect(pluginConfigWI.getString("enabled", "false"))
+        .andReturn(enabled).anyTimes();
 
     expect(pluginConfigWI.getStringList("branch")).andReturn(branches)
         .anyTimes();
@@ -514,7 +514,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternNullMatch() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn(null).atLeastOnce();
@@ -528,7 +528,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternNullMatchWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn("foo").atLeastOnce();
     expect(serverConfig.getString("commentlink", "foo", "match"))
         .andReturn(null).atLeastOnce();
@@ -542,7 +542,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePattern() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("TestPattern").atLeastOnce();
@@ -556,7 +556,7 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn("foo").atLeastOnce();
     expect(serverConfig.getString("commentlink", "foo", "match"))
         .andReturn("TestPattern").atLeastOnce();
@@ -571,11 +571,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroupDefault() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("(foo)(bar)(baz)").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -587,11 +587,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroupDefaultGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("foo").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -603,11 +603,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroup1() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("(foo)(bar)(baz)").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -619,11 +619,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroup3() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("(foo)(bar)(baz)").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(3).atLeastOnce();
 
     replayMocks();
@@ -635,11 +635,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroupTooHigh() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("(foo)(bar)(baz)").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(5).atLeastOnce();
 
     replayMocks();
@@ -651,11 +651,11 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetIssuePatternGroupIndexGroupTooHighGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
         .andReturn("foo").atLeastOnce();
-    expect(serverConfig.getInt("ItsTestName", "commentlinkGroupIndex", 1))
+    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
         .andReturn(5).atLeastOnce();
 
     replayMocks();
@@ -667,9 +667,13 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.OPTIONAL)
+        .atLeastOnce();
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.OPTIONAL)
         .atLeastOnce();
@@ -683,9 +687,13 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicyOptionalWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn("foo").atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "foo", "association",
+        ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.OPTIONAL)
+        .atLeastOnce();
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.OPTIONAL)
         .atLeastOnce();
@@ -699,13 +707,16 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicySuggested() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.SUGGESTED)
         .atLeastOnce();
-
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
+        ItsAssociationPolicy.SUGGESTED))
+        .andReturn(ItsAssociationPolicy.SUGGESTED)
+        .atLeastOnce();
     replayMocks();
 
     assertEquals("Expected and generated associated policy do not match",
@@ -715,8 +726,12 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicySuggestedWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn("foo").atLeastOnce();
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
+        ItsAssociationPolicy.SUGGESTED))
+        .andReturn(ItsAssociationPolicy.SUGGESTED)
+        .atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "foo", "association",
         ItsAssociationPolicy.OPTIONAL))
         .andReturn(ItsAssociationPolicy.SUGGESTED)
@@ -731,10 +746,14 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicyMandatory() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn(null).atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "ItsTestName", "association",
         ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
+        ItsAssociationPolicy.MANDATORY))
         .andReturn(ItsAssociationPolicy.MANDATORY)
         .atLeastOnce();
 
@@ -747,10 +766,14 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
   public void testGetItsAssociationPolicyMandatoryWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("ItsTestName", null, "commentlink"))
+    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
         .andReturn("foo").atLeastOnce();
     expect(serverConfig.getEnum("commentlink", "foo", "association",
         ItsAssociationPolicy.OPTIONAL))
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+    expect(serverConfig.getEnum("plugin", "ItsTestName", "association",
+        ItsAssociationPolicy.MANDATORY))
         .andReturn(ItsAssociationPolicy.MANDATORY)
         .atLeastOnce();
 
