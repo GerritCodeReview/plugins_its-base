@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.its;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gerrit.common.data.RefConfigSection;
@@ -188,7 +189,7 @@ public class ItsConfig {
    *    to match issue ids.
    */
   public Pattern getIssuePattern() {
-    String match =
+    Optional<String> match =
         FluentIterable
             .from(getCommitLinkInfo(getCommentLinkName()))
             .filter(new Predicate<CommentLinkInfo>() {
@@ -203,15 +204,16 @@ public class ItsConfig {
                 return input.match;
               }
             })
-            .last()
-            .or(gerritConfig.getString("commentlink", getCommentLinkName(),
-                "match"));
-    Pattern ret = null;
+            .last();
+    
+    String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(),
+        "match");
 
-    if (match != null) {
-      ret = Pattern.compile(match);
+    if (!match.isPresent() && defPattern == null) {
+      return null;
     }
-    return ret;
+    
+    return Pattern.compile(match.or(defPattern));
   }
 
   /**
@@ -239,7 +241,7 @@ public class ItsConfig {
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
     ItsAssociationPolicy legacyItsAssociationPolicy =
-        gerritConfig.getEnum("commentLink", getCommentLinkName(),
+        gerritConfig.getEnum("commentlink", getCommentLinkName(),
             "association", ItsAssociationPolicy.OPTIONAL);
 
     return getPluginConfigEnum("association", legacyItsAssociationPolicy);
@@ -274,16 +276,16 @@ public class ItsConfig {
     return new PluginConfig(pluginName, new Config());
   }
 
-  private List<CommentLinkInfo> getCommitLinkInfo(final String commentLinkName) {
+  private List<CommentLinkInfo> getCommitLinkInfo(final String commentlinkName) {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
-      List<CommentLinkInfo> commentLinks =
+      List<CommentLinkInfo> commentlinks =
           projectCache.get(projectName).getCommentLinks();
-      return FluentIterable.from(commentLinks)
+      return FluentIterable.from(commentlinks)
           .filter(new Predicate<CommentLinkInfo>() {
             @Override
             public boolean apply(CommentLinkInfo input) {
-              return input.name.equals(commentLinkName);
+              return input.name.equals(commentlinkName);
             }
           }).toList();
     }
