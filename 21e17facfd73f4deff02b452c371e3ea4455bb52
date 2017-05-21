@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca25391d_30a544de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-05-21T22:51:36Z",
+      "side": 1,
+      "message": "Better to say \"latest head of master\".\n\nIf you want to mention the sha1, it can go in the message body.",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "21e17facfd73f4deff02b452c371e3ea4455bb52",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
