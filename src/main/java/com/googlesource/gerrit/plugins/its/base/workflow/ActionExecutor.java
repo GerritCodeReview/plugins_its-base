@@ -21,6 +21,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 import org.slf4j.Logger;
@@ -40,17 +41,20 @@ public class ActionExecutor {
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddVelocityComment.Factory addVelocityCommentFactory;
+  private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
 
   @Inject
   public ActionExecutor(ItsFacade its, AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddVelocityComment.Factory addVelocityCommentFactory,
+      AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addVelocityCommentFactory = addVelocityCommentFactory;
+    this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
   }
 
@@ -65,6 +69,8 @@ public class ActionExecutor {
           action = addStandardCommentFactory.create();
       } else if ("add-velocity-comment".equals(name)) {
         action = addVelocityCommentFactory.create();
+      } else if ("add-soy-comment".equals(name)) {
+        action = addSoyCommentFactory.create();
       } else if ("log-event".equals(name)) {
         action = logEventFactory.create();
       }
