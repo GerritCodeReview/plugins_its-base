@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,8 +46,10 @@ public class AddStandardComment implements Action {
 
   private String formatPerson(String prefix, Map<String, String> map) {
     String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
+    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
     if (ret.isEmpty()) {
       ret = Strings.nullToEmpty(map.get(prefix + "-username"));
+      ret = Strings.nullToEmpty(map.get(prefix + "Username"));
     }
     return ret;
   }
@@ -56,6 +58,7 @@ public class AddStandardComment implements Action {
       Map<String, String> map) {
     String ret = "";
     String changeNumber = Strings.nullToEmpty(map.get("change-number"));
+    changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
@@ -73,6 +76,7 @@ public class AddStandardComment implements Action {
       ret += "\n\nReason:\n" + reason;
     }
     String url = Strings.nullToEmpty(map.get("change-url"));
+    url = Strings.nullToEmpty(map.get("changeUrl"));
     if (!url.isEmpty()) {
       ret += "\n\n" + its.createLinkForWebui(url, url);
     }

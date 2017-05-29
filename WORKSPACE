@@ -24,3 +24,15 @@ gerrit_api()
 
 # Load snapshot Plugin API
 #gerrit_api_maven_local()
+
+load(
+    "@com_googlesource_gerrit_bazlets//tools:maven_jar.bzl",
+    "maven_jar",
+)
+
+# Keep this version of Soy synchronized with the version used in gerrit.
+maven_jar(
+    name = "soy",
+    artifact = "com.google.template:soy:2017-08-08",
+    sha1 = "792aa49e3ec3f61e793e56b499f0724df1c1e16c",
+)
