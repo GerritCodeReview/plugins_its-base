@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
@@ -39,6 +40,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddComment.Factory addCommentFactory;
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddVelocityComment.Factory addVelocityCommentFactory;
+  private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
 
   public void testExecuteItem() throws IOException {
@@ -143,6 +145,24 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.execute("4711", actionRequest, properties);
   }
 
+  public void testAddSoyCommentDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-soy-comment");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddSoyComment addSoyComment =
+        createMock(AddSoyComment.class);
+    expect(addSoyCommentFactory.create()).andReturn(addSoyComment);
+
+    addSoyComment.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   public void testAddStandardCommentDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-standard-comment");
@@ -214,6 +234,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       addCommentFactory = createMock(AddComment.Factory.class);
       bind(AddComment.Factory.class).toInstance(addCommentFactory);
+
+      addSoyCommentFactory = createMock(AddSoyComment.Factory.class);
+      bind(AddSoyComment.Factory.class).toInstance(
+          addSoyCommentFactory);
 
       addStandardCommentFactory = createMock(AddStandardComment.Factory.class);
       bind(AddStandardComment.Factory.class).toInstance(
