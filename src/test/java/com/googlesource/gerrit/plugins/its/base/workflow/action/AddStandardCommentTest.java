@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2017 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,19 +66,19 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("change-number")
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
         .anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("submitter-name")
+    expect(propertySubmitterName.getKey()).andReturn("submitterName")
         .anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl= createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("change-url").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
         .anyTimes();
     properties.add(propertyChangeUrl);
@@ -134,19 +134,19 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("change-number")
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
         .anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("abandoner-name")
+    expect(propertySubmitterName.getKey()).andReturn("abandonerName")
         .anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl= createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("change-url").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
         .anyTimes();
     properties.add(propertyChangeUrl);
@@ -205,19 +205,19 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("change-number")
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
         .anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("restorer-name")
+    expect(propertySubmitterName.getKey()).andReturn("restorerName")
         .anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl= createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("change-url").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
         .anyTimes();
     properties.add(propertyChangeUrl);
@@ -271,19 +271,19 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("change-number")
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
         .anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("uploader-name")
+    expect(propertySubmitterName.getKey()).andReturn("uploaderName")
         .anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl= createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("change-url").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
         .anyTimes();
     properties.add(propertyChangeUrl);
