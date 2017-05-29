@@ -35,7 +35,7 @@ A simple `etc/its/actions.config` (or
     action = add-standard-comment
 [rule "rule2"]
     event-type = comment-added
-    approval-Code-Review = -2,-1
+    approvalCodeReview = -2,-1
     action = add-comment Oh my Goodness! Someone gave a negative code review in Gerrit on an associated change.
 ```
 
@@ -140,11 +140,11 @@ The common properties for each event are
     ```
     [rule "someRuleForBugzillaOnly"]
       its-name = its-bugzilla
-      approval-Code-Review = -2
+      approvalCodeReview = -2
       action = add-comment Heya Bugzilla users, the change had a -2 Code-Review approval.
     [rule "someRuleForJiraOnly"]
       its-name = its-jira
-      approval-Code-Review = -2
+      approvalCodeReview = -2
       action = add-comment Dear JIRA users, the change had a -2 Code-Review approval.
     ```
 
@@ -176,61 +176,61 @@ An event typically has several `association` properties. Possible
 values are:
 
 `somewhere`
-:	issue id occurs somewhere in the commit message of the change/the
-	most recent patch set.
+:   issue id occurs somewhere in the commit message of the change/the
+    most recent patch set.
 
 `subject`
-:	issue id occurs in the first line of the commit message of the
-	change/the most recent patch set.
+:   issue id occurs in the first line of the commit message of the
+    change/the most recent patch set.
 
 `body`
-:	issue id occurs after the subject but before the footer of the
-	commit message of the change/the most recent patch set.
+:   issue id occurs after the subject but before the footer of the
+    commit message of the change/the most recent patch set.
 
 `footer`
-:	issue id occurs in the last paragraph after the subject of the
-	commit message of the change/the most recent patch set
+:   issue id occurs in the last paragraph after the subject of the
+    commit message of the change/the most recent patch set
 
 `footer-<Key>`
-:	issue id occurs in the footer of the commit message of the
-	change/the most recent patch set, and is in a line with a key
-	(part before the colon).
+:   issue id occurs in the footer of the commit message of the
+    change/the most recent patch set, and is in a line with a key
+    (part before the colon).
 
-	So for example, if the footer would contain a line
+    So for example, if the footer would contain a line
 
-	```
+    ```
 Fixes-Issue: issue 4711
 ```
 
-	then a property `association` with value `footer-Fixes-Issue`
-	would get added to the event for issue “4711”.
+    then a property `association` with value `footer-Fixes-Issue`
+    would get added to the event for issue “4711”.
 
 `added@<Association-Value>`
-:	(only for events that allow to determine the patch set number.
-	So for example, this `association` property is not set for
-	RevUpdatedEvents)
+:   (only for events that allow to determine the patch set number.
+    So for example, this `association` property is not set for
+    RevUpdatedEvents)
 
-	issue id occurs at `<Association-Value>` in the most recent
-	patch set of the change, and either the event is for patch set
-	1 or the issue id does not occur at `<Association-Value>` in
-	the previous patch set.
+    issue id occurs at `<Association-Value>` in the most recent
+    patch set of the change, and either the event is for patch set
+    1 or the issue id does not occur at `<Association-Value>` in
+    the previous patch set.
 
-	So for example if issue “4711” occurs in the subject of patch
-	set 3 (the most recent patch set) of a change, but not in
-	patch set 2.  When adding a comment to this change, the event
-	for issue “4711” would get a property 'association' with value
-	`added@subject`.
+    So for example if issue “4711” occurs in the subject of patch
+    set 3 (the most recent patch set) of a change, but not in
+    patch set 2.  When adding a comment to this change, the event
+    for issue “4711” would get a property 'association' with value
+    `added@subject`.
 
 [event-properties-ChangeAbandonedEvent]: #event-properties-ChangeAbandonedEvent
 ### <a name="event-properties-ChangeAbandonedEvent">ChangeAbandonedEvent</a>
 
-`abandoner-email`
+`abandonerEmail`
 : email address of the user abandoning the change.
 
-`abandoner-name`
+`abandonerName`
 : name of the user abandoning the change.
 
-`abandoner-username`
+`abandonerUsername`
 : username of the user abandoning the change.
 
 `event`
@@ -255,13 +255,13 @@ its most recent [Patch Set][event-properties-patch-set].
 `event-type`
 : `change-merged`
 
-`submitter-email`
+`submitterEmail`
 : email address of the user causing the merge of the change.
 
-`submitter-name`
+`submitterName`
 : name of the user causing the merge of the change.
 
-`submitter-username`
+`submitterUsername`
 : username of the user causing the merge of the change.
 
 In addition to the above properties, the event also provides
@@ -280,13 +280,13 @@ most recent [Patch Set][event-properties-patch-set].
 `reason`
 : reason why the change has been restored.
 
-`restorer-email`
+`restorerEmail`
 : email address of the user restoring the change.
 
-`restorer-name`
+`restorerName`
 :  name of the user restoring the change.
 
-`restorer-username`
+`restorerUsername`
 : username of the user restoring the change.
 
 In addition to the above properties, the event also provides
@@ -302,13 +302,13 @@ comment, but refer to the author of the change's latest patch set. The
 author of the comment is accessible via the `commenter-...`
 properties.
 
-`commenter-email`
+`commenterEmail`
 : email address of the comment's author.
 
-`commenter-name`
+`commenterName`
 : name of the comment's author.
 
-`commenter-username`
+`commenterUsername`
 : username of the comment's author.
 
 `comment`
@@ -321,11 +321,11 @@ properties.
 : `comment-added`
 
 For each new or changed approval that has been made for this change, a
-property of key `approval-<LabelName>` and the approval's value as
+property of key `approval<LabelName>` and the approval's value as
 value is added. So for example voting “-2” for the approval
 “Code-Review” would add the following property:
 
-`approval-Code-Review`
+`approvalCodeReview`
 : `-2`
 
 In addition to the above properties, the event also provides
@@ -377,16 +377,16 @@ and the [Change][event-properties-change] it belongs to.
 `revision`
 : git commit hash the rev is pointing to now.
 
-`revision-old`
+`revisionOld`
 : git commit hash the rev was pointing to before.
 
-`submitter-email`
+`submitterEmail`
 : email address of the user that updated the ref.
 
-`submitter-name`
+`submitterName`
 : name of the user that updated the ref.
 
-`submitter-username`
+`submitterUsername`
 : username of the user that updated the ref.
 
 [event-properties-change]: #event-properties-change
@@ -395,22 +395,25 @@ and the [Change][event-properties-change] it belongs to.
 `branch`
 : name of the branch the change belongs to.
 
-`change-id`
+`changeId`
 : Change-Id for the change („I-followed by 40 hex digits” string).
 
-`change-number`
+`changeNumber`
 : number for the change (plain integer).
 
-`change-url`
+`changeUrl`
 : url of the change.
 
-`owner-email`
+`formatChangeUrl`
+: format the url for changeUrl.
+
+`ownerEmail`
 : email address of the change's owner.
 
-`owner-name`
+`ownerName`
 : name of the change's owner.
 
-`owner-username`
+`ownerUsername`
 : username of the change's owner.
 
 `project`
@@ -419,12 +422,12 @@ and the [Change][event-properties-change] it belongs to.
 `subject`
 : first line of the change's most recent patch set's commit message.
 
-`commit-message`
+`commitMessage`
 : full commit message of the most recent patch set
 
 `status`
-:	status of the change (`null`, `NEW`, `SUBMITTED`, `DRAFT`, `MERGED`,
-	or `ABANDONED` )
+:   status of the change (`null`, `NEW`, `SUBMITTED`, `DRAFT`, `MERGED`,
+    or `ABANDONED` )
 
 `topic`
 : name of the topic the change belongs to.
@@ -432,13 +435,13 @@ and the [Change][event-properties-change] it belongs to.
 [event-properties-patch-set]: #event-properties-patch-set
 ### <a name="event-properties-patch-set">Common properties for events on a patch set</a>
 
-`author-email`
+`authorEmail`
 : email address of this patch set's author.
 
-`author-name`
+`authorName`
 : name of this patch set's author.
 
-`author-username`
+`authorUsername`
 : username of this patch set's author.
 
 `created-on`
@@ -450,13 +453,13 @@ and the [Change][event-properties-change] it belongs to.
 `insertions`
 : number of lines inserted by the patch set.
 
-`is-draft`
+`isDraft`
 : 'true', if the patch set is a draft patch set, 'false' otherwise.
 
 `parents`
 : A list of git commit hashes that are parents to the patch set.
 
-`patch-set-number`
+`patchSetNumber`
 : patch set's number within the change.
 
 `ref`
@@ -466,13 +469,13 @@ and the [Change][event-properties-change] it belongs to.
 `revision`
 : git commit hash of the patch set
 
-`uploader-email`
+`uploaderEmail`
 : email address of the user that uploaded this patch set.
 
-`uploader-name`
+`uploaderName`
 : name of the user that uploaded this patch set.
 
-`uploader-username`
+`uploaderUsername`
 : username of the user that uploaded this patch set.
 
 [actions]: #actions
@@ -498,6 +501,9 @@ The following actions are available:
 
 [`add-velocity-comment`][action-add-velocity-comment]
 : adds a rendered Velocity template as issue comment
+
+[`add-soy-comment`][action-add-velocity-comment]
+: adds a rendered Closure Template (soy) template as issue comment
 
 [`log-event`][action-log-event]
 : appends the event's properties to Gerrit's log
@@ -564,36 +570,71 @@ If 'TemplateName' is not `inline`, further parameters get ignored.
 
 Any [property][event-properties] of the event may be used from
 templates. So for example `$subject` in the above example refers to
-the event's subject property, and `$change-number` would refer to the
+the event's subject property, and `$changeNumber` would refer to the
 change's number.
 
 Additionally, the context's `its` property provides an object that
 allows to format links using the its' syntax:
 
 `formatLink( url )`
-:	Formats a link to a url.
+:   Formats a link to a url.
 
-	So for example upon adding a comment to a change, the
-	following rule formats a link to the change:
+    So for example upon adding a comment to a change, the
+    following rule formats a link to the change:
 
-	```
+    ```
 [rule "formatLinkSampleRule"]
   event-type = comment-added
-  action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($change-url)}
+  action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($changeUrl)}
 ```
 
 `formatLink( url, caption )`
-:	Formats a link to a url using 'caption' to represent the url.
+:   Formats a link to a url using 'caption' to represent the url.
 
-	So for example upon adding a comment to a change, the following rule
-	formats a link to the change using the change number as link
-	capition:
+    So for example upon adding a comment to a change, the following rule
+    formats a link to the change using the change number as link
+    capition:
 
-	```
+    ```
 [rule "formatLinkSampleRule"]
   event-type = comment-added
-  action = add-velocity-comment inline Comment for change ${its.formatLink($change-url, $change-number)} added.
+  action = add-velocity-comment inline Comment for change ${its.formatLink($changeUrl, $changeNumber)} added.
 ```
+
+[action-add-soy-comment]: #action-add-soy-comment
+### <a name="action-add-soy-comment">Action: add-soy-comment</a>
+
+The `add-soy-comment` action renders a Closure template (soy) for the
+event and adds the output as comment to any associated issue.
+
+So for example
+
+```
+  action = add-soy-comment TemplateName
+```
+
+would render the template `etc/its/templates/TemplateName.soy` add the
+output as comment to associated issues.
+
+example for what the soy template will look like (note @param is required with correct variables.)
+
+
+```
+{namespace etc.its.templates}
+
+/**
+ * @param changeNumber
+ * @param formatChangeUrl
+ */
+{template .TemplateName autoescape="strict" kind="text"}
+  inline Comment for change {$changeNumber} added. See {$formatChangeUrl}
+{/template}
+```
+
+Any [property][event-properties] of the event may be used from
+templates. So for example `$subject` in the above example refers to
+the event's subject property, and `$changeNumber` would refer to the
+change's number.
 
 [action-log-event]: #action-log-event
 ### <a name="action-log-event">Action: log-event</a>
