@@ -22,7 +22,6 @@ import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -32,6 +31,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
@@ -41,8 +41,7 @@ public class ItsHookModule extends FactoryModule {
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
 
-  public ItsHookModule(@PluginName String pluginName,
-      PluginConfigFactory pluginCfgFactory) {
+  public ItsHookModule(@PluginName String pluginName, PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
   }
@@ -53,10 +52,8 @@ public class ItsHookModule extends FactoryModule {
         .annotatedWith(Exports.named("enabled"))
         .toInstance(new ItsHookEnabledConfigEntry(pluginName, pluginCfgFactory));
     bind(ItsConfig.class);
-    DynamicSet.bind(binder(), CommitValidationListener.class).to(
-        ItsValidateComment.class);
-    DynamicSet.bind(binder(), EventListener.class).to(
-        ActionController.class);
+    DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
+    DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
     factory(ActionRequest.Factory.class);
     factory(Property.Factory.class);
     factory(Condition.Factory.class);
@@ -64,6 +61,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(AddVelocityComment.Factory.class);
+    factory(AddSoyComment.Factory.class);
     factory(LogEvent.Factory.class);
   }
 }
