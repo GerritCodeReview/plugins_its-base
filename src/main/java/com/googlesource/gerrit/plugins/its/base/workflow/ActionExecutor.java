@@ -15,56 +15,57 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
-
+import java.io.IOException;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.Set;
-
-/**
- * Executes an {@link ActionRequest}
- */
+/** Executes an {@link ActionRequest} */
 public class ActionExecutor {
-  private static final Logger log = LoggerFactory.getLogger(
-      ActionExecutor.class);
+  private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
   private final ItsFacade its;
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddVelocityComment.Factory addVelocityCommentFactory;
+  private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
 
   @Inject
-  public ActionExecutor(ItsFacade its, AddComment.Factory addCommentFactory,
+  public ActionExecutor(
+      ItsFacade its,
+      AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddVelocityComment.Factory addVelocityCommentFactory,
+      AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addVelocityCommentFactory = addVelocityCommentFactory;
+    this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
   }
 
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
     try {
       String name = actionRequest.getName();
       Action action = null;
       if ("add-comment".equals(name)) {
         action = addCommentFactory.create();
       } else if ("add-standard-comment".equals(name)) {
-          action = addStandardCommentFactory.create();
+        action = addStandardCommentFactory.create();
       } else if ("add-velocity-comment".equals(name)) {
         action = addVelocityCommentFactory.create();
+      } else if ("add-soy-comment".equals(name)) {
+        action = addSoyCommentFactory.create();
       } else if ("log-event".equals(name)) {
         action = logEventFactory.create();
       }
@@ -79,10 +80,9 @@ public class ActionExecutor {
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions,
-      Set<Property> properties) {
+  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-        execute(issue, actionRequest, properties);
+      execute(issue, actionRequest, properties);
     }
   }
 }

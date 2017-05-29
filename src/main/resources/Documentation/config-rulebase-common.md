@@ -224,19 +224,19 @@ Fixes-Issue: issue 4711
 [event-properties-ChangeAbandonedEvent]: #event-properties-ChangeAbandonedEvent
 ### <a name="event-properties-ChangeAbandonedEvent">ChangeAbandonedEvent</a>
 
-`abandoner-email`
+`abandonerEmail`
 : email address of the user abandoning the change.
 
-`abandoner-name`
+`abandonerName`
 : name of the user abandoning the change.
 
-`abandoner-username`
+`abandonerUsername`
 : username of the user abandoning the change.
 
 `event`
 : `com.google.gerrit.server.events.ChangeAbandonedEvent`
 
-`event-type`
+`eventType`
 : `change-abandoned`
 
 `reason`
@@ -252,16 +252,16 @@ its most recent [Patch Set][event-properties-patch-set].
 `event`
 : `com.google.gerrit.server.events.ChangeMergedEvent`
 
-`event-type`
+`eventType`
 : `change-merged`
 
-`submitter-email`
+`submitterEmail`
 : email address of the user causing the merge of the change.
 
-`submitter-name`
+`submitterName`
 : name of the user causing the merge of the change.
 
-`submitter-username`
+`submitterUsername`
 : username of the user causing the merge of the change.
 
 In addition to the above properties, the event also provides
@@ -274,19 +274,19 @@ most recent [Patch Set][event-properties-patch-set].
 `event`
 : `com.google.gerrit.server.events.ChangeRestoredEvent`
 
-`event-type`
+`eventType`
 : `change-restored`
 
 `reason`
 : reason why the change has been restored.
 
-`restorer-email`
+`restorerEmail`
 : email address of the user restoring the change.
 
-`restorer-name`
+`restorerName`
 :  name of the user restoring the change.
 
-`restorer-username`
+`restorerUsername`
 : username of the user restoring the change.
 
 In addition to the above properties, the event also provides
@@ -302,13 +302,13 @@ comment, but refer to the author of the change's latest patch set. The
 author of the comment is accessible via the `commenter-...`
 properties.
 
-`commenter-email`
+`commenterEmail`
 : email address of the comment's author.
 
-`commenter-name`
+`commenterName`
 : name of the comment's author.
 
-`commenter-username`
+`commenterUsername`
 : username of the comment's author.
 
 `comment`
@@ -317,15 +317,15 @@ properties.
 `event`
 : `com.google.gerrit.server.events.CommentAddedEvent+
 
-`event-type`
+`eventType`
 : `comment-added`
 
 For each new or changed approval that has been made for this change, a
-property of key `approval-<LabelName>` and the approval's value as
+property of key `approval_<LabelName>` and the approval's value as
 value is added. So for example voting “-2” for the approval
 “Code-Review” would add the following property:
 
-`approval-Code-Review`
+`approval_Code-Review`
 : `-2`
 
 In addition to the above properties, the event also provides
@@ -338,7 +338,7 @@ added for, and it's most recent [Patch Set][event-properties-patch-set].
 `event`
 : `com.google.gerrit.server.events.DraftPublishedEvent`
 
-`event-type`
+`eventType`
 : `draft-published`
 
 In addition to the above properties, the event also provides
@@ -351,7 +351,7 @@ and the [Change][event-properties-change] it belongs to.
 `event`
 : `com.google.gerrit.server.events.PatchSetCreatedEvent`
 
-`event-type`
+`eventType`
 : `patchset-created`
 
 In addition to the above properties, the event also provides
@@ -364,7 +364,7 @@ and the [Change][event-properties-change] it belongs to.
 `event`
 : `com.google.gerrit.server.events.RefUpdatedEvent`
 
-`event-type`
+`eventType`
 : `ref-updated`
 
 `project`
@@ -380,13 +380,13 @@ and the [Change][event-properties-change] it belongs to.
 `revision-old`
 : git commit hash the rev was pointing to before.
 
-`submitter-email`
+`submitterEmail`
 : email address of the user that updated the ref.
 
-`submitter-name`
+`submitterName`
 : name of the user that updated the ref.
 
-`submitter-username`
+`submitterUsername`
 : username of the user that updated the ref.
 
 [event-properties-change]: #event-properties-change
@@ -395,22 +395,22 @@ and the [Change][event-properties-change] it belongs to.
 `branch`
 : name of the branch the change belongs to.
 
-`change-id`
+`changeId`
 : Change-Id for the change („I-followed by 40 hex digits” string).
 
-`change-number`
+`changeNumber`
 : number for the change (plain integer).
 
-`change-url`
+`changeUrl`
 : url of the change.
 
-`owner-email`
+`ownerEmail`
 : email address of the change's owner.
 
-`owner-name`
+`ownerName`
 : name of the change's owner.
 
-`owner-username`
+`ownerUsername`
 : username of the change's owner.
 
 `project`
@@ -419,7 +419,7 @@ and the [Change][event-properties-change] it belongs to.
 `subject`
 : first line of the change's most recent patch set's commit message.
 
-`commit-message`
+`commitMessage`
 : full commit message of the most recent patch set
 
 `status`
@@ -432,13 +432,13 @@ and the [Change][event-properties-change] it belongs to.
 [event-properties-patch-set]: #event-properties-patch-set
 ### <a name="event-properties-patch-set">Common properties for events on a patch set</a>
 
-`author-email`
+`authorEmail`
 : email address of this patch set's author.
 
-`author-name`
+`authorName`
 : name of this patch set's author.
 
-`author-username`
+`authorUsername`
 : username of this patch set's author.
 
 `created-on`
@@ -450,13 +450,13 @@ and the [Change][event-properties-change] it belongs to.
 `insertions`
 : number of lines inserted by the patch set.
 
-`is-draft`
+`isDraft`
 : 'true', if the patch set is a draft patch set, 'false' otherwise.
 
 `parents`
 : A list of git commit hashes that are parents to the patch set.
 
-`patch-set-number`
+`patchSetNumber`
 : patch set's number within the change.
 
 `ref`
@@ -466,13 +466,13 @@ and the [Change][event-properties-change] it belongs to.
 `revision`
 : git commit hash of the patch set
 
-`uploader-email`
+`uploaderEmail`
 : email address of the user that uploaded this patch set.
 
-`uploader-name`
+`uploaderName`
 : name of the user that uploaded this patch set.
 
-`uploader-username`
+`uploaderUsername`
 : username of the user that uploaded this patch set.
 
 [actions]: #actions
@@ -564,7 +564,7 @@ If 'TemplateName' is not `inline`, further parameters get ignored.
 
 Any [property][event-properties] of the event may be used from
 templates. So for example `$subject` in the above example refers to
-the event's subject property, and `$change-number` would refer to the
+the event's subject property, and `$changeNumber` would refer to the
 change's number.
 
 Additionally, the context's `its` property provides an object that
@@ -579,7 +579,7 @@ allows to format links using the its' syntax:
 	```
 [rule "formatLinkSampleRule"]
   event-type = comment-added
-  action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($change-url)}
+  action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($changeUrl)}
 ```
 
 `formatLink( url, caption )`
@@ -592,8 +592,55 @@ allows to format links using the its' syntax:
 	```
 [rule "formatLinkSampleRule"]
   event-type = comment-added
-  action = add-velocity-comment inline Comment for change ${its.formatLink($change-url, $change-number)} added.
+  action = add-velocity-comment inline Comment for change ${its.formatLink($changeUrl, $changeNumber)} added.
 ```
+
+[action-add-soy-comment]: #action-add-soy-comment
+### <a name="action-add-soy-comment">Action: add-soy-comment</a>
+
+The `add-soy-comment` action renders a Closure template (soy) for the
+event and adds the output as comment to any associated issue.
+
+So for example
+
+```
+  action = add-soy-comment TemplateName
+```
+
+would render the template `etc/its/templates/TemplateName.soy` add the
+output as comment to associated issues.
+
+example for what the soy template will look like
+
+
+```
+{namespace etc.its.templates}
+
+{template .TemplateName autoescape="strict" kind="text"}
+  inline Comment for change {$changeNumber} added. See {$its.formatLink($changeUrl)}
+{/template}
+```
+
+Any [property][event-properties] of the event may be used from
+templates. So for example `$subject` in the above example refers to
+the event's subject property, and `$changeNumber` would refer to the
+change's number.
+
+Additionally, the context's `its` property provides an object that
+allows to format links using the its' syntax:
+
+`formatLink( url )`
+:	Formats a link to a url.
+
+	So for example upon adding a comment to a change, the
+	following rule formats a link to the change:
+
+`formatLink( url, caption )`
+:	Formats a link to a url using 'caption' to represent the url.
+
+	So for example upon adding a comment to a change, the following rule
+	formats a link to the change using the change number as link
+	capition:
 
 [action-log-event]: #action-log-event
 ### <a name="action-log-event">Action: log-event</a>

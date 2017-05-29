@@ -42,11 +42,11 @@ public class PropertyAttributeExtractor {
       String prefix) {
     Set<Property> properties = Sets.newHashSet();
     if (accountAttribute != null) {
-      properties.add(propertyFactory.create(prefix + "-email",
+      properties.add(propertyFactory.create(prefix + "Email",
           accountAttribute.email));
-      properties.add(propertyFactory.create(prefix + "-username",
+      properties.add(propertyFactory.create(prefix + "Username",
           accountAttribute.username));
-      properties.add(propertyFactory.create(prefix + "-name",
+      properties.add(propertyFactory.create(prefix + "Name",
           accountAttribute.name));
     }
     return properties;
@@ -58,11 +58,12 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
-    properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
-    properties.add(propertyFactory.create("change-id", changeAttribute.id));
-    properties.add(propertyFactory.create("change-number",
+    properties.add(propertyFactory.create("commitMessage", changeAttribute.commitMessage));
+    properties.add(propertyFactory.create("changeId", changeAttribute.id));
+    properties.add(propertyFactory.create("changeNumber",
         String.valueOf(changeAttribute.number)));
-    properties.add(propertyFactory.create("change-url", changeAttribute.url));
+    properties.add(propertyFactory.create("changeUrl", changeAttribute.url));
+
     String status = null;
     if (changeAttribute.status != null) {
       status = changeAttribute.status.toString();
@@ -76,10 +77,10 @@ public class PropertyAttributeExtractor {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision",
         patchSetAttribute.revision));
-    properties.add(propertyFactory.create("patch-set-number",
+    properties.add(propertyFactory.create("patchSetNumber",
         String.valueOf(patchSetAttribute.number)));
     properties.add(propertyFactory.create("ref", patchSetAttribute.ref));
-    properties.add(propertyFactory.create("created-on",
+    properties.add(propertyFactory.create("createdOn",
         patchSetAttribute.createdOn.toString()));
     properties.add(propertyFactory.create("parents",
         patchSetAttribute.parents.toString()));
@@ -87,7 +88,7 @@ public class PropertyAttributeExtractor {
         Integer.toString(patchSetAttribute.sizeDeletions)));
     properties.add(propertyFactory.create("insertions",
         Integer.toString(patchSetAttribute.sizeInsertions)));
-    properties.add(propertyFactory.create("is-draft",
+    properties.add(propertyFactory.create("isDraft",
         Boolean.toString(patchSetAttribute.isDraft)));
     properties.addAll(extractFrom(patchSetAttribute.uploader,
         "uploader"));
@@ -100,7 +101,7 @@ public class PropertyAttributeExtractor {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision",
         refUpdateAttribute.newRev));
-    properties.add(propertyFactory.create("revision-old",
+    properties.add(propertyFactory.create("revisionOld",
         refUpdateAttribute.oldRev));
     properties.add(propertyFactory.create("project",
         refUpdateAttribute.project));
@@ -111,7 +112,7 @@ public class PropertyAttributeExtractor {
 
   public Set<Property>extractFrom(ApprovalAttribute approvalAttribute) {
     Set<Property> properties = Sets.newHashSet();
-    properties.add(propertyFactory.create("approval-" +
+    properties.add(propertyFactory.create("approval_" +
         approvalAttribute.type, approvalAttribute.value));
     return properties;
   }
