@@ -595,6 +595,53 @@ allows to format links using the its' syntax:
   action = add-velocity-comment inline Comment for change ${its.formatLink($change-url, $change-number)} added.
 ```
 
+[action-add-soy-comment]: #action-add-soy-comment
+### <a name="action-add-soy-comment">Action: add-soy-comment</a>
+
+The `add-soy-comment` action renders a Closure template (soy) for the
+event and adds the output as comment to any associated issue.
+
+So for example
+
+```
+  action = add-soy-comment TemplateName
+```
+
+would render the template `etc/its/templates/TemplateName.soy` add the
+output as comment to associated issues.
+
+example for what the soy template will look like
+
+
+```
+{namespace com.googlesource.gerrit.plugins.its.base}
+
+{template .TemplateName autoescape="strict" kind="text"}
+  inline Comment for change $change-number added. See $its.formatLink($change-url)
+{/template}
+```
+
+Any [property][event-properties] of the event may be used from
+templates. So for example `$subject` in the above example refers to
+the event's subject property, and `$change-number` would refer to the
+change's number.
+
+Additionally, the context's `its` property provides an object that
+allows to format links using the its' syntax:
+
+`formatLink( url )`
+:	Formats a link to a url.
+
+	So for example upon adding a comment to a change, the
+	following rule formats a link to the change:
+
+`formatLink( url, caption )`
+:	Formats a link to a url using 'caption' to represent the url.
+
+	So for example upon adding a comment to a change, the following rule
+	formats a link to the change using the change number as link
+	capition:
+
 [action-log-event]: #action-log-event
 ### <a name="action-log-event">Action: log-event</a>
 
