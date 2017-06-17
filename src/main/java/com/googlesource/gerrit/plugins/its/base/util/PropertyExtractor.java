@@ -21,6 +21,7 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
+import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
@@ -35,6 +36,9 @@ import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 
+import org.eclipse.jgit.lib.ObjectId;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -120,8 +124,12 @@ public class PropertyExtractor {
     common.add(propertyFactory.create("event-type", event.type));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
+    RefUpdateAttribute refUpdated = event.refUpdate.get();
+    if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
+      return Collections.emptyMap(); 
+    }
     return issueExtractor.getIssueIds(event.getProjectNameKey().get(),
-        event.refUpdate.get().newRev);
+        refUpdated.newRev);
   }
 
   private Map<String,Set<String>> extractFrom(PatchSetCreatedEvent event,
