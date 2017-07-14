@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2852aaa_6c63b315",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddSoyComment.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-07-14T15:30:28Z",
+      "side": 1,
+      "message": "We will probaly want to do something like\n\nhttps://github.com/GerritCodeReview/gerrit/blob/49df12cb7da00f9298d8a37e231d55ecc83fa0c5/gerrit-server/src/main/java/com/google/gerrit/server/mail/send/MailSoyTofuProvider.java#L93\n\nhere though not sure?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "226025376f67a13b1763aa61ee712ec197ef97fa",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
