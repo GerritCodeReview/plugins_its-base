@@ -13,17 +13,22 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.util;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.api.GerritApi;
+import com.google.gerrit.extensions.api.changes.ChangeApi;
+import com.google.gerrit.extensions.api.changes.Changes;
+import com.google.gerrit.extensions.client.ListChangesOption;
+import com.google.gerrit.extensions.common.ChangeInfo;
+import com.google.gerrit.extensions.common.RevisionInfo;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.RevId;
-import com.google.gerrit.reviewdb.server.PatchSetAccess;
-import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -35,6 +40,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +53,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private ItsConfig itsConfig;
   private CommitMessageFetcher commitMessageFetcher;
-  private ReviewDb db;
+  private Map<Change.Id, ChangeApi> changeApis;
+  private Map<Change.Id, ChangeInfo> changeInfos;
 
   public void testIssueIdsNullPattern() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
@@ -807,12 +815,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    Change.Id changeId = createMock(Change.Id.class);
+    Change.Id changeId = new Change.Id(1);
 
     // Call for current patch set
     expect(commitMessageFetcher.fetchGuarded("testProject",
@@ -822,24 +830,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "subject\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -850,7 +847,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
     Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+        "1234567891123456789212345678931234567894", new PatchSet.Id(changeId, 2));
 
     Map<String,Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject",
@@ -870,12 +867,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    Change.Id changeId = createMock(Change.Id.class);
+    Change.Id changeId = new Change.Id(1);
 
     // Call for current patch set
     expect(commitMessageFetcher.fetchGuarded("testProject",
@@ -885,24 +882,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -932,12 +918,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    Change.Id changeId = createMock(Change.Id.class);
+    Change.Id changeId = new Change.Id(1);
 
     // Call for current patch set
     expect(commitMessageFetcher.fetchGuarded("testProject",
@@ -947,16 +933,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
@@ -964,8 +941,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -995,12 +970,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    Change.Id changeId = createMock(Change.Id.class);
+    Change.Id changeId = new Change.Id(1);
 
     // Call for current patch set
     expect(commitMessageFetcher.fetchGuarded("testProject",
@@ -1011,24 +986,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1060,12 +1024,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSubjectFooter()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    Change.Id changeId = createMock(Change.Id.class);
+    Change.Id changeId = new Change.Id(1);
 
     // Call for current patch set
     expect(commitMessageFetcher.fetchGuarded("testProject",
@@ -1078,16 +1042,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
@@ -1095,8 +1050,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1129,7 +1082,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedMultiple()
-      throws OrmException {
+      throws RestApiException {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -1147,16 +1100,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    addMockRevision(changeId, 1, "9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
@@ -1165,8 +1109,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "\n" +
             "Bug: bug#16\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1204,6 +1146,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void setUp() throws Exception {
     super.setUp();
 
+    changeApis = new HashMap<>();
+    changeInfos = new HashMap<>();
     injector = Guice.createInjector(new TestModule());
   }
 
@@ -1216,8 +1160,33 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       commitMessageFetcher = createMock(CommitMessageFetcher.class);
       bind(CommitMessageFetcher.class).toInstance(commitMessageFetcher);
 
-      db = createMock(ReviewDb.class);
-      bind(ReviewDb.class).toInstance(db);
+      GerritApi gApi = createMock(GerritApi.class);
+      expect(gApi.changes()).andReturn(new Changes.NotImplemented() {
+        @Override
+        public ChangeApi id(int id) {
+          ChangeApi cApi = changeApis.get(new Change.Id(id));
+          assertNotNull(cApi);
+          return cApi;
+        }
+      }).anyTimes();
+      bind(GerritApi.class).toInstance(gApi);
     }
+  }
+
+  private void addMockRevision(Change.Id changeId, int psNum, String revision)
+      throws RestApiException {
+    ChangeApi api = changeApis.computeIfAbsent(changeId, id -> createMock(ChangeApi.class));
+    ChangeInfo ci = changeInfos.computeIfAbsent(changeId,
+        id -> {
+          ChangeInfo info = new ChangeInfo();
+          info._number = id.get();
+          info.revisions = new HashMap<>();
+          return info;
+        });
+    RevisionInfo ri = new RevisionInfo();
+    ri._number = psNum;
+    ci.revisions.put(revision, ri);
+    expect(api.get(eq(EnumSet.of(ListChangesOption.ALL_REVISIONS))))
+        .andReturn(ci).anyTimes();
   }
 }

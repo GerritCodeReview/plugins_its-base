@@ -3,9 +3,12 @@ package com.googlesource.gerrit.plugins.its.base.util;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.api.GerritApi;
+import com.google.gerrit.extensions.client.ListChangesOption;
+import com.google.gerrit.extensions.common.ChangeInfo;
+import com.google.gerrit.extensions.common.RevisionInfo;
+import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -14,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -23,17 +27,17 @@ public class IssueExtractor {
   private static final Logger log = LoggerFactory.getLogger(
       IssueExtractor.class);
 
-  private final CommitMessageFetcher commitMessageFetcher;
-  private final ReviewDb db;
   private final ItsConfig itsConfig;
+  private final CommitMessageFetcher commitMessageFetcher;
+  private final GerritApi gApi;
 
   @Inject
   IssueExtractor(ItsConfig itsConfig,
       CommitMessageFetcher commitMessageFetcher,
-      ReviewDb db) {
-    this.commitMessageFetcher = commitMessageFetcher;
-    this.db = db;
+      GerritApi gApi) {
     this.itsConfig = itsConfig;
+    this.commitMessageFetcher = commitMessageFetcher;
+    this.gApi = gApi;
   }
 
   /**
@@ -194,15 +198,12 @@ public class IssueExtractor {
     if (patchSetId != null) {
       Map<String,Set<String>> previous = Maps.newHashMap();
       if (patchSetId.get() != 1) {
-        PatchSet.Id previousPatchSetId = new PatchSet.Id(
-            patchSetId.getParentKey(), patchSetId.get() - 1);
         try {
-          PatchSet previousPatchSet = db.patchSets().get(previousPatchSetId);
-          if (previousPatchSet != null) {
-            previous = getIssueIds(projectName,
-                previousPatchSet.getRevision().get());
+          String previousRevision = getPreviousRevision(patchSetId);
+          if (previousRevision != null) {
+            previous = getIssueIds(projectName, previousRevision);
           }
-        } catch (OrmException e) {
+        } catch (RestApiException e) {
           // previous is still empty to indicate that there was no previous
           // accessible patch set. We treat every occurrence as added.
         }
@@ -224,5 +225,16 @@ public class IssueExtractor {
       }
     }
     return current;
+  }
+
+  private String getPreviousRevision(PatchSet.Id psId) throws RestApiException {
+    ChangeInfo info = gApi.changes().id(psId.getParentKey().get())
+        .get(EnumSet.of(ListChangesOption.ALL_REVISIONS));
+    for (Map.Entry<String, RevisionInfo> e : info.revisions.entrySet()) {
+      if (e.getValue()._number == psId.get() - 1) {
+        return e.getKey();
+      }
+    }
+    return null;
   }
 }
