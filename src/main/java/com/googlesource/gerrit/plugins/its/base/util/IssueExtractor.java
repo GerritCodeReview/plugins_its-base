@@ -3,9 +3,12 @@ package com.googlesource.gerrit.plugins.its.base.util;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.extensions.api.GerritApi;
+import com.google.gerrit.extensions.client.ListChangesOption;
+import com.google.gerrit.extensions.common.ChangeInfo;
+import com.google.gerrit.extensions.common.RevisionInfo;
+import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gwtorm.server.OrmException;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 
@@ -15,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -34,21 +38,27 @@ public class IssueExtractor {
   }
 
   public static class PatchSetDbImpl implements PatchSetDb {
-    private final ReviewDb db;
+    private final GerritApi gApi;
 
     @Inject
-    public PatchSetDbImpl(ReviewDb db) {
-      this.db = db;
+    public PatchSetDbImpl(GerritApi gApi) {
+      this.gApi = gApi;
     }
 
     @Override
     public String getRevision(PatchSet.Id patchSetId) {
       try {
-        PatchSet previousPatchSet = db.patchSets().get(patchSetId);
-        if (previousPatchSet != null) {
-          return previousPatchSet.getRevision().get();
+        ChangeInfo info =
+            gApi.changes()
+                .id(patchSetId.getParentKey().get())
+                .get(EnumSet.of(ListChangesOption.ALL_REVISIONS));
+        for (Map.Entry<String, RevisionInfo> e : info.revisions.entrySet()) {
+          if (e.getValue()._number == patchSetId.get()) {
+            return e.getKey();
+          }
         }
-      } catch (OrmException e) {
+        return null;
+      } catch (RestApiException e) {
         // previous is still empty to indicate that there was no previous
         // accessible patch set. We treat every occurrence as added.
       }
