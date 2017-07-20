@@ -22,6 +22,30 @@
       "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0910aa06_b9d70657",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1010008
+      },
+      "writtenOn": "2017-07-20T13:24:41Z",
+      "side": 0,
+      "message": "I agree. This change was a bit of a straw man: I wanted to illustrate how overuse of mocks can make even a relatively minor change to API usage into a major pain :)\n\nBTW, I think it would be neat if core Gerrit provided a fake[1] GerritApi that let tests manually insert ChangeInfos and RevisionInfos, kind of like I have done with the changeInfos map here, but in an officially supported way.\n\n[1] https://martinfowler.com/articles/mocksArentStubs.html",
+      "parentUuid": "7a65f394_0a5d8b06",
+      "range": {
+        "startLine": 825,
+        "startChar": 4,
+        "endLine": 834,
+        "endChar": 78
+      },
+      "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
