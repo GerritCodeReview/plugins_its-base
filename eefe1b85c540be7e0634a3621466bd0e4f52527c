@@ -46,6 +46,30 @@
       "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ff6ef2_5e59c771",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-07-20T16:18:02Z",
+      "side": 0,
+      "message": "Oh yes, that would be awesome! The only thing that I don\u0027t like is heavy Mocking using internal behavior of external components, which makes the tests expensive to maintain, prone to breakages and hard to read :-( Having everything provided by a \"FakeGerritApi\" would solve it!",
+      "parentUuid": "0910aa06_b9d70657",
+      "range": {
+        "startLine": 825,
+        "startChar": 4,
+        "endLine": 834,
+        "endChar": 78
+      },
+      "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
