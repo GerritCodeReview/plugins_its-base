@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a65f394_0a5d8b06",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-07-20T13:21:53Z",
+      "side": 0,
+      "message": "We shouldn\u0027t spend so much code in mocking Gerrit for getting the previous patch-set. Let\u0027s make it more testable first and then make sure that we test our code and not the \"mocked Gerrit internal logic\".",
+      "range": {
+        "startLine": 825,
+        "startChar": 4,
+        "endLine": 834,
+        "endChar": 78
+      },
+      "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
