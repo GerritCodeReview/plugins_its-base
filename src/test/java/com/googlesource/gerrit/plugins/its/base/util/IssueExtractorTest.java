@@ -21,14 +21,13 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.client.RevId;
-import com.google.gerrit.reviewdb.server.PatchSetAccess;
-import com.google.gerrit.reviewdb.server.ReviewDb;
-import com.google.gwtorm.server.OrmException;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor.PatchSetDb;
 
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -46,7 +45,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private ItsConfig itsConfig;
   private CommitMessageFetcher commitMessageFetcher;
-  private ReviewDb db;
+  private PatchSetDb db;
 
   public void testIssueIdsNullPattern() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
@@ -806,8 +805,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -823,23 +821,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "subject\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
-
-    expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -869,8 +857,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -886,23 +873,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
-
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
 
-    expect(db.patchSets()).andReturn(patchSetAccess);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -931,8 +908,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -948,16 +924,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
-
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "subject\n" +
@@ -965,7 +931,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
 
-    expect(db.patchSets()).andReturn(patchSetAccess);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -994,8 +960,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -1012,23 +977,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
-
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "bug#42\n" +
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
 
-    expect(db.patchSets()).andReturn(patchSetAccess);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1059,8 +1014,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSubjectFooter()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedSubjectFooter() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -1079,16 +1033,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
-
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "subject\n" +
@@ -1096,7 +1040,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
 
-    expect(db.patchSets()).andReturn(patchSetAccess);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1128,8 +1072,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedMultiple()
-      throws OrmException {
+  public void testIssueIdsCommitWAddedMultiple() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
         .atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
@@ -1148,16 +1091,6 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
-    RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
-
-    PatchSet previousPatchSet = createMock(PatchSet.class);
-    expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
-
-    PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
-    expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
-
     expect(commitMessageFetcher.fetchGuarded("testProject",
         "9876543211987654321298765432139876543214")).andReturn(
             "subject\n" +
@@ -1166,7 +1099,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
             "Bug: bug#16\n" +
             "Change-Id: I9876543211987654321298765432139876543214");
 
-    expect(db.patchSets()).andReturn(patchSetAccess);
+    expect(db.getRevision(previousPatchSetId)).andReturn("9876543211987654321298765432139876543214");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
@@ -1216,8 +1149,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
       commitMessageFetcher = createMock(CommitMessageFetcher.class);
       bind(CommitMessageFetcher.class).toInstance(commitMessageFetcher);
 
-      db = createMock(ReviewDb.class);
-      bind(ReviewDb.class).toInstance(db);
+      db = createMock(PatchSetDb.class);
+      bind(PatchSetDb.class).toInstance(db);
     }
   }
 }
