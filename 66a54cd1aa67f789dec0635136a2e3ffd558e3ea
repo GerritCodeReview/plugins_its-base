@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e98d381b_61911569",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-08-01T05:12:36Z",
+      "side": 1,
+      "message": "Strictly speaking this name is not correct any more. The back end might be NoteDb. Gerrit API is called to access the revisions, and this depends on the gerrit site being migrated to NoteDb or not.",
+      "range": {
+        "startLine": 41,
+        "startChar": 22,
+        "endLine": 41,
+        "endChar": 38
+      },
+      "revId": "66a54cd1aa67f789dec0635136a2e3ffd558e3ea",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
