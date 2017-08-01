@@ -22,6 +22,30 @@
       "revId": "051ddcea6fa7806ca458f8da203bbf01e9a219fb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2193c7d_d2f578b5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-08-01T07:31:10Z",
+      "side": 1,
+      "message": "It is used to increase decoupling and allow a much easier testing without lots of mocks.",
+      "parentUuid": "73406ec3_7b658cab",
+      "range": {
+        "startLine": 32,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "051ddcea6fa7806ca458f8da203bbf01e9a219fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
