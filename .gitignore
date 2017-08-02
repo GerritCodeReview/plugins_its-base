@@ -1,13 +1,5 @@
 .idea
-target/
 .classpath
 .project
 /.settings
-/hooks-its/.settings/org.maven.ide.eclipse.prefs
-/hooks-its/.settings/org.eclipse.m2e.core.prefs
-/bazel-bin
-/bazel-genfiles
-/bazel-its-base
-/bazel-out
-/bazel-reviewers
-/bazel-testlogs
+/bazel-*
