@@ -7,31 +7,31 @@ load(
 )
 
 gerrit_plugin(
-  name = "its-base",
-  srcs = glob(["src/main/java/**/*.java"]),
-  resources = glob(["src/main/resources/**/*"]),
+    name = "its-base",
+    srcs = glob(["src/main/java/**/*.java"]),
+    resources = glob(["src/main/resources/**/*"]),
 )
 
-TEST_UTIL_SRC = glob(['src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java'])
+TEST_UTIL_SRC = glob(["src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java"])
 
 java_library(
-    name = 'its-base_tests-utils',
-    srcs = TEST_UTIL_SRC,
-    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS,
+    name = "its-base_tests-utils",
     testonly = 1,
-    visibility = ['//visibility:public'],
+    srcs = TEST_UTIL_SRC,
+    visibility = ["//visibility:public"],
+    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS,
 )
 
 junit_tests(
     name = "its_base_tests",
+    testonly = 1,
     srcs = glob(
-      ["src/test/java/**/*.java"],
-      exclude = TEST_UTIL_SRC
+        ["src/test/java/**/*.java"],
+        exclude = TEST_UTIL_SRC,
     ),
     tags = ["its-base"],
     deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":its-base__plugin",
         ":its-base_tests-utils",
     ],
-    testonly = 1,
 )
