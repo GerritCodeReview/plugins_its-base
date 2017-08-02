@@ -25,6 +25,24 @@ To execute the tests run:
   bazel test :its_base_tests
 ```
 
+To package the plugin sources run:
+
+```
+  bazel build lib@PLUGIN@__plugin-src.jar
+```
+
+The output is created in:
+
+```
+  bazel-bin/lib@PLUGIN@__plugin-src.jar
+```
+
+This project can be imported into the Eclipse IDE:
+
+```
+  ./tools/eclipse/project.sh
+```
+
 ### Build in Gerrit tree
 
 ```

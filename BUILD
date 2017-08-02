@@ -30,7 +30,16 @@ junit_tests(
         exclude = TEST_UTIL_SRC,
     ),
     tags = ["its-base"],
-    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
+    deps = [
+        "its-base__plugin_test_deps",
+    ],
+)
+
+java_library(
+    name = "its-base__plugin_test_deps",
+    testonly = 1,
+    visibility = ["//visibility:public"],
+    exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":its-base__plugin",
         ":its-base_tests-utils",
     ],
