@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcd834d0_d1185add",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2017-08-07T04:59:33Z",
+      "side": 1,
+      "message": "This must wait until bazlets change is submitted.",
+      "revId": "ef144452c6077e4b9e57a451694dbd44a4e2a7e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
