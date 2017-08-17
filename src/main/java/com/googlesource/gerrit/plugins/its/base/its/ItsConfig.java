@@ -191,7 +191,7 @@ public class ItsConfig {
   public Pattern getIssuePattern() {
     Optional<String> match =
         FluentIterable
-            .from(getCommitLinkInfo(getCommentLinkName()))
+            .from(getCommentLinkInfo(getCommentLinkName()))
             .filter(new Predicate<CommentLinkInfo>() {
               @Override
               public boolean apply(CommentLinkInfo input) {
@@ -276,7 +276,7 @@ public class ItsConfig {
     return new PluginConfig(pluginName, new Config());
   }
 
-  private List<CommentLinkInfo> getCommitLinkInfo(final String commentlinkName) {
+  private List<CommentLinkInfo> getCommentLinkInfo(final String commentlinkName) {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       List<CommentLinkInfo> commentlinks =
