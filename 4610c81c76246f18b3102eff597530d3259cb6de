@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6decfb1e_52111992",
+        "filename": "BUILD",
+        "patchSetId": 21
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-09-06T21:12:15Z",
+      "side": 1,
+      "message": "I wonder do i need to this as it is provided by gerrit core?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "4610c81c76246f18b3102eff597530d3259cb6de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
