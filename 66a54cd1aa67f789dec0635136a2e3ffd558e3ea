@@ -94,6 +94,30 @@
       "revId": "66a54cd1aa67f789dec0635136a2e3ffd558e3ea",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e08457a5_9f1931cb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-09-08T07:56:10Z",
+      "side": 1,
+      "message": "Then just PatchSetDbIml",
+      "parentUuid": "8f5d2c75_18621fd3",
+      "range": {
+        "startLine": 41,
+        "startChar": 22,
+        "endLine": 41,
+        "endChar": 38
+      },
+      "revId": "66a54cd1aa67f789dec0635136a2e3ffd558e3ea",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
