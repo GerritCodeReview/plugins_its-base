@@ -70,6 +70,30 @@
       "revId": "051ddcea6fa7806ca458f8da203bbf01e9a219fb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c8ff6438_0187247b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-09-08T08:02:02Z",
+      "side": 1,
+      "message": "Yes, and as its-base is only an \"abstract plugin\" and doesn\u0027t have control over the final injection modules, the implemented by assures a default implementation for it.",
+      "parentUuid": "f13fe01f_3d6c487c",
+      "range": {
+        "startLine": 32,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "051ddcea6fa7806ca458f8da203bbf01e9a219fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
