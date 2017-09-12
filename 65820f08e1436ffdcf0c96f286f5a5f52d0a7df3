@@ -22,6 +22,30 @@
       "revId": "65820f08e1436ffdcf0c96f286f5a5f52d0a7df3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21ca98c3_aecaa501",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-09-12T10:43:26Z",
+      "side": 1,
+      "message": "Nope, soy does not support dash as soy is really javascript i think which is why it wont support dash in variables.\n\nThough i can duplicate some things and deprecated the ones with dash if you want? That will give some users time to migrate to the new formatted configs.",
+      "parentUuid": "e8d6c602_dbd67f36",
+      "range": {
+        "startLine": 64,
+        "startChar": 43,
+        "endLine": 64,
+        "endChar": 56
+      },
+      "revId": "65820f08e1436ffdcf0c96f286f5a5f52d0a7df3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
