@@ -27,7 +27,6 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
-import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.PatchSetEvent;
@@ -110,12 +109,6 @@ public class PropertyExtractor {
       Set<Property> common) {
     common.addAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
     common.add(propertyFactory.create("reason", event.reason));
-    return extractFrom((PatchSetEvent) event, common);
-  }
-
-  private Map<String,Set<String>> extractFrom(DraftPublishedEvent event,
-      Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.uploader.get(), "uploader"));
     return extractFrom((PatchSetEvent) event, common);
   }
 
@@ -206,8 +199,6 @@ public class PropertyExtractor {
       associations = extractFrom((ChangeRestoredEvent) event, common);
     } else if (event instanceof CommentAddedEvent) {
       associations = extractFrom((CommentAddedEvent) event, common);
-    } else if (event instanceof DraftPublishedEvent) {
-      associations = extractFrom((DraftPublishedEvent) event, common);
     } else if (event instanceof PatchSetCreatedEvent) {
       associations = extractFrom((PatchSetCreatedEvent) event, common);
     } else if (event instanceof RefUpdatedEvent) {
