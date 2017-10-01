@@ -28,7 +28,6 @@ import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
-import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
@@ -461,20 +460,6 @@ public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
 
     ChangeRestoredEvent event =
         new ChangeRestoredEvent(testChange("testProject", "testBranch"));
-
-    ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
-
-    assertTrue(itsConfig.isEnabled(event));
-  }
-
-  public void testIsEnabledDraftPublishedEvent() {
-    String[] branches = {};
-    setupIsEnabled("true", null, branches);
-
-    DraftPublishedEvent event =
-        new DraftPublishedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
 
