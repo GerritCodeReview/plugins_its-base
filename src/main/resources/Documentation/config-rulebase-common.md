@@ -160,7 +160,6 @@ corresponding subsection below:
 * [ChangeMergedEvent][event-properties-ChangeMergedEvent]
 * [ChangeRestoredEvent][event-properties-ChangeRestoredEvent]
 * [CommentAddedEvent][event-properties-CommentAddedEvent]
-* [DraftPublishedEvent][event-properties-DraftPublishedEvent]
 * [PatchSetCreatedEvent][event-properties-PatchSetCreatedEvent]
 * [RefUpdatedEvent][event-properties-RefUpdatedEvent]
 * [Common properties for events on a change][event-properties-change]
@@ -331,19 +330,6 @@ value is added. So for example voting “-2” for the approval
 In addition to the above properties, the event also provides
 properties for the [Change][event-properties-change] the comment was
 added for, and it's most recent [Patch Set][event-properties-patch-set].
-
-[event-properties-DraftPublishedEvent]: #event-properties-DraftPublishedEvent
-### <a name="event-properties-DraftPublishedEvent">DraftPublishedEvent</a>
-
-`event`
-: `com.google.gerrit.server.events.DraftPublishedEvent`
-
-`event-type`
-: `draft-published`
-
-In addition to the above properties, the event also provides
-properties for the uploaded [Patch Set][event-properties-patch-set],
-and the [Change][event-properties-change] it belongs to.
 
 [event-properties-PatchSetCreatedEvent]: #event-properties-PatchSetCreatedEvent
 ### <a name="event-properties-PatchSetCreatedEvent">PatchSetCreatedEvent</a>
