@@ -30,7 +30,6 @@ import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
-import com.google.gerrit.server.events.DraftPublishedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
@@ -99,9 +98,6 @@ public class ItsConfig {
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof ChangeRestoredEvent) {
       ChangeRestoredEvent e = (ChangeRestoredEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof DraftPublishedEvent) {
-      DraftPublishedEvent e = (DraftPublishedEvent) event;
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof RefUpdatedEvent) {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
@@ -205,14 +201,14 @@ public class ItsConfig {
               }
             })
             .last();
-    
+
     String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(),
         "match");
 
     if (!match.isPresent() && defPattern == null) {
       return null;
     }
-    
+
     return Pattern.compile(match.or(defPattern));
   }
 

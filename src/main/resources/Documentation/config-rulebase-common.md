@@ -160,7 +160,6 @@ corresponding subsection below:
 * [ChangeMergedEvent][event-properties-ChangeMergedEvent]
 * [ChangeRestoredEvent][event-properties-ChangeRestoredEvent]
 * [CommentAddedEvent][event-properties-CommentAddedEvent]
-* [DraftPublishedEvent][event-properties-DraftPublishedEvent]
 * [PatchSetCreatedEvent][event-properties-PatchSetCreatedEvent]
 * [RefUpdatedEvent][event-properties-RefUpdatedEvent]
 * [Common properties for events on a change][event-properties-change]
@@ -332,19 +331,6 @@ In addition to the above properties, the event also provides
 properties for the [Change][event-properties-change] the comment was
 added for, and it's most recent [Patch Set][event-properties-patch-set].
 
-[event-properties-DraftPublishedEvent]: #event-properties-DraftPublishedEvent
-### <a name="event-properties-DraftPublishedEvent">DraftPublishedEvent</a>
-
-`event`
-: `com.google.gerrit.server.events.DraftPublishedEvent`
-
-`event-type`
-: `draft-published`
-
-In addition to the above properties, the event also provides
-properties for the uploaded [Patch Set][event-properties-patch-set],
-and the [Change][event-properties-change] it belongs to.
-
 [event-properties-PatchSetCreatedEvent]: #event-properties-PatchSetCreatedEvent
 ### <a name="event-properties-PatchSetCreatedEvent">PatchSetCreatedEvent</a>
 
@@ -423,7 +409,7 @@ and the [Change][event-properties-change] it belongs to.
 : full commit message of the most recent patch set
 
 `status`
-:	status of the change (`null`, `NEW`, `SUBMITTED`, `DRAFT`, `MERGED`,
+:	status of the change (`null`, `NEW`, `SUBMITTED`, `MERGED`,
 	or `ABANDONED` )
 
 `topic`
@@ -449,9 +435,6 @@ and the [Change][event-properties-change] it belongs to.
 
 `insertions`
 : number of lines inserted by the patch set.
-
-`is-draft`
-: 'true', if the patch set is a draft patch set, 'false' otherwise.
 
 `parents`
 : A list of git commit hashes that are parents to the patch set.
