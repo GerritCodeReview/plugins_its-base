@@ -125,7 +125,8 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
     common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
     RefUpdateAttribute refUpdated = event.refUpdate.get();
-    if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
+    if (ObjectId.zeroId().name().equals(refUpdated.newRev) ||
+        refUpdated.newRev == null) {
       return Collections.emptyMap();
     }
     return issueExtractor.getIssueIds(event.getProjectNameKey().get(),
