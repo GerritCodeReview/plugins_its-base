@@ -123,7 +123,9 @@ public class PropertyExtractor {
       Set<Property> common) {
     common.add(propertyFactory.create("event-type", event.type));
     common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
-    common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
+    if (event.refUpdate.get() != null) {
+      common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
+    }
     RefUpdateAttribute refUpdated = event.refUpdate.get();
     if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
       return Collections.emptyMap();
