@@ -97,9 +97,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyReason);
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -134,9 +134,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -174,9 +174,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyReason);
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -215,9 +215,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyComment);
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -268,9 +268,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyComment);
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -306,9 +306,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
@@ -342,9 +342,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     changeAttribute.project = "testProject";
-    changeAttribute.number = 176;
+    changeAttribute.number = "176";
     patchSetAttribute.revision = "testRevision";
-    patchSetAttribute.number = 3;
+    patchSetAttribute.number = "3";
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyChange);
