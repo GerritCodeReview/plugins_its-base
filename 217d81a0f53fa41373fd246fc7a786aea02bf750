@@ -22,6 +22,30 @@
       "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cfae2f4_6f37763b",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-25T02:17:48Z",
+      "side": 1,
+      "message": "Thanks, done.\n\nAnd also by you saying the bottom part, does that mean i can do @soy//jar and not have to specify the dep in here?",
+      "parentUuid": "dc1407e7_d60232de",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
