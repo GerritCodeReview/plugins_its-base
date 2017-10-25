@@ -10,9 +10,7 @@ gerrit_plugin(
     name = "its-base",
     srcs = glob(["src/main/java/**/*.java"]),
     resources = glob(["src/main/resources/**/*"]),
-    deps = [
-      "@soy//jar",
-    ],
+    deps = PLUGIN_DEPS,
 )
 
 TEST_UTIL_SRC = glob(["src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/**/*.java"])
