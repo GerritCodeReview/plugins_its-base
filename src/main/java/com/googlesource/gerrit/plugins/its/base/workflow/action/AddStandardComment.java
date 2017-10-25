@@ -45,10 +45,8 @@ public class AddStandardComment implements Action {
   }
 
   private String formatPerson(String prefix, Map<String, String> map) {
-    String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
-    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
+    String ret = Strings.nullToEmpty(map.get(prefix + "Name"));
     if (ret.isEmpty()) {
-      ret = Strings.nullToEmpty(map.get(prefix + "-username"));
       ret = Strings.nullToEmpty(map.get(prefix + "Username"));
     }
     return ret;
@@ -57,8 +55,7 @@ public class AddStandardComment implements Action {
   private String getCommentChangeEvent(String Action, String prefix,
       Map<String, String> map) {
     String ret = "";
-    String changeNumber = Strings.nullToEmpty(map.get("change-number"));
-    changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
+    String changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
@@ -75,8 +72,7 @@ public class AddStandardComment implements Action {
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
     }
-    String url = Strings.nullToEmpty(map.get("change-url"));
-    url = Strings.nullToEmpty(map.get("changeUrl"));
+    String url = Strings.nullToEmpty(map.get("changeUrl"));
     if (!url.isEmpty()) {
       ret += "\n\n" + its.createLinkForWebui(url, url);
     }
