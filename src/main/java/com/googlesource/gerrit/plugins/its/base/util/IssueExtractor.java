@@ -33,16 +33,16 @@ public class IssueExtractor {
   private final PatchSetDb db;
   private final ItsConfig itsConfig;
 
-  @ImplementedBy(PatchSetReviewDb.class)
+  @ImplementedBy(PatchSetDbIml.class)
   public interface PatchSetDb {
     public String getRevision(PatchSet.Id patchSetId);
   }
 
-  public static class PatchSetReviewDb implements PatchSetDb {
+  public static class PatchSetDbIml implements PatchSetDb {
     private final GerritApi gApi;
 
     @Inject
-    public PatchSetReviewDb(GerritApi gApi) {
+    public PatchSetDbIml(GerritApi gApi) {
       this.gApi = gApi;
     }
 
