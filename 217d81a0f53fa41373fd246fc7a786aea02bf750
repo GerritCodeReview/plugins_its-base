@@ -46,6 +46,30 @@
       "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bc7bbdb_7f12b16c",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-25T02:20:05Z",
+      "side": 1,
+      "message": "when i remove it, it fails with\n\nERROR: /Users/xxx/Documents/workspace/gerrit/plugins/its-base/BUILD:9:1: no such package \u0027@soy//jar\u0027: The repository could not be resolved and referenced by \u0027//:its-base__plugin\u0027.",
+      "parentUuid": "6cfae2f4_6f37763b",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
