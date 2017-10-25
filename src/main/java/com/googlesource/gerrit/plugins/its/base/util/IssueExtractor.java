@@ -38,11 +38,11 @@ public class IssueExtractor {
     public String getRevision(PatchSet.Id patchSetId);
   }
 
-  public static class PatchSetReviewDb implements PatchSetDb {
+  public static class PatchSetDbIml implements PatchSetDb {
     private final GerritApi gApi;
 
     @Inject
-    public PatchSetReviewDb(GerritApi gApi) {
+    public PatchSetDbIml(GerritApi gApi) {
       this.gApi = gApi;
     }
 
