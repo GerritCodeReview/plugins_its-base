@@ -70,6 +70,30 @@
       "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46313091_7109ecee",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-25T02:21:34Z",
+      "side": 1,
+      "message": "ERROR: /Users/xxx/Documents/workspace/gerrit/plugins/its-base/BUILD:9:1: no such package \u0027@soy//jar\u0027: The repository could not be resolved and referenced by \u0027//:its-base__plugin\u0027.\nERROR: /Users/xxxx/Documents/workspace/gerrit/plugins/its-base/BUILD:9:1: no such target \u0027//external:gerrit-plugin-api-neverlink\u0027: target \u0027gerrit-plugin-api-neverlink\u0027 not declared in package \u0027external\u0027 defined by /Users/xxx/Documents/workspace/gerrit/plugins/its-base/WORKSPACE and referenced by \u0027//:its-base__plugin\u0027.\nERROR: Analysis of target \u0027//:its-base\u0027 failed; build aborted: no such package \u0027@soy//jar\u0027: The repository could not be resolved.",
+      "parentUuid": "7bc7bbdb_7f12b16c",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
