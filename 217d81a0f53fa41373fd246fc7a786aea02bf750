@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc1407e7_d60232de",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-10-25T02:13:23Z",
+      "side": 1,
+      "message": "gerrit 2.14 uses soy version 2017-02-01\n\nactually, why do we need to do this anyway?  soy is exported in the plugin api.",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
