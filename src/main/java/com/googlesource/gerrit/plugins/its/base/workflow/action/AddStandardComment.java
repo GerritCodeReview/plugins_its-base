@@ -43,12 +43,12 @@ public class AddStandardComment implements Action {
 
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
-    String changeNumber = getValueFromMap(map, "", "change-number", "changeNumber");
+    String changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
     ret += "Change " + changeNumber + action;
-    String submitter = getValueFromMap(map, prefix, "-name", "Name", "-username", "Username");
+    String submitter = getValueFromMap(map, prefix, "Name", "Username");
     if (!submitter.isEmpty()) {
       ret += " by " + submitter;
     }
@@ -60,7 +60,7 @@ public class AddStandardComment implements Action {
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
     }
-    String url = getValueFromMap(map, "", "change-url", "changeUrl");
+    String url = Strings.nullToEmpty(map.get("changeUrl"));
     if (!url.isEmpty()) {
       ret += "\n\n" + its.createLinkForWebui(url, url);
     }
