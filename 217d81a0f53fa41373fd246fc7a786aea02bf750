@@ -142,6 +142,30 @@
       "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10b07949_e141b016",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-10-25T03:25:56Z",
+      "side": 1,
+      "message": "It\u0027s not necessary to cherry pick it; just remove the dependency in this change.",
+      "parentUuid": "4c411947_672f6844",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
