@@ -118,6 +118,30 @@
       "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c411947_672f6844",
+        "filename": "WORKSPACE",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-25T02:28:15Z",
+      "side": 1,
+      "message": "Thanks, i will cherry picked your change for 2.14 once you merge it :).",
+      "parentUuid": "172801c6_811c0949",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "217d81a0f53fa41373fd246fc7a786aea02bf750",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
