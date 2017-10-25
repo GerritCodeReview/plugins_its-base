@@ -45,15 +45,6 @@ public class PropertyAttributeExtractor {
       String prefix) {
     Set<Property> properties = Sets.newHashSet();
     if (accountAttribute != null) {
-      // deprecated, to be removed soon. migrate to ones without dash.
-      properties.add(propertyFactory.create(prefix + "-email",
-          accountAttribute.email));
-      properties.add(propertyFactory.create(prefix + "-username",
-          accountAttribute.username));
-      properties.add(propertyFactory.create(prefix + "-name",
-          accountAttribute.name));
-
-      // New style configs for vm and soy
       properties.add(propertyFactory.create(prefix + "Email",
           accountAttribute.email));
       properties.add(propertyFactory.create(prefix + "Username",
@@ -71,21 +62,12 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
 
-    // deprecated, to be removed soon. migrate to ones without dash.
-    properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
-    properties.add(propertyFactory.create("change-id", changeAttribute.id));
-    properties.add(propertyFactory.create("change-number",
-        String.valueOf(changeAttribute.number)));
-    properties.add(propertyFactory.create("change-url", changeAttribute.url));
-
-    // New style configs for vm and soy
     properties.add(propertyFactory.create("commitMessage", changeAttribute.commitMessage));
     properties.add(propertyFactory.create("changeId", changeAttribute.id));
     properties.add(propertyFactory.create("changeNumber",
         String.valueOf(changeAttribute.number)));
     properties.add(propertyFactory.create("changeUrl", changeAttribute.url));
 
-    // Soy specfic config though will work with Velocity too
     properties.add(propertyFactory.create("formatChangeUrl",
         its.createLinkForWebui(changeAttribute.url, changeAttribute.url)));
 
@@ -102,21 +84,11 @@ public class PropertyAttributeExtractor {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision",
         patchSetAttribute.revision));
-    // deprecated, to be removed soon. migrate to ones without dash.
-    properties.add(propertyFactory.create("patch-set-number",
-        String.valueOf(patchSetAttribute.number)));
-
-    // New style configs for vm and soy
     properties.add(propertyFactory.create("patchSetNumber",
         String.valueOf(patchSetAttribute.number)));
 
     properties.add(propertyFactory.create("ref", patchSetAttribute.ref));
 
-    // deprecated, to be removed soon. migrate to ones without dash.
-    properties.add(propertyFactory.create("created-on",
-        patchSetAttribute.createdOn.toString()));
-
-    // New style configs for vm and soy
     properties.add(propertyFactory.create("createdOn",
         patchSetAttribute.createdOn.toString()));
 
@@ -138,11 +110,6 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("revision",
         refUpdateAttribute.newRev));
 
-    // deprecated, to be removed soon. migrate to ones without dash.
-    properties.add(propertyFactory.create("revision-old",
-        refUpdateAttribute.oldRev));
-
-    // New style configs for vm and soy
     properties.add(propertyFactory.create("revisionOld",
         refUpdateAttribute.oldRev));
     properties.add(propertyFactory.create("project",
@@ -154,11 +121,6 @@ public class PropertyAttributeExtractor {
 
   public Set<Property>extractFrom(ApprovalAttribute approvalAttribute) {
     Set<Property> properties = Sets.newHashSet();
-    // deprecated, to be removed soon. migrate to ones without dash.
-    properties.add(propertyFactory.create("approval-" +
-        approvalAttribute.type, approvalAttribute.value));
-
-    // New style configs for vm and soy
     properties.add(propertyFactory.create("approval" +
         approvalAttribute.type.replace("-", ""), approvalAttribute.value));
     return properties;
