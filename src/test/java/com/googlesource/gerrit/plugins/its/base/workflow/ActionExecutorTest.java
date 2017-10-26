@@ -26,6 +26,7 @@ import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private ItsFacade its;
   private AddComment.Factory addCommentFactory;
   private AddStandardComment.Factory addStandardCommentFactory;
+  private AddVelocityComment.Factory addVelocityCommentFactory;
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
 
@@ -179,6 +181,24 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.execute("4711", actionRequest, properties);
   }
 
+  public void testAddVelocityCommentDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-velocity-comment");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddVelocityComment addVelocityComment =
+        createMock(AddVelocityComment.class);
+    expect(addVelocityCommentFactory.create()).andReturn(addVelocityComment);
+
+    addVelocityComment.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   public void testLogEventDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("log-event");
@@ -222,6 +242,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
       addStandardCommentFactory = createMock(AddStandardComment.Factory.class);
       bind(AddStandardComment.Factory.class).toInstance(
           addStandardCommentFactory);
+
+      addVelocityCommentFactory = createMock(AddVelocityComment.Factory.class);
+      bind(AddVelocityComment.Factory.class).toInstance(
+          addVelocityCommentFactory);
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
