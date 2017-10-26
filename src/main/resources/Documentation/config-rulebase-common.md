@@ -523,6 +523,67 @@ The added comments contain the person responsible for the event
 (abandoner, merger, ...), the change's subject, a reason (if one has
 been given), and a link to the change.
 
+[action-add-velocity-comment]: #action-add-velocity-comment
+### <a name="action-add-velocity-comment">Action: add-velocity-comment</a>
+
+The `add-velocity-comment` action renders a Velocity template for the
+event and adds the output as comment to any associated issue.
+
+So for example
+
+```
+  action = add-velocity-comment TemplateName
+```
+
+would render the template `etc/its/templates/TemplateName.vm` add the
+output as comment to associated issues.
+
+If 'TemplateName' is `inline`, the Velocity template to render is not
+loaded from a file, but the template is built by joining the remaining
+parameters. So for example
+
+```
+  action = add-velocity-comment inline Sample template using $subject property.
+```
+
+would render “Sample template using $subject property.” as Velocity
+template.
+
+If 'TemplateName' is not `inline`, further parameters get ignored.
+
+Any [property][event-properties] of the event may be used from
+templates. So for example `$subject` in the above example refers to
+the event's subject property, and `$changeNumber` would refer to the
+change's number.
+
+Additionally, the context's `its` property provides an object that
+allows to format links using the its' syntax:
+
+`formatLink( url )`
+:	Formats a link to a url.
+
+	So for example upon adding a comment to a change, the
+	following rule formats a link to the change:
+
+	```
+[rule "formatLinkSampleRule"]
+  event-type = comment-added
+  action = add-velocity-comment inline Comment for change $change-number added. See ${its.formatLink($changeUrl)}
+```
+
+`formatLink( url, caption )`
+:	Formats a link to a url using 'caption' to represent the url.
+
+	So for example upon adding a comment to a change, the following rule
+	formats a link to the change using the change number as link
+	capition:
+
+	```
+[rule "formatLinkSampleRule"]
+  event-type = comment-added
+  action = add-velocity-comment inline Comment for change ${its.formatLink($changeUrl, $changeNumber)} added.
+```
+
 [action-add-soy-comment]: #action-add-soy-comment
 ### <a name="action-add-soy-comment">Action: add-soy-comment</a>
 
