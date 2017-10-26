@@ -45,6 +45,16 @@ This project can be imported into the Eclipse IDE:
 
 ### Build in Gerrit tree
 
+Put the external dependency Bazel build file into the Gerrit /plugins directory,
+replacing the existing empty one.
+
+```
+  cd gerrit/plugins
+  rm external_plugin_deps.bzl
+  cd @PLUGIN@
+  cp external_plugin_deps.bzl ../
+  cd ../../
+
 ```
   bazel build plugins/its-base
 ```
