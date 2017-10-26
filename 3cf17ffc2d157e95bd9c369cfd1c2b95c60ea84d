@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa560c8b_1e98138c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-10-26T02:08:37Z",
+      "side": 1,
+      "message": "Impl",
+      "range": {
+        "startLine": 7,
+        "startChar": 53,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "3cf17ffc2d157e95bd9c369cfd1c2b95c60ea84d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
