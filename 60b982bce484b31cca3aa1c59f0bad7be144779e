@@ -118,6 +118,30 @@
       "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e67aa0_eb2157b0",
+        "filename": "BUILD",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-10-27T01:04:38Z",
+      "side": 1,
+      "message": "I\u0027m building on the head of stable-2.14 which is the destination of this change.\n\nObviously if you\u0027re building on master you need to have installed the snapshot API.",
+      "parentUuid": "9b22afa5_e8a09567",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
