@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gwtorm.server.OrmException;
+import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -24,13 +25,39 @@ public class IssueExtractor {
       IssueExtractor.class);
 
   private final CommitMessageFetcher commitMessageFetcher;
-  private final ReviewDb db;
+  private final PatchSetDb db;
   private final ItsConfig itsConfig;
 
+  @ImplementedBy(PatchSetDbImpl.class)
+  public interface PatchSetDb {
+    public String getRevision(PatchSet.Id patchSetId);
+  }
+
+  public static class PatchSetDbImpl implements PatchSetDb {
+    private final ReviewDb db;
+
+    @Inject
+    public PatchSetDbImpl(ReviewDb db) {
+      this.db = db;
+    }
+
+    @Override
+    public String getRevision(PatchSet.Id patchSetId) {
+      try {
+        PatchSet previousPatchSet = db.patchSets().get(patchSetId);
+        if (previousPatchSet != null) {
+          return previousPatchSet.getRevision().get();
+        }
+      } catch (OrmException e) {
+        // previous is still empty to indicate that there was no previous
+        // accessible patch set. We treat every occurrence as added.
+      }
+      return null;
+    }
+  }
+
   @Inject
-  IssueExtractor(ItsConfig itsConfig,
-      CommitMessageFetcher commitMessageFetcher,
-      ReviewDb db) {
+  IssueExtractor(ItsConfig itsConfig, CommitMessageFetcher commitMessageFetcher, PatchSetDb db) {
     this.commitMessageFetcher = commitMessageFetcher;
     this.db = db;
     this.itsConfig = itsConfig;
@@ -188,23 +215,15 @@ public class IssueExtractor {
    *    "subject". Issues in the last block get tagged with "footer". Issues
    *    occurring between "subject" and "footer" get tagged with "body".
    */
-  public Map<String,Set<String>> getIssueIds(String projectName,
-      String commitId, PatchSet.Id patchSetId) {
-    Map<String,Set<String>> current = getIssueIds(projectName, commitId);
+  public Map<String, Set<String>> getIssueIds(String projectName, String commitId, PatchSet.Id patchSetId) {
+    Map<String, Set<String>> current = getIssueIds(projectName, commitId);
     if (patchSetId != null) {
-      Map<String,Set<String>> previous = Maps.newHashMap();
+      Map<String, Set<String>> previous = Maps.newHashMap();
       if (patchSetId.get() != 1) {
-        PatchSet.Id previousPatchSetId = new PatchSet.Id(
-            patchSetId.getParentKey(), patchSetId.get() - 1);
-        try {
-          PatchSet previousPatchSet = db.patchSets().get(previousPatchSetId);
-          if (previousPatchSet != null) {
-            previous = getIssueIds(projectName,
-                previousPatchSet.getRevision().get());
-          }
-        } catch (OrmException e) {
-          // previous is still empty to indicate that there was no previous
-          // accessible patch set. We treat every occurrence as added.
+        PatchSet.Id previousPatchSetId = new PatchSet.Id(patchSetId.getParentKey(), patchSetId.get() - 1);
+        String previousPatchSet = db.getRevision(previousPatchSetId);
+        if (previousPatchSet != null) {
+          previous = getIssueIds(projectName, previousPatchSet);
         }
       }
 
