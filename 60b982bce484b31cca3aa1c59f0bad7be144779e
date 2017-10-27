@@ -94,6 +94,30 @@
       "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b22afa5_e8a09567",
+        "filename": "BUILD",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-27T01:03:12Z",
+      "side": 1,
+      "message": "if i run\n\n./tools/maven/api.sh install\n\nand build its-base it works :).",
+      "parentUuid": "5356c7e6_dc9b4aed",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
