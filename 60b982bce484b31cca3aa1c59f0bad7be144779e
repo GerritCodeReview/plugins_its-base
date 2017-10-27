@@ -46,6 +46,30 @@
       "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88cf8f1d_bb595c13",
+        "filename": "BUILD",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-10-27T00:46:58Z",
+      "side": 1,
+      "message": "It builds for me in standalone mode:\n\nhttp://paste.openstack.org/show/624762/",
+      "parentUuid": "91e57db4_1cfe853b",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
