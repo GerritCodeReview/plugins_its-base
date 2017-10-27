@@ -22,6 +22,30 @@
       "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91e57db4_1cfe853b",
+        "filename": "BUILD",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-10-27T00:42:40Z",
+      "side": 1,
+      "message": "Yep, currently failing with\n\nERROR: /Users/patrickmulhall/its-base/BUILD:9:1: no such target \u0027//external:gerrit-plugin-api-neverlink\u0027: target \u0027gerrit-plugin-api-neverlink\u0027 not declared in package \u0027external\u0027 defined by /Users/patrickmulhall/its-base/WORKSPACE and referenced by \u0027//:its-base__plugin\u0027.\nERROR: Analysis of target \u0027//:its-base\u0027 failed; build aborted: Loading failed.\nINFO: Elapsed time: 1.519s",
+      "parentUuid": "c3b0c135_076110d4",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "60b982bce484b31cca3aa1c59f0bad7be144779e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
