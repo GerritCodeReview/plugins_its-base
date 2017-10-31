@@ -14,8 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.EventListener;
 import com.google.inject.Inject;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
