@@ -482,10 +482,7 @@ The following actions are available:
 [`add-standard-comment`][action-add-standard-comment]
 : adds a predefined standard comment for certain events
 
-[`add-velocity-comment`][action-add-velocity-comment]
-: adds a rendered Velocity template as issue comment
-
-[`add-soy-comment`][action-add-velocity-comment]
+[`add-soy-comment`][action-add-soy-comment]
 : adds a rendered Closure Template (soy) template as issue comment
 
 [`log-event`][action-log-event]
