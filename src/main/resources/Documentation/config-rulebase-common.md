@@ -1,17 +1,11 @@
 Rule base configuration
 =======================
 
-#### Table of Contents
-* [Overview][overview]
-* [Rules][rules]
-* [Conditions][conditions]
-* [Event Properties][event-properties]
-* [Actions][actions]
+[TOC]: # "Table of Contents"
 
-[overview]: #overview
-<a name="overview">Overview</a>
+Overview
 -------------------------------
-
+//[overview]: #
 In this part we describe how to specify which events in Gerrit (E.g.:
 “Change Merged”, or “User ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a
 change”) trigger which actions (e.g.: “Set issue's status to
@@ -51,8 +45,7 @@ The order of rules in `etc/its/actions.config` need not be
 respected. So in the above example, do not rely on `rule1` being
 evaluated before `rule2`.
 
-[rules]: #rules
-<a name="rules">Rules</a>
+Rules
 -------------------------
 
 Each rule consists of three items: A name, a set of conditions, and a
@@ -72,8 +65,7 @@ respected.
 There is no upper limit on the number of elements in a rules set of
 conditions, and set of actions. Each of those sets may be empty.
 
-[conditions]: #conditions
-<a name="conditions">Conditions</a>
+Conditions
 -----------------------------------
 
 The conditions are lines of the form
@@ -101,8 +93,7 @@ having `DRAFT`, the following condition can be used:
   status = !,DRAFT
 ```
 
-[event-properties]: #event-properties
-<a name="event-properties">Event Properties</a>
+Event Properties
 -----------------------------------------------
 
 The properties exposed by events depend on the kind of event.
@@ -165,8 +156,7 @@ corresponding subsection below:
 * [Common properties for events on a change][event-properties-change]
 * [Common properties for events on a patch set][event-properties-patch-set]
 
-[property-association]: #property-association
-### <a name="property-association">Property: `association`</a>
+### Property: `association`
 
 The property `association` describes how the `issue` got associated to
 this event.
@@ -221,7 +211,7 @@ Fixes-Issue: issue 4711
 	`added@subject`.
 
 [event-properties-ChangeAbandonedEvent]: #event-properties-ChangeAbandonedEvent
-### <a name="event-properties-ChangeAbandonedEvent">ChangeAbandonedEvent</a>
+### ChangeAbandonedEvent
 
 `abandonerEmail`
 : email address of the user abandoning the change.
@@ -246,7 +236,7 @@ properties for the abandoned [Change][event-properties-change], and
 its most recent [Patch Set][event-properties-patch-set].
 
 [event-properties-ChangeMergedEvent]: #event-properties-ChangeMergedEvent
-### <a name="event-properties-ChangeMergedEvent">ChangeMergedEvent</a>
+### ChangeMergedEvent
 
 `event`
 : `com.google.gerrit.server.events.ChangeMergedEvent`
