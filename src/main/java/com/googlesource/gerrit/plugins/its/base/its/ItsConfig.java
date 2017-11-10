@@ -23,6 +23,7 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
+import static com.google.gerrit.reviewdb.client.RefNames.REFS_CHANGES;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -117,6 +118,10 @@ public class ItsConfig {
     if (projectState == null) {
       log.error("Failed to check if " + pluginName + " is enabled for project "
           + projectNK.get() + ": Project " + projectNK.get() + " not found");
+      return false;
+    }
+
+    if(refName.startsWith(REFS_CHANGES)) {
       return false;
     }
 
