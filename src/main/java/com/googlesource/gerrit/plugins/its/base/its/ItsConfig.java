@@ -215,6 +215,17 @@ public class ItsConfig {
   }
 
   /**
+   * Pattern to skip the mandatory check for an issue. Can be used to explicitly bypass the
+   * mandatory issue pattern check for some commits.
+   *
+   * <p>When no pattern is specified, it will return a pattern which never matches.
+   */
+  public Optional<Pattern> getDummyIssuePattern() {
+    return Optional.ofNullable(getPluginConfigString("dummyIssuePattern"))
+        .map(Pattern::compile);
+  }
+
+  /**
    * Gets how necessary it is to associate commits with issues
    *
    * @return policy on how necessary association with issues is
