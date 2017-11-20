@@ -78,6 +78,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getItsAssociationPolicy())
         .andReturn(ItsAssociationPolicy.SUGGESTED).atLeastOnce();
+    expect(itsConfig.getDummyIssuePattern()).andReturn(Pattern.compile("x^")).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -103,6 +104,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     expect(itsConfig.getItsAssociationPolicy())
         .andReturn(ItsAssociationPolicy.MANDATORY).atLeastOnce();
+    expect(itsConfig.getDummyIssuePattern()).andReturn(Pattern.compile("x^")).atLeastOnce();
     expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
@@ -119,6 +121,30 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
           + "contain 'Missing issue'",
           e.getMessage().contains("Missing issue"));
     }
+  }
+
+  public void testOnlySkipMatching() throws CommitValidationException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null,
+        commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.MANDATORY).atLeastOnce();
+    expect(itsConfig.getDummyIssuePattern()).andReturn(Pattern.compile("SKIP")).atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("TestMessage SKIP").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("TestMessage SKIP")).andReturn(
+        new String[] {}).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEmptyList(ret);
   }
 
   public void testSuggestedMatchingSingleExisting()

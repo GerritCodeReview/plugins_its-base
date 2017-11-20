@@ -167,7 +167,7 @@ public class ItsConfig {
   public String getCommentLinkName() {
     String ret;
 
-    ret = getPluginConfigString("commentlink");
+    ret = getPluginConfigString("commentlink", null);
     if (ret == null) {
       ret = pluginName;
     }
@@ -231,6 +231,16 @@ public class ItsConfig {
   }
 
   /**
+   * Pattern to skip the mandatory check for an issue.
+   * Can be used to explicitly bypass the mandatory issue pattern check for some commits.
+   *
+   * When no pattern is specified, it will return a pattern which never matches.
+   */
+  public Pattern getDummyIssuePattern() {
+    return Pattern.compile(getPluginConfigString("dummyIssuePattern", "x^"));
+  }
+
+  /**
    * Gets how necessary it is to associate commits with issues
    *
    * @return policy on how necessary association with issues is
@@ -243,9 +253,10 @@ public class ItsConfig {
     return getPluginConfigEnum("association", legacyItsAssociationPolicy);
   }
 
-  private String getPluginConfigString(String key) {
-    return getCurrentPluginConfig().getString(key,
+  private String getPluginConfigString(String key, String defaultValue) {
+    String val = getCurrentPluginConfig().getString(key,
         gerritConfig.getString(PLUGIN, pluginName, key));
+    return val == null ? defaultValue : val;
   }
 
   private int getPluginConfigInt(String key, int defaultValue) {

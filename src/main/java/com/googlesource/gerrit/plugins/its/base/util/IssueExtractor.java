@@ -100,7 +100,7 @@ public class IssueExtractor {
   }
 
   /**
-   * Helper funcion for {@link #getIssueIds(String, String)}.
+   * Helper function for {@link #getIssueIds(String, String)}.
    * <p>
    * Adds a text's issues for a given occurrence to the map returned by
    * {@link #getIssueIds(String, String)}.
