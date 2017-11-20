@@ -92,7 +92,7 @@ public class ItsValidateComment implements CommitValidationListener {
 
             ret.add(commitValidationFailure(synopsis, details));
           }
-        } else {
+        } else if (!itsConfig.getDummyIssuePattern().map(p -> p.matcher(commitMessage).find()).orElse(false)) {
           synopsis = "Missing issue-id in commit message";
 
           StringBuilder sb = new StringBuilder();
