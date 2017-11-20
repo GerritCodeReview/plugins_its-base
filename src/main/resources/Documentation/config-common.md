@@ -42,8 +42,8 @@ is possible to require commits to carry ITS references; the following
 values are supported (default is `OPTIONAL`):
 
 MANDATORY
-:	 One or more issue-ids are required in the git commit message, otherwise
-	 the git push will be rejected.
+:	 One or more issue-ids are required in the git commit message.  The git push will
+	 be rejected otherwise.
 
 SUGGESTED
 :	 Whenever the git commit message does not contain one or more issue-ids,
@@ -184,6 +184,12 @@ just need to use the appropriate name to configure each plugin.
     Default is `1`, if there are are groups within the regular expression for
     the `@PLUGIN@.commentlink` comment link, and the default is `0`, if there
     are no such groups.
+
+<a name="common-config-dummyIssuePattern">`@PLUGIN@.dummyIssuePattern`
+:   Pattern which can be specified to match a dummy issue.
+
+    This setting is useful to bypass the MANDATORY check for commits matching
+    a specific pattern.
 
 [Back to @PLUGIN@ documentation index][index]
 
