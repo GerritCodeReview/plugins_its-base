@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f57deca9_a6bead15",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-11-23T08:30:15Z",
+      "side": 1,
+      "message": "Are then disabling altogether the ITS-* plugins for changes under review? I believe this is *NOT* desirable because it would not allow any policy on the issues associations, isn\u0027t it?",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 39
+      },
+      "revId": "201289fc3163c393dc8941df8d5e9a75b626772b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
