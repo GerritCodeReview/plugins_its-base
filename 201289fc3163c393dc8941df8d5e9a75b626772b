@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "023b009f_243a3f8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-11-23T08:31:45Z",
+      "side": 1,
+      "message": "This headline doesn\u0027t match what the change is about: this modification is disabling the ITS-* plugin altogether for any event related to refs/changes/*",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "201289fc3163c393dc8941df8d5e9a75b626772b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25a9d4f0_a7ccc55e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-11-23T08:31:45Z",
+      "side": 1,
+      "message": "Can\u0027t see any reference to the ref-updated in the code.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 13
+      },
+      "revId": "201289fc3163c393dc8941df8d5e9a75b626772b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f57deca9_a6bead15",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
         "patchSetId": 2
