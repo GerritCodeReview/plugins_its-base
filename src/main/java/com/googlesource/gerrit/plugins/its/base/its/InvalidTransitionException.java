@@ -14,9 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import java.io.IOException;
-
-public class InvalidTransitionException extends IOException {
+public class InvalidTransitionException extends Exception {
 
   private static final long serialVersionUID = 1L;
 
