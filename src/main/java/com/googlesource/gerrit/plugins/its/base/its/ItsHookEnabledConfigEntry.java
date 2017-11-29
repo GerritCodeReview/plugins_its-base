@@ -28,7 +28,7 @@ public class ItsHookEnabledConfigEntry extends ProjectConfigEntry {
     super(
         "Enable " + pluginName + " integration",
         "false",
-        Arrays.asList(new String[] {"false", "true", "enforced"}),
+        Arrays.asList("false", "true", "enforced"),
         true);
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
