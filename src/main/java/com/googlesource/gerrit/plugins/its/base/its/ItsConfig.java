@@ -57,12 +57,7 @@ public class ItsConfig {
   private final Config gerritConfig;
 
   private static final ThreadLocal<Project.NameKey> currentProjectName =
-      new ThreadLocal<Project.NameKey>() {
-        @Override
-        protected Project.NameKey initialValue() {
-          return null;
-        }
-      };
+      ThreadLocal.withInitial(() -> null);
 
   public static void setCurrentProjectName(Project.NameKey projectName) {
     currentProjectName.set(projectName);
