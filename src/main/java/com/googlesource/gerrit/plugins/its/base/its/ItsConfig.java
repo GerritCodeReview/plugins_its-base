@@ -105,7 +105,7 @@ public class ItsConfig {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else {
-      log.debug("Event " + event + " not recognised and ignored");
+      log.debug("Event {} not recognised and ignored", event);
       return false;
     }
   }
@@ -114,13 +114,9 @@ public class ItsConfig {
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
       log.error(
-          "Failed to check if "
-              + pluginName
-              + " is enabled for project "
-              + projectNK.get()
-              + ": Project "
-              + projectNK.get()
-              + " not found");
+          "Failed to check if {} is enabled for project {}: Project not found",
+          pluginName,
+          projectNK.get());
       return false;
     }
 
