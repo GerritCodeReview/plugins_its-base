@@ -37,7 +37,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, new HashSet<Property>());
+    logEvent.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testLevelDefault() throws IOException {
