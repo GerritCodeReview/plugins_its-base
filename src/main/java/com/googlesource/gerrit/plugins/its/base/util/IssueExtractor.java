@@ -57,7 +57,7 @@ public class IssueExtractor {
   }
 
   /**
-   * Helper funcion for {@link #getIssueIds(String, String)}.
+   * Helper function for {@link #getIssueIds(String, String)}.
    *
    * <p>Adds a text's issues for a given occurrence to the map returned by {@link
    * #getIssueIds(String, String)}.
@@ -68,11 +68,7 @@ public class IssueExtractor {
    */
   private void addIssuesOccurrence(String text, String occurrence, Map<String, Set<String>> map) {
     for (String issue : getIssueIds(text)) {
-      Set<String> occurrences = map.get(issue);
-      if (occurrences == null) {
-        occurrences = Sets.newLinkedHashSet();
-        map.put(issue, occurrences);
-      }
+      Set<String> occurrences = map.computeIfAbsent(issue, k -> Sets.newLinkedHashSet());
       occurrences.add(occurrence);
     }
   }
