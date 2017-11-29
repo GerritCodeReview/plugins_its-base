@@ -51,14 +51,14 @@ public class AddStandardComment implements Action {
     return ret;
   }
 
-  private String getCommentChangeEvent(String Action, String prefix, Map<String, String> map) {
+  private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
     String changeNumber = Strings.nullToEmpty(map.get("change-number"));
     changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
-    ret += "Change " + changeNumber + Action;
+    ret += "Change " + changeNumber + action;
     String submitter = formatPerson(prefix, map);
     if (!submitter.isEmpty()) {
       ret += " by " + submitter;
