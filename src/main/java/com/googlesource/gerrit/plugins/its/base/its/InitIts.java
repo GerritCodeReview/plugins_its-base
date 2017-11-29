@@ -28,8 +28,6 @@ import org.eclipse.jgit.lib.Config;
 
 public class InitIts implements InitStep {
 
-  public static String COMMENT_LINK_SECTION = "commentlink";
-
   public static enum TrueFalseEnum {
     TRUE,
     FALSE
