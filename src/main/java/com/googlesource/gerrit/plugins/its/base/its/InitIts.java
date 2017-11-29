@@ -32,13 +32,13 @@ public class InitIts implements InitStep {
 
   public static enum TrueFalseEnum {
     TRUE,
-    FALSE;
+    FALSE
   }
 
   public static enum ItsIntegration {
     ENABLED,
     DISABLED,
-    ENFORCED;
+    ENFORCED
   }
 
   private final String pluginName;
