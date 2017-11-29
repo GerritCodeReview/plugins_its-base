@@ -94,7 +94,7 @@ public class RuleBase {
         Rule rule = ruleFactory.create(subsection);
         Collection<String> keys = cfg.getNames(RULE_SECTION, subsection);
         for (String key : keys) {
-          String values[] = cfg.getStringList(RULE_SECTION, subsection, key);
+          String[] values = cfg.getStringList(RULE_SECTION, subsection, key);
           if (ACTION_KEY.equals(key)) {
             for (String value : values) {
               ActionRequest actionRequest = actionRequestFactory.create(value);
