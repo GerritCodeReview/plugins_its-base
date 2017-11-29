@@ -40,7 +40,7 @@ public class IssueExtractor {
     Pattern pattern = itsConfig.getIssuePattern();
     if (pattern == null) return new String[] {};
 
-    log.debug("Matching '" + haystack + "' against " + pattern.pattern());
+    log.debug("Matching '{}' against {}", haystack, pattern.pattern());
 
     Set<String> issues = Sets.newHashSet();
     Matcher matcher = pattern.matcher(haystack);
