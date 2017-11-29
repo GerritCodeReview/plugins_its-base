@@ -23,11 +23,9 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -46,8 +44,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     ChangeEvent event = createMock(ChangeEvent.class);
 
     Set<Set<Property>> propertySets = Collections.emptySet();
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets)
-        .anyTimes();
+    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
     replayMocks();
 
@@ -63,8 +60,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Property> propertySet = Collections.emptySet();
     propertySets.add(propertySet);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets)
-        .anyTimes();
+    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
     Collection<ActionRequest> actions = Collections.emptySet();
     expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).once();
@@ -83,8 +79,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Property> propertySet = Collections.emptySet();
     propertySets.add(propertySet);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets)
-        .anyTimes();
+    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
     Collection<ActionRequest> actions = Lists.newArrayListWithCapacity(1);
     ActionRequest action1 = createMock(ActionRequest.class);
@@ -111,15 +106,12 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Set<Property>> propertySets = Sets.newHashSet();
     propertySets.add(propertySet);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets)
-        .anyTimes();
+    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
-    Collection<ActionRequest> actionRequests =
-        Lists.newArrayListWithCapacity(1);
+    Collection<ActionRequest> actionRequests = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
     actionRequests.add(actionRequest1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests)
-        .once();
+    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests).once();
 
     actionExecutor.execute("testIssue", actionRequests, propertySet);
 
@@ -152,25 +144,20 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     propertySets.add(propertySet1);
     propertySets.add(propertySet2);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets)
-        .anyTimes();
+    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
-    Collection<ActionRequest> actionRequests1 =
-        Lists.newArrayListWithCapacity(1);
+    Collection<ActionRequest> actionRequests1 = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
     actionRequests1.add(actionRequest1);
 
-    Collection<ActionRequest> actionRequests2 =
-        Lists.newArrayListWithCapacity(2);
+    Collection<ActionRequest> actionRequests2 = Lists.newArrayListWithCapacity(2);
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
     actionRequests2.add(actionRequest2);
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
     actionRequests2.add(actionRequest3);
 
-    expect(ruleBase.actionRequestsFor(propertySet1)).andReturn(actionRequests1)
-        .once();
-    expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2)
-        .once();
+    expect(ruleBase.actionRequestsFor(propertySet1)).andReturn(actionRequests1).once();
+    expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2).once();
 
     actionExecutor.execute("testIssue", actionRequests1, propertySet1);
     actionExecutor.execute("testIssue", actionRequests2, propertySet2);
@@ -180,13 +167,13 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     actionController.onEvent(event);
   }
+
   private ActionController createActionController() {
     return injector.getInstance(ActionController.class);
   }
 
   private void setupCommonMocks() {
-    expect(itsConfig.isEnabled(anyObject(Event.class))).andReturn(true)
-        .anyTimes();
+    expect(itsConfig.isEnabled(anyObject(Event.class))).andReturn(true).anyTimes();
   }
 
   @Override

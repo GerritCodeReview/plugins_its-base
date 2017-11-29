@@ -26,22 +26,19 @@ import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PatchSet.class,RevId.class})
+@PrepareForTest({PatchSet.class, RevId.class})
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private ItsConfig itsConfig;
@@ -51,8 +48,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsNullPattern() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(null)
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(null).atLeastOnce();
 
     replayMocks();
 
@@ -63,8 +59,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsNoMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -78,8 +73,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsEmptyGroup() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(X*)(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(X*)(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -93,8 +87,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsFullMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -109,8 +102,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -125,8 +117,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsGrouplessMatch() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#\\d+"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#\\d+")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(0).atLeastOnce();
 
     replayMocks();
@@ -141,8 +132,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsMultiGroupMatchGroup1() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern())
-        .andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -157,8 +147,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsMultiGroupMatchGroup2() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern())
-        .andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d)(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(2).atLeastOnce();
 
     replayMocks();
@@ -173,8 +162,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsMulipleMatches() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
@@ -192,14 +180,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   public void testIssueIdsMulipleMatchesWithDuplicates() {
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
 
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar\n" +
-        "bug#123 baz bug#42");
+    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar\n" + "bug#123 baz bug#42");
     assertEquals("Number of found ids do not match", 3, ret.length);
     List<String> retList = Arrays.asList(ret);
     assertTrue("4711 not among the extracted ids", retList.contains("4711"));
@@ -210,23 +196,21 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssue() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
@@ -238,23 +222,24 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssues() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42, and bug#4711\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "bug#42, and bug#4711\n"
+                + "\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("4711", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
@@ -267,23 +252,24 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssuesMultipleTimes() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42, bug#4711, bug#4711, bug#42, and bug#4711\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "bug#42, bug#4711, bug#4711, bug#42, and bug#4711\n"
+                + "\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("4711", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
@@ -296,25 +282,26 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssueBody() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject does not reference a bug\n" +
-            "Body references bug#42\n" +
-            "\n" +
-            "Footer: does not reference a bug\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject does not reference a bug\n"
+                + "Body references bug#42\n"
+                + "\n"
+                + "Footer: does not reference a bug\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "body"));
     assertEquals("Extracted issues do not match", expected, actual);
 
@@ -327,27 +314,27 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitSingleIssueFooter() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject does not reference a bug\n" +
-            "Body does not reference a bug\n" +
-            "\n" +
-            "Footer: references bug#42\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject does not reference a bug\n"
+                + "Body does not reference a bug\n"
+                + "\n"
+                + "Footer: references bug#42\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "footer",
-        "footer-Footer"));
+    Map<String, Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "footer", "footer-Footer"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -359,29 +346,30 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitMultipleIssuesFooter() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject does not reference a bug\n" +
-            "Body does not reference a bug\n" +
-            "\n" +
-            "KeyA: references bug#42\n" +
-            "KeyB: does not reference bug\n" +
-            "KeyC: references bug#176\n" +
-            "Unkeyed reference to bug#4711\n" +
-            "Change-Id: I1234567891123456789212345678931234567894\n" +
-            "KeyZ: references bug#256" );
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject does not reference a bug\n"
+                + "Body does not reference a bug\n"
+                + "\n"
+                + "KeyA: references bug#42\n"
+                + "KeyB: does not reference bug\n"
+                + "KeyC: references bug#176\n"
+                + "Unkeyed reference to bug#4711\n"
+                + "Change-Id: I1234567891123456789212345678931234567894\n"
+                + "KeyZ: references bug#256");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "footer", "footer-KeyA"));
     expected.put("176", Sets.newHashSet("somewhere", "footer", "footer-KeyC"));
     expected.put("256", Sets.newHashSet("somewhere", "footer", "footer-KeyZ"));
@@ -400,26 +388,27 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentParts() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n" +
-            "\n" +
-            "Bug: bug#4711 in footer\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n"
+                + "\n"
+                + "Bug: bug#4711 in footer\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -435,26 +424,27 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsEmptySubject() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n" +
-            "\n" +
-            "Bug: bug#4711 in footer\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n"
+                + "\n"
+                + "Bug: bug#4711 in footer\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
     expected.put("4711", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
@@ -469,26 +459,27 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsLinePastFooter() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n" +
-            "\n" +
-            "Bug: bug#4711 in footer\n" +
-            "Change-Id: I1234567891123456789212345678931234567894\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n"
+                + "\n"
+                + "Bug: bug#4711 in footer\n"
+                + "Change-Id: I1234567891123456789212345678931234567894\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -504,27 +495,28 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsLinesPastFooter() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n" +
-            "\n" +
-            "Bug: bug#4711 in footer\n" +
-            "Change-Id: I1234567891123456789212345678931234567894\n" +
-            "\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n"
+                + "\n"
+                + "Bug: bug#4711 in footer\n"
+                + "Change-Id: I1234567891123456789212345678931234567894\n"
+                + "\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -540,23 +532,24 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooter() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -568,23 +561,24 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLine() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -596,24 +590,25 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitDifferentPartsNoFooterTrailingLines() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject references bug#42.\n" +
-            "Body references bug#16.\n" +
-            "Body also references bug#176.\n" +
-            "\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject references bug#42.\n"
+                + "Body references bug#16.\n"
+                + "Body also references bug#176.\n"
+                + "\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "body"));
@@ -625,20 +620,21 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitEmpty() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn("");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -647,96 +643,98 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitBlankLine() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn("\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitBlankLines() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn("\n\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("\n\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitMoreBlankLines() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn("\n\n\n");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("\n\n\n");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
   }
 
   public void testIssueIdsCommitMixed() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "Subject bug#42, bug#1984, and bug#16\n" +
-            "\n" +
-            "bug#4711 in body,\n" +
-            "along with bug#1984, and bug#5150.\n" +
-            "bug#4711 in body again, along with bug#16\n" +
-            "\n" +
-            "Bug: bug#176, bug#1984, and bug#5150\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "Subject bug#42, bug#1984, and bug#16\n"
+                + "\n"
+                + "bug#4711 in body,\n"
+                + "along with bug#1984, and bug#5150.\n"
+                + "bug#4711 in body again, along with bug#16\n"
+                + "\n"
+                + "Bug: bug#176, bug#1984, and bug#5150\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894");
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds("testProject", "1234567891123456789212345678931234567894");
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "subject", "body"));
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     expected.put("176", Sets.newHashSet("somewhere", "footer", "footer-Bug"));
-    expected.put("1984", Sets.newHashSet("somewhere", "subject", "body",
-        "footer", "footer-Bug"));
+    expected.put("1984", Sets.newHashSet("somewhere", "subject", "body", "footer", "footer-Bug"));
     expected.put("4711", Sets.newHashSet("somewhere", "body"));
-    expected.put("5150", Sets.newHashSet("somewhere", "body", "footer",
-        "footer-Bug"));
+    expected.put("5150", Sets.newHashSet("somewhere", "body", "footer", "footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -748,21 +746,23 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedEmptyFirst() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn("");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("");
 
     replayMocks();
 
     PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(4), 1);
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", patchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", patchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -771,32 +771,29 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
   }
 
   public void testIssueIdsCommitWAddedSingleSubjectIssueFirst() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(1).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "subject",
-        "added@somewhere", "added@subject"));
+    Map<String, Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@somewhere", "added@subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -806,26 +803,22 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondEmpty() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -833,28 +826,26 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "subject\n" +
-            "\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn("subject\n" + "\n" + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "subject",
-        "added@somewhere", "added@subject"));
+    Map<String, Set<String>> expected = Maps.newHashMap();
+    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@somewhere", "added@subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -869,26 +860,22 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondSame() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -896,26 +883,25 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
@@ -931,26 +917,22 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondBody() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -958,27 +940,29 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "subject\n" +
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn(
+            "subject\n"
+                + "bug#42\n"
+                + "\n"
+                + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject"));
     assertEquals("Extracted issues do not match", expected, actual);
 
@@ -994,27 +978,26 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedSingleSubjectIssueSecondFooter() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "subject\n" +
-            "\n" +
-            "Bug: bug#42\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "subject\n"
+                + "\n"
+                + "Bug: bug#42\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -1022,28 +1005,28 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn("bug#42\n" + "\n" + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "footer", "added@footer",
-        "footer-Bug", "added@footer-Bug"));
+    Map<String, Set<String>> expected = Maps.newHashMap();
+    expected.put(
+        "42",
+        Sets.newHashSet("somewhere", "footer", "added@footer", "footer-Bug", "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -1059,29 +1042,28 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedSubjectFooter()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedSubjectFooter() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "subject bug#42\n" +
-            "\n" +
-            "body bug#42\n" +
-            "\n" +
-            "Bug: bug#42\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "subject bug#42\n"
+                + "\n"
+                + "body bug#42\n"
+                + "\n"
+                + "Bug: bug#42\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -1089,30 +1071,40 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "subject\n" +
-            "bug#42\n" +
-            "\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn(
+            "subject\n"
+                + "bug#42\n"
+                + "\n"
+                + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
-    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
-        "body", "footer", "added@footer", "footer-Bug",
-        "added@footer-Bug"));
+    Map<String, Set<String>> expected = Maps.newHashMap();
+    expected.put(
+        "42",
+        Sets.newHashSet(
+            "somewhere",
+            "subject",
+            "added@subject",
+            "body",
+            "footer",
+            "added@footer",
+            "footer-Bug",
+            "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");
@@ -1128,29 +1120,28 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertLogMessageContains("Matching");
   }
 
-  public void testIssueIdsCommitWAddedMultiple()
-      throws OrmException {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)"))
-        .atLeastOnce();
+  public void testIssueIdsCommitWAddedMultiple() throws OrmException {
+    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).atLeastOnce();
     expect(itsConfig.getIssuePatternGroupIndex()).andReturn(1).atLeastOnce();
 
     Change.Id changeId = createMock(Change.Id.class);
 
     // Call for current patch set
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "1234567891123456789212345678931234567894")).andReturn(
-            "subject bug#42\n" +
-            "\n" +
-            "body bug#42 bug#16\n" +
-            "\n" +
-            "Bug: bug#42\n" +
-            "Change-Id: I1234567891123456789212345678931234567894");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "1234567891123456789212345678931234567894"))
+        .andReturn(
+            "subject bug#42\n"
+                + "\n"
+                + "body bug#42 bug#16\n"
+                + "\n"
+                + "Bug: bug#42\n"
+                + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
     PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     RevId previousRevId = createMock(RevId.class);
-    expect(previousRevId.get())
-        .andReturn("9876543211987654321298765432139876543214").anyTimes();
+    expect(previousRevId.get()).andReturn("9876543211987654321298765432139876543214").anyTimes();
 
     PatchSet previousPatchSet = createMock(PatchSet.class);
     expect(previousPatchSet.getRevision()).andReturn(previousRevId).anyTimes();
@@ -1158,32 +1149,42 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     PatchSetAccess patchSetAccess = createMock(PatchSetAccess.class);
     expect(patchSetAccess.get(previousPatchSetId)).andReturn(previousPatchSet);
 
-    expect(commitMessageFetcher.fetchGuarded("testProject",
-        "9876543211987654321298765432139876543214")).andReturn(
-            "subject\n" +
-            "bug#42 bug#4711\n" +
-            "\n" +
-            "Bug: bug#16\n" +
-            "Change-Id: I9876543211987654321298765432139876543214");
+    expect(
+            commitMessageFetcher.fetchGuarded(
+                "testProject", "9876543211987654321298765432139876543214"))
+        .andReturn(
+            "subject\n"
+                + "bug#42 bug#4711\n"
+                + "\n"
+                + "Bug: bug#16\n"
+                + "Change-Id: I9876543211987654321298765432139876543214");
 
     expect(db.patchSets()).andReturn(patchSetAccess);
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.getParentKey()).andReturn(changeId)
-        .anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
-    Map<String,Set<String>> actual = issueExtractor.getIssueIds("testProject",
-        "1234567891123456789212345678931234567894", currentPatchSetId);
+    Map<String, Set<String>> actual =
+        issueExtractor.getIssueIds(
+            "testProject", "1234567891123456789212345678931234567894", currentPatchSetId);
 
-    Map<String,Set<String>> expected = Maps.newHashMap();
+    Map<String, Set<String>> expected = Maps.newHashMap();
     expected.put("16", Sets.newHashSet("somewhere", "body", "added@body"));
-    expected.put("42", Sets.newHashSet("somewhere", "subject", "added@subject",
-        "body", "footer", "added@footer", "footer-Bug",
-        "added@footer-Bug"));
+    expected.put(
+        "42",
+        Sets.newHashSet(
+            "somewhere",
+            "subject",
+            "added@subject",
+            "body",
+            "footer",
+            "added@footer",
+            "footer-Bug",
+            "added@footer-Bug"));
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching");

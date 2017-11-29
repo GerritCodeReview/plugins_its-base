@@ -21,20 +21,18 @@ import com.google.inject.assistedinject.Assisted;
 /**
  * A property to match against {@code Condition}s.
  *
- * A property is a simple key value pair.
+ * <p>A property is a simple key value pair.
  */
 public class Property {
   public interface Factory {
-    Property create(@Assisted("key") String key,
-        @Assisted("value") String value);
+    Property create(@Assisted("key") String key, @Assisted("value") String value);
   }
 
   private final String key;
   private final String value;
 
   @Inject
-  public Property(@Assisted("key") String key,
-      @Nullable @Assisted("value") String value) {
+  public Property(@Assisted("key") String key, @Nullable @Assisted("value") String value) {
     this.key = key;
     this.value = value;
   }
@@ -71,8 +69,7 @@ public class Property {
 
   @Override
   public int hashCode() {
-    return (key == null ? 0 : key.hashCode()) * 31 +
-        (value == null ? 0 : value.hashCode());
+    return (key == null ? 0 : key.hashCode()) * 31 + (value == null ? 0 : value.hashCode());
   }
 
   @Override

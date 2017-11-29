@@ -21,23 +21,24 @@ import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.ConsoleUI;
 import com.google.gerrit.pgm.init.api.InitStep;
 import com.google.gerrit.pgm.init.api.Section;
-
-import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.lib.Config;
-
 import java.io.IOException;
 import java.util.EnumSet;
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
 
 public class InitIts implements InitStep {
 
   public static String COMMENT_LINK_SECTION = "commentlink";
 
   public static enum TrueFalseEnum {
-    TRUE, FALSE;
+    TRUE,
+    FALSE;
   }
 
   public static enum ItsIntegration {
-    ENABLED, DISABLED, ENFORCED;
+    ENABLED,
+    DISABLED,
+    ENFORCED;
   }
 
   private final String pluginName;
@@ -46,7 +47,10 @@ public class InitIts implements InitStep {
   private final AllProjectsConfig allProjectsConfig;
   private final AllProjectsNameOnInitProvider allProjects;
 
-  public InitIts(String pluginName, String itsDisplayName, ConsoleUI ui,
+  public InitIts(
+      String pluginName,
+      String itsDisplayName,
+      ConsoleUI ui,
       AllProjectsConfig allProjectsConfig,
       AllProjectsNameOnInitProvider allProjects) {
     this.pluginName = pluginName;
@@ -57,8 +61,7 @@ public class InitIts implements InitStep {
   }
 
   @Override
-  public void run() throws IOException, ConfigInvalidException {
-  }
+  public void run() throws IOException, ConfigInvalidException {}
 
   @Override
   public void postRun() throws IOException, ConfigInvalidException {
@@ -76,7 +79,8 @@ public class InitIts implements InitStep {
       itsintegration = ItsIntegration.DISABLED;
     }
     itsintegration =
-        ui.readEnum(itsintegration,
+        ui.readEnum(
+            itsintegration,
             EnumSet.allOf(ItsIntegration.class),
             "Issue tracker integration for all projects?");
     switch (itsintegration) {
@@ -92,8 +96,8 @@ public class InitIts implements InitStep {
         cfg.unset("plugin", pluginName, "enabled");
         break;
       default:
-        throw new IOException("Unsupported value for issue track integration: "
-            + itsintegration.name());
+        throw new IOException(
+            "Unsupported value for issue track integration: " + itsintegration.name());
     }
     allProjectsConfig.save(pluginName, "Initialize " + itsDisplayName + " Integration");
   }
@@ -101,8 +105,9 @@ public class InitIts implements InitStep {
   private void configureBranches(Config cfg) {
     String[] branches = cfg.getStringList("plugin", pluginName, "branch");
     if (branches.length > 1) {
-      ui.message("The issue tracker integration is configured for multiple branches."
-          + " Please adapt the configuration in the 'project.config' file of the '%s' project.\n",
+      ui.message(
+          "The issue tracker integration is configured for multiple branches."
+              + " Please adapt the configuration in the 'project.config' file of the '%s' project.\n",
           allProjects.get());
       return;
     }
@@ -114,14 +119,18 @@ public class InitIts implements InitStep {
 
     boolean validRef;
     do {
-      String v = ui.readString(branch, "Branches for which the issue tracker integration"
-          + " should be enabled (ref, ref pattern or regular expression)");
+      String v =
+          ui.readString(
+              branch,
+              "Branches for which the issue tracker integration"
+                  + " should be enabled (ref, ref pattern or regular expression)");
       validRef = RefConfigSection.isValid(v);
       if (validRef) {
         branch = v;
       } else {
         ui.message(
-            "'%s' is not valid. Please specify a valid ref, ref pattern or regular expression\n", v);
+            "'%s' is not valid. Please specify a valid ref, ref pattern or regular expression\n",
+            v);
       }
     } while (!validRef);
 
@@ -133,7 +142,7 @@ public class InitIts implements InitStep {
   }
 
   public boolean enterSSLVerify(Section section) {
-    return TrueFalseEnum.TRUE == section.select("Verify SSL Certificates",
-        "sslVerify", TrueFalseEnum.TRUE);
+    return TrueFalseEnum.TRUE
+        == section.select("Verify SSL Certificates", "sslVerify", TrueFalseEnum.TRUE);
   }
 }

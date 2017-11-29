@@ -19,13 +19,11 @@ import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-
 import java.util.Collection;
 import java.util.Collections;
 
-public class ConditionTest  extends LoggingMockingTestCase {
+public class ConditionTest extends LoggingMockingTestCase {
   private Injector injector;
 
   public void testGetKeyNull() {

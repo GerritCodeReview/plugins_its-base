@@ -15,34 +15,34 @@
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Dumps the event's properties to the log.
  *
- * This event helps when developing rules as available properties become
- * visible.
+ * <p>This event helps when developing rules as available properties become visible.
  */
 public class LogEvent implements Action {
   private static final Logger log = LoggerFactory.getLogger(LogEvent.class);
 
-  private enum Level { ERROR, WARN, INFO, DEBUG }
+  private enum Level {
+    ERROR,
+    WARN,
+    INFO,
+    DEBUG
+  }
 
   public interface Factory {
     LogEvent create();
   }
 
   @Inject
-  public LogEvent() {
-  }
+  public LogEvent() {}
 
   private void logProperty(Level level, Property property) {
     String message = property.toString();
@@ -65,8 +65,8 @@ public class LogEvent implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
     String levelParameter = actionRequest.getParameter(1);
     if (levelParameter != null) {
       levelParameter = levelParameter.toLowerCase();
