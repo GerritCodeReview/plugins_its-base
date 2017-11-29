@@ -248,7 +248,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     Property propertyApproval2 = createMock(Property.class);
     expect(propertyAttributeExtractor.extractFrom(approvalAttribute2))
         .andReturn(Sets.newHashSet(propertyApproval2));
-    ApprovalAttribute approvalAttributes[] = {approvalAttribute1, approvalAttribute2};
+    ApprovalAttribute[] approvalAttributes = {approvalAttribute1, approvalAttribute2};
     event.approvals = Suppliers.ofInstance(approvalAttributes);
 
     event.comment = "testComment";
