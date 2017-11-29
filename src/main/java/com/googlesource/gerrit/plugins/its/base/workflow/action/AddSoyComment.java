@@ -119,7 +119,7 @@ public class AddSoyComment implements Action {
     String template = null;
     String templateName = actionRequest.getParameter(1);
     if (templateName.isEmpty()) {
-      log.error("No template name given in " + actionRequest);
+      log.error("No template name given in {}", actionRequest);
     } else {
       template = templateName;
     }
