@@ -14,10 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
@@ -42,7 +38,9 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,22 +193,11 @@ public class ItsConfig {
    */
   public Pattern getIssuePattern() {
     Optional<String> match =
-        FluentIterable.from(getCommentLinkInfo(getCommentLinkName()))
-            .filter(
-                new Predicate<CommentLinkInfo>() {
-                  @Override
-                  public boolean apply(CommentLinkInfo input) {
-                    return input.match != null && !input.match.trim().isEmpty();
-                  }
-                })
-            .transform(
-                new Function<CommentLinkInfo, String>() {
-                  @Override
-                  public String apply(CommentLinkInfo input) {
-                    return input.match;
-                  }
-                })
-            .last();
+        getCommentLinkInfo(getCommentLinkName())
+            .stream()
+            .filter(input -> input.match != null && !input.match.trim().isEmpty())
+            .map(input -> input.match)
+            .reduce((a, b) -> b);
 
     String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(), "match");
 
@@ -218,7 +205,7 @@ public class ItsConfig {
       return null;
     }
 
-    return Pattern.compile(match.or(defPattern));
+    return Pattern.compile(match.orElse(defPattern));
   }
 
   /**
@@ -282,15 +269,10 @@ public class ItsConfig {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
-      return FluentIterable.from(commentlinks)
-          .filter(
-              new Predicate<CommentLinkInfo>() {
-                @Override
-                public boolean apply(CommentLinkInfo input) {
-                  return input.name.equals(commentlinkName);
-                }
-              })
-          .toList();
+      return commentlinks
+          .stream()
+          .filter(input -> input.name.equals(commentlinkName))
+          .collect(Collectors.toList());
     }
     return Collections.emptyList();
   }
