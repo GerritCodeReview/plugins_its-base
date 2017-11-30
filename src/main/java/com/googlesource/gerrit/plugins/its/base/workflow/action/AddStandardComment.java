@@ -15,11 +15,13 @@
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -42,19 +44,21 @@ public class AddStandardComment implements Action {
   }
 
   private String formatPerson(String prefix, Map<String, String> map) {
-    String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
-    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
-    if (ret.isEmpty()) {
-      ret = Strings.nullToEmpty(map.get(prefix + "-username"));
-      ret = Strings.nullToEmpty(map.get(prefix + "Username"));
+    for (String key : ImmutableList.of("-name", "Name", "-username", "Username")) {
+      String ret = Strings.nullToEmpty(map.get(prefix + key));
+      if (!ret.isEmpty()) {
+        return ret;
+      }
     }
-    return ret;
+    return "";
   }
 
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
     String changeNumber = Strings.nullToEmpty(map.get("change-number"));
-    changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
+    if (ret.isEmpty()) {
+      changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
+    }
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
