@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc67de7_4b6c25ab",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-11-30T00:44:46Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand how this code works.  It seems like occurrences is instantiated, and something is added to it, but it\u0027s never actually used.",
+      "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
