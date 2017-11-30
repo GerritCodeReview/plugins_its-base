@@ -34,6 +34,24 @@
       "revId": "7601ce0bf1e8d3cd4a6bf16c3740d325d8604393",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "755361c9_c6adb0e6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-11-30T13:39:50Z",
+      "side": 1,
+      "message": "New patch set generalizes this a bit more to avoid having two loops doing the same. Any thoughts?",
+      "parentUuid": "b2a63c12_ed51d13d",
+      "revId": "7601ce0bf1e8d3cd4a6bf16c3740d325d8604393",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
