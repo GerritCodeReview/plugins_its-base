@@ -41,25 +41,14 @@ public class AddStandardComment implements Action {
     this.its = its;
   }
 
-  private String formatPerson(String prefix, Map<String, String> map) {
-    String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
-    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
-    if (ret.isEmpty()) {
-      ret = Strings.nullToEmpty(map.get(prefix + "-username"));
-      ret = Strings.nullToEmpty(map.get(prefix + "Username"));
-    }
-    return ret;
-  }
-
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
-    String changeNumber = Strings.nullToEmpty(map.get("change-number"));
-    changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
+    String changeNumber = getValueFromMap(map, "", "change-number", "changeNumber");
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
     ret += "Change " + changeNumber + action;
-    String submitter = formatPerson(prefix, map);
+    String submitter = getValueFromMap(map, prefix, "-name", "Name", "-username", "Username");
     if (!submitter.isEmpty()) {
       ret += " by " + submitter;
     }
@@ -71,12 +60,21 @@ public class AddStandardComment implements Action {
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
     }
-    String url = Strings.nullToEmpty(map.get("change-url"));
-    url = Strings.nullToEmpty(map.get("changeUrl"));
+    String url = getValueFromMap(map, "", "change-url", "changeUrl");
     if (!url.isEmpty()) {
       ret += "\n\n" + its.createLinkForWebui(url, url);
     }
     return ret;
+  }
+
+  private String getValueFromMap(Map<String, String> map, String keyPrefix, String... keyOptions) {
+    for (String key : keyOptions) {
+      String ret = Strings.nullToEmpty(map.get(keyPrefix + key));
+      if (!ret.isEmpty()) {
+        return ret;
+      }
+    }
+    return "";
   }
 
   private String getCommentChangeAbandoned(Map<String, String> map) {
