@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffdbb469_9f7e79e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-11-30T00:39:03Z",
+      "side": 1,
+      "message": "Optional: change to \"Remove redundant specification of type arguments\"",
+      "revId": "29f8e7d3019b780622f3de8e08898857da60cccf",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
