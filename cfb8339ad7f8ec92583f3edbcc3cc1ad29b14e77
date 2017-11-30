@@ -16,6 +16,24 @@
       "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eafb15cc_b95372eb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/InitIts.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-11-30T02:25:47Z",
+      "side": 0,
+      "message": "Definitively. Thanks for verifying this. Will push a new patch set implementing your proposal.",
+      "parentUuid": "9577894d_930a794a",
+      "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
