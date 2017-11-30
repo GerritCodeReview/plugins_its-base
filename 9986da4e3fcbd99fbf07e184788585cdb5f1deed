@@ -70,6 +70,30 @@
       "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cae3a0db_5781e02b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-11-30T11:02:54Z",
+      "side": 0,
+      "message": "Oh sorry, I was trying to support both the old way and the new way but seems I did it wrong.",
+      "parentUuid": "2cc5f151_0a6258e8",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
