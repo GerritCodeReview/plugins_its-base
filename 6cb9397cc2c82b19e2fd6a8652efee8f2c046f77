@@ -22,6 +22,30 @@
       "revId": "6cb9397cc2c82b19e2fd6a8652efee8f2c046f77",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde03859_bf32e018",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-11-30T03:24:29Z",
+      "side": 1,
+      "message": "Good point. Or just return the set it\u0027s created there? I\u0027ll propose a follow-up change",
+      "parentUuid": "b2560a70_9a75eff6",
+      "range": {
+        "startLine": 55,
+        "startChar": 34,
+        "endLine": 55,
+        "endChar": 45
+      },
+      "revId": "6cb9397cc2c82b19e2fd6a8652efee8f2c046f77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
