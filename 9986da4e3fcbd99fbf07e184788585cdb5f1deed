@@ -22,6 +22,30 @@
       "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e15ef5e_0483aea2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-11-30T02:19:58Z",
+      "side": 0,
+      "message": "Agree. This change is highlighting the fact that the original change is not doing what was its supposed to. Unless I\u0027m really misunderstanding all this, I was a bit surprised this change was merged. In any case, I\u0027ll push a new path set fixing this.",
+      "parentUuid": "4d2b7ce3_caf32ae6",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
