@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9d5afd9_c451372b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-11-30T00:40:47Z",
+      "side": 1,
+      "message": "optional: Import this as static",
+      "range": {
+        "startLine": 275,
+        "startChar": 19,
+        "endLine": 275,
+        "endChar": 38
+      },
+      "revId": "a5795c7458c9aace396b0098d5bd30d4241006a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
