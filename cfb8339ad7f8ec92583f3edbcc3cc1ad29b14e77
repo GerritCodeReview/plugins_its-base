@@ -16,6 +16,24 @@
       "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a77a4ff_8b5c1a95",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-11-30T03:13:23Z",
+      "side": 1,
+      "message": "I agree the way of doing it\u0027s a bit strange but in the end, we\u0027re just adding the occurrence to the set (occurrences) that we get from the passed map (or that we just created if it\u0027s not there)",
+      "parentUuid": "fbc67de7_4b6c25ab",
+      "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
