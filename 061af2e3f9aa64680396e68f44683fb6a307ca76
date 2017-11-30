@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7a512aa_cd202f01",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-11-30T00:51:30Z",
+      "side": 1,
+      "message": "This is done because we need to support the old velocity syntax and the new soy syntax. You can have a dash in the name in velocity but under soy you carnt.",
+      "revId": "061af2e3f9aa64680396e68f44683fb6a307ca76",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
