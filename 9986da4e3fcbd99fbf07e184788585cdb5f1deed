@@ -46,6 +46,30 @@
       "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc5f151_0a6258e8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-11-30T04:02:55Z",
+      "side": 0,
+      "message": "That\u0027s my bad.  It was me that approved and submitted it.  Looking at it again, it\u0027s obviously wrong.",
+      "parentUuid": "7e15ef5e_0483aea2",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "9986da4e3fcbd99fbf07e184788585cdb5f1deed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
