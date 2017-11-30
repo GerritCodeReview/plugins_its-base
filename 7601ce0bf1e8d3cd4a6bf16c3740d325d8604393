@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92456279_b499490b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddStandardComment.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-11-30T13:17:47Z",
+      "side": 1,
+      "message": "Should probably use the for here too and list (do the same as above :))\n\nAs it looks like try.isEmpty will always return empty per the string above ret \u003d “”",
+      "revId": "7601ce0bf1e8d3cd4a6bf16c3740d325d8604393",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
