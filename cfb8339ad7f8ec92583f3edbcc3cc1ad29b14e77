@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9577894d_930a794a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/InitIts.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-11-30T00:48:12Z",
+      "side": 0,
+      "message": "This is used in its-bugzilla\n\nhttps://gerrit.googlesource.com/plugins/its-bugzilla/+/ec635a06ced193458c7940f187d258e20d656b0e/src/main/java/com/googlesource/gerrit/plugins/its/bugzilla/InitBugzilla.java#74\n\nOther its-plugins define their own, with the same value.\n\nMaybe this should be changed from public to protected, and the plugins that define their own should be changed to use this one?",
+      "revId": "cfb8339ad7f8ec92583f3edbcc3cc1ad29b14e77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
