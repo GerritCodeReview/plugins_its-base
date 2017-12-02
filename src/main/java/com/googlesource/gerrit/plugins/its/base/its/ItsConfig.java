@@ -14,10 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import static java.util.stream.Collectors.toList;
+
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
@@ -38,17 +36,14 @@ import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
-
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 import org.eclipse.jgit.lib.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-
 
 public class ItsConfig {
   private static final String PLUGIN = "plugin";
@@ -61,20 +56,18 @@ public class ItsConfig {
   private final Config gerritConfig;
 
   private static final ThreadLocal<Project.NameKey> currentProjectName =
-      new ThreadLocal<Project.NameKey>() {
-        @Override
-        protected Project.NameKey initialValue() {
-          return null;
-        }
-      };
+      ThreadLocal.withInitial(() -> null);
 
   public static void setCurrentProjectName(Project.NameKey projectName) {
     currentProjectName.set(projectName);
   }
 
   @Inject
-  public ItsConfig(@PluginName String pluginName, ProjectCache projectCache,
-      PluginConfigFactory pluginCfgFactory, @GerritServerConfig Config gerritConfig) {
+  public ItsConfig(
+      @PluginName String pluginName,
+      ProjectCache projectCache,
+      PluginConfigFactory pluginCfgFactory,
+      @GerritServerConfig Config gerritConfig) {
     this.pluginName = pluginName;
     this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
@@ -103,7 +96,7 @@ public class ItsConfig {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else {
-      log.debug("Event " + event + " not recognised and ignored");
+      log.debug("Event {} not recognised and ignored", event);
       return false;
     }
   }
@@ -111,25 +104,28 @@ public class ItsConfig {
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
-      log.error("Failed to check if " + pluginName + " is enabled for project "
-          + projectNK.get() + ": Project " + projectNK.get() + " not found");
+      log.error(
+          "Failed to check if {} is enabled for project {}: Project not found",
+          pluginName,
+          projectNK.get());
       return false;
     }
 
-    if(isEnforcedByAnyParentProject(refName, projectState)) {
+    if (isEnforcedByAnyParentProject(refName, projectState)) {
       return true;
     }
 
-    return !"false".equals(pluginCfgFactory.getFromProjectConfigWithInheritance(
-        projectState, pluginName).getString("enabled", "false"))
+    return !"false"
+            .equals(
+                pluginCfgFactory
+                    .getFromProjectConfigWithInheritance(projectState, pluginName)
+                    .getString("enabled", "false"))
         && isEnabledForBranch(projectState, refName);
   }
 
-  private boolean isEnforcedByAnyParentProject(String refName,
-      ProjectState projectState) {
+  private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {
     for (ProjectState parentState : projectState.treeInOrder()) {
-      PluginConfig parentCfg =
-          pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
+      PluginConfig parentCfg = pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
       if ("enforced".equals(parentCfg.getString("enabled", "false"))
           && isEnabledForBranch(parentState, refName)) {
         return true;
@@ -140,8 +136,9 @@ public class ItsConfig {
 
   private boolean isEnabledForBranch(ProjectState project, String refName) {
     String[] refPatterns =
-        pluginCfgFactory.getFromProjectConfigWithInheritance(project,
-            pluginName).getStringList("branch");
+        pluginCfgFactory
+            .getFromProjectConfigWithInheritance(project, pluginName)
+            .getStringList("branch");
     if (refPatterns.length == 0) {
       return true;
     }
@@ -177,15 +174,14 @@ public class ItsConfig {
 
   /**
    * Gets the regular expression used to identify issue ids.
-   * <p>
-   * The index of the group that holds the issue id is
-   * {@link #getIssuePatternGroupIndex()}.
    *
-   * @return the regular expression, or {@code null}, if there is no pattern
-   *    to match issue ids.
+   * <p>The index of the group that holds the issue id is {@link #getIssuePatternGroupIndex()}.
+   *
+   * @return the regular expression, or {@code null}, if there is no pattern to match issue ids.
    */
   public Pattern getIssuePattern() {
     Optional<String> match =
+<<<<<<< HEAD
         FluentIterable
             .from(getCommentLinkInfo(getCommentLinkName()))
             .filter(new Predicate<CommentLinkInfo>() {
@@ -204,21 +200,34 @@ public class ItsConfig {
 
     String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(),
         "match");
+=======
+        getCommentLinkInfo(getCommentLinkName())
+            .stream()
+            .filter(input -> input.match != null && !input.match.trim().isEmpty())
+            .map(input -> input.match)
+            .reduce((a, b) -> b);
+
+    String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(), "match");
+>>>>>>> stable-2.14
 
     if (!match.isPresent() && defPattern == null) {
       return null;
     }
 
+<<<<<<< HEAD
     return Pattern.compile(match.or(defPattern));
+=======
+    return Pattern.compile(match.orElse(defPattern));
+>>>>>>> stable-2.14
   }
 
   /**
    * Gets the index of the group in the issue pattern that holds the issue id.
-   * <p>
-   * The corresponding issue pattern is {@link #getIssuePattern()}
    *
-   * @return the group index for {@link #getIssuePattern()} that holds the
-   *     issue id. The group index is guaranteed to be a valid group index.
+   * <p>The corresponding issue pattern is {@link #getIssuePattern()}
+   *
+   * @return the group index for {@link #getIssuePattern()} that holds the issue id. The group index
+   *     is guaranteed to be a valid group index.
    */
   public int getIssuePatternGroupIndex() {
     Pattern pattern = getIssuePattern();
@@ -237,36 +246,33 @@ public class ItsConfig {
    */
   public ItsAssociationPolicy getItsAssociationPolicy() {
     ItsAssociationPolicy legacyItsAssociationPolicy =
-        gerritConfig.getEnum("commentlink", getCommentLinkName(),
-            "association", ItsAssociationPolicy.OPTIONAL);
+        gerritConfig.getEnum(
+            "commentlink", getCommentLinkName(), "association", ItsAssociationPolicy.OPTIONAL);
 
     return getPluginConfigEnum("association", legacyItsAssociationPolicy);
   }
 
   private String getPluginConfigString(String key) {
-    return getCurrentPluginConfig().getString(key,
-        gerritConfig.getString(PLUGIN, pluginName, key));
+    return getCurrentPluginConfig().getString(key, gerritConfig.getString(PLUGIN, pluginName, key));
   }
 
   private int getPluginConfigInt(String key, int defaultValue) {
-    return getCurrentPluginConfig().getInt(key,
-        gerritConfig.getInt(PLUGIN, pluginName, key, defaultValue));
+    return getCurrentPluginConfig()
+        .getInt(key, gerritConfig.getInt(PLUGIN, pluginName, key, defaultValue));
   }
 
   private <T extends Enum<?>> T getPluginConfigEnum(String key, T defaultValue) {
-    return getCurrentPluginConfig().getEnum(key,
-        gerritConfig.getEnum(PLUGIN, pluginName, key, defaultValue));
+    return getCurrentPluginConfig()
+        .getEnum(key, gerritConfig.getEnum(PLUGIN, pluginName, key, defaultValue));
   }
 
   private PluginConfig getCurrentPluginConfig() {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       try {
-        return pluginCfgFactory.getFromProjectConfigWithInheritance(
-            projectName, pluginName);
+        return pluginCfgFactory.getFromProjectConfigWithInheritance(projectName, pluginName);
       } catch (NoSuchProjectException e) {
-        log.error("Cannot access " + projectName + " configuration for plugin "
-            + pluginName, e);
+        log.error("Cannot access " + projectName + " configuration for plugin " + pluginName, e);
       }
     }
     return new PluginConfig(pluginName, new Config());
@@ -275,15 +281,11 @@ public class ItsConfig {
   private List<CommentLinkInfo> getCommentLinkInfo(final String commentlinkName) {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
-      List<CommentLinkInfo> commentlinks =
-          projectCache.get(projectName).getCommentLinks();
-      return FluentIterable.from(commentlinks)
-          .filter(new Predicate<CommentLinkInfo>() {
-            @Override
-            public boolean apply(CommentLinkInfo input) {
-              return input.name.equals(commentlinkName);
-            }
-          }).toList();
+      List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
+      return commentlinks
+          .stream()
+          .filter(input -> input.name.equals(commentlinkName))
+          .collect(toList());
     }
     return Collections.emptyList();
   }

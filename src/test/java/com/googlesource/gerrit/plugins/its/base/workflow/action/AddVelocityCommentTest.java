@@ -23,20 +23,11 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
-
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime.RuntimeInstance;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.easymock.IAnswer;
-import org.eclipse.jgit.util.FileUtils;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -48,6 +39,12 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
+import org.easymock.IAnswer;
+import org.eclipse.jgit.util.FileUtils;
 
 public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -64,7 +61,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("No template name");
   }
@@ -72,12 +69,15 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   public void testInlinePlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "Simple-text"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Simple-text"});
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-text");
-    expect(velocityRuntime.evaluate((VelocityContext)anyObject(),
-        (Writer)anyObject(), (String)anyObject(), eq("Simple-text")))
+    expect(
+            velocityRuntime.evaluate(
+                (VelocityContext) anyObject(),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Simple-text")))
         .andAnswer(answer);
 
     its.addComment("4711", "Simple-text");
@@ -85,20 +85,23 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testInlineWithMultipleParameters() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "Param2", "Param3"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Param2", "Param3"});
 
     Set<Property> properties = Sets.newHashSet();
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Param2 Param3");
-    expect(velocityRuntime.evaluate((VelocityContext)anyObject(),
-        (Writer)anyObject(), (String)anyObject(), eq("Param2 Param3")))
+    expect(
+            velocityRuntime.evaluate(
+                (VelocityContext) anyObject(),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Param2 Param3")))
         .andAnswer(answer);
 
     its.addComment("4711", "Param2 Param3");
@@ -112,8 +115,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   public void testInlineWithSingleProperty() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "${subject}"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "${subject}"});
 
     Set<Property> properties = Sets.newHashSet();
 
@@ -124,8 +126,12 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud");
     Capture<VelocityContext> contextCapture = createCapture();
-    expect(velocityRuntime.evaluate(capture(contextCapture),
-        (Writer)anyObject(), (String)anyObject(), eq("${subject}")))
+    expect(
+            velocityRuntime.evaluate(
+                capture(contextCapture),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("${subject}")))
         .andAnswer(answer);
 
     its.addComment("4711", "Rosebud");
@@ -136,15 +142,13 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     addVelocityComment.execute("4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
-    assertEquals("Subject property of context did not match", "Rosebud",
-        context.get("subject"));
+    assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
   }
 
   public void testInlineWithUnusedProperty() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "Test"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Test"});
 
     Set<Property> properties = Sets.newHashSet();
 
@@ -154,8 +158,12 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Test");
-    expect(velocityRuntime.evaluate((VelocityContext)anyObject(),
-        (Writer)anyObject(), (String)anyObject(), eq("Test")))
+    expect(
+            velocityRuntime.evaluate(
+                (VelocityContext) anyObject(),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Test")))
         .andAnswer(answer);
 
     its.addComment("4711", "Test");
@@ -169,8 +177,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   public void testInlineWithMultipleProperties() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "${subject}", "${reason}", "${subject}"});
+    expect(actionRequest.getParameters())
+        .andReturn(new String[] {"inline", "${subject}", "${reason}", "${subject}"});
 
     Set<Property> properties = Sets.newHashSet();
 
@@ -186,9 +194,13 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud Life Rosebud");
     Capture<VelocityContext> contextCapture = createCapture();
-    expect(velocityRuntime.evaluate(capture(contextCapture),
-        (Writer)anyObject(), (String)anyObject(),
-        eq("${subject} ${reason} ${subject}"))).andAnswer(answer);
+    expect(
+            velocityRuntime.evaluate(
+                capture(contextCapture),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("${subject} ${reason} ${subject}")))
+        .andAnswer(answer);
 
     its.addComment("4711", "Rosebud Life Rosebud");
 
@@ -198,58 +210,61 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     addVelocityComment.execute("4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
-    assertEquals("Subject property of context did not match", "Rosebud",
-        context.get("subject"));
-    assertEquals("Reason property of context did not match", "Life",
-        context.get("reason"));
+    assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
+    assertEquals("Reason property of context did not match", "Life", context.get("reason"));
   }
 
-  public void testItsWrapperFormatLink1Parameter() throws IOException,
-      SecurityException, IllegalArgumentException {
+  public void testItsWrapperFormatLink1Parameter()
+      throws IOException, SecurityException, IllegalArgumentException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "Simple-Text"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Simple-Text"});
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
     Capture<VelocityContext> contextCapture = createCapture();
-    expect(velocityRuntime.evaluate(capture(contextCapture),
-        (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
+    expect(
+            velocityRuntime.evaluate(
+                capture(contextCapture),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Simple-Text")))
         .andAnswer(answer);
 
     its.addComment("4711", "Simple-Text");
 
-    expect(its.createLinkForWebui("http://www.example.org/",
-        "http://www.example.org/")) .andReturn("Formatted Link");
+    expect(its.createLinkForWebui("http://www.example.org/", "http://www.example.org/"))
+        .andReturn("Formatted Link");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
     assertNotNull("its property is null", itsAdapterObj);
-    assertTrue("Its is not a VelocityAdapterItsFacade instance",
+    assertTrue(
+        "Its is not a VelocityAdapterItsFacade instance",
         itsAdapterObj instanceof VelocityAdapterItsFacade);
-    VelocityAdapterItsFacade itsAdapter =
-        (VelocityAdapterItsFacade) itsAdapterObj;
+    VelocityAdapterItsFacade itsAdapter = (VelocityAdapterItsFacade) itsAdapterObj;
     String formattedLink = itsAdapter.formatLink("http://www.example.org/");
-    assertEquals("Result of formatLink does not match", "Formatted Link",
-        formattedLink);
+    assertEquals("Result of formatLink does not match", "Formatted Link", formattedLink);
   }
 
-  public void testItsWrapperFormatLink2Parameters() throws IOException,
-      SecurityException, IllegalArgumentException {
+  public void testItsWrapperFormatLink2Parameters()
+      throws IOException, SecurityException, IllegalArgumentException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"inline", "Simple-Text"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Simple-Text"});
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple-Text");
     Capture<VelocityContext> contextCapture = createCapture();
-    expect(velocityRuntime.evaluate(capture(contextCapture),
-        (Writer)anyObject(), (String)anyObject(), eq("Simple-Text")))
+    expect(
+            velocityRuntime.evaluate(
+                capture(contextCapture),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Simple-Text")))
         .andAnswer(answer);
 
     its.addComment("4711", "Simple-Text");
@@ -260,19 +275,17 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
     assertNotNull("its property is null", itsAdapterObj);
-    assertTrue("Its is not a VelocityAdapterItsFacade instance",
+    assertTrue(
+        "Its is not a VelocityAdapterItsFacade instance",
         itsAdapterObj instanceof VelocityAdapterItsFacade);
-    VelocityAdapterItsFacade itsAdapter =
-        (VelocityAdapterItsFacade) itsAdapterObj;
-    String formattedLink = itsAdapter.formatLink("http://www.example.org/",
-        "Caption");
-    assertEquals("Result of formatLink does not match", "Formatted Link",
-        formattedLink);
+    VelocityAdapterItsFacade itsAdapter = (VelocityAdapterItsFacade) itsAdapterObj;
+    String formattedLink = itsAdapter.formatLink("http://www.example.org/", "Caption");
+    assertEquals("Result of formatLink does not match", "Formatted Link", formattedLink);
   }
 
   public void testWarnTemplateNotFound() throws IOException {
@@ -282,7 +295,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("non-existing-template");
   }
@@ -294,16 +307,20 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     injectTestTemplate("Simple Test Template");
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Simple Test Template");
-    expect(velocityRuntime.evaluate((VelocityContext)anyObject(),
-        (Writer)anyObject(), (String)anyObject(),
-        eq("Simple Test Template"))).andAnswer(answer);
+    expect(
+            velocityRuntime.evaluate(
+                (VelocityContext) anyObject(),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq("Simple Test Template")))
+        .andAnswer(answer);
 
     its.addComment("4711", "Simple Test Template");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testTemplateMultipleParametersAndProperties() throws IOException {
@@ -322,20 +339,25 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     expect(propertyReason.getValue()).andReturn("Life").anyTimes();
     properties.add(propertyReason);
 
-    injectTestTemplate("Test Template with subject: ${subject}.\n" +
-        "${reason} is the reason for ${subject}.");
+    injectTestTemplate(
+        "Test Template with subject: ${subject}.\n" + "${reason} is the reason for ${subject}.");
 
-    IAnswer<Boolean> answer = new VelocityWriterFiller(
-        "Test Template with subject: Rosebud.\n" +
-        "Life is the reason for Rosebud.");
+    IAnswer<Boolean> answer =
+        new VelocityWriterFiller(
+            "Test Template with subject: Rosebud.\n" + "Life is the reason for Rosebud.");
     Capture<VelocityContext> contextCapture = createCapture();
-    expect(velocityRuntime.evaluate(capture(contextCapture),
-        (Writer)anyObject(), (String)anyObject(),
-        eq("Test Template with subject: ${subject}.\n" +
-            "${reason} is the reason for ${subject}."))).andAnswer(answer);
+    expect(
+            velocityRuntime.evaluate(
+                capture(contextCapture),
+                (Writer) anyObject(),
+                (String) anyObject(),
+                eq(
+                    "Test Template with subject: ${subject}.\n"
+                        + "${reason} is the reason for ${subject}.")))
+        .andAnswer(answer);
 
-    its.addComment("4711", "Test Template with subject: Rosebud.\n" +
-        "Life is the reason for Rosebud.");
+    its.addComment(
+        "4711", "Test Template with subject: Rosebud.\n" + "Life is the reason for Rosebud.");
 
     replayMocks();
 
@@ -343,10 +365,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     addVelocityComment.execute("4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
-    assertEquals("Subject property of context did not match", "Rosebud",
-        context.get("subject"));
-    assertEquals("Reason property of context did not match", "Life",
-        context.get("reason"));
+    assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
+    assertEquals("Reason property of context did not match", "Life", context.get("reason"));
   }
 
   private AddVelocityComment createAddVelocityComment() {
@@ -354,10 +374,12 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   }
 
   private void injectTestTemplate(String template) throws IOException {
-    File templateParentFile = new File(sitePath.toFile(), "etc" +
-        File.separatorChar + "its" + File.separator + "templates");
-    assertTrue("Failed to create parent (" + templateParentFile + ") for " +
-        "rule base", templateParentFile.mkdirs());
+    File templateParentFile =
+        new File(
+            sitePath.toFile(), "etc" + File.separatorChar + "its" + File.separator + "templates");
+    assertTrue(
+        "Failed to create parent (" + templateParentFile + ") for " + "rule base",
+        templateParentFile.mkdirs());
     File templateFile = new File(templateParentFile, "test-template.vm");
 
     try (FileWriter unbufferedWriter = new FileWriter(templateFile);
@@ -391,8 +413,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     @Override
     protected void configure() {
       sitePath = randomTargetPath();
-      assertFalse("sitePath already (" + sitePath + ") already exists",
-          Files.exists(sitePath));
+      assertFalse("sitePath already (" + sitePath + ") already exists", Files.exists(sitePath));
       cleanupSitePath = true;
 
       bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);

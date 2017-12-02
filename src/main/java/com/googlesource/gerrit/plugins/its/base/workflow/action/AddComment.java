@@ -16,20 +16,17 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.io.IOException;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Adds a fixed comment to an issue.
  *
- * The action requests parameters get concatenated and get added to the issue.
+ * <p>The action requests parameters get concatenated and get added to the issue.
  */
 public class AddComment implements Action {
   public interface Factory {
@@ -44,8 +41,8 @@ public class AddComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
     String[] parameters = actionRequest.getParameters();
     String comment = StringUtils.join(parameters, " ");
     if (!Strings.isNullOrEmpty(comment)) {
