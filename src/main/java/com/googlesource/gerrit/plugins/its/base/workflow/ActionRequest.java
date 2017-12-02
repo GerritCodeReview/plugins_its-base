@@ -17,14 +17,13 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-
 import java.util.Arrays;
 
 /**
  * An action to take for an {@code ChangeEvent}.
  *
- * Actions are typically related to an Its (e.g.:adding an Its comment, or
- * changing an issue's status).
+ * <p>Actions are typically related to an Its (e.g.:adding an Its comment, or changing an issue's
+ * status).
  */
 public class ActionRequest {
   private final String unparsed;
@@ -47,8 +46,7 @@ public class ActionRequest {
   /**
    * Gets the name of the requested action.
    *
-   * @return The name of the requested action, if a name has been given.
-   *    "" otherwise.
+   * @return The name of the requested action, if a name has been given. "" otherwise.
    */
   public String getName() {
     String ret = "";
@@ -62,8 +60,7 @@ public class ActionRequest {
    * Gets the name of the requested action.
    *
    * @param i The number of the parameter to extract. 1 is the first parameter.
-   * @return The name of the requested parameter, if the requested parameter
-   *    exists. "" otherwise.
+   * @return The name of the requested parameter, if the requested parameter exists. "" otherwise.
    */
   public String getParameter(int i) {
     String ret = "";

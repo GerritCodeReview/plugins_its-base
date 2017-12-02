@@ -16,13 +16,10 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.io.IOException;
 import java.util.Set;
 
-/**
- * Interface for actions on an issue tracking system
- */
+/** Interface for actions on an issue tracking system */
 public interface Action {
 
   /**
@@ -32,6 +29,6 @@ public interface Action {
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException;
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException;
 }

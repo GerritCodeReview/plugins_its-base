@@ -17,17 +17,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 import com.google.common.base.Strings;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime.RuntimeInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -35,33 +27,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Adds a short predefined comments to an issue.
  *
- * Comments are added for merging, abandoning, restoring of changes and adding
- * of patch sets.
+ * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
 public class AddVelocityComment implements Action {
-  private static final Logger log = LoggerFactory.getLogger(
-      AddVelocityComment.class);
+  private static final Logger log = LoggerFactory.getLogger(AddVelocityComment.class);
 
   public interface Factory {
     AddVelocityComment create();
   }
 
-  /**
-   * Directory (relative to site) to search templates in
-   */
-  private static final String ITS_TEMPLATE_DIR = "etc" + File.separator +
-      "its" + File.separator + "templates";
+  /** Directory (relative to site) to search templates in */
+  private static final String ITS_TEMPLATE_DIR =
+      "etc" + File.separator + "its" + File.separator + "templates";
 
   private final ItsFacade its;
   private final Path sitePath;
   private final RuntimeInstance velocityRuntime;
 
   @Inject
-  public AddVelocityComment(RuntimeInstance velocityRuntime, @SitePath Path sitePath, ItsFacade its) {
+  public AddVelocityComment(
+      RuntimeInstance velocityRuntime, @SitePath Path sitePath, ItsFacade its) {
     this.velocityRuntime = velocityRuntime;
     this.sitePath = sitePath;
     this.its = its;
@@ -79,7 +73,7 @@ public class AddVelocityComment implements Action {
       }
     }
 
-    velocityContext.put("its",  new VelocityAdapterItsFacade(its));
+    velocityContext.put("its", new VelocityAdapterItsFacade(its));
 
     return velocityContext;
   }
@@ -92,25 +86,24 @@ public class AddVelocityComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
     String template = null;
     String templateName = actionRequest.getParameter(1);
     if ("inline".equals(templateName)) {
       String[] allParameters = actionRequest.getParameters();
-      String[] templateParameters =
-          Arrays.copyOfRange(allParameters, 1, allParameters.length);
+      String[] templateParameters = Arrays.copyOfRange(allParameters, 1, allParameters.length);
       template = StringUtils.join(templateParameters, " ");
     } else {
       if (templateName.isEmpty()) {
-        log.error("No template name given in " + actionRequest);
+        log.error("No template name given in {}", actionRequest);
       } else {
         Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
         Path templatePath = templateDir.resolve(templateName + ".vm");
         if (Files.isReadable(templatePath)) {
           template = new String(Files.readAllBytes(templatePath));
         } else {
-          log.error("Cannot read template " + templatePath);
+          log.error("Cannot read template {}", templatePath);
         }
       }
     }
@@ -120,9 +113,7 @@ public class AddVelocityComment implements Action {
     }
   }
 
-  /**
-   * Adapter for ItsFacade to be used through Velocity
-   */
+  /** Adapter for ItsFacade to be used through Velocity */
   // Although we'd prefer to keep this class private, Velocity will only pick
   // it up, if it is public.
   public class VelocityAdapterItsFacade {
@@ -146,8 +137,8 @@ public class AddVelocityComment implements Action {
 
     /**
      * Format a link to an URL.
-     * <p>
-     * The provided URL is used as caption for the formatted link.
+     *
+     * <p>The provided URL is used as caption for the formatted link.
      *
      * @param url URL to link to
      * @return Link to the given URL in the used Its' syntax.

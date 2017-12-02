@@ -18,15 +18,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-/**
- * A single rule that associates {@code Action}s to {@code Condition}s.
- */
+/** A single rule that associates {@code Action}s to {@code Condition}s. */
 public class Rule {
   private final String name;
   private List<ActionRequest> actionRequests;
@@ -68,14 +65,13 @@ public class Rule {
   /**
    * Gets this rule's the action requests for a given set of properties.
    *
-   * If the given set of properties meets all of the rule's conditions, the
-   * rule's actions are returned. Otherwise the empty collection is returned.
+   * <p>If the given set of properties meets all of the rule's conditions, the rule's actions are
+   * returned. Otherwise the empty collection is returned.
    *
    * @param properties The properties to check against the rule's conditions.
    * @return The actions that should get fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(
-      Iterable<Property> properties) {
+  public Collection<ActionRequest> actionRequestsFor(Iterable<Property> properties) {
     for (Condition condition : conditions) {
       if (!condition.isMetBy(properties)) {
         return Collections.emptyList();
