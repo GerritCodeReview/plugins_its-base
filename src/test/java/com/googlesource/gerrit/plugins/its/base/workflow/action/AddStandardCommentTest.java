@@ -19,12 +19,10 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.io.IOException;
 import java.util.Set;
 
@@ -66,30 +64,29 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
-        .anyTimes();
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("submitterName")
-        .anyTimes();
+    expect(propertySubmitterName.getKey()).andReturn("submitterName").anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
-    Property propertyChangeUrl= createMock(Property.class);
+    Property propertyChangeUrl = createMock(Property.class);
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
-        .anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
 
-    expect(its.createLinkForWebui("http://example.org/change",
-        "http://example.org/change")).andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
+    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
+        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
-    its.addComment("176", "Change 4711 merged by John Doe:\n" +
-        "Test-Change-Subject\n" +
-        "\n" +
-        "HtTp://ExAmPlE.OrG/ChAnGe");
+    its.addComment(
+        "176",
+        "Change 4711 merged by John Doe:\n"
+            + "Test-Change-Subject\n"
+            + "\n"
+            + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
@@ -134,33 +131,32 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
-        .anyTimes();
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("abandonerName")
-        .anyTimes();
+    expect(propertySubmitterName.getKey()).andReturn("abandonerName").anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
-    Property propertyChangeUrl= createMock(Property.class);
+    Property propertyChangeUrl = createMock(Property.class);
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
-        .anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
 
-    expect(its.createLinkForWebui("http://example.org/change",
-        "http://example.org/change")).andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
+    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
+        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
-    its.addComment("176", "Change 4711 abandoned by John Doe:\n" +
-        "Test-Change-Subject\n" +
-        "\n" +
-        "Reason:\n" +
-        "Test-Reason\n" +
-        "\n" +
-        "HtTp://ExAmPlE.OrG/ChAnGe");
+    its.addComment(
+        "176",
+        "Change 4711 abandoned by John Doe:\n"
+            + "Test-Change-Subject\n"
+            + "\n"
+            + "Reason:\n"
+            + "Test-Reason\n"
+            + "\n"
+            + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
@@ -205,33 +201,32 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
-        .anyTimes();
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("restorerName")
-        .anyTimes();
+    expect(propertySubmitterName.getKey()).andReturn("restorerName").anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
-    Property propertyChangeUrl= createMock(Property.class);
+    Property propertyChangeUrl = createMock(Property.class);
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
-        .anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
 
-    expect(its.createLinkForWebui("http://example.org/change",
-        "http://example.org/change")).andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
+    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
+        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
-    its.addComment("176", "Change 4711 restored by John Doe:\n" +
-        "Test-Change-Subject\n" +
-        "\n" +
-        "Reason:\n" +
-        "Test-Reason\n" +
-        "\n" +
-        "HtTp://ExAmPlE.OrG/ChAnGe");
+    its.addComment(
+        "176",
+        "Change 4711 restored by John Doe:\n"
+            + "Test-Change-Subject\n"
+            + "\n"
+            + "Reason:\n"
+            + "Test-Reason\n"
+            + "\n"
+            + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
@@ -271,31 +266,30 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubject);
 
     Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber")
-        .anyTimes();
+    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
     expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
     properties.add(propertyChangeNumber);
 
     Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("uploaderName")
-        .anyTimes();
+    expect(propertySubmitterName.getKey()).andReturn("uploaderName").anyTimes();
     expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
     properties.add(propertySubmitterName);
 
-    Property propertyChangeUrl= createMock(Property.class);
+    Property propertyChangeUrl = createMock(Property.class);
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change")
-        .anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
 
-    expect(its.createLinkForWebui("http://example.org/change",
-        "http://example.org/change")).andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
+    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
+        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
-    its.addComment("176", "Change 4711 had a related patch set uploaded by " +
-        "John Doe:\n" +
-        "Test-Change-Subject\n" +
-        "\n" +
-        "HtTp://ExAmPlE.OrG/ChAnGe");
+    its.addComment(
+        "176",
+        "Change 4711 had a related patch set uploaded by "
+            + "John Doe:\n"
+            + "Test-Change-Subject\n"
+            + "\n"
+            + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);

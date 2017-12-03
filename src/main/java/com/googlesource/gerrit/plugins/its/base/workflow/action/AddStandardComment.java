@@ -17,11 +17,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -29,8 +27,7 @@ import java.util.Set;
 /**
  * Adds a short predefined comments to an issue.
  *
- * Comments are added for merging, abandoning, restoring of changes and adding
- * of patch sets.
+ * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
 public class AddStandardComment implements Action {
   public interface Factory {
@@ -54,8 +51,7 @@ public class AddStandardComment implements Action {
     return ret;
   }
 
-  private String getCommentChangeEvent(String Action, String prefix,
-      Map<String, String> map) {
+  private String getCommentChangeEvent(String Action, String prefix, Map<String, String> map) {
     String ret = "";
     String changeNumber = Strings.nullToEmpty(map.get("change-number"));
     changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
@@ -96,19 +92,17 @@ public class AddStandardComment implements Action {
   }
 
   private String getCommentPatchSetCreated(Map<String, String> map) {
-    return getCommentChangeEvent("had a related patch set uploaded",
-        "uploader", map);
+    return getCommentChangeEvent("had a related patch set uploaded", "uploader", map);
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
     String comment = "";
     Map<String, String> map = Maps.newHashMap();
     for (Property property : properties) {
       String current = property.getValue();
-      if (!Strings.isNullOrEmpty(current))
-      {
+      if (!Strings.isNullOrEmpty(current)) {
         String key = property.getKey();
         String old = Strings.nullToEmpty(map.get(key));
         if (!old.isEmpty()) {

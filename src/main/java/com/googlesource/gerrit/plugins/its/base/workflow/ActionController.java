@@ -17,18 +17,16 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
-
 import java.util.Collection;
 import java.util.Set;
 
 /**
  * Controller that takes actions according to {@code ChangeEvents@}.
  *
- * The taken actions are typically Its related (e.g.: adding an Its comment, or
- * changing an issue's status).
+ * <p>The taken actions are typically Its related (e.g.: adding an Its comment, or changing an
+ * issue's status).
  */
 public class ActionController implements EventListener {
   private final PropertyExtractor propertyExtractor;
@@ -37,8 +35,11 @@ public class ActionController implements EventListener {
   private final ItsConfig itsConfig;
 
   @Inject
-  public ActionController(PropertyExtractor propertyExtractor,
-      RuleBase ruleBase, ActionExecutor actionExecutor, ItsConfig itsConfig) {
+  public ActionController(
+      PropertyExtractor propertyExtractor,
+      RuleBase ruleBase,
+      ActionExecutor actionExecutor,
+      ItsConfig itsConfig) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
@@ -51,11 +52,9 @@ public class ActionController implements EventListener {
       return;
     }
 
-    Set<Set<Property>> propertiesCollections =
-        propertyExtractor.extractFrom(event);
+    Set<Set<Property>> propertiesCollections = propertyExtractor.extractFrom(event);
     for (Set<Property> properties : propertiesCollections) {
-      Collection<ActionRequest> actions =
-          ruleBase.actionRequestsFor(properties);
+      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(properties);
       if (!actions.isEmpty()) {
         for (Property property : properties) {
           if ("issue".equals(property.getKey())) {
