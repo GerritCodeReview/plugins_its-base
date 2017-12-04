@@ -35,7 +35,7 @@ public class NoopItsFacade implements ItsFacade {
   public void addRelatedLink(String issueId, URL relatedUrl, String description)
       throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("addRelatedLink({},{},{})", new Object[] {issueId, relatedUrl, description});
+      log.debug("addRelatedLink({},{},{})", issueId, relatedUrl, description);
     }
   }
 

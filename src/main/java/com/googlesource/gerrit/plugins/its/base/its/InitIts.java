@@ -28,17 +28,17 @@ import org.eclipse.jgit.lib.Config;
 
 public class InitIts implements InitStep {
 
-  public static String COMMENT_LINK_SECTION = "commentlink";
+  protected static final String COMMENT_LINK_SECTION = "commentlink";
 
   public static enum TrueFalseEnum {
     TRUE,
-    FALSE;
+    FALSE
   }
 
   public static enum ItsIntegration {
     ENABLED,
     DISABLED,
-    ENFORCED;
+    ENFORCED
   }
 
   private final String pluginName;
