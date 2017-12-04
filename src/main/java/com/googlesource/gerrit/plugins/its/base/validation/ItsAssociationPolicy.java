@@ -15,5 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.validation;
 
 public enum ItsAssociationPolicy {
-    MANDATORY, SUGGESTED, OPTIONAL;
+  MANDATORY,
+  SUGGESTED,
+  OPTIONAL;
 }

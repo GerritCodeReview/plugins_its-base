@@ -19,20 +19,17 @@ import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.Project;
-
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
-
+import java.sql.Timestamp;
+import java.util.Iterator;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
-import java.sql.Timestamp;
-import java.util.Iterator;
-
 public abstract class LoggingMockingTestCase extends MockingTestCase {
 
-  protected final Change.Key testChangeKey = new Change.Key(
-      "Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");
+  protected final Change.Key testChangeKey =
+      new Change.Key("Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");
   protected final Change.Id testChangeId = new Change.Id(1);
   protected final Account.Id testAccountId = new Account.Id(1);
 
@@ -49,10 +46,9 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
         }
       }
     }
-    assertNotNull("Could not find log message containing '" + needle + "'",
-        hit);
-    assertTrue("Could not remove log message containing '" + needle + "'",
-        loggedEvents.remove(hit));
+    assertNotNull("Could not find log message containing '" + needle + "'", hit);
+    assertTrue(
+        "Could not remove log message containing '" + needle + "'", loggedEvents.remove(hit));
   }
 
   protected final void assertLogMessageContains(String needle) {
@@ -65,15 +61,14 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
     while (hit == null && iter.hasNext()) {
       LoggingEvent event = iter.next();
 
-      if (event.getThrowableInformation().getThrowable().toString()
-          .contains(needle)) {
+      if (event.getThrowableInformation().getThrowable().toString().contains(needle)) {
         hit = event;
       }
     }
-    assertNotNull("Could not find log message with a Throwable containing '"
-        + needle + "'", hit);
-    assertTrue("Could not remove log message with a Throwable containing '"
-        + needle + "'", loggedEvents.remove(hit));
+    assertNotNull("Could not find log message with a Throwable containing '" + needle + "'", hit);
+    assertTrue(
+        "Could not remove log message with a Throwable containing '" + needle + "'",
+        loggedEvents.remove(hit));
   }
 
   // As the PowerMock runner does not pass through runTest, we inject log
@@ -101,7 +96,7 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
     // and we can improve later to allow tests to specify which loggers are
     // to check.
     String logName = this.getClass().getCanonicalName();
-    logName = logName.substring(0, logName.length()-4);
+    logName = logName.substring(0, logName.length() - 4);
     LogUtil.logToCollection(logName, loggedEvents);
   }
 
@@ -116,7 +111,10 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
   }
 
   protected Change testChange(String project, String branch) {
-    return new Change(testChangeKey, testChangeId, testAccountId,
+    return new Change(
+        testChangeKey,
+        testChangeId,
+        testAccountId,
         new Branch.NameKey(new Project.NameKey(project), branch),
         new Timestamp(System.currentTimeMillis()));
   }

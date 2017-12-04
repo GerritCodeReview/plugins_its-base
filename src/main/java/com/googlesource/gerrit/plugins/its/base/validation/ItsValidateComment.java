@@ -21,35 +21,27 @@ import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
-
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
 public class ItsValidateComment implements CommitValidationListener {
 
-  private static final Logger log = LoggerFactory
-      .getLogger(ItsValidateComment.class);
+  private static final Logger log = LoggerFactory.getLogger(ItsValidateComment.class);
 
-  @Inject
-  private ItsFacade client;
+  @Inject private ItsFacade client;
 
-  @Inject @PluginName
-  private String pluginName;
+  @Inject @PluginName private String pluginName;
 
-  @Inject
-  private ItsConfig itsConfig;
+  @Inject private ItsConfig itsConfig;
 
-  @Inject
-  private IssueExtractor issueExtractor;
+  @Inject private IssueExtractor issueExtractor;
 
   private List<CommitValidationMessage> validCommit(RevCommit commit)
       throws CommitValidationException {
@@ -70,8 +62,7 @@ public class ItsValidateComment implements CommitValidationListener {
             try {
               exists = client.exists(issueId);
             } catch (IOException e) {
-              synopsis = "Failed to check whether or not issue " + issueId
-                  + " exists";
+              synopsis = "Failed to check whether or not issue " + issueId + " exists";
               log.warn(synopsis, e);
               details = e.toString();
               ret.add(commitValidationFailure(synopsis, details));
@@ -129,20 +120,18 @@ public class ItsValidateComment implements CommitValidationListener {
     return ret;
   }
 
-  private CommitValidationMessage commitValidationFailure(
-      String synopsis, String details) throws CommitValidationException {
-    CommitValidationMessage ret =
-        new CommitValidationMessage(synopsis + "\n" + details, false);
+  private CommitValidationMessage commitValidationFailure(String synopsis, String details)
+      throws CommitValidationException {
+    CommitValidationMessage ret = new CommitValidationMessage(synopsis + "\n" + details, false);
     if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
-      throw new CommitValidationException(synopsis,
-          Collections.singletonList(ret));
+      throw new CommitValidationException(synopsis, Collections.singletonList(ret));
     }
     return ret;
   }
 
   @Override
-  public List<CommitValidationMessage> onCommitReceived(
-      CommitReceivedEvent receiveEvent) throws CommitValidationException {
+  public List<CommitValidationMessage> onCommitReceived(CommitReceivedEvent receiveEvent)
+      throws CommitValidationException {
     ItsConfig.setCurrentProjectName(receiveEvent.getProjectNameKey());
 
     if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {

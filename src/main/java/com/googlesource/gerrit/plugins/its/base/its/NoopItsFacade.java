@@ -14,16 +14,12 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import java.io.IOException;
+import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URL;
-
-/**
- * An ITS facade doing nothing, it's configured when no ITS are referenced in
- * config
- */
+/** An ITS facade doing nothing, it's configured when no ITS are referenced in config */
 public class NoopItsFacade implements ItsFacade {
 
   private Logger log = LoggerFactory.getLogger(NoopItsFacade.class);
@@ -39,8 +35,7 @@ public class NoopItsFacade implements ItsFacade {
   public void addRelatedLink(String issueId, URL relatedUrl, String description)
       throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("addRelatedLink({},{},{})", new Object[] {issueId, relatedUrl,
-          description});
+      log.debug("addRelatedLink({},{},{})", new Object[] {issueId, relatedUrl, description});
     }
   }
 
@@ -53,8 +48,7 @@ public class NoopItsFacade implements ItsFacade {
   }
 
   @Override
-  public void performAction(String issueId, String actionName)
-      throws IOException {
+  public void performAction(String issueId, String actionName) throws IOException {
     if (log.isDebugEnabled()) {
       log.debug("performAction({},{})", issueId, actionName);
     }
