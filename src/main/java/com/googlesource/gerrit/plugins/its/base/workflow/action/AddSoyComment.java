@@ -62,7 +62,7 @@ public class AddSoyComment implements Action {
     this.its = its;
   }
 
-  private HashMap getSoyContext(Set<Property> properties) {
+  private HashMap<String, Object> getSoyContext(Set<Property> properties) {
     HashMap<String, Object> soyContext = new HashMap<>();
     for (Property property : properties) {
       String key = property.getKey();
@@ -95,7 +95,7 @@ public class AddSoyComment implements Action {
 
     builder.add(content, templatePath.toAbsolutePath().toString());
 
-    HashMap context = getSoyContext(properties);
+    HashMap<String, Object> context = getSoyContext(properties);
 
     SoyTofu.Renderer renderer =
         builder
@@ -119,7 +119,7 @@ public class AddSoyComment implements Action {
     String template = null;
     String templateName = actionRequest.getParameter(1);
     if (templateName.isEmpty()) {
-      log.error("No template name given in " + actionRequest);
+      log.error("No template name given in {}", actionRequest);
     } else {
       template = templateName;
     }

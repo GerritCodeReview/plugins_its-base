@@ -37,7 +37,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<Property>());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testPlain() throws IOException {
@@ -49,7 +49,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<Property>());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   private AddComment createAddComment() {

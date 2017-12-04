@@ -105,9 +105,19 @@ public class ItsConfig {
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
       log.error(
+<<<<<<< HEAD
+          "Failed to check if "
+              + pluginName
+              + " is enabled for project "
+              + projectNK.get()
+              + ": Project "
+              + projectNK.get()
+              + " not found");
+=======
           "Failed to check if {} is enabled for project {}: Project not found",
           pluginName,
           projectNK.get());
+>>>>>>> stable-2.14
       return false;
     }
 
@@ -181,11 +191,30 @@ public class ItsConfig {
    */
   public Pattern getIssuePattern() {
     Optional<String> match =
+<<<<<<< HEAD
+        FluentIterable.from(getCommentLinkInfo(getCommentLinkName()))
+            .filter(
+                new Predicate<CommentLinkInfo>() {
+                  @Override
+                  public boolean apply(CommentLinkInfo input) {
+                    return input.match != null && !input.match.trim().isEmpty();
+                  }
+                })
+            .transform(
+                new Function<CommentLinkInfo, String>() {
+                  @Override
+                  public String apply(CommentLinkInfo input) {
+                    return input.match;
+                  }
+                })
+            .last();
+=======
         getCommentLinkInfo(getCommentLinkName())
             .stream()
             .filter(input -> input.match != null && !input.match.trim().isEmpty())
             .map(input -> input.match)
             .reduce((a, b) -> b);
+>>>>>>> stable-2.14
 
     String defPattern = gerritConfig.getString("commentlink", getCommentLinkName(), "match");
 
@@ -193,7 +222,11 @@ public class ItsConfig {
       return null;
     }
 
+<<<<<<< HEAD
+    return Pattern.compile(match.or(defPattern));
+=======
     return Pattern.compile(match.orElse(defPattern));
+>>>>>>> stable-2.14
   }
 
   /**
@@ -257,10 +290,22 @@ public class ItsConfig {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
+<<<<<<< HEAD
+      return FluentIterable.from(commentlinks)
+          .filter(
+              new Predicate<CommentLinkInfo>() {
+                @Override
+                public boolean apply(CommentLinkInfo input) {
+                  return input.name.equals(commentlinkName);
+                }
+              })
+          .toList();
+=======
       return commentlinks
           .stream()
           .filter(input -> input.name.equals(commentlinkName))
           .collect(toList());
+>>>>>>> stable-2.14
     }
     return Collections.emptyList();
   }
