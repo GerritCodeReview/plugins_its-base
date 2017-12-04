@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "658131da_07b1e87e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-04T15:52:10Z",
+      "side": 1,
+      "message": "I\u0027d rather return an optional and avoid doing any pattern matching at all if dummyIssuePattern is not specified.",
+      "range": {
+        "startLine": 240,
+        "startChar": 70,
+        "endLine": 240,
+        "endChar": 74
+      },
+      "revId": "faa2bf280ac010ff720ef80db33b8d92a41f07e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
