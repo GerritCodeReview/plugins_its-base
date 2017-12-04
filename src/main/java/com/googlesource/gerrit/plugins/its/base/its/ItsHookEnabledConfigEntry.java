@@ -18,17 +18,18 @@ import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.project.ProjectState;
-
 import java.util.Arrays;
 
 public class ItsHookEnabledConfigEntry extends ProjectConfigEntry {
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
 
-  public ItsHookEnabledConfigEntry(String pluginName,
-      PluginConfigFactory pluginCfgFactory) {
-    super("Enable " + pluginName + " integration", "false",
-        Arrays.asList(new String[] {"false", "true", "enforced"}), true);
+  public ItsHookEnabledConfigEntry(String pluginName, PluginConfigFactory pluginCfgFactory) {
+    super(
+        "Enable " + pluginName + " integration",
+        "false",
+        Arrays.asList("false", "true", "enforced"),
+        true);
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
   }
@@ -36,8 +37,7 @@ public class ItsHookEnabledConfigEntry extends ProjectConfigEntry {
   @Override
   public boolean isEditable(ProjectState project) {
     for (ProjectState parentState : project.parents()) {
-      PluginConfig parentCfg =
-          pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
+      PluginConfig parentCfg = pluginCfgFactory.getFromProjectConfig(parentState, pluginName);
       if ("enforced".equals(parentCfg.getString("enabled"))) {
         return false;
       }

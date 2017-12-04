@@ -18,12 +18,10 @@ import static org.easymock.EasyMock.expect;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -34,26 +32,24 @@ public class AddCommentTest extends LoggingMockingTestCase {
 
   public void testEmpty() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {});
+    expect(actionRequest.getParameters()).andReturn(new String[] {});
 
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<Property>());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(
-        new String[] {"Some", "test", "comment"});
+    expect(actionRequest.getParameters()).andReturn(new String[] {"Some", "test", "comment"});
 
     its.addComment("4711", "Some test comment");
 
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<Property>());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   private AddComment createAddComment() {

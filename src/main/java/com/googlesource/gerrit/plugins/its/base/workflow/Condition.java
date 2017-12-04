@@ -20,25 +20,23 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 /**
  * A condition as used in {@link Rule}, as precondition to {@link Action}s.
- * <p>
- * A condition consists of a key and an associated set of values.
- * <p>
- * For positive conditions (see constructor), the condition is said to match a
- * set of properties, if this set contains at least one property that matches
- * the rules key and whose value matches at least one of the rule's value.
- * <p>
- * For negated conditions (see constructor), the condition is said to match a
- * set of properties, if this set does not contain any property that matches
- * the rules key and whose value matches at least one of the rule's value.
+ *
+ * <p>A condition consists of a key and an associated set of values.
+ *
+ * <p>For positive conditions (see constructor), the condition is said to match a set of properties,
+ * if this set contains at least one property that matches the rules key and whose value matches at
+ * least one of the rule's value.
+ *
+ * <p>For negated conditions (see constructor), the condition is said to match a set of properties,
+ * if this set does not contain any property that matches the rules key and whose value matches at
+ * least one of the rule's value.
  */
 public class Condition {
   private final String key;
@@ -46,29 +44,26 @@ public class Condition {
   private final boolean negated;
 
   public interface Factory {
-    Condition create(@Assisted("key") String key,
-        @Assisted("values") String values);
+    Condition create(@Assisted("key") String key, @Assisted("values") String values);
   }
 
   /**
    * Constructs a condition.
+   *
    * @param key The key to use for values.
-   * @param values A comma separated list of values to associate to the key. If
-   *    the first value is not "!", it's a positive condition. If the first
-   *    value is "!", the "!" is removed from the values and the condition is
-   *    considered a negated condition.
+   * @param values A comma separated list of values to associate to the key. If the first value is
+   *     not "!", it's a positive condition. If the first value is "!", the "!" is removed from the
+   *     values and the condition is considered a negated condition.
    */
   @Inject
-  public Condition(@Assisted("key") String key,
-      @Nullable @Assisted("values") String values) {
+  public Condition(@Assisted("key") String key, @Nullable @Assisted("values") String values) {
     this.key = key;
     Set<String> modifyableValues;
     boolean modifyableNegated = false;
     if (values == null) {
       modifyableValues = Collections.emptySet();
     } else {
-      List<String> valueList = Lists.newArrayList(
-          Splitter.on(',').trimResults().split(values));
+      List<String> valueList = Lists.newArrayList(Splitter.on(',').trimResults().split(values));
       if (!valueList.isEmpty() && "!".equals(valueList.get(0))) {
         modifyableNegated = true;
         valueList.remove(0);
@@ -87,17 +82,15 @@ public class Condition {
    * Checks whether or not the Condition matches the given set of properties
    *
    * @param properties The set of properties to match against.
-   * @return For positive conditions, true iff properties contains at least
-   *    one property that matches the rules key and whose value matches at
-   *    least one of the rule's value. For negated conditions, true iff
-   *    properties does not contain any property that matches the rules key
-   *    and whose value matches at least one of the rule's value.
+   * @return For positive conditions, true iff properties contains at least one property that
+   *     matches the rules key and whose value matches at least one of the rule's value. For negated
+   *     conditions, true iff properties does not contain any property that matches the rules key
+   *     and whose value matches at least one of the rule's value.
    */
   public boolean isMetBy(Iterable<Property> properties) {
     for (Property property : properties) {
       String propertyKey = property.getKey();
-      if ((key == null && propertyKey == null)
-          || (key != null && key.equals(propertyKey))) {
+      if ((key == null && propertyKey == null) || (key != null && key.equals(propertyKey))) {
         if (values.contains(property.getValue())) {
           return !negated;
         }

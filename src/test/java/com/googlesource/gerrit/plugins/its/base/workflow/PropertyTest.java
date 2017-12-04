@@ -16,10 +16,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 
-public class PropertyTest  extends LoggingMockingTestCase {
+public class PropertyTest extends LoggingMockingTestCase {
   private Injector injector;
 
   public void testGetKeyNull() {
@@ -61,36 +60,31 @@ public class PropertyTest  extends LoggingMockingTestCase {
   public void testEqualsNulledKey() {
     Property propertyA = new Property(null, "testValue");
     Property propertyB = createProperty("testKey", "testValue");
-    assertFalse("Single nulled key does match",
-        propertyA.equals(propertyB));
+    assertFalse("Single nulled key does match", propertyA.equals(propertyB));
   }
 
   public void testEqualsNulledKey2() {
     Property propertyA = createProperty("testKey", "testValue");
     Property propertyB = new Property(null, "testValue");
-    assertFalse("Single nulled key does match",
-        propertyA.equals(propertyB));
+    assertFalse("Single nulled key does match", propertyA.equals(propertyB));
   }
 
   public void testEqualsNulledValue() {
     Property propertyA = createProperty("testKey", "testValue");
     Property propertyB = createProperty("testKey", null);
-    assertFalse("Single nulled value does match",
-        propertyA.equals(propertyB));
+    assertFalse("Single nulled value does match", propertyA.equals(propertyB));
   }
 
   public void testEqualsNulledValue2() {
     Property propertyA = createProperty("testKey", null);
     Property propertyB = createProperty("testKey", "testValue");
-    assertFalse("Single nulled value does match",
-        propertyA.equals(propertyB));
+    assertFalse("Single nulled value does match", propertyA.equals(propertyB));
   }
 
   public void testHashCodeEquals() {
     Property propertyA = createProperty("testKey", "testValue");
     Property propertyB = createProperty("testKey", "testValue");
-    assertEquals("Hash codes do not match", propertyA.hashCode(),
-        propertyB.hashCode());
+    assertEquals("Hash codes do not match", propertyA.hashCode(), propertyB.hashCode());
   }
 
   public void testHashCodeNullKey() {

@@ -28,15 +28,11 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +62,7 @@ public class AddSoyComment implements Action {
     this.its = its;
   }
 
-  private HashMap getSoyContext(Set<Property> properties) {
+  private HashMap<String, Object> getSoyContext(Set<Property> properties) {
     HashMap<String, Object> soyContext = new HashMap<>();
     for (Property property : properties) {
       String key = property.getKey();
@@ -81,13 +77,17 @@ public class AddSoyComment implements Action {
     return soyContext;
   }
 
-  private String soyTemplate(SoyFileSet.Builder builder, String template, SanitizedContent.ContentKind kind, Set<Property> properties) {
+  private String soyTemplate(
+      SoyFileSet.Builder builder,
+      String template,
+      SanitizedContent.ContentKind kind,
+      Set<Property> properties) {
     Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
     try (Reader r = Files.newBufferedReader(templatePath, StandardCharsets.UTF_8)) {
-       content = CharStreams.toString(r);
+      content = CharStreams.toString(r);
     } catch (IOException err) {
       throw new ProvisionException(
           "Failed to read template file " + templatePath.toAbsolutePath().toString(), err);
@@ -95,7 +95,7 @@ public class AddSoyComment implements Action {
 
     builder.add(content, templatePath.toAbsolutePath().toString());
 
-    HashMap context = getSoyContext(properties);
+    HashMap<String, Object> context = getSoyContext(properties);
 
     SoyTofu.Renderer renderer =
         builder
@@ -107,7 +107,8 @@ public class AddSoyComment implements Action {
     return renderer.render();
   }
 
-  protected String soyTextTemplate(SoyFileSet.Builder builder, String template, Set<Property> properties) {
+  protected String soyTextTemplate(
+      SoyFileSet.Builder builder, String template, Set<Property> properties) {
     return soyTemplate(builder, template, SanitizedContent.ContentKind.TEXT, properties);
   }
 
@@ -118,7 +119,7 @@ public class AddSoyComment implements Action {
     String template = null;
     String templateName = actionRequest.getParameter(1);
     if (templateName.isEmpty()) {
-      log.error("No template name given in " + actionRequest);
+      log.error("No template name given in {}", actionRequest);
     } else {
       template = templateName;
     }

@@ -19,16 +19,13 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
-import org.apache.log4j.Level;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.log4j.Level;
 
 public class LogEventTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -40,7 +37,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, new HashSet<Property>());
+    logEvent.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testLevelDefault() throws IOException {
@@ -117,7 +114,6 @@ public class LogEventTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("info");
 
-
     Set<Property> properties = Sets.newHashSet();
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
     properties.add(new PropertyMock("KeyB", "ValueB", "PropertyB"));
@@ -144,8 +140,7 @@ public class LogEventTest extends LoggingMockingTestCase {
 
   private class TestModule extends FactoryModule {
     @Override
-    protected void configure() {
-    }
+    protected void configure() {}
   }
 
   private class PropertyMock extends Property {

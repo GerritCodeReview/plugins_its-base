@@ -17,11 +17,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -29,8 +27,7 @@ import java.util.Set;
 /**
  * Adds a short predefined comments to an issue.
  *
- * Comments are added for merging, abandoning, restoring of changes and adding
- * of patch sets.
+ * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
 public class AddStandardComment implements Action {
   public interface Factory {
@@ -54,16 +51,14 @@ public class AddStandardComment implements Action {
     return ret;
   }
 
-  private String getCommentChangeEvent(String Action, String prefix,
-      Map<String, String> map) {
+  private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
-    String changeNumber = Strings.nullToEmpty(map.get("change-number"));
-    changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
+    String changeNumber = getValueFromMap(map, "", "change-number", "changeNumber");
     if (!changeNumber.isEmpty()) {
       changeNumber += " ";
     }
-    ret += "Change " + changeNumber + Action;
-    String submitter = formatPerson(prefix, map);
+    ret += "Change " + changeNumber + action;
+    String submitter = getValueFromMap(map, prefix, "-name", "Name", "-username", "Username");
     if (!submitter.isEmpty()) {
       ret += " by " + submitter;
     }
@@ -75,12 +70,21 @@ public class AddStandardComment implements Action {
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
     }
-    String url = Strings.nullToEmpty(map.get("change-url"));
-    url = Strings.nullToEmpty(map.get("changeUrl"));
+    String url = getValueFromMap(map, "", "change-url", "changeUrl");
     if (!url.isEmpty()) {
       ret += "\n\n" + its.createLinkForWebui(url, url);
     }
     return ret;
+  }
+
+  private String getValueFromMap(Map<String, String> map, String keyPrefix, String... keyOptions) {
+    for (String key : keyOptions) {
+      String ret = Strings.nullToEmpty(map.get(keyPrefix + key));
+      if (!ret.isEmpty()) {
+        return ret;
+      }
+    }
+    return "";
   }
 
   private String getCommentChangeAbandoned(Map<String, String> map) {
@@ -96,19 +100,17 @@ public class AddStandardComment implements Action {
   }
 
   private String getCommentPatchSetCreated(Map<String, String> map) {
-    return getCommentChangeEvent("had a related patch set uploaded",
-        "uploader", map);
+    return getCommentChangeEvent("had a related patch set uploaded", "uploader", map);
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest,
-      Set<Property> properties) throws IOException {
+  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
     String comment = "";
     Map<String, String> map = Maps.newHashMap();
     for (Property property : properties) {
       String current = property.getValue();
-      if (!Strings.isNullOrEmpty(current))
-      {
+      if (!Strings.isNullOrEmpty(current)) {
         String key = property.getKey();
         String old = Strings.nullToEmpty(map.get(key));
         if (!old.isEmpty()) {

@@ -21,11 +21,7 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-
-import org.eclipse.jgit.util.FileUtils;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import org.eclipse.jgit.util.FileUtils;
 
 public class RuleBaseTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -49,9 +46,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   private boolean cleanupSitePath;
 
   private enum RuleBaseKind {
-      GLOBAL,
-      ITS,
-      FAULTY
+    GLOBAL,
+    ITS,
+    FAULTY
   }
 
   public void testWarnNonExistingRuleBase() {
@@ -71,9 +68,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testSimpleRuleBase() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\tconditionA = value1\n" +
-        "\taction = action1");
+    injectRuleBase("[rule \"rule1\"]\n" + "\tconditionA = value1\n" + "\taction = action1");
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -92,36 +87,34 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testBasicRuleBase() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\tconditionA = value1,value2\n" +
-        "\tconditionA = value3,value of 4\n" +
-        "\tconditionB = value5\n" +
-        "\taction = action1\n" +
-        "\taction = action2 param\n" +
-        "\n" +
-        "[ruleXZ \"nonrule\"]\n" +
-        "\tconditionA = value1\n" +
-        "\taction = action2\n" +
-        "[rule \"rule2\"]\n" +
-        "\tconditionC = value6\n" +
-        "\taction = action3");
+    injectRuleBase(
+        "[rule \"rule1\"]\n"
+            + "\tconditionA = value1,value2\n"
+            + "\tconditionA = value3,value of 4\n"
+            + "\tconditionB = value5\n"
+            + "\taction = action1\n"
+            + "\taction = action2 param\n"
+            + "\n"
+            + "[ruleXZ \"nonrule\"]\n"
+            + "\tconditionA = value1\n"
+            + "\taction = action2\n"
+            + "[rule \"rule2\"]\n"
+            + "\tconditionC = value6\n"
+            + "\taction = action3");
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
 
     Condition condition1 = createMock(Condition.class);
-    expect(conditionFactory.create("conditionA", "value1,value2")).
-        andReturn(condition1);
+    expect(conditionFactory.create("conditionA", "value1,value2")).andReturn(condition1);
     rule1.addCondition(condition1);
 
     Condition condition2 = createMock(Condition.class);
-    expect(conditionFactory.create("conditionA", "value3,value of 4")).
-        andReturn(condition2);
+    expect(conditionFactory.create("conditionA", "value3,value of 4")).andReturn(condition2);
     rule1.addCondition(condition2);
 
     Condition condition3 = createMock(Condition.class);
-    expect(conditionFactory.create("conditionB", "value5")).
-        andReturn(condition3);
+    expect(conditionFactory.create("conditionB", "value5")).andReturn(condition3);
     rule1.addCondition(condition3);
 
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
@@ -136,8 +129,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     expect(ruleFactory.create("rule2")).andReturn(rule2);
 
     Condition condition4 = createMock(Condition.class);
-    expect(conditionFactory.create("conditionC", "value6")).
-        andReturn(condition4);
+    expect(conditionFactory.create("conditionC", "value6")).andReturn(condition4);
     rule2.addCondition(condition4);
 
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
@@ -150,8 +142,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testActionRequestsForSimple() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\taction = action1");
+    injectRuleBase("[rule \"rule1\"]\n" + "\taction = action1");
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -178,12 +169,13 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testActionRequestsForExtended() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\taction = action1\n" +
-        "\taction = action2\n" +
-        "\n" +
-        "[rule \"rule2\"]\n" +
-        "\taction = action3");
+    injectRuleBase(
+        "[rule \"rule1\"]\n"
+            + "\taction = action1\n"
+            + "\taction = action2\n"
+            + "\n"
+            + "[rule \"rule2\"]\n"
+            + "\taction = action3");
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -241,9 +233,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testSimpleFaultyNameRuleBase() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\tconditionA = value1\n" +
-        "\taction = action1", RuleBaseKind.FAULTY);
+    injectRuleBase(
+        "[rule \"rule1\"]\n" + "\tconditionA = value1\n" + "\taction = action1",
+        RuleBaseKind.FAULTY);
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -265,9 +257,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testSimpleItsRuleBase() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\tconditionA = value1\n" +
-        "\taction = action1", RuleBaseKind.ITS);
+    injectRuleBase(
+        "[rule \"rule1\"]\n" + "\tconditionA = value1\n" + "\taction = action1", RuleBaseKind.ITS);
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
@@ -286,14 +277,11 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testAllRuleBaseFilesAreLoaded() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" +
-        "\taction = action1", RuleBaseKind.FAULTY);
+    injectRuleBase("[rule \"rule1\"]\n" + "\taction = action1", RuleBaseKind.FAULTY);
 
-    injectRuleBase("[rule \"rule2\"]\n" +
-        "\taction = action2", RuleBaseKind.GLOBAL);
+    injectRuleBase("[rule \"rule2\"]\n" + "\taction = action2", RuleBaseKind.GLOBAL);
 
-    injectRuleBase("[rule \"rule3\"]\n" +
-        "\taction = action3", RuleBaseKind.ITS);
+    injectRuleBase("[rule \"rule3\"]\n" + "\taction = action3", RuleBaseKind.ITS);
 
     Collection<Property> properties = Collections.emptySet();
 
@@ -369,14 +357,16 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       default:
         fail("Unknown ruleBaseKind");
     }
-    File ruleBaseFile = new File(sitePath.toFile(),
-        "etc" + File.separatorChar + "its" + File.separator +
-        baseName + ".config");
+    File ruleBaseFile =
+        new File(
+            sitePath.toFile(),
+            "etc" + File.separatorChar + "its" + File.separator + baseName + ".config");
 
     File ruleBaseParentFile = ruleBaseFile.getParentFile();
     if (!ruleBaseParentFile.exists()) {
-      assertTrue("Failed to create parent (" + ruleBaseParentFile + ") for " +
-          "rule base", ruleBaseParentFile.mkdirs());
+      assertTrue(
+          "Failed to create parent (" + ruleBaseParentFile + ") for " + "rule base",
+          ruleBaseParentFile.mkdirs());
     }
     try (FileWriter unbufferedWriter = new FileWriter(ruleBaseFile);
         BufferedWriter writer = new BufferedWriter(unbufferedWriter)) {
@@ -409,12 +399,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     @Override
     protected void configure() {
 
-      bind(String.class).annotatedWith(PluginName.class)
-          .toInstance("ItsTestName");
+      bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
       sitePath = randomTargetPath();
-      assertFalse("sitePath already (" + sitePath + ") already exists",
-          Files.exists(sitePath));
+      assertFalse("sitePath already (" + sitePath + ") already exists", Files.exists(sitePath));
       cleanupSitePath = true;
 
       bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);

@@ -26,11 +26,9 @@ import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-
 import java.util.Set;
 
 public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
@@ -42,8 +40,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
   public void testAccountAttributeNull() {
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(null, "prefix");
 
@@ -60,34 +57,27 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     // deprecated, to be removed soon. migrate to ones without dash.
     Property propertyEmail2 = createMock(Property.class);
-    expect(propertyFactory.create("prefix-email", "testEmail"))
-        .andReturn(propertyEmail2);
+    expect(propertyFactory.create("prefix-email", "testEmail")).andReturn(propertyEmail2);
 
     Property propertyName2 = createMock(Property.class);
-    expect(propertyFactory.create("prefix-name", "testName"))
-        .andReturn(propertyName2);
+    expect(propertyFactory.create("prefix-name", "testName")).andReturn(propertyName2);
 
     Property propertyUsername2 = createMock(Property.class);
-    expect(propertyFactory.create("prefix-username", "testUsername"))
-        .andReturn(propertyUsername2);
+    expect(propertyFactory.create("prefix-username", "testUsername")).andReturn(propertyUsername2);
 
     // New style configs for vm and soy
-    Property propertyEmail= createMock(Property.class);
-    expect(propertyFactory.create("prefixEmail", "testEmail"))
-        .andReturn(propertyEmail);
+    Property propertyEmail = createMock(Property.class);
+    expect(propertyFactory.create("prefixEmail", "testEmail")).andReturn(propertyEmail);
 
     Property propertyName = createMock(Property.class);
-    expect(propertyFactory.create("prefixName", "testName"))
-        .andReturn(propertyName);
+    expect(propertyFactory.create("prefixName", "testName")).andReturn(propertyName);
 
     Property propertyUsername = createMock(Property.class);
-    expect(propertyFactory.create("prefixUsername", "testUsername"))
-        .andReturn(propertyUsername);
+    expect(propertyFactory.create("prefixUsername", "testUsername")).andReturn(propertyUsername);
 
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(accountAttribute, "prefix");
 
@@ -119,36 +109,28 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.commitMessage = "Commit Message";
 
     Property propertyProject = createMock(Property.class);
-    expect(propertyFactory.create("project", "testProject"))
-        .andReturn(propertyProject);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     Property propertyBranch = createMock(Property.class);
-    expect(propertyFactory.create("branch", "testBranch"))
-        .andReturn(propertyBranch);
+    expect(propertyFactory.create("branch", "testBranch")).andReturn(propertyBranch);
 
     Property propertyTopic = createMock(Property.class);
-    expect(propertyFactory.create("topic", "testTopic"))
-        .andReturn(propertyTopic);
+    expect(propertyFactory.create("topic", "testTopic")).andReturn(propertyTopic);
 
     Property propertySubject = createMock(Property.class);
-    expect(propertyFactory.create("subject", "testSubject"))
-        .andReturn(propertySubject);
+    expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyId2 = createMock(Property.class);
-    expect(propertyFactory.create("change-id", "testId"))
-        .andReturn(propertyId2);
+    expect(propertyFactory.create("change-id", "testId")).andReturn(propertyId2);
 
     Property propertyId = createMock(Property.class);
-    expect(propertyFactory.create("changeId", "testId"))
-        .andReturn(propertyId);
+    expect(propertyFactory.create("changeId", "testId")).andReturn(propertyId);
 
     Property propertyNumber2 = createMock(Property.class);
-    expect(propertyFactory.create("change-number", "4711"))
-        .andReturn(propertyNumber2);
+    expect(propertyFactory.create("change-number", "4711")).andReturn(propertyNumber2);
 
     Property propertyNumber = createMock(Property.class);
-    expect(propertyFactory.create("changeNumber", "4711"))
-        .andReturn(propertyNumber);
+    expect(propertyFactory.create("changeNumber", "4711")).andReturn(propertyNumber);
 
     Property propertyUrl2 = createMock(Property.class);
     expect(propertyFactory.create("change-url", "http://www.example.org/test"))
@@ -159,36 +141,29 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyUrl);
 
     Property propertyStatus = createMock(Property.class);
-    expect(propertyFactory.create("status", null))
-        .andReturn(propertyStatus);
+    expect(propertyFactory.create("status", null)).andReturn(propertyStatus);
 
     Property propertyEmail = createMock(Property.class);
-    expect(propertyFactory.create("ownerEmail", "testEmail"))
-        .andReturn(propertyEmail);
+    expect(propertyFactory.create("ownerEmail", "testEmail")).andReturn(propertyEmail);
 
     Property propertyName = createMock(Property.class);
-    expect(propertyFactory.create("ownerName", "testName"))
-        .andReturn(propertyName);
+    expect(propertyFactory.create("ownerName", "testName")).andReturn(propertyName);
 
     Property propertyUsername = createMock(Property.class);
-    expect(propertyFactory.create("ownerUsername", "testUsername"))
-        .andReturn(propertyUsername);
+    expect(propertyFactory.create("ownerUsername", "testUsername")).andReturn(propertyUsername);
 
     Property propertyCommitMessage = createMock(Property.class);
     expect(propertyFactory.create("commitMessage", "Commit Message"))
         .andReturn(propertyCommitMessage);
 
     Property propertyEmail2 = createMock(Property.class);
-    expect(propertyFactory.create("owner-email", "testEmail"))
-        .andReturn(propertyEmail2);
+    expect(propertyFactory.create("owner-email", "testEmail")).andReturn(propertyEmail2);
 
     Property propertyName2 = createMock(Property.class);
-    expect(propertyFactory.create("owner-name", "testName"))
-        .andReturn(propertyName2);
+    expect(propertyFactory.create("owner-name", "testName")).andReturn(propertyName2);
 
     Property propertyUsername2 = createMock(Property.class);
-    expect(propertyFactory.create("owner-username", "testUsername"))
-        .andReturn(propertyUsername2);
+    expect(propertyFactory.create("owner-username", "testUsername")).andReturn(propertyUsername2);
 
     Property propertyCommitMessage2 = createMock(Property.class);
     expect(propertyFactory.create("commit-message", "Commit Message"))
@@ -203,8 +178,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(changeAttribute);
 
@@ -251,76 +225,61 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.commitMessage = "Commit Message";
 
     Property propertyProject = createMock(Property.class);
-    expect(propertyFactory.create("project", "testProject"))
-        .andReturn(propertyProject);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     Property propertyBranch = createMock(Property.class);
-    expect(propertyFactory.create("branch", "testBranch"))
-        .andReturn(propertyBranch);
+    expect(propertyFactory.create("branch", "testBranch")).andReturn(propertyBranch);
 
     Property propertyTopic = createMock(Property.class);
-    expect(propertyFactory.create("topic", "testTopic"))
-        .andReturn(propertyTopic);
+    expect(propertyFactory.create("topic", "testTopic")).andReturn(propertyTopic);
 
     Property propertySubject = createMock(Property.class);
-    expect(propertyFactory.create("subject", "testSubject"))
-        .andReturn(propertySubject);
+    expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyId = createMock(Property.class);
-    expect(propertyFactory.create("changeId", "testId"))
-        .andReturn(propertyId);
+    expect(propertyFactory.create("changeId", "testId")).andReturn(propertyId);
 
     Property propertyNumber = createMock(Property.class);
-    expect(propertyFactory.create("changeNumber", "4711"))
-        .andReturn(propertyNumber);
+    expect(propertyFactory.create("changeNumber", "4711")).andReturn(propertyNumber);
 
     Property propertyUrl = createMock(Property.class);
     expect(propertyFactory.create("changeUrl", "http://www.example.org/test"))
         .andReturn(propertyUrl);
 
     Property propertyId2 = createMock(Property.class);
-    expect(propertyFactory.create("change-id", "testId"))
-        .andReturn(propertyId2);
+    expect(propertyFactory.create("change-id", "testId")).andReturn(propertyId2);
 
     Property propertyNumber2 = createMock(Property.class);
-    expect(propertyFactory.create("change-number", "4711"))
-        .andReturn(propertyNumber2);
+    expect(propertyFactory.create("change-number", "4711")).andReturn(propertyNumber2);
 
     Property propertyUrl2 = createMock(Property.class);
     expect(propertyFactory.create("change-url", "http://www.example.org/test"))
         .andReturn(propertyUrl2);
 
     Property propertyStatus = createMock(Property.class);
-    expect(propertyFactory.create("status", "ABANDONED"))
-        .andReturn(propertyStatus);
+    expect(propertyFactory.create("status", "ABANDONED")).andReturn(propertyStatus);
 
-    Property propertyEmail= createMock(Property.class);
-    expect(propertyFactory.create("ownerEmail", "testEmail"))
-        .andReturn(propertyEmail);
+    Property propertyEmail = createMock(Property.class);
+    expect(propertyFactory.create("ownerEmail", "testEmail")).andReturn(propertyEmail);
 
     Property propertyName = createMock(Property.class);
-    expect(propertyFactory.create("ownerName", "testName"))
-        .andReturn(propertyName);
+    expect(propertyFactory.create("ownerName", "testName")).andReturn(propertyName);
 
     Property propertyUsername = createMock(Property.class);
-    expect(propertyFactory.create("ownerUsername", "testUsername"))
-        .andReturn(propertyUsername);
+    expect(propertyFactory.create("ownerUsername", "testUsername")).andReturn(propertyUsername);
 
     Property propertyCommitMessage = createMock(Property.class);
     expect(propertyFactory.create("commitMessage", "Commit Message"))
         .andReturn(propertyCommitMessage);
 
-    Property propertyEmail2= createMock(Property.class);
-    expect(propertyFactory.create("owner-email", "testEmail"))
-        .andReturn(propertyEmail2);
+    Property propertyEmail2 = createMock(Property.class);
+    expect(propertyFactory.create("owner-email", "testEmail")).andReturn(propertyEmail2);
 
     Property propertyName2 = createMock(Property.class);
-    expect(propertyFactory.create("owner-name", "testName"))
-        .andReturn(propertyName2);
+    expect(propertyFactory.create("owner-name", "testName")).andReturn(propertyName2);
 
     Property propertyUsername2 = createMock(Property.class);
-    expect(propertyFactory.create("owner-username", "testUsername"))
-        .andReturn(propertyUsername2);
+    expect(propertyFactory.create("owner-username", "testUsername")).andReturn(propertyUsername2);
 
     Property propertyCommitMessage2 = createMock(Property.class);
     expect(propertyFactory.create("commit-message", "Commit Message"))
@@ -333,11 +292,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
         .andReturn("http://www.example.org/test");
 
-
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(changeAttribute);
 
@@ -388,49 +345,38 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     patchSetAttribute.author = author;
 
     Property propertyRevision = createMock(Property.class);
-    expect(propertyFactory.create("revision",
-        "1234567891123456789212345678931234567894"))
+    expect(propertyFactory.create("revision", "1234567891123456789212345678931234567894"))
         .andReturn(propertyRevision);
 
     Property propertyNumber = createMock(Property.class);
-    expect(propertyFactory.create("patchSetNumber", "42"))
-        .andReturn(propertyNumber);
+    expect(propertyFactory.create("patchSetNumber", "42")).andReturn(propertyNumber);
 
     Property propertyNumber2 = createMock(Property.class);
-    expect(propertyFactory.create("patch-set-number", "42"))
-        .andReturn(propertyNumber2);
+    expect(propertyFactory.create("patch-set-number", "42")).andReturn(propertyNumber2);
 
     Property propertyRef = createMock(Property.class);
-    expect(propertyFactory.create("ref", "testRef"))
-        .andReturn(propertyRef);
+    expect(propertyFactory.create("ref", "testRef")).andReturn(propertyRef);
 
     Property propertyCreatedOn = createMock(Property.class);
-    expect(propertyFactory.create("createdOn", "1234567890"))
-        .andReturn(propertyCreatedOn);
+    expect(propertyFactory.create("createdOn", "1234567890")).andReturn(propertyCreatedOn);
 
     Property propertyCreatedOn2 = createMock(Property.class);
-    expect(propertyFactory.create("created-on", "1234567890"))
-        .andReturn(propertyCreatedOn2);
+    expect(propertyFactory.create("created-on", "1234567890")).andReturn(propertyCreatedOn2);
 
     Property propertyParents = createMock(Property.class);
-    expect(propertyFactory.create("parents", "[parent1, parent2]"))
-        .andReturn(propertyParents);
+    expect(propertyFactory.create("parents", "[parent1, parent2]")).andReturn(propertyParents);
 
     Property propertyDeletions = createMock(Property.class);
-    expect(propertyFactory.create("deletions", "7"))
-        .andReturn(propertyDeletions);
+    expect(propertyFactory.create("deletions", "7")).andReturn(propertyDeletions);
 
     Property propertyInsertions = createMock(Property.class);
-    expect(propertyFactory.create("insertions", "12"))
-        .andReturn(propertyInsertions);
+    expect(propertyFactory.create("insertions", "12")).andReturn(propertyInsertions);
 
     Property propertyUploaderEmail = createMock(Property.class);
-    expect(propertyFactory.create("uploaderEmail", "testEmail1"))
-        .andReturn(propertyUploaderEmail);
+    expect(propertyFactory.create("uploaderEmail", "testEmail1")).andReturn(propertyUploaderEmail);
 
     Property propertyUploaderName = createMock(Property.class);
-    expect(propertyFactory.create("uploaderName", "testName1"))
-        .andReturn(propertyUploaderName);
+    expect(propertyFactory.create("uploaderName", "testName1")).andReturn(propertyUploaderName);
 
     Property propertyUploaderUsername = createMock(Property.class);
     expect(propertyFactory.create("uploaderUsername", "testUsername1"))
@@ -441,42 +387,35 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyUploaderEmail2);
 
     Property propertyUploaderName2 = createMock(Property.class);
-    expect(propertyFactory.create("uploader-name", "testName1"))
-        .andReturn(propertyUploaderName2);
+    expect(propertyFactory.create("uploader-name", "testName1")).andReturn(propertyUploaderName2);
 
     Property propertyUploaderUsername2 = createMock(Property.class);
     expect(propertyFactory.create("uploader-username", "testUsername1"))
         .andReturn(propertyUploaderUsername2);
 
     Property propertyAuthorEmail = createMock(Property.class);
-    expect(propertyFactory.create("authorEmail", "testEmail2"))
-        .andReturn(propertyAuthorEmail);
+    expect(propertyFactory.create("authorEmail", "testEmail2")).andReturn(propertyAuthorEmail);
 
     Property propertyAuthorName = createMock(Property.class);
-    expect(propertyFactory.create("authorName", "testName2"))
-        .andReturn(propertyAuthorName);
+    expect(propertyFactory.create("authorName", "testName2")).andReturn(propertyAuthorName);
 
     Property propertyAuthorUsername = createMock(Property.class);
     expect(propertyFactory.create("authorUsername", "testUsername2"))
         .andReturn(propertyAuthorUsername);
 
     Property propertyAuthorEmail2 = createMock(Property.class);
-    expect(propertyFactory.create("author-email", "testEmail2"))
-        .andReturn(propertyAuthorEmail2);
+    expect(propertyFactory.create("author-email", "testEmail2")).andReturn(propertyAuthorEmail2);
 
     Property propertyAuthorName2 = createMock(Property.class);
-    expect(propertyFactory.create("author-name", "testName2"))
-        .andReturn(propertyAuthorName2);
+    expect(propertyFactory.create("author-name", "testName2")).andReturn(propertyAuthorName2);
 
     Property propertyAuthorUsername2 = createMock(Property.class);
     expect(propertyFactory.create("author-username", "testUsername2"))
         .andReturn(propertyAuthorUsername2);
 
-
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(patchSetAttribute);
 
@@ -513,32 +452,26 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     refUpdateAttribute.refName = "testRef";
 
     Property propertyRevision = createMock(Property.class);
-    expect(propertyFactory.create("revision",
-        "1234567891123456789212345678931234567894"))
+    expect(propertyFactory.create("revision", "1234567891123456789212345678931234567894"))
         .andReturn(propertyRevision);
 
     Property propertyRevisionOld = createMock(Property.class);
-    expect(propertyFactory.create("revisionOld",
-        "9876543211987654321298765432139876543214"))
+    expect(propertyFactory.create("revisionOld", "9876543211987654321298765432139876543214"))
         .andReturn(propertyRevisionOld);
 
     Property propertyRevisionOld2 = createMock(Property.class);
-    expect(propertyFactory.create("revision-old",
-        "9876543211987654321298765432139876543214"))
+    expect(propertyFactory.create("revision-old", "9876543211987654321298765432139876543214"))
         .andReturn(propertyRevisionOld2);
 
     Property propertyProject = createMock(Property.class);
-    expect(propertyFactory.create("project", "testProject"))
-        .andReturn(propertyProject);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     Property propertyRef = createMock(Property.class);
-    expect(propertyFactory.create("ref", "testRef"))
-        .andReturn(propertyRef);
+    expect(propertyFactory.create("ref", "testRef")).andReturn(propertyRef);
 
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(refUpdateAttribute);
 
@@ -557,18 +490,14 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     approvalAttribute.value = "TestValue";
 
     Property propertyApproval = createMock(Property.class);
-    expect(propertyFactory.create("approvalTestType", "TestValue"))
-        .andReturn(propertyApproval);
+    expect(propertyFactory.create("approvalTestType", "TestValue")).andReturn(propertyApproval);
 
     Property propertyApproval2 = createMock(Property.class);
-    expect(propertyFactory.create("approval-TestType", "TestValue"))
-        .andReturn(propertyApproval2);
-
+    expect(propertyFactory.create("approval-TestType", "TestValue")).andReturn(propertyApproval2);
 
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(approvalAttribute);
 
@@ -584,18 +513,14 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     approvalAttribute.value = "TestValue";
 
     Property propertyApproval = createMock(Property.class);
-    expect(propertyFactory.create("approvalTestType", "TestValue"))
-        .andReturn(propertyApproval);
+    expect(propertyFactory.create("approvalTestType", "TestValue")).andReturn(propertyApproval);
 
     Property propertyApproval2 = createMock(Property.class);
-    expect(propertyFactory.create("approval-Test-Type", "TestValue"))
-        .andReturn(propertyApproval2);
-
+    expect(propertyFactory.create("approval-Test-Type", "TestValue")).andReturn(propertyApproval2);
 
     replayMocks();
 
-    PropertyAttributeExtractor extractor =
-        injector.getInstance(PropertyAttributeExtractor.class);
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Set<Property> actual = extractor.extractFrom(approvalAttribute);
 
