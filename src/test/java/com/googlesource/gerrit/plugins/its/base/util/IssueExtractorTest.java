@@ -50,7 +50,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Test");
+    String[] ret = issueExtractor.getIssueIds("Test");
     assertEquals("Number of found ids do not match", 0, ret.length);
   }
 
@@ -62,7 +62,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Test");
+    String[] ret = issueExtractor.getIssueIds("Test");
     assertEquals("Number of found ids do not match", 0, ret.length);
 
     assertLogMessageContains("Matching");
@@ -76,7 +76,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("bug#4711");
+    String[] ret = issueExtractor.getIssueIds("bug#4711");
     assertEquals("Number of found ids do not match", 0, ret.length);
 
     assertLogMessageContains("Matching");
@@ -90,7 +90,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("bug#4711");
+    String[] ret = issueExtractor.getIssueIds("bug#4711");
     assertEquals("Number of found ids do not match", 1, ret.length);
     assertEquals("First found issue id do not match", "4711", ret[0]);
 
@@ -105,7 +105,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bar");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bar");
     assertEquals("Number of found ids do not match", 1, ret.length);
     assertEquals("Found issue id does not match", "4711", ret[0]);
 
@@ -120,7 +120,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bar");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bar");
     assertEquals("Number of found ids do not match", 1, ret.length);
     assertEquals("Found issue id does not match", "bug#4711", ret[0]);
 
@@ -135,7 +135,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bar");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bar");
     assertEquals("Number of found ids do not match", 1, ret.length);
     assertEquals("Found issue id does not match", "4", ret[0]);
 
@@ -150,7 +150,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bar");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bar");
     assertEquals("Number of found ids do not match", 1, ret.length);
     assertEquals("Found issue id does not match", "711", ret[0]);
 
@@ -165,7 +165,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar bug#123");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar bug#123");
     assertEquals("Number of found ids do not match", 3, ret.length);
     List<String> retList = Arrays.asList(ret);
     assertTrue("4711 not among the extracted ids", retList.contains("4711"));
@@ -183,7 +183,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    String ret[] = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar\n" + "bug#123 baz bug#42");
+    String[] ret = issueExtractor.getIssueIds("Foo bug#4711 bug#42 bar\n" + "bug#123 baz bug#42");
     assertEquals("Number of found ids do not match", 3, ret.length);
     List<String> retList = Arrays.asList(ret);
     assertTrue("4711 not among the extracted ids", retList.contains("4711"));

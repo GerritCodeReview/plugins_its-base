@@ -61,7 +61,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("No template name");
   }
@@ -85,7 +85,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testInlineWithMultipleParameters() throws IOException {
@@ -238,7 +238,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -275,7 +275,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -295,7 +295,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("non-existing-template");
   }
@@ -320,7 +320,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<Property>());
+    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testTemplateMultipleParametersAndProperties() throws IOException {

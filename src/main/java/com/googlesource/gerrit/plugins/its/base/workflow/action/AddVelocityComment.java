@@ -96,14 +96,14 @@ public class AddVelocityComment implements Action {
       template = StringUtils.join(templateParameters, " ");
     } else {
       if (templateName.isEmpty()) {
-        log.error("No template name given in " + actionRequest);
+        log.error("No template name given in {}", actionRequest);
       } else {
         Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
         Path templatePath = templateDir.resolve(templateName + ".vm");
         if (Files.isReadable(templatePath)) {
           template = new String(Files.readAllBytes(templatePath));
         } else {
-          log.error("Cannot read template " + templatePath);
+          log.error("Cannot read template {}", templatePath);
         }
       }
     }

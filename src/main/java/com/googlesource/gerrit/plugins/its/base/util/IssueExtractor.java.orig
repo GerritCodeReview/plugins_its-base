@@ -12,7 +12,10 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+<<<<<<< HEAD
 import java.util.EnumSet;
+=======
+>>>>>>> stable-2.14
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -63,7 +66,11 @@ public class IssueExtractor {
   }
 
   @Inject
+<<<<<<< HEAD
   IssueExtractor(ItsConfig itsConfig, CommitMessageFetcher commitMessageFetcher, PatchSetDb db) {
+=======
+  IssueExtractor(ItsConfig itsConfig, CommitMessageFetcher commitMessageFetcher, ReviewDb db) {
+>>>>>>> stable-2.14
     this.commitMessageFetcher = commitMessageFetcher;
     this.db = db;
     this.itsConfig = itsConfig;
@@ -96,7 +103,11 @@ public class IssueExtractor {
   }
 
   /**
+<<<<<<< HEAD
+   * Helper funcion for {@link #getIssueIds(String, String)}.
+=======
    * Helper function for {@link #getIssueIds(String, String)}.
+>>>>>>> stable-2.14
    *
    * <p>Adds a text's issues for a given occurrence to the map returned by {@link
    * #getIssueIds(String, String)}.
@@ -220,9 +231,20 @@ public class IssueExtractor {
       if (patchSetId.get() != 1) {
         PatchSet.Id previousPatchSetId =
             new PatchSet.Id(patchSetId.getParentKey(), patchSetId.get() - 1);
+<<<<<<< HEAD
         String previousPatchSet = db.getRevision(previousPatchSetId);
         if (previousPatchSet != null) {
           previous = getIssueIds(projectName, previousPatchSet);
+=======
+        try {
+          PatchSet previousPatchSet = db.patchSets().get(previousPatchSetId);
+          if (previousPatchSet != null) {
+            previous = getIssueIds(projectName, previousPatchSet.getRevision().get());
+          }
+        } catch (OrmException e) {
+          // previous is still empty to indicate that there was no previous
+          // accessible patch set. We treat every occurrence as added.
+>>>>>>> stable-2.14
         }
       }
 
