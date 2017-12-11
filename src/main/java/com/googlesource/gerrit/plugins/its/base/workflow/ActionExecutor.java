@@ -14,8 +14,12 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -31,6 +35,7 @@ public class ActionExecutor {
   private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
   private final ItsFacade its;
+  private final ItsFacadeMultiServer itsMultiServer;
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
@@ -39,11 +44,13 @@ public class ActionExecutor {
   @Inject
   public ActionExecutor(
       ItsFacade its,
+      ItsFacadeMultiServer itsFacadeMultiServer,
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory) {
     this.its = its;
+    this.itsMultiServer = itsFacadeMultiServer;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
@@ -66,12 +73,21 @@ public class ActionExecutor {
   }
 
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
+    execute(null, issue, actionRequest, properties);
+  }
+
+  @VisibleForTesting
+  void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Set<Property> properties) {
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
-        its.performAction(issue, actionRequest.getUnparsed());
+        executeUnparsedAction(server, issue, actionRequest);
       } else {
-        action.execute(issue, actionRequest, properties);
+        action.execute(server, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
@@ -79,8 +95,25 @@ public class ActionExecutor {
   }
 
   public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+    execute(null, issue, actions, properties);
+  }
+
+  public void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(issue, actionRequest, properties);
+      execute(server, issue, actionRequest, properties);
+    }
+  }
+
+  private void executeUnparsedAction(
+      ItsServerInfo server, String issue, ActionRequest actionRequest) throws IOException {
+    if (server == null) {
+      its.performAction(issue, actionRequest.getUnparsed());
+    } else {
+      itsMultiServer.performAction(server, issue, actionRequest.getUnparsed());
     }
   }
 }

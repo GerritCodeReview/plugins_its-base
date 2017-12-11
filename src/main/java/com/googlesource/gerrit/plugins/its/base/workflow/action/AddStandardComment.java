@@ -16,8 +16,11 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
@@ -35,10 +38,12 @@ public class AddStandardComment implements Action {
   }
 
   private final ItsFacade its;
+  private final ItsFacadeMultiServer itsMultiServer;
 
   @Inject
-  public AddStandardComment(ItsFacade its) {
+  public AddStandardComment(ItsFacade its, ItsFacadeMultiServer itsMultiServer) {
     this.its = its;
+    this.itsMultiServer = itsMultiServer;
   }
 
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
@@ -80,9 +85,23 @@ public class AddStandardComment implements Action {
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
+    execute(null, issue, actionRequest, properties);
+  }
+
+  @Override
+  public void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Set<Property> properties)
+      throws IOException {
     String comment = buildComment(properties);
     if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
+      if (server == null) {
+        its.addComment(issue, comment);
+      } else {
+        itsMultiServer.addComment(server, issue, comment);
+      }
     }
   }
 
