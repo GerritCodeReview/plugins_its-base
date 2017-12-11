@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public interface Action {
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException;
 }

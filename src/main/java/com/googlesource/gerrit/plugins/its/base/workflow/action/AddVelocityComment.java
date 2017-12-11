@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.File;
@@ -86,7 +87,8 @@ public class AddVelocityComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
     String template = null;
     String templateName = actionRequest.getParameter(1);
@@ -109,7 +111,7 @@ public class AddVelocityComment implements Action {
     }
     if (!Strings.isNullOrEmpty(template)) {
       String comment = velocify(template, properties);
-      its.addComment(issue, comment);
+      its.addComment(server, issue, comment);
     }
   }
 

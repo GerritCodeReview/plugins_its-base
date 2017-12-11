@@ -24,6 +24,7 @@ import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
@@ -58,10 +59,12 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   public void testWarnNoTemplateNameGiven() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("");
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("No template name");
   }
@@ -79,13 +82,14 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Simple-text")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Simple-text");
+    its.addComment(serverInfo, "4711", "Simple-text");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<Property>());
   }
 
   public void testInlineWithMultipleParameters() throws IOException {
@@ -103,13 +107,14 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Param2 Param3")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Param2 Param3");
+    its.addComment(serverInfo, "4711", "Param2 Param3");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, properties);
   }
 
   public void testInlineWithSingleProperty() throws IOException {
@@ -133,13 +138,13 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("${subject}")))
         .andAnswer(answer);
-
-    its.addComment("4711", "Rosebud");
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    its.addComment(serverInfo, "4711", "Rosebud");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
@@ -165,13 +170,14 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Test")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Test");
+    its.addComment(serverInfo, "4711", "Test");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, properties);
   }
 
   public void testInlineWithMultipleProperties() throws IOException {
@@ -201,13 +207,14 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("${subject} ${reason} ${subject}")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Rosebud Life Rosebud");
+    its.addComment(serverInfo, "4711", "Rosebud Life Rosebud");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
@@ -229,8 +236,9 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Simple-Text")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Simple-Text");
+    its.addComment(serverInfo, "4711", "Simple-Text");
 
     expect(its.createLinkForWebui("http://www.example.org/", "http://www.example.org/"))
         .andReturn("Formatted Link");
@@ -238,7 +246,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -266,8 +274,9 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Simple-Text")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Simple-Text");
+    its.addComment(serverInfo, "4711", "Simple-Text");
 
     expect(its.createLinkForWebui("http://www.example.org/", "Caption"))
         .andReturn("Formatted Link");
@@ -275,7 +284,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -291,11 +300,12 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   public void testWarnTemplateNotFound() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("non-existing-template");
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<>());
 
     assertLogMessageContains("non-existing-template");
   }
@@ -314,13 +324,14 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                 (String) anyObject(),
                 eq("Simple Test Template")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Simple Test Template");
+    its.addComment(serverInfo, "4711", "Simple Test Template");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, new HashSet<>());
   }
 
   public void testTemplateMultipleParametersAndProperties() throws IOException {
@@ -355,14 +366,17 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
                     "Test Template with subject: ${subject}.\n"
                         + "${reason} is the reason for ${subject}.")))
         .andAnswer(answer);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
     its.addComment(
-        "4711", "Test Template with subject: Rosebud.\n" + "Life is the reason for Rosebud.");
+        serverInfo,
+        "4711",
+        "Test Template with subject: Rosebud.\n" + "Life is the reason for Rosebud.");
 
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(serverInfo, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));

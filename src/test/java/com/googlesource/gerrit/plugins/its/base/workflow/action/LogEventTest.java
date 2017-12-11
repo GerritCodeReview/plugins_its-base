@@ -19,6 +19,7 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
@@ -37,7 +38,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, new HashSet<>());
+    logEvent.execute(null, "4711", actionRequest, new HashSet<Property>());
   }
 
   public void testLevelDefault() throws IOException {
@@ -46,10 +47,12 @@ public class LogEventTest extends LoggingMockingTestCase {
 
     Set<Property> properties = Sets.newHashSet();
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.INFO);
   }
@@ -60,10 +63,12 @@ public class LogEventTest extends LoggingMockingTestCase {
 
     Set<Property> properties = Sets.newHashSet();
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.ERROR);
   }
@@ -74,10 +79,12 @@ public class LogEventTest extends LoggingMockingTestCase {
 
     Set<Property> properties = Sets.newHashSet();
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.WARN);
   }
@@ -88,10 +95,12 @@ public class LogEventTest extends LoggingMockingTestCase {
 
     Set<Property> properties = Sets.newHashSet();
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.INFO);
   }
@@ -105,7 +114,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(null, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.DEBUG);
   }
@@ -118,10 +127,12 @@ public class LogEventTest extends LoggingMockingTestCase {
     properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
     properties.add(new PropertyMock("KeyB", "ValueB", "PropertyB"));
     properties.add(new PropertyMock("KeyC", "ValueC", "PropertyC"));
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     assertLogMessageContains("PropertyA", Level.INFO);
     assertLogMessageContains("PropertyB", Level.INFO);
