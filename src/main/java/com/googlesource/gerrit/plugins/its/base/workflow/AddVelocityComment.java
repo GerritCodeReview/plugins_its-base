@@ -66,7 +66,8 @@ public class AddVelocityComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String template = null;
     String templateName = actionRequest.getParameter(1);

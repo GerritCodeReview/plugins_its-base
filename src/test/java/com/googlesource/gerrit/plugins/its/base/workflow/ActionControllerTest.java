@@ -54,7 +54,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     actionController.onEvent(event);
   }
 
-  public void testNoActionsOrNotIssues() {
+  public void testNoActionsOrNoIssues() {
     ActionController actionController = createActionController();
 
     ChangeEvent event = createMock(ChangeEvent.class);

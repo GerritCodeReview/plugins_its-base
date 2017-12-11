@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.validation;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
@@ -23,6 +24,7 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
 import java.util.Collections;
@@ -41,9 +43,11 @@ public class ItsValidateComment implements CommitValidationListener {
 
   @Inject private ItsConfig itsConfig;
 
+  @Inject private ItsFacadeFactory itsFacadeFactory;
+
   @Inject private IssueExtractor issueExtractor;
 
-  private List<CommitValidationMessage> validCommit(RevCommit commit)
+  private List<CommitValidationMessage> validCommit(Project.NameKey project, RevCommit commit)
       throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
@@ -57,6 +61,7 @@ public class ItsValidateComment implements CommitValidationListener {
         String details = null;
         if (issueIds.length > 0) {
           List<String> nonExistingIssueIds = Lists.newArrayList();
+          client = itsFacadeFactory.getFacade(project);
           for (String issueId : issueIds) {
             boolean exists = false;
             try {
@@ -132,10 +137,11 @@ public class ItsValidateComment implements CommitValidationListener {
   @Override
   public List<CommitValidationMessage> onCommitReceived(CommitReceivedEvent receiveEvent)
       throws CommitValidationException {
-    ItsConfig.setCurrentProjectName(receiveEvent.getProjectNameKey());
+    Project.NameKey projectName = receiveEvent.getProjectNameKey();
+    ItsConfig.setCurrentProjectName(projectName);
 
-    if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {
-      return validCommit(receiveEvent.commit);
+    if (itsConfig.isEnabled(projectName, receiveEvent.getRefName())) {
+      return validCommit(projectName, receiveEvent.commit);
     }
 
     return Collections.emptyList();
