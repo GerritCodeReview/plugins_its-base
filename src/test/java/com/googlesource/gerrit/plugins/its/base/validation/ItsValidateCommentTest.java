@@ -26,6 +26,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.NoopItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.UniqueItsServer;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
@@ -534,6 +538,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
       itsConfig = createMock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      bind(ItsFacadeMultiServer.class).to(NoopItsFacadeMultiServer.class);
+      bind(ItsServer.class).to(UniqueItsServer.class);
     }
   }
 }
