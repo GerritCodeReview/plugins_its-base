@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.common.Nullable;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
 import java.util.Map;
@@ -24,10 +26,15 @@ interface Action {
   /**
    * Execute this action.
    *
+   * @param server The server where the action will be executed on.
    * @param issue The issue to execute on.
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Map<String, String> properties)
       throws IOException;
 }

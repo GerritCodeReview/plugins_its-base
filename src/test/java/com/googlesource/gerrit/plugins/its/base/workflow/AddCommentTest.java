@@ -20,6 +20,7 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
 
@@ -35,19 +36,20 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, ImmutableMap.of());
+    addComment.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameters()).andReturn(new String[] {"Some", "test", "comment"});
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("4711", "Some test comment");
+    its.addComment(serverInfo, "4711", "Some test comment");
 
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, ImmutableMap.of());
+    addComment.execute(serverInfo, "4711", actionRequest, ImmutableMap.of());
   }
 
   private AddComment createAddComment() {

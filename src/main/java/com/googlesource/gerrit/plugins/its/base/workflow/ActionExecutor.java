@@ -14,8 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import java.io.IOException;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -26,6 +29,7 @@ public class ActionExecutor {
   private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
   private final ItsFacade its;
+  private final ItsServer itsServer;
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
@@ -34,11 +38,13 @@ public class ActionExecutor {
   @Inject
   public ActionExecutor(
       ItsFacade its,
+      ItsServer itsServer,
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory) {
     this.its = its;
+    this.itsServer = itsServer;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
@@ -60,16 +66,27 @@ public class ActionExecutor {
     }
   }
 
+  //  @VisibleForTesting
   private void execute(String issue, ActionRequest actionRequest, Map<String, String> properties) {
+    ItsServerInfo server = itsServer.getServer(new Project.NameKey(properties.get("project")));
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
-        its.performAction(issue, actionRequest.getUnparsed());
+        executeUnparsedAction(server, issue, actionRequest);
       } else {
-        action.execute(issue, actionRequest, properties);
+        action.execute(server, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
+  private void executeUnparsedAction(
+      ItsServerInfo server, String issue, ActionRequest actionRequest) throws IOException {
+    if (server == null) {
+      its.performAction(issue, actionRequest.getUnparsed());
+    } else {
+      its.performAction(server, issue, actionRequest.getUnparsed());
     }
   }
 

@@ -59,6 +59,7 @@ public class ActionController implements EventListener {
   }
 
   private void handleEvent(RefEvent refEvent) {
+    //    ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
     Set<Map<String, String>> properties = propertyExtractor.extractFrom(refEvent);
     for (Map<String, String> propertiesMap : properties) {
       Collection<ActionRequest> actions = ruleBase.actionRequestsFor(propertiesMap);
