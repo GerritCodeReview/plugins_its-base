@@ -19,9 +19,12 @@ import static org.easymock.EasyMock.expectLastCall;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -35,21 +38,26 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
 
   private ItsFacade its;
+  private ItsServer itsServer;
+  private ItsServerInfo serverInfo;
   private AddComment.Factory addCommentFactory;
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
 
-  private Map<String, String> properties = ImmutableMap.of("issue", "4711");
+  private Map<String, String> properties =
+      ImmutableMap.of("issue", "4711", "project", "testProject");
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    its.performAction("4711", "unparsed action 1");
+    its.performAction(serverInfo, "4711", "unparsed action 1");
 
     replayMocks();
 
@@ -61,10 +69,12 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    its.performAction("4711", "unparsed action 1");
+    its.performAction(serverInfo, "4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
 
     replayMocks();
@@ -83,11 +93,14 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
     expect(actionRequest2.getName()).andReturn("unparsed");
     expect(actionRequest2.getUnparsed()).andReturn("unparsed action 2");
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo)
+        .anyTimes();
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest1, actionRequest2);
 
-    its.performAction("4711", "unparsed action 1");
-    its.performAction("4711", "unparsed action 2");
+    its.performAction(serverInfo, "4711", "unparsed action 1");
+    its.performAction(serverInfo, "4711", "unparsed action 2");
 
     replayMocks();
 
@@ -107,14 +120,17 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
     expect(actionRequest3.getName()).andReturn("unparsed");
     expect(actionRequest3.getUnparsed()).andReturn("unparsed action 3");
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo)
+        .anyTimes();
 
     Set<ActionRequest> actionRequests =
         ImmutableSet.of(actionRequest1, actionRequest2, actionRequest3);
 
-    its.performAction("4711", "unparsed action 1");
+    its.performAction(serverInfo, "4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
-    its.performAction("4711", "unparsed action 2");
-    its.performAction("4711", "unparsed action 3");
+    its.performAction(serverInfo, "4711", "unparsed action 2");
+    its.performAction(serverInfo, "4711", "unparsed action 3");
     expectLastCall().andThrow(new IOException("injected exception 3"));
 
     replayMocks();
@@ -134,8 +150,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddComment addComment = createMock(AddComment.class);
     expect(addCommentFactory.create()).andReturn(addComment);
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
-    addComment.execute("4711", actionRequest, properties);
+    addComment.execute(serverInfo, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -151,8 +169,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddSoyComment addSoyComment = createMock(AddSoyComment.class);
     expect(addSoyCommentFactory.create()).andReturn(addSoyComment);
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
-    addSoyComment.execute("4711", actionRequest, properties);
+    addSoyComment.execute(serverInfo, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -168,8 +188,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddStandardComment addStandardComment = createMock(AddStandardComment.class);
     expect(addStandardCommentFactory.create()).andReturn(addStandardComment);
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
-    addStandardComment.execute("4711", actionRequest, properties);
+    addStandardComment.execute(serverInfo, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -185,8 +207,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     LogEvent logEvent = createMock(LogEvent.class);
     expect(logEventFactory.create()).andReturn(logEvent);
+    expect(itsServer.getServer(new Project.NameKey(properties.get("project"))))
+        .andReturn(serverInfo);
 
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(serverInfo, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -221,6 +245,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
+
+      serverInfo = createMock(ItsServerInfo.class);
+      itsServer = createMock(ItsServer.class);
+      bind(ItsServer.class).toInstance(itsServer);
     }
   }
 }
