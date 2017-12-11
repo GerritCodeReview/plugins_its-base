@@ -23,6 +23,7 @@ import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.File;
@@ -115,12 +116,28 @@ public class AddSoyComment implements Action {
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
+    String comment = buildComment(actionRequest, properties);
+    if (!Strings.isNullOrEmpty(comment) ) {
+      its.addComment(issue, comment);
+    }
+  }
+
+  @Override
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
+    String comment = buildComment(actionRequest, properties);
+    if (!Strings.isNullOrEmpty(comment) ) {
+      its.addComment(server, issue, comment);
+    }
+  }
+
+  private String buildComment(ActionRequest actionRequest, Set<Property> properties) {
     String template = actionRequest.getParameter(1);
     if (!template.isEmpty()) {
-      String comment = soyTextTemplate(SoyFileSet.builder(), template, properties);
-      its.addComment(issue, comment);
-    } else {
-      log.error("No template name given in {}", actionRequest);
+      return soyTextTemplate(SoyFileSet.builder(), template, properties);
     }
+    log.error("No template name given in {}", actionRequest);
+    return "";
   }
 }
