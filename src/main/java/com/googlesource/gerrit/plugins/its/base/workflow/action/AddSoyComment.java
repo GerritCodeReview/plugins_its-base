@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
+import com.google.gerrit.common.Nullable;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
@@ -23,6 +24,7 @@ import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.File;
@@ -113,11 +115,19 @@ public class AddSoyComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Set<Property> properties)
       throws IOException {
     String comment = buildComment(actionRequest, properties);
     if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
+      if (server != null) {
+        its.addComment(server, issue, comment);
+      } else {
+        its.addComment(issue, comment);
+      }
     }
   }
 

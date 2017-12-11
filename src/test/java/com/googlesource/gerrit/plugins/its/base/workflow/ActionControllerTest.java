@@ -19,11 +19,14 @@ import static org.easymock.EasyMock.expect;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
@@ -31,12 +34,15 @@ import java.util.Collections;
 import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
+  private static final Project.NameKey DEMO_PROJECT = new Project.NameKey("demoProject");
+
   private Injector injector;
 
   private PropertyExtractor propertyExtractor;
   private RuleBase ruleBase;
   private ActionExecutor actionExecutor;
   private ItsConfig itsConfig;
+  private ItsServer itsServer;
 
   public void testNoPropertySets() {
     ActionController actionController = createActionController();
@@ -98,7 +104,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     Property propertyIssue1 = createMock(Property.class);
     expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
-    expect(propertyIssue1.getValue()).andReturn("testIssue").anyTimes();
+    expect(propertyIssue1.getValue()).andReturn("singleTestIssue").anyTimes();
 
     Set<Property> propertySet = Sets.newHashSet();
     propertySet.add(propertyIssue1);
@@ -111,9 +117,13 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Collection<ActionRequest> actionRequests = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
     actionRequests.add(actionRequest1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests).once();
 
-    actionExecutor.execute("testIssue", actionRequests, propertySet);
+    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests).once();
+    expect(event.getProjectNameKey()).andReturn(DEMO_PROJECT).anyTimes();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(DEMO_PROJECT)).andReturn(serverInfo);
+
+    actionExecutor.execute(serverInfo, "singleTestIssue", actionRequests, propertySet);
 
     replayMocks();
 
@@ -159,10 +169,14 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(ruleBase.actionRequestsFor(propertySet1)).andReturn(actionRequests1).once();
     expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2).once();
 
-    actionExecutor.execute("testIssue", actionRequests1, propertySet1);
-    actionExecutor.execute("testIssue", actionRequests2, propertySet2);
-    actionExecutor.execute("testIssue2", actionRequests2, propertySet2);
+    expect(event.getProjectNameKey()).andReturn(DEMO_PROJECT).anyTimes();
 
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(DEMO_PROJECT)).andReturn(serverInfo).anyTimes();
+
+    actionExecutor.execute(serverInfo, "testIssue", actionRequests1, propertySet1);
+    actionExecutor.execute(serverInfo, "testIssue", actionRequests2, propertySet2);
+    actionExecutor.execute(serverInfo, "testIssue2", actionRequests2, propertySet2);
     replayMocks();
 
     actionController.onEvent(event);
@@ -192,6 +206,9 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       ruleBase = createMock(RuleBase.class);
       bind(RuleBase.class).toInstance(ruleBase);
+
+      itsServer = createMock(ItsServer.class);
+      bind(ItsServer.class).toInstance(itsServer);
 
       actionExecutor = createMock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);

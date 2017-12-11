@@ -14,8 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -65,22 +68,40 @@ public class ActionExecutor {
     }
   }
 
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
+  @VisibleForTesting
+  void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Set<Property> properties) {
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
-        its.performAction(issue, actionRequest.getUnparsed());
+        executeUnparsedAction(server, issue, actionRequest);
       } else {
-        action.execute(issue, actionRequest, properties);
+        action.execute(server, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+  private void executeUnparsedAction(
+      ItsServerInfo server, String issue, ActionRequest actionRequest) throws IOException {
+    if (server == null) {
+      its.performAction(issue, actionRequest.getUnparsed());
+    } else {
+      its.performAction(server, issue, actionRequest.getUnparsed());
+    }
+  }
+
+  public void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(issue, actionRequest, properties);
+      execute(server, issue, actionRequest, properties);
     }
   }
 }
