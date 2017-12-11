@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
-import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
@@ -30,15 +29,9 @@ public class AddComment implements Action {
     AddComment create();
   }
 
-  private final ItsFacade its;
-
-  @Inject
-  public AddComment(ItsFacade its) {
-    this.its = its;
-  }
-
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String comment = String.join(" ", actionRequest.getParameters());
     if (!Strings.isNullOrEmpty(comment)) {

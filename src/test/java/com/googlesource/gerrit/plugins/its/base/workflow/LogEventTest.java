@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.apache.log4j.Level;
 
 public class LogEventTest extends LoggingMockingTestCase {
   private Injector injector;
+  private ItsFacade its;
 
   public void testNull() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -34,7 +36,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, ImmutableMap.of());
+    logEvent.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testEmpty() throws IOException {
@@ -44,7 +46,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, ImmutableMap.of());
+    logEvent.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testLevelDefault() throws IOException {
@@ -52,10 +54,11 @@ public class LogEventTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.INFO);
   }
@@ -65,10 +68,11 @@ public class LogEventTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("error");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.ERROR);
   }
@@ -78,10 +82,11 @@ public class LogEventTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("warn");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.WARN);
   }
@@ -91,10 +96,11 @@ public class LogEventTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("info");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.INFO);
   }
@@ -104,10 +110,11 @@ public class LogEventTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("debug");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.DEBUG);
   }
@@ -122,10 +129,11 @@ public class LogEventTest extends LoggingMockingTestCase {
             .put("KeyB", "ValueB")
             .put("KeyC", "ValueC")
             .build();
+
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(its, "4711", actionRequest, properties);
 
     assertLogMessageContains("KeyA = ValueA", Level.INFO);
     assertLogMessageContains("KeyB = ValueB", Level.INFO);
@@ -144,6 +152,8 @@ public class LogEventTest extends LoggingMockingTestCase {
 
   private class TestModule extends FactoryModule {
     @Override
-    protected void configure() {}
+    protected void configure() {
+      its = createMock(ItsFacade.class);
+    }
   }
 }
