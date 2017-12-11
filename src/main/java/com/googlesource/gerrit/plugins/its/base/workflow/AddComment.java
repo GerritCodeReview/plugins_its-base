@@ -15,8 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
 import java.util.Map;
@@ -39,11 +41,19 @@ public class AddComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      @Nullable ItsServerInfo server,
+      String issue,
+      ActionRequest actionRequest,
+      Map<String, String> properties)
       throws IOException {
     String comment = String.join(" ", actionRequest.getParameters());
     if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
+      if (server != null) {
+        its.addComment(server, issue, comment);
+      } else {
+        its.addComment(issue, comment);
+      }
     }
   }
 }
