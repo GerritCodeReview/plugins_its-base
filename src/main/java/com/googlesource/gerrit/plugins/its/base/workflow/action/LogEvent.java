@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
@@ -78,7 +79,8 @@ public class LogEvent implements Action {
   public LogEvent() {}
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
     Level level = Level.fromString(actionRequest.getParameter(1));
     for (Property property : properties) {
