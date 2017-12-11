@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
 
@@ -24,10 +24,12 @@ interface Action {
   /**
    * Execute this action.
    *
+   * @param its The facade interface to execute actions.
    * @param issue The issue to execute on.
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException;
 }
