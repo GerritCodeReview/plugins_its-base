@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
-import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -173,7 +173,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   }
 
   private void setupCommonMocks() {
-    expect(itsConfig.isEnabled(anyObject(Event.class))).andReturn(true).anyTimes();
+    expect(itsConfig.isEnabled(anyObject(RefEvent.class))).andReturn(true).anyTimes();
   }
 
   @Override
