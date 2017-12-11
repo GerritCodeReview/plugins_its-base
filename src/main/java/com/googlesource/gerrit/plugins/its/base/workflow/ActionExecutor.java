@@ -14,8 +14,10 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import java.io.IOException;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -25,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class ActionExecutor {
   private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
-  private final ItsFacade its;
+  private final ItsFacadeFactory itsFactory;
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
@@ -33,12 +35,12 @@ public class ActionExecutor {
 
   @Inject
   public ActionExecutor(
-      ItsFacade its,
+      ItsFacadeFactory itsFactory,
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory) {
-    this.its = its;
+    this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
@@ -61,12 +63,13 @@ public class ActionExecutor {
   }
 
   private void execute(String issue, ActionRequest actionRequest, Map<String, String> properties) {
+    ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
         its.performAction(issue, actionRequest.getUnparsed());
       } else {
-        action.execute(issue, actionRequest, properties);
+        action.execute(its, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
