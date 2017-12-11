@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.validation;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
@@ -23,6 +24,8 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
 import java.util.Collections;
@@ -35,15 +38,17 @@ public class ItsValidateComment implements CommitValidationListener {
 
   private static final Logger log = LoggerFactory.getLogger(ItsValidateComment.class);
 
-  @Inject private ItsFacade client;
+  @Inject private ItsFacade its;
 
   @Inject @PluginName private String pluginName;
 
   @Inject private ItsConfig itsConfig;
 
+  @Inject private ItsServer itsServer;
+
   @Inject private IssueExtractor issueExtractor;
 
-  private List<CommitValidationMessage> validCommit(RevCommit commit)
+  private List<CommitValidationMessage> validCommit(Project.NameKey project, RevCommit commit)
       throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
@@ -57,10 +62,15 @@ public class ItsValidateComment implements CommitValidationListener {
         String details = null;
         if (issueIds.length > 0) {
           List<String> nonExistingIssueIds = Lists.newArrayList();
+          ItsServerInfo server = itsServer.getServer(project);
           for (String issueId : issueIds) {
             boolean exists = false;
             try {
-              exists = client.exists(issueId);
+              if (itsServer != null) {
+                exists = its.exists(server, issueId);
+              } else {
+                exists = its.exists(issueId);
+              }
             } catch (IOException e) {
               synopsis = "Failed to check whether or not issue " + issueId + " exists";
               log.warn(synopsis, e);
@@ -132,10 +142,11 @@ public class ItsValidateComment implements CommitValidationListener {
   @Override
   public List<CommitValidationMessage> onCommitReceived(CommitReceivedEvent receiveEvent)
       throws CommitValidationException {
-    ItsConfig.setCurrentProjectName(receiveEvent.getProjectNameKey());
+    Project.NameKey project = receiveEvent.getProjectNameKey();
+    ItsConfig.setCurrentProjectName(project);
 
-    if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {
-      return validCommit(receiveEvent.commit);
+    if (itsConfig.isEnabled(project, receiveEvent.getRefName())) {
+      return validCommit(project, receiveEvent.commit);
     }
 
     return Collections.emptyList();
