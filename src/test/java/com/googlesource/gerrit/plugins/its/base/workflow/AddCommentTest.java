@@ -35,7 +35,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, ImmutableMap.of());
+    addComment.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testPlain() throws IOException {
@@ -47,7 +47,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, ImmutableMap.of());
+    addComment.execute(its, "4711", actionRequest, ImmutableMap.of());
   }
 
   private AddComment createAddComment() {

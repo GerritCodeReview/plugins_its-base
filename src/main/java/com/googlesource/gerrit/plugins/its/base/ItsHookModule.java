@@ -72,6 +72,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+
     install(ItsRulesProjectCache.module());
   }
 
