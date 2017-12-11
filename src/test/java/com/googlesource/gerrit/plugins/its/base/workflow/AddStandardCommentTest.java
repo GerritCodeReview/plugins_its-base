@@ -19,7 +19,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeMergedFull() throws IOException {
@@ -61,7 +60,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testChangeAbandonedPlain() throws IOException {
@@ -73,7 +72,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeAbandonedFull() throws IOException {
@@ -101,7 +100,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testChangeRestoredPlain() throws IOException {
@@ -113,7 +112,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeRestoredFull() throws IOException {
@@ -141,7 +140,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testPatchSetCreatedPlain() throws IOException {
@@ -153,7 +152,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testPatchSetCreatedFull() throws IOException {
@@ -178,7 +177,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   @Override
