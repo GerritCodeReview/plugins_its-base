@@ -31,9 +31,32 @@ public interface ItsFacade {
 
   public void addComment(String issueId, String comment) throws IOException;
 
-  public void performAction(String issueId, String actionName) throws IOException;
+  public void performAction(String issueId, String actionName)
+      throws IOException;
 
   public boolean exists(final String issueId) throws IOException;
 
   public String createLinkForWebui(String url, String text);
+
+  default String healthCheck(ItsServerInfo server, Check check) throws IOException {
+    return healthCheck(check);
+  }
+
+  default void addRelatedLink(ItsServerInfo server, String issueId, URL relatedUrl,
+      String description) throws IOException {
+    addRelatedLink(issueId, relatedUrl, description);
+  }
+
+  default void addComment(ItsServerInfo server, String issueId, String comment) throws IOException {
+    addComment(issueId, comment);
+  }
+
+  default void performAction(ItsServerInfo server, String issueId, String actionName)
+      throws IOException {
+    performAction(issueId, actionName);
+  }
+
+  default boolean exists(ItsServerInfo server, final String issueId) throws IOException {
+    return exists(issueId);
+  }
 }

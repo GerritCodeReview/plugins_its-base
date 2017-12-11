@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -50,7 +51,8 @@ public class ActionExecutor {
     this.logEventFactory = logEventFactory;
   }
 
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties) {
     try {
       String name = actionRequest.getName();
       Action action = null;
@@ -65,18 +67,22 @@ public class ActionExecutor {
       }
 
       if (action == null) {
-        its.performAction(issue, actionRequest.getUnparsed());
+        its.performAction(server, issue, actionRequest.getUnparsed());
       } else {
-        action.execute(issue, actionRequest, properties);
+        action.execute(server, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+  public void execute(
+      ItsServerInfo server,
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(issue, actionRequest, properties);
+      execute(server, issue, actionRequest, properties);
     }
   }
 }

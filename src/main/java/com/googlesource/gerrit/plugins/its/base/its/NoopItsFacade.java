@@ -39,6 +39,7 @@ public class NoopItsFacade implements ItsFacade {
     }
   }
 
+
   @Override
   public boolean exists(String issueId) throws IOException {
     if (log.isDebugEnabled()) {

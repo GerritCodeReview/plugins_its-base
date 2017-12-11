@@ -26,6 +26,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
@@ -44,6 +46,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private IssueExtractor issueExtractor;
   private ItsFacade itsFacade;
   private ItsConfig itsConfig;
+  private ItsServer itsServer;
 
   private Project project = new Project(new Project.NameKey("myProject"));
 
@@ -129,7 +132,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(true).atLeastOnce();
 
     replayMocks();
 
@@ -152,7 +157,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(true).atLeastOnce();
 
     replayMocks();
 
@@ -176,7 +183,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
 
     replayMocks();
 
@@ -204,7 +213,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(commit.getId()).andReturn(commit).anyTimes();
     expect(commit.getName()).andReturn("TestCommit").anyTimes();
     expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
 
     replayMocks();
 
@@ -234,8 +245,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(true).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(true).atLeastOnce();
 
     replayMocks();
 
@@ -260,8 +274,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(true).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(true).atLeastOnce();
 
     replayMocks();
 
@@ -287,9 +304,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(true).atLeastOnce();
     replayMocks();
 
     ret = ivc.onCommitReceived(event);
@@ -321,8 +340,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(true).atLeastOnce();
 
     replayMocks();
 
@@ -353,8 +375,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(false).atLeastOnce();
 
     replayMocks();
 
@@ -387,8 +412,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711")).andReturn(false).atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(false).atLeastOnce();
 
     replayMocks();
 
@@ -419,8 +447,13 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
         .andReturn(new String[] {"4711", "42"})
         .atLeastOnce();
-    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsServer.getServer(project.getName())).andReturn(serverInfo);
+    expect(itsFacade.exists(serverInfo, "4711"))
+        .andThrow(new IOException("InjectedEx1"))
+        .atLeastOnce();
+    expect(itsFacade.exists(serverInfo, "42")).andReturn(false).atLeastOnce();
 
     replayMocks();
 
@@ -506,6 +539,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
       itsConfig = createMock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      itsServer = createMock(ItsServer.class);
+      bind(ItsServer.class).toInstance(itsServer);
     }
   }
 }
