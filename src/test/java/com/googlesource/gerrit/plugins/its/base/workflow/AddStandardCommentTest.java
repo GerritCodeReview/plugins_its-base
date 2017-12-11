@@ -36,7 +36,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeMergedFull() throws IOException {
@@ -60,7 +60,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testChangeAbandonedPlain() throws IOException {
@@ -72,7 +72,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeAbandonedFull() throws IOException {
@@ -100,7 +100,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testChangeRestoredPlain() throws IOException {
@@ -112,7 +112,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testChangeRestoredFull() throws IOException {
@@ -140,7 +140,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   public void testPatchSetCreatedPlain() throws IOException {
@@ -152,7 +152,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(its, "42", actionRequest, properties);
   }
 
   public void testPatchSetCreatedFull() throws IOException {
@@ -177,7 +177,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(its, "176", actionRequest, properties);
   }
 
   @Override

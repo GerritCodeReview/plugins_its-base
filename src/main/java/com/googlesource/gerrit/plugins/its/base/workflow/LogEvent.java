@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -75,7 +76,8 @@ public class LogEvent implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     Level level = Level.fromString(actionRequest.getParameter(1));
     for (Entry<String, String> property : properties.entrySet()) {
