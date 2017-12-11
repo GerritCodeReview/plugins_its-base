@@ -24,7 +24,6 @@ import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -47,14 +46,12 @@ public class AddSoyComment implements Action {
     AddSoyComment create();
   }
 
-  private final ItsFacade its;
   private final Path templateDir;
   protected HashMap<String, Object> soyContext;
 
   @Inject
-  public AddSoyComment(@ItsPath Path itsPath, ItsFacade its) {
+  public AddSoyComment(@ItsPath Path itsPath) {
     this.templateDir = itsPath.resolve("templates");
-    this.its = its;
   }
 
   private String soyTemplate(
@@ -88,7 +85,8 @@ public class AddSoyComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String comment = buildComment(actionRequest, properties);
     if (!Strings.isNullOrEmpty(comment)) {
