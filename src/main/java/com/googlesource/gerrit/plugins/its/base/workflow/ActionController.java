@@ -19,6 +19,8 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
 import java.util.Set;
@@ -34,17 +36,20 @@ public class ActionController implements EventListener {
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
   private final ItsConfig itsConfig;
+  private final ItsServer itsServer;
 
   @Inject
   public ActionController(
       PropertyExtractor propertyExtractor,
       RuleBase ruleBase,
       ActionExecutor actionExecutor,
-      ItsConfig itsConfig) {
+      ItsConfig itsConfig,
+      ItsServer itsServer) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
     this.itsConfig = itsConfig;
+    this.itsServer = itsServer;
   }
 
   @Override
@@ -65,7 +70,12 @@ public class ActionController implements EventListener {
         for (Property property : properties) {
           if ("issue".equals(property.getKey())) {
             String issue = property.getValue();
-            actionExecutor.execute(issue, actions, properties);
+            ItsServerInfo server = itsServer.getServer(refEvent.getProjectNameKey().get());
+            if (server != null) {
+              actionExecutor.execute(server, issue, actions, properties);
+            } else {
+              actionExecutor.execute(issue, actions, properties);
+            }
           }
         }
       }
