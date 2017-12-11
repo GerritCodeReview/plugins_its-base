@@ -19,11 +19,14 @@ import static org.easymock.EasyMock.expect;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.UniqueItsServer;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
@@ -31,17 +34,18 @@ import java.util.Collections;
 import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
+  private static Project.NameKey TEST_PROJECT = new Project.NameKey("testProject");
+
   private Injector injector;
 
   private PropertyExtractor propertyExtractor;
   private RuleBase ruleBase;
   private ActionExecutor actionExecutor;
   private ItsConfig itsConfig;
+  private ChangeEvent event;
 
   public void testNoPropertySets() {
     ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
 
     Set<Set<Property>> propertySets = Collections.emptySet();
     expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
@@ -53,8 +57,6 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
   public void testNoActions() {
     ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
 
     Set<Set<Property>> propertySets = Sets.newHashSet();
     Set<Property> propertySet = Collections.emptySet();
@@ -72,8 +74,6 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
   public void testNoIssues() {
     ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
 
     Set<Set<Property>> propertySets = Sets.newHashSet();
     Set<Property> propertySet = Collections.emptySet();
@@ -93,8 +93,6 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
   public void testSinglePropertySetSingleActionSingleIssue() {
     ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
 
     Property propertyIssue1 = createMock(Property.class);
     expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
@@ -122,8 +120,6 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
   public void testMultiplePropertySetsMultipleActionMultipleIssue() {
     ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
 
     Property propertyIssue1 = createMock(Property.class);
     expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
@@ -174,6 +170,8 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
   private void setupCommonMocks() {
     expect(itsConfig.isEnabled(anyObject(RefEvent.class))).andReturn(true).anyTimes();
+    event = createMock(ChangeEvent.class);
+    expect(event.getProjectNameKey()).andReturn(TEST_PROJECT).anyTimes();
   }
 
   @Override
@@ -198,6 +196,8 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = createMock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      bind(ItsServer.class).to(UniqueItsServer.class);
     }
   }
 }

@@ -21,6 +21,10 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.NoopItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.UniqueItsServer;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -132,7 +136,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     AddComment addComment = createMock(AddComment.class);
     expect(addCommentFactory.create()).andReturn(addComment);
 
-    addComment.execute("4711", actionRequest, properties);
+    addComment.execute(null, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -149,7 +153,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     AddSoyComment addSoyComment = createMock(AddSoyComment.class);
     expect(addSoyCommentFactory.create()).andReturn(addSoyComment);
 
-    addSoyComment.execute("4711", actionRequest, properties);
+    addSoyComment.execute(null, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -166,7 +170,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     AddStandardComment addStandardComment = createMock(AddStandardComment.class);
     expect(addStandardCommentFactory.create()).andReturn(addStandardComment);
 
-    addStandardComment.execute("4711", actionRequest, properties);
+    addStandardComment.execute(null, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -183,7 +187,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     LogEvent logEvent = createMock(LogEvent.class);
     expect(logEventFactory.create()).andReturn(logEvent);
 
-    logEvent.execute("4711", actionRequest, properties);
+    logEvent.execute(null, "4711", actionRequest, properties);
 
     replayMocks();
 
@@ -218,6 +222,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
+
+      bind(ItsFacadeMultiServer.class).to(NoopItsFacadeMultiServer.class);
+      bind(ItsServer.class).to(UniqueItsServer.class);
     }
   }
 }

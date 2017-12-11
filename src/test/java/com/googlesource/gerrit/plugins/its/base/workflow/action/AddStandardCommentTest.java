@@ -20,6 +20,10 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
+import com.googlesource.gerrit.plugins.its.base.its.NoopItsFacadeMultiServer;
+import com.googlesource.gerrit.plugins.its.base.its.UniqueItsServer;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
@@ -308,6 +312,9 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     protected void configure() {
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
+
+      bind(ItsFacadeMultiServer.class).to(NoopItsFacadeMultiServer.class);
+      bind(ItsServer.class).to(UniqueItsServer.class);
     }
   }
 }
