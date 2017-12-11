@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
@@ -96,7 +97,23 @@ public class AddStandardComment implements Action {
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
-    String comment = "";
+    String comment = buildComment(properties);
+    if (!Strings.isNullOrEmpty(comment)) {
+      its.addComment(issue, comment);
+    }
+  }
+
+  @Override
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
+    String comment = buildComment(properties);
+    if (!Strings.isNullOrEmpty(comment)) {
+      its.addComment(server, issue, comment);
+    }
+  }
+
+  private String buildComment(Set<Property> properties) {
     Map<String, String> map = Maps.newHashMap();
     for (Property property : properties) {
       String current = property.getValue();
@@ -109,18 +126,16 @@ public class AddStandardComment implements Action {
         map.put(key, old + current);
       }
     }
-    String eventType = map.get("event-type");
-    if ("change-abandoned".equals(eventType)) {
-      comment = getCommentChangeAbandoned(map);
-    } else if ("change-merged".equals(eventType)) {
-      comment = getCommentChangeMerged(map);
-    } else if ("change-restored".equals(eventType)) {
-      comment = getCommentChangeRestored(map);
-    } else if ("patchset-created".equals(eventType)) {
-      comment = getCommentPatchSetCreated(map);
+    switch (map.get("event-type")) {
+      case "change-abandoned":
+        return getCommentChangeAbandoned(map);
+      case "change-merged":
+        return getCommentChangeMerged(map);
+      case "change-restored":
+        return getCommentChangeRestored(map);
+      case "patchset-created":
+        return getCommentPatchSetCreated(map);
     }
-    if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
-    }
+    return "";
   }
 }
