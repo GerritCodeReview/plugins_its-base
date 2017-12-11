@@ -14,8 +14,10 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -52,18 +54,7 @@ public class ActionExecutor {
 
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
     try {
-      String name = actionRequest.getName();
-      Action action = null;
-      if ("add-comment".equals(name)) {
-        action = addCommentFactory.create();
-      } else if ("add-standard-comment".equals(name)) {
-        action = addStandardCommentFactory.create();
-      } else if ("add-soy-comment".equals(name)) {
-        action = addSoyCommentFactory.create();
-      } else if ("log-event".equals(name)) {
-        action = logEventFactory.create();
-      }
-
+      Action action = getAction(actionRequest.getName());
       if (action == null) {
         its.performAction(issue, actionRequest.getUnparsed());
       } else {
@@ -74,9 +65,51 @@ public class ActionExecutor {
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+  public void execute(
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
       execute(issue, actionRequest, properties);
     }
+  }
+
+  @VisibleForTesting
+  void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties) {
+    try {
+      Action action = getAction(actionRequest.getName());
+      if (action == null) {
+        its.performAction(server, issue, actionRequest.getUnparsed());
+      } else {
+        action.execute(server, issue, actionRequest, properties);
+      }
+    } catch (IOException e) {
+      log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
+  public void execute(
+      ItsServerInfo server,
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
+    for (ActionRequest actionRequest : actions) {
+      execute(server, issue, actionRequest, properties);
+    }
+  }
+
+  private Action getAction(String actionName) {
+    switch (actionName) {
+      case "add-comment":
+        return addCommentFactory.create();
+      case "add-standard-comment":
+        return addStandardCommentFactory.create();
+      case "add-soy-comment":
+        return addSoyCommentFactory.create();
+      case "log-event":
+        return logEventFactory.create();
+    }
+    return null;
   }
 }

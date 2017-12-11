@@ -23,6 +23,7 @@ import com.google.gerrit.server.git.validators.CommitValidationMessage;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServer;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
 import java.util.Collections;
@@ -41,9 +42,11 @@ public class ItsValidateComment implements CommitValidationListener {
 
   @Inject private ItsConfig itsConfig;
 
+  @Inject private ItsServer itsServer;
+
   @Inject private IssueExtractor issueExtractor;
 
-  private List<CommitValidationMessage> validCommit(RevCommit commit)
+  private List<CommitValidationMessage> validCommit(String projectName, RevCommit commit)
       throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
     ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
@@ -60,7 +63,11 @@ public class ItsValidateComment implements CommitValidationListener {
           for (String issueId : issueIds) {
             boolean exists = false;
             try {
-              exists = client.exists(issueId);
+              if (itsServer != null) {
+                exists = client.exists(itsServer.getServer(projectName), issueId);
+              } else {
+                exists = client.exists(issueId);
+              }
             } catch (IOException e) {
               synopsis = "Failed to check whether or not issue " + issueId + " exists";
               log.warn(synopsis, e);
@@ -135,7 +142,7 @@ public class ItsValidateComment implements CommitValidationListener {
     ItsConfig.setCurrentProjectName(receiveEvent.getProjectNameKey());
 
     if (itsConfig.isEnabled(receiveEvent.getProjectNameKey(), receiveEvent.getRefName())) {
-      return validCommit(receiveEvent.commit);
+      return validCommit(receiveEvent.getProjectNameKey().get(), receiveEvent.commit);
     }
 
     return Collections.emptyList();
