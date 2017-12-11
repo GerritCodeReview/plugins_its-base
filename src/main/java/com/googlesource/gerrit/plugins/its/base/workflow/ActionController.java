@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
@@ -48,11 +49,15 @@ public class ActionController implements EventListener {
 
   @Override
   public void onEvent(Event event) {
-    if (!itsConfig.isEnabled(event)) {
+    if (!(event instanceof RefEvent)) {
+      return;
+    }
+    RefEvent refEvent = (RefEvent) event;
+    if (!itsConfig.isEnabled(refEvent)) {
       return;
     }
 
-    Set<Set<Property>> propertiesCollections = propertyExtractor.extractFrom(event);
+    Set<Set<Property>> propertiesCollections = propertyExtractor.extractFrom(refEvent);
     for (Set<Property> properties : propertiesCollections) {
       Collection<ActionRequest> actions = ruleBase.actionRequestsFor(properties);
       if (!actions.isEmpty()) {

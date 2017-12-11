@@ -28,9 +28,9 @@ import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.DraftPublishedEvent;
-import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.PatchSetEvent;
+import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
@@ -173,7 +173,7 @@ public class PropertyExtractor {
    * @param event The event to extract property sets from.
    * @return sets of property sets extracted from the event.
    */
-  public Set<Set<Property>> extractFrom(Event event) {
+  public Set<Set<Property>> extractFrom(RefEvent event) {
     Map<String, Set<String>> associations = null;
     Set<Set<Property>> ret = Sets.newHashSet();
 
