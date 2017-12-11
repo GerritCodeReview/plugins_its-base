@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
-import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
@@ -30,22 +29,7 @@ public class AddStandardComment implements Action {
     AddStandardComment create();
   }
 
-  private final ItsFacade its;
-
-  @Inject
-  public AddStandardComment(ItsFacade its) {
-    this.its = its;
-  }
-
-  private String formatPerson(String prefix, Map<String, String> map) {
-    String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
-    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
-    if (ret.isEmpty()) {
-      ret = Strings.nullToEmpty(map.get(prefix + "-username"));
-      ret = Strings.nullToEmpty(map.get(prefix + "Username"));
-    }
-    return ret;
-  }
+  private ItsFacade its;
 
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
@@ -84,8 +68,10 @@ public class AddStandardComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+  public void execute(
+      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
+    this.its = its;
     String comment = buildComment(properties);
 
     if (!Strings.isNullOrEmpty(comment)) {
