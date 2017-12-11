@@ -25,10 +25,10 @@ import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.gerrit.server.events.ChangeAbandonedEvent;
+import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
-import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
@@ -469,7 +469,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   }
 
   public void BROKEN_testIsEnabledUnknownEvent() {
-    Event event = new Event("foo") {};
+    ChangeEvent event = createMock(ChangeEvent.class);
 
     ItsConfig itsConfig = createItsConfig();
 

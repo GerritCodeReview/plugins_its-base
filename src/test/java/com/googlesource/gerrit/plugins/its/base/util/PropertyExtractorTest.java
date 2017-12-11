@@ -22,6 +22,7 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -31,8 +32,8 @@ import com.google.gerrit.server.events.ChangeAbandonedEvent;
 import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
-import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -330,7 +331,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   }
 
   private void eventHelper(
-      Event event, String className, String type, Set<Property> common, boolean withRevision) {
+      RefEvent event, String className, String type, Set<Property> common, boolean withRevision) {
     PropertyExtractor propertyExtractor = injector.getInstance(PropertyExtractor.class);
 
     Property propertyItsName = createMock(Property.class);
@@ -421,9 +422,19 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     }
   }
 
-  private class DummyEvent extends Event {
+  private class DummyEvent extends RefEvent {
     public DummyEvent() {
       super(null);
+    }
+
+    @Override
+    public String getRefName() {
+      return null;
+    }
+
+    @Override
+    public NameKey getProjectNameKey() {
+      return null;
     }
   }
 }
