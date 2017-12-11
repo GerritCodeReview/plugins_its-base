@@ -25,37 +25,40 @@ public class NoopItsFacade implements ItsFacade {
   private Logger log = LoggerFactory.getLogger(NoopItsFacade.class);
 
   @Override
-  public void addComment(String issueId, String comment) throws IOException {
+  public void addComment(ItsServerInfo server, String issueId, String comment) throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("addComment({},{})", issueId, comment);
+      log.debug("addComment({},{},{})", server.URL, issueId, comment);
     }
   }
 
   @Override
-  public void addRelatedLink(String issueId, URL relatedUrl, String description)
-      throws IOException {
+  public void addRelatedLink(
+      ItsServerInfo server, String issueId, URL relatedUrl, String description) throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("addRelatedLink({},{},{})", issueId, relatedUrl, description);
+      log.debug(
+          "addRelatedLink({},{},{},{})",
+         server.URL, issueId, relatedUrl, description);
     }
   }
 
   @Override
-  public boolean exists(String issueId) throws IOException {
+  public boolean exists(ItsServerInfo server, String issueId) throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("exists({})", issueId);
+      log.debug("exists({},{})", server.URL, issueId);
     }
     return false;
   }
 
   @Override
-  public void performAction(String issueId, String actionName) throws IOException {
+  public void performAction(ItsServerInfo server, String issueId, String actionName)
+      throws IOException {
     if (log.isDebugEnabled()) {
-      log.debug("performAction({},{})", issueId, actionName);
+      log.debug("performAction({},{},{})", server.URL, issueId, actionName);
     }
   }
 
   @Override
-  public String healthCheck(Check check) throws IOException {
+  public String healthCheck(ItsServerInfo server, Check check) throws IOException {
     if (log.isDebugEnabled()) {
       log.debug("healthCheck()");
     }

@@ -25,15 +25,17 @@ public interface ItsFacade {
     ACCESS
   }
 
-  public String healthCheck(Check check) throws IOException;
+  public String healthCheck(ItsServerInfo server, Check check) throws IOException;
 
-  public void addRelatedLink(String issueId, URL relatedUrl, String description) throws IOException;
+  public void addRelatedLink(
+      ItsServerInfo server, String issueId, URL relatedUrl, String description) throws IOException;
 
-  public void addComment(String issueId, String comment) throws IOException;
+  public void addComment(ItsServerInfo server, String issueId, String comment) throws IOException;
 
-  public void performAction(String issueId, String actionName) throws IOException;
+  public void performAction(ItsServerInfo server, String issueId, String actionName)
+      throws IOException;
 
-  public boolean exists(final String issueId) throws IOException;
+  public boolean exists(ItsServerInfo server, final String issueId) throws IOException;
 
   public String createLinkForWebui(String url, String text);
 }
