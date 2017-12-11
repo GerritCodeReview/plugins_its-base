@@ -56,7 +56,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, ImmutableMap.of());
+    addVelocityComment.execute(its, "4711", actionRequest, ImmutableMap.of());
 
     assertLogMessageContains("No template name");
   }
@@ -80,7 +80,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
+    addVelocityComment.execute(its, "4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testInlineWithMultipleParameters() throws IOException {
@@ -102,7 +102,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
+    addVelocityComment.execute(its, "4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testInlineWithSingleProperty() throws IOException {
@@ -128,7 +128,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(its, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
@@ -156,7 +156,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(its, "4711", actionRequest, properties);
   }
 
   public void testInlineWithMultipleProperties() throws IOException {
@@ -184,7 +184,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(its, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
@@ -215,7 +215,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
+    addVelocityComment.execute(its, "4711", actionRequest, new HashMap<String, String>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -252,7 +252,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
+    addVelocityComment.execute(its, "4711", actionRequest, new HashMap<String, String>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -272,7 +272,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, ImmutableMap.of());
+    addVelocityComment.execute(its, "4711", actionRequest, ImmutableMap.of());
 
     assertLogMessageContains("non-existing-template");
   }
@@ -297,7 +297,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
+    addVelocityComment.execute(its, "4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testTemplateMultipleParametersAndProperties() throws IOException {
@@ -330,7 +330,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute(its, "4711", actionRequest, properties);
 
     VelocityContext context = contextCapture.getValue();
     assertEquals("Subject property of context did not match", "Rosebud", context.get("subject"));
