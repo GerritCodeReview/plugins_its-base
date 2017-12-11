@@ -20,6 +20,7 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
@@ -40,12 +41,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
     expect(propertyEventType.getValue()).andReturn("change-merged").anyTimes();
     properties.add(propertyEventType);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("42", "Change merged");
+    its.addComment(serverInfo, "42", "Change merged");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(serverInfo, "42", actionRequest, properties);
   }
 
   public void testChangeMergedFull() throws IOException {
@@ -77,11 +79,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
     expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
         .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
+        serverInfo,
         "176",
         "Change 4711 merged by John Doe:\n"
             + "Test-Change-Subject\n"
@@ -90,7 +94,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(serverInfo, "176", actionRequest, properties);
   }
 
   public void testChangeAbandonedPlain() throws IOException {
@@ -102,12 +106,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
     expect(propertyEventType.getValue()).andReturn("change-abandoned").anyTimes();
     properties.add(propertyEventType);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("42", "Change abandoned");
+    its.addComment(serverInfo, "42", "Change abandoned");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(serverInfo, "42", actionRequest, properties);
   }
 
   public void testChangeAbandonedFull() throws IOException {
@@ -144,11 +149,12 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
-
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
     expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
         .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
+        serverInfo,
         "176",
         "Change 4711 abandoned by John Doe:\n"
             + "Test-Change-Subject\n"
@@ -160,7 +166,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(serverInfo, "176", actionRequest, properties);
   }
 
   public void testChangeRestoredPlain() throws IOException {
@@ -172,12 +178,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
     expect(propertyEventType.getValue()).andReturn("change-restored").anyTimes();
     properties.add(propertyEventType);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("42", "Change restored");
+    its.addComment(serverInfo, "42", "Change restored");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(serverInfo, "42", actionRequest, properties);
   }
 
   public void testChangeRestoredFull() throws IOException {
@@ -214,11 +221,12 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
-
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
     expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
         .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
+        serverInfo,
         "176",
         "Change 4711 restored by John Doe:\n"
             + "Test-Change-Subject\n"
@@ -230,7 +238,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(serverInfo, "176", actionRequest, properties);
   }
 
   public void testPatchSetCreatedPlain() throws IOException {
@@ -242,12 +250,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
     expect(propertyEventType.getValue()).andReturn("patchset-created").anyTimes();
     properties.add(propertyEventType);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
-    its.addComment("42", "Change had a related patch set uploaded");
+    its.addComment(serverInfo, "42", "Change had a related patch set uploaded");
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("42", actionRequest, properties);
+    action.execute(serverInfo, "42", actionRequest, properties);
   }
 
   public void testPatchSetCreatedFull() throws IOException {
@@ -279,11 +288,13 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
     expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
     properties.add(propertyChangeUrl);
+    ItsServerInfo serverInfo = createMock(ItsServerInfo.class);
 
     expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
         .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
+        serverInfo,
         "176",
         "Change 4711 had a related patch set uploaded by "
             + "John Doe:\n"
@@ -293,7 +304,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     Action action = injector.getInstance(AddStandardComment.class);
-    action.execute("176", actionRequest, properties);
+    action.execute(serverInfo, "176", actionRequest, properties);
   }
 
   @Override

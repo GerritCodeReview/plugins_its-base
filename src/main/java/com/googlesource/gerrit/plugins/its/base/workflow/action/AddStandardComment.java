@@ -16,8 +16,10 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
@@ -78,11 +80,16 @@ public class AddStandardComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(
+      @Nullable ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
     String comment = buildComment(properties);
     if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
+      if (server != null) {
+        its.addComment(server, issue, comment);
+      } else {
+        its.addComment(issue, comment);
+      }
     }
   }
 

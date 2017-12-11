@@ -14,10 +14,12 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+
 import java.io.IOException;
 import java.net.URL;
 
 /** A simple facade to an issue tracking system (its) */
+@SuppressWarnings("unused")
 public interface ItsFacade {
 
   public enum Check {
@@ -36,4 +38,26 @@ public interface ItsFacade {
   public boolean exists(final String issueId) throws IOException;
 
   public String createLinkForWebui(String url, String text);
+
+  default String healthCheck(ItsServerInfo server, Check check) throws IOException {
+    return healthCheck(check);
+  }
+
+  default void addRelatedLink(ItsServerInfo server, String issueId, URL relatedUrl,
+      String description) throws IOException {
+    addRelatedLink(issueId, relatedUrl, description);
+  }
+
+  default void addComment(ItsServerInfo server, String issueId, String comment) throws IOException {
+    addComment(issueId, comment);
+  }
+
+  default void performAction(ItsServerInfo server, String issueId, String actionName)
+      throws IOException {
+    performAction(issueId, actionName);
+  }
+
+  default boolean exists(ItsServerInfo server, final String issueId) throws IOException {
+    return exists(issueId);
+  }
 }

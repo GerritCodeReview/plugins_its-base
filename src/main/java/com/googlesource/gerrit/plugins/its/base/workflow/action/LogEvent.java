@@ -14,10 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
+import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.io.IOException;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +77,8 @@ public class LogEvent implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
-      throws IOException {
+  public void execute(
+      @Nullable ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties) {
     Level level = Level.fromString(actionRequest.getParameter(1));
     for (Property property : properties) {
       logProperty(level, property);
