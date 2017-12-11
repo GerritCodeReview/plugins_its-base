@@ -30,6 +30,7 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectCache;
@@ -77,28 +78,19 @@ public class ItsConfig {
   // Plugin enablement --------------------------------------------------------
 
   public boolean isEnabled(Event event) {
-    if (event instanceof PatchSetCreatedEvent) {
-      PatchSetCreatedEvent e = (PatchSetCreatedEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof CommentAddedEvent) {
-      CommentAddedEvent e = (CommentAddedEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof ChangeMergedEvent) {
-      ChangeMergedEvent e = (ChangeMergedEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof ChangeAbandonedEvent) {
-      ChangeAbandonedEvent e = (ChangeAbandonedEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof ChangeRestoredEvent) {
-      ChangeRestoredEvent e = (ChangeRestoredEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else if (event instanceof RefUpdatedEvent) {
-      RefUpdatedEvent e = (RefUpdatedEvent) event;
-      return isEnabled(e.getProjectNameKey(), e.getRefName());
-    } else {
-      log.debug("Event {} not recognised and ignored", event);
-      return false;
+    if (event instanceof RefEvent) {
+      RefEvent refEvent = (RefEvent) event;
+      if (refEvent instanceof PatchSetCreatedEvent
+          || refEvent instanceof CommentAddedEvent
+          || refEvent instanceof ChangeMergedEvent
+          || refEvent instanceof ChangeAbandonedEvent
+          || refEvent instanceof ChangeRestoredEvent
+          || refEvent instanceof RefUpdatedEvent) {
+        return isEnabled(refEvent.getProjectNameKey(), refEvent.getRefName());
+      }
     }
+    log.debug("Event {} not recognised and ignored", event);
+    return false;
   }
 
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
