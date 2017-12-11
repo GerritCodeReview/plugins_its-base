@@ -14,8 +14,10 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -81,6 +83,31 @@ public class ActionExecutor {
   public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
       execute(issue, actionRequest, properties);
+    }
+  }
+
+  @VisibleForTesting
+  void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties) {
+    try {
+      Action action = getAction(actionRequest.getName());
+      if (action == null) {
+        its.performAction(server, issue, actionRequest.getUnparsed());
+      } else {
+        action.execute(server, issue, actionRequest, properties);
+      }
+    } catch (IOException e) {
+      log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
+  public void execute(
+      ItsServerInfo server,
+      String issue,
+      Iterable<ActionRequest> actions,
+      Set<Property> properties) {
+    for (ActionRequest actionRequest : actions) {
+      execute(server, issue, actionRequest, properties);
     }
   }
 }

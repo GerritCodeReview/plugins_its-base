@@ -23,6 +23,7 @@ import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.its.ItsServerInfo;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.File;
@@ -118,6 +119,16 @@ public class AddSoyComment implements Action {
     String comment = buildComment(actionRequest, properties);
     if (!Strings.isNullOrEmpty(comment) ) {
       its.addComment(issue, comment);
+    }
+  }
+
+  @Override
+  public void execute(
+      ItsServerInfo server, String issue, ActionRequest actionRequest, Set<Property> properties)
+      throws IOException {
+    String comment = buildComment(actionRequest, properties);
+    if (!Strings.isNullOrEmpty(comment) ) {
+      its.addComment(server, issue, comment);
     }
   }
 
