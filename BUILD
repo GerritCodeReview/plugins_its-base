@@ -6,9 +6,23 @@ load(
     "PLUGIN_TEST_DEPS",
 )
 
+GERRIT_POST_214_EXCLUDE = [
+    "src/main/java/com/googlesource/gerrit214/**/*.java",
+]
+
+GERRIT_214_EXCLUDE = [
+    "src/main/java/**/ItsHookModule.java",
+    "src/main/java/**/ActionController.java",
+]
+
 gerrit_plugin(
     name = "its-base",
-    srcs = glob(["src/main/java/**/*.java"]),
+    srcs = glob(
+        ["src/main/java/**/*.java"],
+        exclude = GERRIT_POST_214_EXCLUDE,
+# When building on Gerrit 2.14, enable the 2.14-specific excludes
+#        exclude = GERRIT_214_EXCLUDE,
+    ),
     resources = glob(["src/main/resources/**/*"]),
 )
 
