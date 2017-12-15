@@ -49,11 +49,7 @@ public class ActionRequest {
    * @return The name of the requested action, if a name has been given. "" otherwise.
    */
   public String getName() {
-    String ret = "";
-    if (chopped.length > 0) {
-      ret = chopped[0];
-    }
-    return ret;
+    return getParameter(0);
   }
 
   /**
@@ -63,11 +59,7 @@ public class ActionRequest {
    * @return The name of the requested parameter, if the requested parameter exists. "" otherwise.
    */
   public String getParameter(int i) {
-    String ret = "";
-    if (chopped.length > i) {
-      ret = chopped[i];
-    }
-    return ret;
+    return chopped.length > i ? chopped[i] : "";
   }
 
   /**
