@@ -41,16 +41,6 @@ public class AddStandardComment implements Action {
     this.its = its;
   }
 
-  private String formatPerson(String prefix, Map<String, String> map) {
-    String ret = Strings.nullToEmpty(map.get(prefix + "-name"));
-    ret = Strings.nullToEmpty(map.get(prefix + "Name"));
-    if (ret.isEmpty()) {
-      ret = Strings.nullToEmpty(map.get(prefix + "-username"));
-      ret = Strings.nullToEmpty(map.get(prefix + "Username"));
-    }
-    return ret;
-  }
-
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
     String changeNumber = getValueFromMap(map, "", "change-number", "changeNumber");
