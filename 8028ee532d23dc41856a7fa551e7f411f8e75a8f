@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96337e27_de39878f",
+        "filename": "BUILD",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-15T21:18:48Z",
+      "side": 1,
+      "message": "Should be SRCS",
+      "range": {
+        "startLine": 10,
+        "startChar": 5,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "8028ee532d23dc41856a7fa551e7f411f8e75a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc480803_adc3a16f",
+        "filename": "gerrit_legacy_compat.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-15T21:18:48Z",
+      "side": 1,
+      "message": "This should rather be \u003c \"2.16\"",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 26
+      },
+      "revId": "8028ee532d23dc41856a7fa551e7f411f8e75a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
