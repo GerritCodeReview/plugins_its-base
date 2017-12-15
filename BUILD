@@ -5,10 +5,18 @@ load(
     "PLUGIN_DEPS",
     "PLUGIN_TEST_DEPS",
 )
+load(
+    "//plugins/its-base:gerrit_legacy_compat.bzl",
+    "SRCS_INCLUDE",
+    "SRCS_EXCLUDE",
+)
 
 gerrit_plugin(
     name = "its-base",
-    srcs = glob(["src/main/java/**/*.java"]),
+    srcs = glob(
+        SRCS_INCLUDE,
+        exclude = SRCS_EXCLUDE,
+    ),
     resources = glob(["src/main/resources/**/*"]),
 )
 
