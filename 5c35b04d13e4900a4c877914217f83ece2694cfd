@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "948cb13d_cb2c9198",
+        "filename": "BUILD",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-12-15T12:00:37Z",
+      "side": 1,
+      "message": "This is not an ideal solution if you have to make local changes to the build config in order for it to work.",
+      "revId": "5c35b04d13e4900a4c877914217f83ece2694cfd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
