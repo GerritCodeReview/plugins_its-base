@@ -31,10 +31,43 @@ public class LogEvent implements Action {
   private static final Logger log = LoggerFactory.getLogger(LogEvent.class);
 
   private enum Level {
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG
+    ERROR {
+      @Override
+      void logProperty(Property property) {
+        log.error(property.toString());
+      }
+    },
+    WARN {
+      @Override
+      void logProperty(Property property) {
+        log.warn(property.toString());
+      }
+    },
+    INFO {
+      @Override
+      void logProperty(Property property) {
+        log.info(property.toString());
+      }
+    },
+    DEBUG {
+      @Override
+      void logProperty(Property property) {
+        log.debug(property.toString());
+      }
+    };
+
+    static Level fromString(String s) {
+      if (s != null) {
+        for (Level level : Level.values()) {
+          if (s.toUpperCase().equals(level.toString())) {
+            return level;
+          }
+        }
+      }
+      return INFO;
+    }
+
+    abstract void logProperty(Property property);
   }
 
   public interface Factory {
@@ -44,46 +77,12 @@ public class LogEvent implements Action {
   @Inject
   public LogEvent() {}
 
-  private void logProperty(Level level, Property property) {
-    String message = property.toString();
-    switch (level) {
-      case ERROR:
-        log.error(message);
-        break;
-      case WARN:
-        log.warn(message);
-        break;
-      case INFO:
-        log.info(message);
-        break;
-      case DEBUG:
-        log.debug(message);
-        break;
-      default:
-        log.error("Undefined log level.");
-    }
-  }
-
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
-    String levelParameter = actionRequest.getParameter(1);
-    if (levelParameter != null) {
-      levelParameter = levelParameter.toLowerCase();
-    }
-    Level level = Level.INFO;
-    if ("error".equals(levelParameter)) {
-      level = Level.ERROR;
-    } else if ("warn".equals(levelParameter)) {
-      level = Level.WARN;
-    } else if ("info".equals(levelParameter)) {
-      level = Level.INFO;
-    } else if ("debug".equals(levelParameter)) {
-      level = Level.DEBUG;
-    }
-
+    Level level = Level.fromString(actionRequest.getParameter(1));
     for (Property property : properties) {
-      logProperty(level, property);
+      level.logProperty(property);
     }
   }
 }
