@@ -30,6 +30,16 @@ import org.apache.log4j.Level;
 public class LogEventTest extends LoggingMockingTestCase {
   private Injector injector;
 
+  public void testNull() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getParameter(1)).andReturn(null);
+
+    replayMocks();
+
+    LogEvent logEvent = createLogEvent();
+    logEvent.execute("4711", actionRequest, new HashSet<>());
+  }
+
   public void testEmpty() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("");

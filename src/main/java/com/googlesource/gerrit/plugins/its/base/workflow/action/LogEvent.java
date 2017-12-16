@@ -34,7 +34,18 @@ public class LogEvent implements Action {
     ERROR,
     WARN,
     INFO,
-    DEBUG
+    DEBUG;
+
+    static Level fromString(String s) {
+      if (s != null) {
+        for (Level level : Level.values()) {
+          if (s.toUpperCase().equals(level.toString())) {
+            return level;
+          }
+        }
+      }
+      return INFO;
+    }
   }
 
   public interface Factory {
@@ -67,21 +78,7 @@ public class LogEvent implements Action {
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
-    String levelParameter = actionRequest.getParameter(1);
-    if (levelParameter != null) {
-      levelParameter = levelParameter.toLowerCase();
-    }
-    Level level = Level.INFO;
-    if ("error".equals(levelParameter)) {
-      level = Level.ERROR;
-    } else if ("warn".equals(levelParameter)) {
-      level = Level.WARN;
-    } else if ("info".equals(levelParameter)) {
-      level = Level.INFO;
-    } else if ("debug".equals(levelParameter)) {
-      level = Level.DEBUG;
-    }
-
+    Level level = Level.fromString(actionRequest.getParameter(1));
     for (Property property : properties) {
       logProperty(level, property);
     }
