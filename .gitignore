@@ -4,3 +4,4 @@
 /.settings
 /bazel-*
 .DS_Store
+/eclipse-out
