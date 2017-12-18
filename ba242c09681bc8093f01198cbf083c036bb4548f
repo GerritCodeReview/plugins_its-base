@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1faa194_5cc77416",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServerInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T23:14:56Z",
+      "side": 1,
+      "message": "The configuration of the ITS-* server and its credentials shouldn\u0027t be hardcoded in its-base. I believe this should only be an interface at this level and delegate the its-* subclasses for its implementation.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed406c60_77755733",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/NoopItsFacade.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T23:14:56Z",
+      "side": 1,
+      "message": "This is really bad: we are breaking *all* backward compatibility with existing implementations of ItsFacade.\n\nWhy don\u0027t you create a different interface?",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
