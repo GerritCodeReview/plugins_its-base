@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c7d9d1f_ee46dee3",
+        "filename": "BUILD",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T21:56:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96337e27_de39878f",
+      "range": {
+        "startLine": 10,
+        "startChar": 5,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "8028ee532d23dc41856a7fa551e7f411f8e75a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc480803_adc3a16f",
         "filename": "gerrit_legacy_compat.bzl",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "8028ee532d23dc41856a7fa551e7f411f8e75a8f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28eedfb0_bd2f6b1e",
+        "filename": "gerrit_legacy_compat.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T21:56:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc480803_adc3a16f",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 26
+      },
+      "revId": "8028ee532d23dc41856a7fa551e7f411f8e75a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
