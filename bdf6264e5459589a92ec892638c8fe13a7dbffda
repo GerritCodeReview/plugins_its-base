@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82f85b32_be822bbd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T23:22:08Z",
+      "side": 1,
+      "message": "I believe we don\u0027t need this hunk anymore: the only caller to this method uses \u0027null\u0027 as default value ;-)",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 44
+      },
+      "revId": "bdf6264e5459589a92ec892638c8fe13a7dbffda",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26f702f0_895ed01c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2017-12-18T23:22:08Z",
+      "side": 1,
+      "message": "Have you checked the Google-Java-Format on this two lines?",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 110
+      },
+      "revId": "bdf6264e5459589a92ec892638c8fe13a7dbffda",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
