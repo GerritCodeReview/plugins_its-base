@@ -22,6 +22,30 @@
       "revId": "581cd4cb067f164213f5d887780418e4f0a4a1ad",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f22c10d1_6eb927fc",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-12-18T23:49:38Z",
+      "side": 1,
+      "message": "You have to use https://gerrit-review.googlesource.com/#/c/gerrit/+/138774/",
+      "parentUuid": "a16486ab_583ca80e",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 5
+      },
+      "revId": "581cd4cb067f164213f5d887780418e4f0a4a1ad",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
