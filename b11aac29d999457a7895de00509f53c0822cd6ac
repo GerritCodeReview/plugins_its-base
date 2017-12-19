@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "22cc6ffe_5e8473b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-12-19T02:26:06Z",
+      "side": 1,
+      "message": "The main reason was to simplify the event handling as the title states it, which is done in its-config line 79-90. The rationale here is that the plugin is interested in handling a subset of events which are all RefEvents.",
+      "parentUuid": "23a5cc43_915eacf6",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "b11aac29d999457a7895de00509f53c0822cd6ac",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15cf57a7_ae33da6a",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-18T23:08:42Z",
       "side": 1,
       "message": "I believe it was better to delegate all the decision points to the itsConfig.isEnabled() instead of having a piece of it here and there.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 5
+      },
+      "revId": "b11aac29d999457a7895de00509f53c0822cd6ac",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3d94965_e9346dcb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-12-19T02:26:06Z",
+      "side": 1,
+      "message": "Probably you\u0027re right. Done.",
+      "parentUuid": "15cf57a7_ae33da6a",
       "range": {
         "startLine": 52,
         "startChar": 0,
