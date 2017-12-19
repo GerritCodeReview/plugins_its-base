@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c1a5da20_83cc76be",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-12-19T01:47:04Z",
+      "side": 1,
+      "message": "I suppose is a question of preference, but I like the fact there\u0027s no unneeded default case (which should not occur given next method avoids this possibility) and that there is no conditionals involved.",
+      "parentUuid": "70d8bbef_b8facd10",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "cca5addf9702c9ee11a9ac9f584300dec2c3277c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d8c6f65_65ee9991",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEvent.java",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2017-12-18T23:03:24Z",
       "side": 1,
       "message": "I do not see any extra null pointers checks in the code",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 58
+      },
+      "revId": "cca5addf9702c9ee11a9ac9f584300dec2c3277c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bb1e026_26ad8798",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEventTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2017-12-19T01:47:04Z",
+      "side": 1,
+      "message": "The idea here was to test that we handle the null when logging (line 40)",
+      "parentUuid": "d6eb9d5e_cec72283",
       "range": {
         "startLine": 35,
         "startChar": 4,
