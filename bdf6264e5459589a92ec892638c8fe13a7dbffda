@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "106bce97_04db40b2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1005133
+      },
+      "writtenOn": "2017-12-21T14:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82f85b32_be822bbd",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 44
+      },
+      "revId": "bdf6264e5459589a92ec892638c8fe13a7dbffda",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26f702f0_895ed01c",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "bdf6264e5459589a92ec892638c8fe13a7dbffda",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb5ac1b6_9f05deb8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1005133
+      },
+      "writtenOn": "2017-12-21T14:16:50Z",
+      "side": 1,
+      "message": "Done, was not aware of this.",
+      "parentUuid": "26f702f0_895ed01c",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 110
+      },
+      "revId": "bdf6264e5459589a92ec892638c8fe13a7dbffda",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
