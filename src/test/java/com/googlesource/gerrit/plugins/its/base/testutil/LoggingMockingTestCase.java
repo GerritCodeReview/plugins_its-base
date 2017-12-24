@@ -22,8 +22,8 @@ import com.google.gerrit.reviewdb.client.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 import java.sql.Timestamp;
 import java.util.Iterator;
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
 import org.junit.After;
 
 public abstract class LoggingMockingTestCase extends MockingTestCase {
@@ -33,13 +33,13 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
   protected final Change.Id testChangeId = new Change.Id(1);
   protected final Account.Id testAccountId = new Account.Id(1);
 
-  private java.util.Collection<LoggingEvent> loggedEvents;
+  private java.util.Collection<LogEvent> loggedEvents;
 
   protected final void assertLogMessageContains(String needle, Level level) {
-    LoggingEvent hit = null;
-    Iterator<LoggingEvent> iter = loggedEvents.iterator();
+    LogEvent hit = null;
+    Iterator<LogEvent> iter = loggedEvents.iterator();
     while (hit == null && iter.hasNext()) {
-      LoggingEvent event = iter.next();
+      LogEvent event = iter.next();
       if (event.getRenderedMessage().contains(needle)) {
         if (level == null || level.equals(event.getLevel())) {
           hit = event;
@@ -56,10 +56,10 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
   }
 
   protected final void assertLogThrowableMessageContains(String needle) {
-    LoggingEvent hit = null;
-    Iterator<LoggingEvent> iter = loggedEvents.iterator();
+    LogEvent hit = null;
+    Iterator<LogEvent> iter = loggedEvents.iterator();
     while (hit == null && iter.hasNext()) {
-      LoggingEvent event = iter.next();
+      LogEvent event = iter.next();
 
       if (event.getThrowableInformation().getThrowable().toString().contains(needle)) {
         hit = event;
@@ -76,7 +76,7 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
   @After
   public final void assertNoUnassertedLogEvents() {
     if (loggedEvents.size() > 0) {
-      LoggingEvent event = loggedEvents.iterator().next();
+      LogEvent event = loggedEvents.iterator().next();
       String msg = "Found untreated logged events. First one is:\n";
       msg += event.getRenderedMessage();
       if (event.getThrowableInformation() != null) {
