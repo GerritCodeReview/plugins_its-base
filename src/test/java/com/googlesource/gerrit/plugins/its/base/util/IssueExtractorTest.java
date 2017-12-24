@@ -32,11 +32,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PatchSet.class, RevId.class})
+@PowerMockIgnore("javax.management.*")
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private ItsConfig itsConfig;

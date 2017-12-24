@@ -15,17 +15,20 @@
 package com.googlesource.gerrit.plugins.its.base.testutil.log;
 
 import java.util.Collection;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 public class LogUtil {
   public static CollectionAppender logToCollection(
-      String logName, Collection<LoggingEvent> collection) {
-    Logger log = LogManager.getLogger(logName);
+      String logName, Collection<LogEvent> collection) {
+    LoggerConfig log = new LoggerConfig(logName, Level.DEBUG, false);
     CollectionAppender listAppender = new CollectionAppender(collection);
-    log.removeAllAppenders();
-    log.addAppender(listAppender);
+    for (Appender appender : log.getAppenders().values()) {
+      log.removeAppender(appender.toString());
+    }
+    log.addAppender(listAppender, null, null);
     return listAppender;
   }
 }

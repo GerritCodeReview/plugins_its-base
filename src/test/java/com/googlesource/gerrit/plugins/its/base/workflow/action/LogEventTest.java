@@ -25,7 +25,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 public class LogEventTest extends LoggingMockingTestCase {
   private Injector injector;
