@@ -115,17 +115,18 @@ public class AddSoyComment implements Action {
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
-    SoyFileSet.Builder builder = SoyFileSet.builder();
-    String template = null;
-    String templateName = actionRequest.getParameter(1);
-    if (templateName.isEmpty()) {
-      log.error("No template name given in {}", actionRequest);
-    } else {
-      template = templateName;
-    }
-    if (!Strings.isNullOrEmpty(template)) {
-      String comment = soyTextTemplate(builder, template, properties);
+    String comment = buildComment(actionRequest, properties);
+    if (!Strings.isNullOrEmpty(comment) ) {
       its.addComment(issue, comment);
     }
+  }
+
+  private String buildComment(ActionRequest actionRequest, Set<Property> properties) {
+    String template = actionRequest.getParameter(1);
+    if (!template.isEmpty()) {
+      return soyTextTemplate(SoyFileSet.builder(), template, properties);
+    }
+    log.error("No template name given in {}", actionRequest);
+    return "";
   }
 }

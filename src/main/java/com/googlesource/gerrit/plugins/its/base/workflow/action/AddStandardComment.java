@@ -77,26 +77,16 @@ public class AddStandardComment implements Action {
     return "";
   }
 
-  private String getCommentChangeAbandoned(Map<String, String> map) {
-    return getCommentChangeEvent("abandoned", "abandoner", map);
-  }
-
-  private String getCommentChangeMerged(Map<String, String> map) {
-    return getCommentChangeEvent("merged", "submitter", map);
-  }
-
-  private String getCommentChangeRestored(Map<String, String> map) {
-    return getCommentChangeEvent("restored", "restorer", map);
-  }
-
-  private String getCommentPatchSetCreated(Map<String, String> map) {
-    return getCommentChangeEvent("had a related patch set uploaded", "uploader", map);
-  }
-
   @Override
   public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException {
-    String comment = "";
+    String comment = buildComment(properties);
+    if (!Strings.isNullOrEmpty(comment)) {
+      its.addComment(issue, comment);
+    }
+  }
+
+  private String buildComment(Set<Property> properties) {
     Map<String, String> map = Maps.newHashMap();
     for (Property property : properties) {
       String current = property.getValue();
@@ -109,18 +99,17 @@ public class AddStandardComment implements Action {
         map.put(key, old + current);
       }
     }
-    String eventType = map.get("event-type");
-    if ("change-abandoned".equals(eventType)) {
-      comment = getCommentChangeAbandoned(map);
-    } else if ("change-merged".equals(eventType)) {
-      comment = getCommentChangeMerged(map);
-    } else if ("change-restored".equals(eventType)) {
-      comment = getCommentChangeRestored(map);
-    } else if ("patchset-created".equals(eventType)) {
-      comment = getCommentPatchSetCreated(map);
-    }
-    if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
+    switch (map.get("event-type")) {
+      case "change-abandoned":
+        return getCommentChangeEvent("abandoned", "abandoner", map);
+      case "change-merged":
+        return getCommentChangeEvent("merged", "submitter", map);
+      case "change-restored":
+        return getCommentChangeEvent("restored", "restorer", map);
+      case "patchset-created":
+        return getCommentChangeEvent("had a related patch set uploaded", "uploader", map);
+      default:
+        return "";
     }
   }
 }
