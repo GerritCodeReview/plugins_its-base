@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09ff07b8_0ce9fe5a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServerInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-01-04T16:07:25Z",
+      "side": 1,
+      "message": "To clarify the purpose of this class:\n\nAn object of class ItsServerInfo will not contain any hardcoded values for any ITS-* server. The configuration values will be set by the ITS-child plugin and the object with set values will be tunneled back to the its-base. This object is not used anywhere in the its-base later on and is just used for passing the ITS-* server related information back to ITS-child plugins whenever an action is performed. Please suggest if you think this is not the correct way to pass information. \n\nThe objective of backporting and passing this information to the child plugins from its-base is to be able to access the gerrit project level config information in child plugins using the projectName passed by the method below and to use the latest server information while performing any action in child plugins:\n\npublic ItsServerInfo getServer(String projectName)\n\ndeclared in the interface `ItsServer`.",
+      "parentUuid": "b1faa194_5cc77416",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed406c60_77755733",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/NoopItsFacade.java",
         "patchSetId": 2
