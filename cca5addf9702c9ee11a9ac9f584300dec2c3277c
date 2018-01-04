@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "68ad6cef_48f7a56f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-01-04T15:26:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a5da20_83cc76be",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "cca5addf9702c9ee11a9ac9f584300dec2c3277c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d8c6f65_65ee9991",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEvent.java",
         "patchSetId": 2
@@ -69,6 +93,30 @@
       "revId": "cca5addf9702c9ee11a9ac9f584300dec2c3277c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6580d3c_8fb024ca",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/LogEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-01-04T15:26:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9d8c6f65_65ee9991",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 5
+      },
+      "revId": "cca5addf9702c9ee11a9ac9f584300dec2c3277c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
