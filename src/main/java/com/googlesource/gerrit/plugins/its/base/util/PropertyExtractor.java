@@ -173,6 +173,7 @@ public class PropertyExtractor {
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyFactory.create("event", event.getClass().getName()));
+    common.add(propertyFactory.create("project", event.getProjectNameKey().get()));
 
     if (event instanceof ChangeAbandonedEvent) {
       associations = extractFrom((ChangeAbandonedEvent) event, common);
