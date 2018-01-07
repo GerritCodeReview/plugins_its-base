@@ -22,6 +22,7 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
@@ -59,6 +60,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
                 "com.googlesource.gerrit.plugins."
                     + "its.base.util.PropertyExtractorTest$DummyEvent"))
         .andReturn(property1);
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     replayMocks();
 
@@ -93,12 +96,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     Property propertyReason = createMock(Property.class);
     expect(propertyFactory.create("reason", "testReason")).andReturn(propertyReason);
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -128,12 +136,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -166,12 +179,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     Property propertyReason = createMock(Property.class);
     expect(propertyFactory.create("reason", "testReason")).andReturn(propertyReason);
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -205,12 +223,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     Property propertyComment = createMock(Property.class);
     expect(propertyFactory.create("comment", "testComment")).andReturn(propertyComment);
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -255,12 +278,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     Property propertyComment = createMock(Property.class);
     expect(propertyFactory.create("comment", "testComment")).andReturn(propertyComment);
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -292,12 +320,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
+    event.project = new Project.NameKey("testProject");
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
     patchSetAttribute.revision = "testRevision";
     patchSetAttribute.number = 3;
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertyChange);
     common.add(propertySubmitter);
     common.add(propertyPatchSet);
@@ -320,10 +353,14 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     expect(propertyAttributeExtractor.extractFrom(refUpdateAttribute))
         .andReturn(Sets.newHashSet(propertyRefUpdated));
 
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject).anyTimes();
+
     refUpdateAttribute.project = "testProject";
     refUpdateAttribute.newRev = "testRevision";
 
     Set<Property> common = Sets.newHashSet();
+    common.add(propertyProject);
     common.add(propertySubmitter);
     common.add(propertyRefUpdated);
 
@@ -434,7 +471,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     @Override
     public NameKey getProjectNameKey() {
-      return null;
+      return new Project.NameKey("testProject");
     }
   }
 }

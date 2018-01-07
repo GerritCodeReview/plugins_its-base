@@ -54,7 +54,6 @@ public class PropertyAttributeExtractor {
 
   public Set<Property> extractFrom(ChangeAttribute changeAttribute) {
     Set<Property> properties = Sets.newHashSet();
-    properties.add(propertyFactory.create("project", changeAttribute.project));
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
@@ -123,7 +122,6 @@ public class PropertyAttributeExtractor {
 
     // New style configs for vm and soy
     properties.add(propertyFactory.create("revisionOld", refUpdateAttribute.oldRev));
-    properties.add(propertyFactory.create("project", refUpdateAttribute.project));
     properties.add(propertyFactory.create("ref", refUpdateAttribute.refName));
     return properties;
   }
