@@ -98,17 +98,8 @@ public class ItsConfig {
           projectNK.get());
       return false;
     }
-
-    if (isEnforcedByAnyParentProject(refName, projectState)) {
-      return true;
-    }
-
-    return !"false"
-            .equals(
-                pluginCfgFactory
-                    .getFromProjectConfigWithInheritance(projectState, pluginName)
-                    .getString("enabled", "false"))
-        && isEnabledForBranch(projectState, refName);
+    return isEnforcedByAnyParentProject(refName, projectState)
+        || (isEnabledForProject(projectState) && isEnabledForBranch(projectState, refName));
   }
 
   private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {
@@ -120,6 +111,14 @@ public class ItsConfig {
       }
     }
     return false;
+  }
+
+  private boolean isEnabledForProject(ProjectState projectState) {
+    return !"false"
+        .equals(
+            pluginCfgFactory
+                .getFromProjectConfigWithInheritance(projectState, pluginName)
+                .getString("enabled", "false"));
   }
 
   private boolean isEnabledForBranch(ProjectState project, String refName) {
