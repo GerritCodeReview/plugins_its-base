@@ -46,6 +46,30 @@
       "revId": "83888bbfd19a2df90fe36fb77d8997837e846cef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fc60741_23fa9e31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-11T09:16:39Z",
+      "side": 1,
+      "message": "Cool, why don\u0027t you just write this condition in the commit message? ;-)",
+      "parentUuid": "7def8910_5c358629",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 8,
+        "endChar": 0
+      },
+      "revId": "83888bbfd19a2df90fe36fb77d8997837e846cef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
