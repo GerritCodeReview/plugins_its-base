@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "56a14fac_93eaa4ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-11T09:27:30Z",
+      "side": 1,
+      "message": "Thanks for the explanation, makes sense.",
+      "parentUuid": "22cc6ffe_5e8473b1",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "b11aac29d999457a7895de00509f53c0822cd6ac",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15cf57a7_ae33da6a",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
         "patchSetId": 2
