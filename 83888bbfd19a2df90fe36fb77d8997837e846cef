@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5a67295_10aafd48",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-11T08:17:08Z",
+      "side": 1,
+      "message": "The diff already says so: however, why are you adding the null check and in which conditions should the submitter be null?",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 8,
+        "endChar": 0
+      },
+      "revId": "83888bbfd19a2df90fe36fb77d8997837e846cef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
