@@ -1,5 +1,6 @@
 package com.googlesource.gerrit.plugins.its.base.util;
 
+import static java.util.Arrays.copyOfRange;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,12 +13,12 @@ import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
+
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,13 +157,11 @@ public class IssueExtractor {
       if (footerStart == -1) {
         // No footer could be found. So all lines after the first one (that's
         // the subject) is the body.
-        //body = String[] templateParameters =
-        //  Arrays.copyOfRange(allParameters, 1, allParameters.length);
         if (lines.length > 0) {
-          body = StringUtils.join(lines, "\n", 1, lines.length);
+          body = String.join("\n", copyOfRange(lines, 1, lines.length));
         }
       } else {
-        body = StringUtils.join(lines, "\n", 1, footerStart - 1);
+        body = String.join("\n", copyOfRange(lines, 1, footerStart - 1));
 
         StringBuilder footerBuilder = new StringBuilder();
         for (int lineIdx = footerStart; lineIdx < footerEnd; lineIdx++) {
@@ -182,7 +181,7 @@ public class IssueExtractor {
           }
           footerBuilder.append(line);
         }
-        footer = StringUtils.join(lines, "\n", footerStart, footerEnd);
+        footer = String.join("\n", copyOfRange(lines, footerStart, footerEnd));
       }
       if (body != null) {
         addIssuesOccurrence(body, "body", ret);
