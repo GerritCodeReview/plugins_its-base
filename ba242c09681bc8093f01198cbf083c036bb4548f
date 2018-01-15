@@ -117,6 +117,30 @@
       "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12f48fb1_066a92bf",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/NoopItsFacade.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-01-15T00:53:27Z",
+      "side": 1,
+      "message": "For the two interfaces approach please see patch set 16 (15 had a wrong commit message).",
+      "parentUuid": "bc17f784_f5ae824f",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
