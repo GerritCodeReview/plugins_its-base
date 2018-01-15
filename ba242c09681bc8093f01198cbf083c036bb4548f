@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e7eecbdd_f14c3507",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServerInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-01-15T00:51:07Z",
+      "side": 1,
+      "message": "However, if we only have a more generic information here (like the name of the server) we can leave the implementing plugin to choose the type of information the server should have.",
+      "parentUuid": "09ff07b8_0ce9fe5a",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed406c60_77755733",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/NoopItsFacade.java",
         "patchSetId": 2
@@ -69,6 +93,30 @@
       "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc17f784_f5ae824f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/NoopItsFacade.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-01-15T00:51:07Z",
+      "side": 1,
+      "message": "That could be an option. Then, is up to the child plugin to choose which interface to implement. The main issue with this approach is that even if the plugin chooses one of the interfaces, it still have to bind both in the module (one of them, the non implemented, as a NoOp). This limitation is explained by the fact we cannot duplicate every other class to deal with the one-server vs the multi-server use cases. Patch set 15 shows how this option could look like.\n\nAnother option could be to extend the current interface with default methods that include the new dependency; in that case, plugins that want to support a multi-server setting will override the default methods with their own implementations while plugins that do not want multi-server can continue working without any change needed. This way, we kept the existing interface and the child plugins that do not want to implement multi-server continue to work without (almost) any changes (see last paragraph for details). Patch set 14 shows how this option could look like.\n\nIn both cases, the implementing plugin needs to bind an implementation of ItsServer, either the NoOp one (for the case of only one server) or the multi-server one if that\u0027s the requirement.\n\nAs an example, its-jira muti-server has been implemented using both approach and, besides the aforementioned differences, both work OK.",
+      "parentUuid": "ed406c60_77755733",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "ba242c09681bc8093f01198cbf083c036bb4548f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
