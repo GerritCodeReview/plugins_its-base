@@ -30,7 +30,9 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.PrivateStateChangedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
@@ -94,6 +96,12 @@ public class ItsConfig {
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else if (event instanceof RefUpdatedEvent) {
       RefUpdatedEvent e = (RefUpdatedEvent) event;
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
+    } else if (event instanceof PrivateStateChangedEvent) {
+      PrivateStateChangedEvent e = (PrivateStateChangedEvent) event;
+      return isEnabled(e.getProjectNameKey(), e.getRefName());
+    } else if (event instanceof WorkInProgressStateChangedEvent) {
+      WorkInProgressStateChangedEvent e = (WorkInProgressStateChangedEvent) event;
       return isEnabled(e.getProjectNameKey(), e.getRefName());
     } else {
       log.debug("Event {} not recognised and ignored", event);

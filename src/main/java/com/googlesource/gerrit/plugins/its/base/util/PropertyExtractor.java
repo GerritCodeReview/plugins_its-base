@@ -30,7 +30,9 @@ import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.PatchSetEvent;
+import com.google.gerrit.server.events.PrivateStateChangedEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.util.Collections;
@@ -99,6 +101,18 @@ public class PropertyExtractor {
     common.addAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
     common.add(propertyFactory.create("reason", event.reason));
     return extractFrom((PatchSetEvent) event, common);
+  }
+
+  private Map<String,Set<String>> extractFrom(PrivateStateChangedEvent event,
+      Set<Property> common) {
+    common.addAll(propertyAttributeExtractor.extractFrom(event.changer.get(), "changer"));
+    return extractFrom((ChangeEvent) event, common);
+  }
+
+  private Map<String,Set<String>> extractFrom(WorkInProgressStateChangedEvent event,
+      Set<Property> common) {
+    common.addAll(propertyAttributeExtractor.extractFrom(event.changer.get(), "changer"));
+    return extractFrom((ChangeEvent) event, common);
   }
 
   private Map<String, Set<String>> extractFrom(RefUpdatedEvent event, Set<Property> common) {
@@ -188,6 +202,10 @@ public class PropertyExtractor {
       associations = extractFrom((PatchSetCreatedEvent) event, common);
     } else if (event instanceof RefUpdatedEvent) {
       associations = extractFrom((RefUpdatedEvent) event, common);
+    } else if (event instanceof PrivateStateChangedEvent) {
+      associations = extractFrom((PrivateStateChangedEvent) event, common);
+    } else if (event instanceof WorkInProgressStateChangedEvent) {
+      associations = extractFrom((WorkInProgressStateChangedEvent) event, common);
     }
 
     if (associations != null) {
