@@ -22,9 +22,6 @@ import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,8 +43,14 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   private boolean cleanupSitePath;
 
   private enum RuleBaseKind {
-    GLOBAL,
-    ITS,
+    GLOBAL("actions"),
+    ITS("actions-ItsTestName");
+
+    String fileName;
+
+    RuleBaseKind(String fileName) {
+      this.fileName = fileName + ".config";
+    }
   }
 
   public void testWarnNonExistingRuleBase() {
@@ -291,32 +294,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   private void injectRuleBase(String rules, RuleBaseKind ruleBaseKind) throws IOException {
-    String baseName = "";
-    switch (ruleBaseKind) {
-      case GLOBAL:
-        baseName = "actions";
-        break;
-      case ITS:
-        baseName = "actions-ItsTestName";
-        break;
-      default:
-        fail("Unknown ruleBaseKind");
-    }
-    File ruleBaseFile =
-        new File(
-            sitePath.toFile(),
-            "etc" + File.separatorChar + "its" + File.separator + baseName + ".config");
-
-    File ruleBaseParentFile = ruleBaseFile.getParentFile();
-    if (!ruleBaseParentFile.exists()) {
-      assertTrue(
-          "Failed to create parent (" + ruleBaseParentFile + ") for " + "rule base",
-          ruleBaseParentFile.mkdirs());
-    }
-    try (FileWriter unbufferedWriter = new FileWriter(ruleBaseFile);
-        BufferedWriter writer = new BufferedWriter(unbufferedWriter)) {
-      writer.write(rules);
-    }
+    Path ruleBaseFile = sitePath.resolve("etc").resolve("its").resolve(ruleBaseKind.fileName);
+    Files.createDirectories(ruleBaseFile.getParent());
+    Files.write(ruleBaseFile, rules.getBytes());
   }
 
   @Override
