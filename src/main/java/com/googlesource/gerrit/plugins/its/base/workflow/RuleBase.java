@@ -148,16 +148,12 @@ public class RuleBase {
     if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
       try {
         log.warn(
-            "Neither global rule file "
-                + globalRuleFile.getCanonicalPath()
-                + " nor Its specific rule file"
-                + itsSpecificRuleFile.getCanonicalPath()
-                + " exist. Please configure "
-                + "rules.");
+            "Neither global rule file {} nor Its specific rule file {} exist. Please configure rules.",
+            globalRuleFile.getCanonicalPath(),
+            itsSpecificRuleFile.getCanonicalPath());
       } catch (IOException e) {
         log.warn(
-            "Neither global rule file nor Its specific rule files exist. "
-                + "Please configure rules.");
+            "Neither global rule file nor Its specific rule files exist. Please configure rules.");
       }
     }
   }
