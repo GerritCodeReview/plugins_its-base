@@ -16,7 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.SitePath;
+import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import java.io.File;
 import java.io.IOException;
@@ -32,12 +32,8 @@ import org.slf4j.LoggerFactory;
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
-  /** File beginning (relative to site) to load rules from */
-  private static final String ITS_CONFIG_FILE_START =
-      "etc" + File.separatorChar + "its" + File.separator + "actions";
-
-  /** File end to load rules from */
-  private static final String ITS_CONFIG_FILE_END = ".config";
+  /** Rules configuration filename pattern */
+  private static final String CONFIG_FILE_NAME = "actions%s.config";
 
   /** The section for rules within rulebases */
   private static final String RULE_SECTION = "rule";
@@ -45,7 +41,7 @@ public class RuleBase {
   /** The key for actions within rulebases */
   private static final String ACTION_KEY = "action";
 
-  private final Path sitePath;
+  private final Path itsPath;
   private final Rule.Factory ruleFactory;
   private final Condition.Factory conditionFactory;
   private final ActionRequest.Factory actionRequestFactory;
@@ -59,12 +55,12 @@ public class RuleBase {
 
   @Inject
   public RuleBase(
-      @SitePath Path sitePath,
+      SitePaths sitePaths,
       Rule.Factory ruleFactory,
       Condition.Factory conditionFactory,
       ActionRequest.Factory actionRequestFactory,
       @PluginName String pluginName) {
-    this.sitePath = sitePath;
+    this.itsPath = sitePaths.etc_dir.normalize().resolve("its");
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;
@@ -124,10 +120,8 @@ public class RuleBase {
     // "actions.config" (with trailing "s", we (for now) load files from both
     // locations, but consider "actions.config" (with trailing "s" the
     // canonical place.
-    File faultyNameRuleFile =
-        new File(
-            sitePath.toFile(),
-            "etc" + File.separatorChar + "its" + File.separator + "action.config");
+    File faultyNameRuleFile = itsPath.resolve("action.config").toFile();
+
     if (faultyNameRuleFile.exists()) {
       log.warn(
           "Loading rules from deprecated 'etc/its/action.config' (No "
@@ -137,28 +131,19 @@ public class RuleBase {
     }
 
     // Add global rules
-    File globalRuleFile = new File(sitePath.toFile(), ITS_CONFIG_FILE_START + ITS_CONFIG_FILE_END);
+    File globalRuleFile = itsPath.resolve(String.format(CONFIG_FILE_NAME, "")).toFile();
     addRulesFromFile(globalRuleFile);
 
     // Add its-specific rules
     File itsSpecificRuleFile =
-        new File(sitePath.toFile(), ITS_CONFIG_FILE_START + "-" + pluginName + ITS_CONFIG_FILE_END);
+        itsPath.resolve(String.format(CONFIG_FILE_NAME, "-" + pluginName)).toFile();
     addRulesFromFile(itsSpecificRuleFile);
 
     if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
-      try {
-        log.warn(
-            "Neither global rule file "
-                + globalRuleFile.getCanonicalPath()
-                + " nor Its specific rule file"
-                + itsSpecificRuleFile.getCanonicalPath()
-                + " exist. Please configure "
-                + "rules.");
-      } catch (IOException e) {
-        log.warn(
-            "Neither global rule file nor Its specific rule files exist. "
-                + "Please configure rules.");
-      }
+      log.warn(
+          "Neither global rule file {} nor Its specific rule file {} exist. Please configure rules.",
+          globalRuleFile,
+          itsSpecificRuleFile);
     }
   }
 
