@@ -32,12 +32,8 @@ import org.slf4j.LoggerFactory;
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
-  /** File beginning (relative to site) to load rules from */
-  private static final String ITS_CONFIG_FILE_START =
-      "etc" + File.separatorChar + "its" + File.separator + "actions";
-
-  /** File end to load rules from */
-  private static final String ITS_CONFIG_FILE_END = ".config";
+  /** Rules configuration filename pattern */
+  private static final String CONFIG_FILE_NAME = "actions%s.config";
 
   /** The section for rules within rulebases */
   private static final String RULE_SECTION = "rule";
@@ -45,7 +41,7 @@ public class RuleBase {
   /** The key for actions within rulebases */
   private static final String ACTION_KEY = "action";
 
-  private final Path sitePath;
+  private final Path itsPath;
   private final Rule.Factory ruleFactory;
   private final Condition.Factory conditionFactory;
   private final ActionRequest.Factory actionRequestFactory;
@@ -64,7 +60,7 @@ public class RuleBase {
       Condition.Factory conditionFactory,
       ActionRequest.Factory actionRequestFactory,
       @PluginName String pluginName) {
-    this.sitePath = sitePath;
+    this.itsPath = sitePath.normalize().resolve("etc").resolve("its");
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;
@@ -117,24 +113,19 @@ public class RuleBase {
     rules = Lists.newArrayList();
 
     // Add global rules
-    File globalRuleFile = new File(sitePath.toFile(), ITS_CONFIG_FILE_START + ITS_CONFIG_FILE_END);
+    File globalRuleFile = itsPath.resolve(String.format(CONFIG_FILE_NAME, "")).toFile();
     addRulesFromFile(globalRuleFile);
 
     // Add its-specific rules
     File itsSpecificRuleFile =
-        new File(sitePath.toFile(), ITS_CONFIG_FILE_START + "-" + pluginName + ITS_CONFIG_FILE_END);
+        itsPath.resolve(String.format(CONFIG_FILE_NAME, "-" + pluginName)).toFile();
     addRulesFromFile(itsSpecificRuleFile);
 
     if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
-      try {
-        log.warn(
-            "Neither global rule file {} nor Its specific rule file {} exist. Please configure rules.",
-            globalRuleFile.getCanonicalPath(),
-            itsSpecificRuleFile.getCanonicalPath());
-      } catch (IOException e) {
-        log.warn(
-            "Neither global rule file nor Its specific rule files exist. Please configure rules.");
-      }
+      log.warn(
+          "Neither global rule file {} nor Its specific rule file {} exist. Please configure rules.",
+          globalRuleFile,
+          itsSpecificRuleFile);
     }
   }
 
