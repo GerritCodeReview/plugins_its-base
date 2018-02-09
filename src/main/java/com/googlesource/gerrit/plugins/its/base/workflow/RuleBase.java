@@ -85,26 +85,30 @@ public class RuleBase {
         return;
       }
 
-      Collection<String> subsections = cfg.getSubsections(RULE_SECTION);
-      for (String subsection : subsections) {
+      for (String subsection : cfg.getSubsections(RULE_SECTION)) {
         Rule rule = ruleFactory.create(subsection);
-        Collection<String> keys = cfg.getNames(RULE_SECTION, subsection);
-        for (String key : keys) {
+        for (String key : cfg.getNames(RULE_SECTION, subsection)) {
           String[] values = cfg.getStringList(RULE_SECTION, subsection, key);
           if (ACTION_KEY.equals(key)) {
-            for (String value : values) {
-              ActionRequest actionRequest = actionRequestFactory.create(value);
-              rule.addActionRequest(actionRequest);
-            }
+            addActions(rule, values);
           } else {
-            for (String value : values) {
-              Condition condition = conditionFactory.create(key, value);
-              rule.addCondition(condition);
-            }
+            addConditions(rule, key, values);
           }
         }
         rules.add(rule);
       }
+    }
+  }
+
+  private void addActions(Rule rule, String[] values) {
+    for (String value : values) {
+      rule.addActionRequest(actionRequestFactory.create(value));
+    }
+  }
+
+  private void addConditions(Rule rule, String key, String[] values) {
+    for (String value : values) {
+      rule.addCondition(conditionFactory.create(key, value));
     }
   }
 
