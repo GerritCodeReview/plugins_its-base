@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
@@ -23,6 +22,7 @@ import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -38,6 +38,7 @@ public class RuleBase {
   private final File globalRuleFile;
   private final File itsSpecificRuleFile;
   private final RulesConfigReader rulesConfigReader;
+  private final ItsRulesProjectCache rulesProjectCache;
 
   private Collection<Rule> rules;
 
@@ -50,10 +51,12 @@ public class RuleBase {
       @ItsPath Path itsPath,
       @GlobalRulesFileName String globalRulesFileName,
       @PluginRulesFileName String pluginRulesFileName,
+      ItsRulesProjectCache rulesProjectCache,
       RulesConfigReader rulesConfigReader) {
     this.globalRuleFile = itsPath.resolve(globalRulesFileName).toFile();
     this.itsSpecificRuleFile = itsPath.resolve(pluginRulesFileName).toFile();
     this.rulesConfigReader = rulesConfigReader;
+    this.rulesProjectCache = rulesProjectCache;
     this.rules =
         new ImmutableList.Builder<Rule>()
             .addAll(getRulesFromFile(globalRuleFile))
@@ -89,11 +92,32 @@ public class RuleBase {
    * @param properties The properties to search actions for.
    * @return Requests for the actions that should be fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(Iterable<Property> properties) {
-    Collection<ActionRequest> ret = Lists.newLinkedList();
-    for (Rule rule : rules) {
-      ret.addAll(rule.actionRequestsFor(properties));
+  public Collection<ActionRequest> actionRequestsFor(Collection<Property> properties) {
+    String projectName = getProjectFromProperties(properties);
+    Collection<Rule> fromProjectConfig = rulesProjectCache.get(projectName);
+    Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
+    if (rulesToAdd.isEmpty() && !globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
+      log.warn(
+          "Neither global rule file {} nor Its specific rule file {} exist and no rules are "
+              + "configured for project {}. Please configure rules.",
+          globalRuleFile,
+          itsSpecificRuleFile,
+          projectName);
+      return Collections.emptyList();
     }
-    return ret;
+    Collection<ActionRequest> actions = new ArrayList<>();
+    for (Rule rule : rulesToAdd) {
+      actions.addAll(rule.actionRequestsFor(properties));
+    }
+    return actions;
+  }
+
+  private String getProjectFromProperties(Collection<Property> properties) {
+    for (Property property : properties) {
+      if ("project".equals(property.getKey())) {
+        return property.getValue();
+      }
+    }
+    return "";
   }
 }
