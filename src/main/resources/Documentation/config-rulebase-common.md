@@ -21,13 +21,24 @@ Actions on the ITS and conditions for the action to take place are
 configured through the rule bases in `etc/its/actions.config` (for global rules
 to be picked up by all configured ITS plugins) and
 `etc/its/actions-@PLUGIN@.config` (for rules to be picked up only by @PLUGIN@)
-in the site directory. A rule base is a git config file, and may contain an
-arbitrary number of rules. Each rule can have an arbitrary number of conditions
-and actions. A rule fires all associated actions, once all of its conditions are
-met.
+in the site directory.
 
-A simple `etc/its/actions.config` (or
-`etc/its/actions-@PLUGIN@.config`) may look like
+Project-specific rules can also be specified. They are defined using the same
+aforementioned file names, but they should be located in the project's
+ `refs/meta/config` branch. As with other project configurations, inheritance
+is honored so rules can be defined in a parent project. This inheritance, however,
+is capped at the closest level, i.e., if a project defines at least one of these
+rules files, the presence of the files is not evaluated for any of the project's
+parents. The same applies to the rules defined at the site level: if the project
+defines their own rules files, the ones in the `etc/its` folder do not appy for
+this project.
+
+A rule base is a git config file, and may contain an arbitrary number of rules.
+Each rule can have an arbitrary number of conditions and actions. A rule fires
+all associated actions, once all of its conditions are met.
+
+A simple `etc/its/actions.config` (or `etc/its/actions-@PLUGIN@.config`) may
+look like
 
 ```
 [rule "rule1"]
