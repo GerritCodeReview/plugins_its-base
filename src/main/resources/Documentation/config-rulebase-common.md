@@ -18,16 +18,12 @@ change”) trigger which actions (e.g.: “Set issue's status to
 ‘Resolved’”) on the ITS.
 
 Actions on the ITS and conditions for the action to take place are
-configured through the rule bases in `etc/its/actions.config` (for global rules
-to be picked up by all configured ITS plugins) and
-`etc/its/actions-@PLUGIN@.config` (for rules to be picked up only by @PLUGIN@)
-in the site directory. A rule base is a git config file, and may contain an
-arbitrary number of rules. Each rule can have an arbitrary number of conditions
-and actions. A rule fires all associated actions, once all of its conditions are
-met.
+configured through rule bases.  A rule base is a git config file and
+may contain an arbitrary number of rules. Each rule can have an
+arbitrary number of conditions and actions. A rule fires all associated
+actions, once all of its conditions are met.
 
-A simple `etc/its/actions.config` (or
-`etc/its/actions-@PLUGIN@.config`) may look like
+A simple rule bases file may look like
 
 ```
 [rule "rule1"]
@@ -47,9 +43,92 @@ adds a comment to a change that is associated to some issues and votes
 Goodness! Someone gave a negative code review in Gerrit on an
 associated change.” to each such issue.
 
-The order of rules in `etc/its/actions.config` need not be
-respected. So in the above example, do not rely on `rule1` being
-evaluated before `rule2`.
+The order of rules in a rule base file need not be respected. So in the
+above example, do not rely on `rule1` being evaluated before `rule2`.
+
+[rules-scope]: #rules-scope
+<a name="rules">Rule bases scope</a>
+-------------------------
+
+Rule bases can be defined in two scopes:
+
+* Global
+* Plugin specific
+
+Global rules are picked up by all configured ITS plugins and they are
+defined in a rule base file named `actions.config`.
+
+Plugin specific rules are picked up only by @PLUGIN@ plugin and they
+are defined in a rule base file named `actions-@PLUGIN@.config`.
+
+A second aspect of rules bases scope is what projects they apply to;
+in this case the rules can be:
+
+* Generic
+* Project specific
+
+The generic scope referes to rules that apply to all projects that
+enable ITS integration on the gerrit site; they are defined on rule
+base files located inside the `gerrit_site/etc/its/` folder.
+
+Project specific rules are defined on rule base files located on the
+`refs/meta/config` branch of a project and they apply exclusively to
+the project that defines them (or that inherits them) and, possibly,
+to child projects (see further explanations about rules inheritance
+below). Project specific rules take precedence over generic rules,
+i.e, when they are defined, generic rules do not apply to the project.
+
+Thus, to define global generic rules, i.e., rules that are picked up
+by all the ITS plugins and that apply to all the projects that enable
+any ITS integration, they should be defined in the
+`gerrit_site/etc/its/actions.config` rule base file.
+
+Rules defined in the `gerrit_site/etc/its/actions-@PLUGIN@.config` rule
+base file have generic but plugin specific scope, i.e., they apply to
+all projects on the gerrit site that enable integration with @PLUGIN@.
+
+On the other hand, if the rule base file `actions.config` is created
+on the `refs/meta/config` branch of project 'P', the rules defined
+on this file will have global but pproject specific scope, i.e, they
+apply to all the ITS integrations defined for this project. Thus, if
+project 'P' integrates with ITS system 'x' and with ITS system 'y',
+the rules are applied to these two ITS integrations.
+
+Contrarily, rules defined on the rule base file `actions-@PLUGIN@.config`
+created on the `refs/meta/config` branch of project 'P' have project
+and plugin specific scope, i.e., they apply only to the @PLUGIN@
+integration defined for project 'P'.
+
+Finally, is important to notice that if global and plugin specific rules
+are defined, the final set of rules applied is the merge of them and this
+is true either if they are defined in generic or project specific scope.
+
+[rules-inheritance]: #rules-inheritance
+### <a name="rules-inheritance">Rules inheritance</a>
+
+For project specific rules, i.e., those defined on the `refs/meta/config`
+branch of a project, inheritance is honored, similar to what is done in
+other cases of project configurations.
+
+Thus, if project 'P' defines project specific rules, these are applied
+to children projects of project 'P' that enable an ITS integration.
+
+This inheritance, however, is capped at the closest level, which means
+that if a project defines at least one of the rule bases files,
+(`actions.config` or `actions-@PLUGIN@.config`), the presence of these
+files is not evaluated for any of the project's parents.
+
+Thence, and continuing the example, if project 'Q' is a child of
+project 'P' and project 'Q' enables ITS integration, rules defined in
+project 'P' apply to project 'Q'. If however, project 'Q' defines its
+own set of rules, either on file `actions.config` or
+`actions-@PLUGIN@.config` (or both), the rules defined by project 'P'
+no longer apply to project 'Q' , i.e., rules defined in project 'Q'
+override and replace any rules defined on any parent project.
+
+The same applies to the rules defined at the site level: if any project
+defines their own rule base files, the global ones defined in the
+`gerrit_site/etc/its/` folder do not appy to this project.
 
 [rules]: #rules
 <a name="rules">Rules</a>

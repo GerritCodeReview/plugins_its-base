@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.expect;
@@ -39,15 +40,18 @@ import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.util.FileUtils;
 
 public class RuleBaseTest extends LoggingMockingTestCase {
+  private static final String PROJECT_KEY = "project";
+  private static final String TEST_PROJECT = "testProject";
 
   private Injector injector;
 
   private Path itsPath;
   private RulesConfigReader rulesConfigReader;
+  private ItsRulesProjectCache rulesProjectCache;
 
   private boolean cleanupSitePath;
 
-  private enum RuleBaseKind {
+  public enum RuleBaseKind {
     GLOBAL("actions"),
     ITS("actions-ItsTestName");
 
@@ -65,7 +69,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Rule rule1 = createMock(Rule.class);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
 
-    Map<String, String> properties = ImmutableMap.of();
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(1);
     rule1Match.add(actionRequest1);
@@ -74,6 +78,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule1))
         .once();
+
+    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
 
     replayMocks();
 
@@ -102,13 +108,15 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Rule rule2 = createMock(Rule.class);
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
 
-    Map<String, String> properties = ImmutableMap.of();
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1, actionRequest2);
     expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match).anyTimes();
 
     List<ActionRequest> rule2Match = ImmutableList.of(actionRequest3);
     expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match).anyTimes();
+
+    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
 
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule1, rule2))
@@ -130,7 +138,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     injectRuleBase("[rule \"rule3\"]\n\taction = action3", RuleBaseKind.ITS);
 
-    Map<String, String> properties = ImmutableMap.of();
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     Rule rule2 = createMock(Rule.class);
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
@@ -144,6 +152,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     List<ActionRequest> rule3Match = ImmutableList.of(actionRequest3);
     expect(rule3.actionRequestsFor(properties)).andReturn(rule3Match);
 
+    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
+
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule2, rule3))
         .andReturn(ImmutableList.of())
@@ -156,6 +166,27 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
 
     List<ActionRequest> expected = ImmutableList.of(actionRequest2, actionRequest3);
+
+    assertEquals("Matched actionRequests do not match", expected, actual);
+  }
+
+  public void testProjectConfigIsLoaded() {
+    Rule rule1 = createMock(Rule.class);
+    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
+
+    List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
+    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
+
+    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of(rule1));
+
+    replayMocks();
+
+    RuleBase ruleBase = createRuleBase();
+    Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
+
+    List<ActionRequest> expected = ImmutableList.of(actionRequest1);
 
     assertEquals("Matched actionRequests do not match", expected, actual);
   }
@@ -209,6 +240,9 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
       rulesConfigReader = createMock(RulesConfigReader.class);
       bind(RulesConfigReader.class).toInstance(rulesConfigReader);
+
+      rulesProjectCache = createMock(ItsRulesProjectCache.class);
+      bind(ItsRulesProjectCache.class).toInstance(rulesProjectCache);
 
       bind(String.class)
           .annotatedWith(GlobalRulesFileName.class)
