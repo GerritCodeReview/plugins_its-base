@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.events.GitReferenceUpdatedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
@@ -31,6 +32,7 @@ import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionController;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
+import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCache;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
@@ -63,6 +65,7 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    DynamicSet.bind(binder(), GitReferenceUpdatedListener.class).to(ItsRulesProjectCache.class);
     factory(ActionRequest.Factory.class);
     factory(Property.Factory.class);
     factory(Condition.Factory.class);
@@ -71,6 +74,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+    install(ItsRulesProjectCache.module());
   }
 
   @Provides
