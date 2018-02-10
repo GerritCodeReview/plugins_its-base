@@ -34,6 +34,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
+import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import java.nio.file.Path;
@@ -69,6 +70,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+    install(ItsRulesProjectCacheImpl.module());
   }
 
   @Provides
