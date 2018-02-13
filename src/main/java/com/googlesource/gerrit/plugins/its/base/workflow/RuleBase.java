@@ -14,12 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.SitePath;
-import com.google.gerrit.server.git.ProjectLevelConfig;
-import com.google.gerrit.server.project.ProjectCache;
-import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
@@ -30,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
 import org.slf4j.Logger;
@@ -44,7 +39,7 @@ public class RuleBase {
   private final RulesConfigReader rulesConfigReader;
   private final String globalRulesFileName;
   private final String pluginRulesFileName;
-  private final ProjectCache projectCache;
+  private final ItsRulesProjectCache rulesProjectCache;
 
   private Collection<Rule> rules;
 
@@ -55,13 +50,13 @@ public class RuleBase {
   @Inject
   public RuleBase(
       @SitePath Path sitePath,
+      ItsRulesProjectCache rulesProjectCache,
       RulesConfigReader rulesConfigReader,
-      ProjectCache projectCache,
       @GlobalRulesFileName String globalRulesFileName,
       @PluginRulesFileName String pluginRulesFileName) {
     this.itsPath = sitePath.normalize().resolve("etc").resolve("its");
     this.rulesConfigReader = rulesConfigReader;
-    this.projectCache = projectCache;
+    this.rulesProjectCache = rulesProjectCache;
     this.globalRulesFileName = globalRulesFileName;
     this.pluginRulesFileName = pluginRulesFileName;
     reloadRules();
@@ -117,7 +112,7 @@ public class RuleBase {
    */
   public Collection<ActionRequest> actionRequestsFor(Collection<Property> properties) {
     String projectName = getProjectFromProperties(properties);
-    Collection<Rule> fromProjectConfig = getRulesForProject(projectName);
+    Collection<Rule> fromProjectConfig = rulesProjectCache.get(new Project.NameKey(projectName));
     Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
 
     Collection<ActionRequest> actions = new ArrayList<>();
@@ -134,38 +129,5 @@ public class RuleBase {
       }
     }
     return "";
-  }
-
-  private Collection<Rule> getRulesForProject(String projectName) {
-    if (projectName.isEmpty()) {
-      return Collections.emptyList();
-    }
-    Collection<Rule> projectRules = new ArrayList<>();
-    try {
-      ProjectState project = projectCache.checkedGet(new Project.NameKey(projectName));
-      projectRules = readRulesFrom(project);
-      if (projectRules.isEmpty()) {
-        for (ProjectState parent : project.parents()) {
-          projectRules = readRulesFrom(parent);
-          if (!projectRules.isEmpty()) {
-            break;
-          }
-        }
-      }
-    } catch (IOException e) {
-      log.debug("Ignoring project specific rules: unable to open project {}.", projectName, e);
-    }
-    return projectRules;
-  }
-
-  private Collection<Rule> readRulesFrom(ProjectState project) {
-    ProjectLevelConfig global = project.getConfig(globalRulesFileName);
-    Config general = global.get();
-    ProjectLevelConfig plugin = project.getConfig(pluginRulesFileName);
-    Config pluginSpecific = plugin.get();
-    return new ImmutableList.Builder<Rule>()
-        .addAll(rulesConfigReader.getRulesFromConfig(general))
-        .addAll(rulesConfigReader.getRulesFromConfig(pluginSpecific))
-        .build();
   }
 }
