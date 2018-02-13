@@ -11,24 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static com.googlesource.gerrit.plugins.its.base.workflow.RulesConfigReader.ACTION_KEY;
-import static com.googlesource.gerrit.plugins.its.base.workflow.RulesConfigReader.RULE_SECTION;
 import static org.easymock.EasyMock.and;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.SitePath;
-import com.google.gerrit.server.git.ProjectLevelConfig;
-import com.google.gerrit.server.project.ProjectCache;
-import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
@@ -46,22 +41,18 @@ import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.util.FileUtils;
 
 public class RuleBaseTest extends LoggingMockingTestCase {
-  private static final String ACTION_1 = "action1";
-  private static final String CONDITION_KEY = "condition";
   private static final String PROJECT_KEY = "project";
-  private static final String RULE_1 = "rule1";
   private static final String TEST_PROJECT = "testProject";
-  private static final String VALUE_1 = "value1";
 
   private Injector injector;
 
   private Path sitePath;
   private RulesConfigReader rulesConfigReader;
-  private ProjectCache projectCache;
+  private ItsRulesProjectCache rulesProjectCache;
 
   private boolean cleanupSitePath;
 
-  private enum RuleBaseKind {
+  public enum RuleBaseKind {
     GLOBAL("actions"),
     ITS("actions-ItsTestName");
 
@@ -150,7 +141,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     Property property1 = createMock(Property.class);
     expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn("");
+    expect(property1.getValue()).andReturn(TEST_PROJECT);
     Collection<Property> properties = ImmutableList.of(property1);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
@@ -160,6 +151,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     expect(rulesConfigReader.getRulesFromConfig(and(capture(capturedConfig), isA(Config.class))))
         .andReturn(ImmutableList.of(rule1))
         .once();
+
+    expect(rulesProjectCache.get(new Project.NameKey(TEST_PROJECT))).andReturn(ImmutableList.of());
 
     replayMocks();
 
@@ -199,16 +192,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     List<ActionRequest> rule2Match = ImmutableList.of(actionRequest3);
     expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match).anyTimes();
 
-    ProjectState projectState = createMock(ProjectState.class);
-    ProjectLevelConfig projectLevelConfigGlobal = createMock(ProjectLevelConfig.class);
-    expect(projectLevelConfigGlobal.get()).andReturn(new Config());
-    expect(projectState.getConfig(RuleBaseKind.GLOBAL.fileName))
-        .andReturn(projectLevelConfigGlobal);
-    ProjectLevelConfig projectLevelConfigPlugin = createMock(ProjectLevelConfig.class);
-    expect(projectLevelConfigPlugin.get()).andReturn(new Config());
-    expect(projectState.getConfig(RuleBaseKind.ITS.fileName)).andReturn(projectLevelConfigPlugin);
-    expect(projectState.parents()).andReturn(FluentIterable.of());
-    expect(projectCache.checkedGet(new Project.NameKey(TEST_PROJECT))).andReturn(projectState);
+    expect(rulesProjectCache.get(new Project.NameKey(TEST_PROJECT))).andReturn(ImmutableList.of());
 
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule1, rule2))
@@ -248,7 +232,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     Property property1 = createMock(Property.class);
     expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn("");
+    expect(property1.getValue()).andReturn(TEST_PROJECT);
     Collection<Property> properties = ImmutableList.of(property1);
 
     Rule rule2 = createMock(Rule.class);
@@ -262,6 +246,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     List<ActionRequest> rule3Match = ImmutableList.of(actionRequest3);
     expect(rule3.actionRequestsFor(properties)).andReturn(rule3Match);
+
+    expect(rulesProjectCache.get(new Project.NameKey(TEST_PROJECT))).andReturn(ImmutableList.of());
 
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule2, rule3))
@@ -279,7 +265,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     assertEquals("Matched actionRequests do not match", expected, actual);
   }
 
-  public void testProjectConfigIsLoaded() throws IOException {
+  public void testProjectConfigIsLoaded() {
     Rule rule1 = createMock(Rule.class);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
 
@@ -291,75 +277,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
     expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
 
-    ProjectState projectState = createMock(ProjectState.class);
-    ProjectLevelConfig projectLevelConfigGlobal = createMock(ProjectLevelConfig.class);
-    Config projectGlobalCfg = new Config();
-    projectGlobalCfg.setString(RULE_SECTION, RULE_1, CONDITION_KEY, VALUE_1);
-    projectGlobalCfg.setString(RULE_SECTION, RULE_1, ACTION_KEY, ACTION_1);
-    expect(projectLevelConfigGlobal.get()).andReturn(projectGlobalCfg);
-    expect(projectState.getConfig(RuleBaseKind.GLOBAL.fileName))
-        .andReturn(projectLevelConfigGlobal);
-    ProjectLevelConfig projectLevelConfigPlugin = createMock(ProjectLevelConfig.class);
-    expect(projectLevelConfigPlugin.get()).andReturn(new Config());
-    expect(projectState.getConfig(RuleBaseKind.ITS.fileName)).andReturn(projectLevelConfigPlugin);
-    expect(projectCache.checkedGet(new Project.NameKey(TEST_PROJECT))).andReturn(projectState);
-
-    expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
-        .andReturn(ImmutableList.of(rule1))
-        .andReturn(ImmutableList.of());
-
-    replayMocks();
-
-    RuleBase ruleBase = createRuleBase();
-    Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
-
-    List<ActionRequest> expected = ImmutableList.of(actionRequest1);
-
-    assertEquals("Matched actionRequests do not match", expected, actual);
-    assertLogMessageContains("Neither global rule file");
-  }
-
-  public void testParentProjectConfigIsLoaded() throws IOException {
-    Rule rule1 = createMock(Rule.class);
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-
-    Property property1 = createMock(Property.class);
-    expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn(TEST_PROJECT);
-    Collection<Property> properties = ImmutableList.of(property1);
-
-    List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
-    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
-
-    ProjectState projectState = createMock(ProjectState.class);
-    ProjectLevelConfig projectLevelConfigGlobal = createMock(ProjectLevelConfig.class);
-    expect(projectLevelConfigGlobal.get()).andReturn(new Config());
-    expect(projectState.getConfig(RuleBaseKind.GLOBAL.fileName))
-        .andReturn(projectLevelConfigGlobal);
-    ProjectLevelConfig projectLevelConfigPlugin = createMock(ProjectLevelConfig.class);
-    expect(projectLevelConfigPlugin.get()).andReturn(new Config());
-    expect(projectState.getConfig(RuleBaseKind.ITS.fileName)).andReturn(projectLevelConfigPlugin);
-
-    ProjectState parentProjectState = createMock(ProjectState.class);
-    ProjectLevelConfig parentProjectConfigGlobal = createMock(ProjectLevelConfig.class);
-    Config parentGlobalCfg = new Config();
-    parentGlobalCfg.setString(RULE_SECTION, RULE_1, CONDITION_KEY, VALUE_1);
-    parentGlobalCfg.setString(RULE_SECTION, RULE_1, ACTION_KEY, ACTION_1);
-    expect(parentProjectConfigGlobal.get()).andReturn(parentGlobalCfg);
-    expect(parentProjectState.getConfig(RuleBaseKind.GLOBAL.fileName))
-        .andReturn(parentProjectConfigGlobal);
-    ProjectLevelConfig parentProjectConfigPlugin = createMock(ProjectLevelConfig.class);
-    expect(parentProjectConfigPlugin.get()).andReturn(new Config());
-    expect(parentProjectState.getConfig(RuleBaseKind.ITS.fileName))
-        .andReturn(parentProjectConfigPlugin);
-    expect(projectState.parents()).andReturn(FluentIterable.of(parentProjectState));
-    expect(projectCache.checkedGet(new Project.NameKey(TEST_PROJECT))).andReturn(projectState);
-
-    expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
-        .andReturn(ImmutableList.of())
-        .andReturn(ImmutableList.of())
-        .andReturn(ImmutableList.of(rule1))
-        .andReturn(ImmutableList.of());
+    expect(rulesProjectCache.get(new Project.NameKey(TEST_PROJECT)))
+        .andReturn(ImmutableList.of(rule1));
 
     replayMocks();
 
@@ -425,10 +344,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       rulesConfigReader = createMock(RulesConfigReader.class);
       bind(RulesConfigReader.class).toInstance(rulesConfigReader);
 
-      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      rulesProjectCache = createMock(ItsRulesProjectCache.class);
+      bind(ItsRulesProjectCache.class).toInstance(rulesProjectCache);
 
-      projectCache = createMock(ProjectCache.class);
-      bind(ProjectCache.class).toInstance(projectCache);
+      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
 
       bind(String.class).annotatedWith(GlobalRulesFileName.class).toInstance("actions.config");
       bind(String.class)
