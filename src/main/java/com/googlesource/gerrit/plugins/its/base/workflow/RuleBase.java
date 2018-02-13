@@ -28,7 +28,7 @@ import org.eclipse.jgit.util.FS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** Collection and matcher agains {@link Rule}s. */
+/** Collection and matcher against {@link Rule}s. */
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
@@ -73,7 +73,7 @@ public class RuleBase {
   }
 
   /**
-   * Adds rules from a file to the the RuleBase.
+   * Adds rules from a file to the RuleBase.
    *
    * <p>If the given file does not exist, it is silently ignored
    *
