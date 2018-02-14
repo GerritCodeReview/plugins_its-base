@@ -21,7 +21,10 @@ import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.ConsoleUI;
 import com.google.gerrit.pgm.init.api.InitStep;
 import com.google.gerrit.pgm.init.api.Section;
+import com.google.gerrit.server.config.SitePaths;
+import com.google.inject.Inject;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.EnumSet;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
@@ -40,6 +43,8 @@ public class InitIts implements InitStep {
     DISABLED,
     ENFORCED
   }
+
+  @Inject private SitePaths sitePaths;
 
   private final String pluginName;
   private final String itsDisplayName;
@@ -61,7 +66,18 @@ public class InitIts implements InitStep {
   }
 
   @Override
-  public void run() throws IOException, ConfigInvalidException {}
+  public void run() throws IOException, ConfigInvalidException {
+    Path deprecatedRules = sitePaths.etc_dir.normalize().resolve("its").resolve("action.config");
+    if (deprecatedRules.toFile().exists()) {
+      ui.error(
+          "Deprecated rules file '%s' (No trailing 's' in 'action') will not be read. "
+              + "Please migrate to 'etc/its/actions.config' (Trailing 's' in 'actions') and retry "
+              + "the init step.\n",
+          deprecatedRules);
+      throw new ConfigInvalidException(
+          "Deprecated configuration file found: " + deprecatedRules.toRealPath());
+    }
+  }
 
   @Override
   public void postRun() throws IOException, ConfigInvalidException {
