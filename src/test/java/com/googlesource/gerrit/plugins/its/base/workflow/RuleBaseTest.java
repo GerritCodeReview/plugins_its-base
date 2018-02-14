@@ -48,7 +48,6 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   private enum RuleBaseKind {
     GLOBAL,
     ITS,
-    FAULTY
   }
 
   public void testWarnNonExistingRuleBase() {
@@ -221,41 +220,6 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     assertEquals("Matched actionRequests do not match", expected, actual);
   }
 
-  public void testWarnExistingFaultyNameRuleBaseFile() throws IOException {
-    injectRuleBase("", RuleBaseKind.FAULTY);
-
-    replayMocks();
-
-    createRuleBase();
-
-    assertLogMessageContains("Please migrate"); // Migration warning for old name
-    assertLogMessageContains("Neither global"); // For rule file at at usual places
-  }
-
-  public void testSimpleFaultyNameRuleBase() throws IOException {
-    injectRuleBase(
-        "[rule \"rule1\"]\n" + "\tconditionA = value1\n" + "\taction = action1",
-        RuleBaseKind.FAULTY);
-
-    Rule rule1 = createMock(Rule.class);
-    expect(ruleFactory.create("rule1")).andReturn(rule1);
-
-    Condition condition1 = createMock(Condition.class);
-    expect(conditionFactory.create("conditionA", "value1")).andReturn(condition1);
-    rule1.addCondition(condition1);
-
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
-    rule1.addActionRequest(actionRequest1);
-
-    replayMocks();
-
-    createRuleBase();
-
-    assertLogMessageContains("Please migrate"); // Migration warning for old name
-    assertLogMessageContains("Neither global"); // For rule file at at usual places
-  }
-
   public void testSimpleItsRuleBase() throws IOException {
     injectRuleBase(
         "[rule \"rule1\"]\n" + "\tconditionA = value1\n" + "\taction = action1", RuleBaseKind.ITS);
@@ -277,24 +241,11 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testAllRuleBaseFilesAreLoaded() throws IOException {
-    injectRuleBase("[rule \"rule1\"]\n" + "\taction = action1", RuleBaseKind.FAULTY);
-
     injectRuleBase("[rule \"rule2\"]\n" + "\taction = action2", RuleBaseKind.GLOBAL);
 
     injectRuleBase("[rule \"rule3\"]\n" + "\taction = action3", RuleBaseKind.ITS);
 
     Collection<Property> properties = Collections.emptySet();
-
-    Rule rule1 = createMock(Rule.class);
-    expect(ruleFactory.create("rule1")).andReturn(rule1);
-
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
-    rule1.addActionRequest(actionRequest1);
-
-    List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(1);
-    rule1Match.add(actionRequest1);
-    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
 
     Rule rule2 = createMock(Rule.class);
     expect(ruleFactory.create("rule2")).andReturn(rule2);
@@ -325,13 +276,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
 
     List<ActionRequest> expected = Lists.newArrayListWithCapacity(3);
-    expected.add(actionRequest1);
     expected.add(actionRequest2);
     expected.add(actionRequest3);
 
     assertEquals("Matched actionRequests do not match", expected, actual);
-
-    assertLogMessageContains("Please migrate"); // Migration warning for old name
   }
 
   private RuleBase createRuleBase() {
@@ -350,9 +298,6 @@ public class RuleBaseTest extends LoggingMockingTestCase {
         break;
       case ITS:
         baseName = "actions-ItsTestName";
-        break;
-      case FAULTY:
-        baseName = "action";
         break;
       default:
         fail("Unknown ruleBaseKind");

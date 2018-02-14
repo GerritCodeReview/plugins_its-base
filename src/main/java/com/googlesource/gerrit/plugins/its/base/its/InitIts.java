@@ -14,6 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
+
 import com.google.common.base.Strings;
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.pgm.init.api.AllProjectsConfig;
@@ -21,10 +24,11 @@ import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.ConsoleUI;
 import com.google.gerrit.pgm.init.api.InitStep;
 import com.google.gerrit.pgm.init.api.Section;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.EnumSet;
-import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.lib.Config;
 
 public class InitIts implements InitStep {
 
@@ -41,6 +45,7 @@ public class InitIts implements InitStep {
     ENFORCED
   }
 
+  private final Path sitePath;
   private final String pluginName;
   private final String itsDisplayName;
   protected final ConsoleUI ui;
@@ -48,11 +53,13 @@ public class InitIts implements InitStep {
   private final AllProjectsNameOnInitProvider allProjects;
 
   public InitIts(
+      Path sitePath,
       String pluginName,
       String itsDisplayName,
       ConsoleUI ui,
       AllProjectsConfig allProjectsConfig,
       AllProjectsNameOnInitProvider allProjects) {
+    this.sitePath = sitePath;
     this.pluginName = pluginName;
     this.itsDisplayName = itsDisplayName;
     this.ui = ui;
@@ -61,7 +68,19 @@ public class InitIts implements InitStep {
   }
 
   @Override
-  public void run() throws IOException, ConfigInvalidException {}
+  public void run() throws IOException, ConfigInvalidException {
+    File deprecatedRules =
+        sitePath.normalize().resolve("etc").resolve("its").resolve("action.config").toFile();
+    if (deprecatedRules.exists()) {
+      ui.error(
+          "Deprecated rules file '%s' (No trailing 's' in 'action') will not be read. "
+              + "Please migrate to 'etc/its/actions.config' (Trailing 's' in 'actions') and retry "
+              + "the init step.\n",
+          deprecatedRules);
+      throw new ConfigInvalidException(
+          "Deprecated configuration file found: " + deprecatedRules.getAbsolutePath());
+    }
+  }
 
   @Override
   public void postRun() throws IOException, ConfigInvalidException {
