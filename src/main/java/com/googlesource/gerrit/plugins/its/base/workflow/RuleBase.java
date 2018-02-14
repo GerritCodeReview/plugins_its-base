@@ -116,26 +116,6 @@ public class RuleBase {
   private void reloadRules() {
     rules = Lists.newArrayList();
 
-    // Add rules from file with typo in filename
-    //
-    // While the documentation called for "actions.config" (Trailing "s" in
-    // "actions"), the code previously only loaded "action.config" (No
-    // trailing "s" in "action"). To give users time to gracefully migrate to
-    // "actions.config" (with trailing "s", we (for now) load files from both
-    // locations, but consider "actions.config" (with trailing "s" the
-    // canonical place.
-    File faultyNameRuleFile =
-        new File(
-            sitePath.toFile(),
-            "etc" + File.separatorChar + "its" + File.separator + "action.config");
-    if (faultyNameRuleFile.exists()) {
-      log.warn(
-          "Loading rules from deprecated 'etc/its/action.config' (No "
-              + "trailing 's' in 'action'). Please migrate to "
-              + "'etc/its/actions.config' (Trailing 's' in 'actions').");
-      addRulesFromFile(faultyNameRuleFile);
-    }
-
     // Add global rules
     File globalRuleFile = new File(sitePath.toFile(), ITS_CONFIG_FILE_START + ITS_CONFIG_FILE_END);
     addRulesFromFile(globalRuleFile);
