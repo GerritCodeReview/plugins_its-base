@@ -74,12 +74,9 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
     properties.add(propertyChangeUrl);
-
-    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
-        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
         "176",
@@ -141,12 +138,9 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
     properties.add(propertyChangeUrl);
-
-    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
-        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
         "176",
@@ -211,12 +205,9 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
     properties.add(propertyChangeUrl);
-
-    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
-        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
         "176",
@@ -276,12 +267,9 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     properties.add(propertySubmitterName);
 
     Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("changeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("http://example.org/change").anyTimes();
+    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
+    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
     properties.add(propertyChangeUrl);
-
-    expect(its.createLinkForWebui("http://example.org/change", "http://example.org/change"))
-        .andReturn("HtTp://ExAmPlE.OrG/ChAnGe");
 
     its.addComment(
         "176",

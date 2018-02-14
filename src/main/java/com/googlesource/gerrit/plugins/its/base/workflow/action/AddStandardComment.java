@@ -60,9 +60,9 @@ public class AddStandardComment implements Action {
     if (!reason.isEmpty()) {
       ret += "\n\nReason:\n" + reason;
     }
-    String url = Strings.nullToEmpty(map.get("changeUrl"));
+    String url = Strings.nullToEmpty(map.get("formatChangeUrl"));
     if (!url.isEmpty()) {
-      ret += "\n\n" + its.createLinkForWebui(url, url);
+      ret += "\n\n" + url;
     }
     return ret;
   }
