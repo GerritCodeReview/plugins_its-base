@@ -15,13 +15,14 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.SitePath;
 import com.google.gerrit.server.git.ProjectLevelConfig;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
+import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -38,9 +39,6 @@ import org.slf4j.LoggerFactory;
 /** Collection and matcher against {@link Rule}s. */
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
-
-  /** Rules configuration filename pattern */
-  private static final String CONFIG_FILE_NAME = "actions%s.config";
 
   private final Path itsPath;
   private final RulesConfigReader rulesConfigReader;
@@ -59,12 +57,13 @@ public class RuleBase {
       @SitePath Path sitePath,
       RulesConfigReader rulesConfigReader,
       ProjectCache projectCache,
-      @PluginName String pluginName) {
+      @GlobalRulesFileName String globalRulesFileName,
+      @PluginRulesFileName String pluginRulesFileName) {
     this.itsPath = sitePath.normalize().resolve("etc").resolve("its");
     this.rulesConfigReader = rulesConfigReader;
     this.projectCache = projectCache;
-    this.globalRulesFileName = String.format(CONFIG_FILE_NAME, "");
-    this.pluginRulesFileName = String.format(CONFIG_FILE_NAME, "-" + pluginName);
+    this.globalRulesFileName = globalRulesFileName;
+    this.pluginRulesFileName = pluginRulesFileName;
     reloadRules();
   }
 
