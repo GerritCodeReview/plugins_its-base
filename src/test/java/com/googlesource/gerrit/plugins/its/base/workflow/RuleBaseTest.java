@@ -31,6 +31,8 @@ import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
+import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -427,6 +429,11 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
       projectCache = createMock(ProjectCache.class);
       bind(ProjectCache.class).toInstance(projectCache);
+
+      bind(String.class).annotatedWith(GlobalRulesFileName.class).toInstance("actions.config");
+      bind(String.class)
+          .annotatedWith(PluginRulesFileName.class)
+          .toInstance("actions-ItsTestName.config");
     }
   }
 }
