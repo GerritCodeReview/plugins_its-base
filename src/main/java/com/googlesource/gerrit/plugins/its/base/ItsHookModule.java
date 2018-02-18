@@ -22,6 +22,7 @@ import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
+import com.google.inject.Provides;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -36,6 +37,9 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComme
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 
 public class ItsHookModule extends FactoryModule {
+
+  /** Config filename pattern */
+  private static final String CONFIG_FILE_NAME = "actions%s.config";
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
@@ -61,5 +65,17 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+  }
+
+  @Provides
+  @GlobalRulesFileName
+  String globalRulesFileName() {
+    return String.format(CONFIG_FILE_NAME, "");
+  }
+
+  @Provides
+  @PluginRulesFileName
+  String pluginRulesFileName() {
+    return String.format(CONFIG_FILE_NAME, "-" + pluginName);
   }
 }
