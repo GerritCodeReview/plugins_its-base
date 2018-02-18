@@ -42,16 +42,8 @@ public class RuleBase {
   /** Config filename pattern */
   private static final String CONFIG_FILE_NAME = "actions%s.config";
 
-  /** The section for rules within rulebases */
-  static final String RULE_SECTION = "rule";
-
-  /** The key for actions within rulebases */
-  static final String ACTION_KEY = "action";
-
   private final Path itsPath;
-  private final Rule.Factory ruleFactory;
-  private final Condition.Factory conditionFactory;
-  private final ActionRequest.Factory actionRequestFactory;
+  private final RulesConfigReader rulesConfigReader;
   private final String globalRulesFileName;
   private final String pluginRulesFileName;
   private final ProjectCache projectCache;
@@ -65,15 +57,11 @@ public class RuleBase {
   @Inject
   public RuleBase(
       @SitePath Path sitePath,
-      Rule.Factory ruleFactory,
-      Condition.Factory conditionFactory,
-      ActionRequest.Factory actionRequestFactory,
+      RulesConfigReader rulesConfigReader,
       ProjectCache projectCache,
       @PluginName String pluginName) {
     this.itsPath = sitePath.normalize().resolve("etc").resolve("its");
-    this.ruleFactory = ruleFactory;
-    this.conditionFactory = conditionFactory;
-    this.actionRequestFactory = actionRequestFactory;
+    this.rulesConfigReader = rulesConfigReader;
     this.projectCache = projectCache;
     this.globalRulesFileName = String.format(CONFIG_FILE_NAME, "");
     this.pluginRulesFileName = String.format(CONFIG_FILE_NAME, "-" + pluginName);
@@ -94,41 +82,12 @@ public class RuleBase {
       FileBasedConfig cfg = new FileBasedConfig(ruleFile, FS.DETECTED);
       try {
         cfg.load();
-        return getRulesFromConfig(cfg);
+        return rulesConfigReader.getRulesFromConfig(cfg);
       } catch (IOException | ConfigInvalidException e) {
         log.error("Invalid ITS action configuration", e);
       }
     }
     return Collections.emptyList();
-  }
-
-  private Collection<Rule> getRulesFromConfig(Config cfg) {
-    Collection<Rule> rules = new ArrayList<>();
-    for (String subsection : cfg.getSubsections(RULE_SECTION)) {
-      Rule rule = ruleFactory.create(subsection);
-      for (String key : cfg.getNames(RULE_SECTION, subsection)) {
-        String[] values = cfg.getStringList(RULE_SECTION, subsection, key);
-        if (ACTION_KEY.equals(key)) {
-          addActions(rule, values);
-        } else {
-          addConditions(rule, key, values);
-        }
-      }
-      rules.add(rule);
-    }
-    return rules;
-  }
-
-  private void addActions(Rule rule, String[] values) {
-    for (String value : values) {
-      rule.addActionRequest(actionRequestFactory.create(value));
-    }
-  }
-
-  private void addConditions(Rule rule, String key, String[] values) {
-    for (String value : values) {
-      rule.addCondition(conditionFactory.create(key, value));
-    }
   }
 
   /** Loads the rules for the RuleBase. */
@@ -206,8 +165,8 @@ public class RuleBase {
     ProjectLevelConfig plugin = project.getConfig(pluginRulesFileName);
     Config pluginSpecific = plugin.get();
     return new ImmutableList.Builder<Rule>()
-        .addAll(getRulesFromConfig(general))
-        .addAll(getRulesFromConfig(pluginSpecific))
+        .addAll(rulesConfigReader.getRulesFromConfig(general))
+        .addAll(rulesConfigReader.getRulesFromConfig(pluginSpecific))
         .build();
   }
 }
