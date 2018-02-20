@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb4cc1d1_65b3a905",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-20T01:59:45Z",
+      "side": 1,
+      "message": "Should this in imperative form as well?",
+      "range": {
+        "startLine": 76,
+        "startChar": 5,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "90359fc08b5d2cf65607b9b47da4b9f1e6721f71",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
