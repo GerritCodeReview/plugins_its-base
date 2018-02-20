@@ -22,6 +22,30 @@
       "revId": "aa36d5e65d2dc81e82a056e078ac978a0dc9d430",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d523e5c9_db057e73",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-02-20T01:54:16Z",
+      "side": 1,
+      "message": "Because despite appearances (seems like a boolean), currently this setting has three possible values: \"true\", \"false\" and \"inherited\".",
+      "parentUuid": "074ea6f2_20ba2f24",
+      "range": {
+        "startLine": 121,
+        "startChar": 17,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "aa36d5e65d2dc81e82a056e078ac978a0dc9d430",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
