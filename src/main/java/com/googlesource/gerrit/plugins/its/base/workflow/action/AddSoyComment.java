@@ -20,19 +20,18 @@ import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
+import com.google.template.soy.SoyFileSet.Builder;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,41 +47,23 @@ public class AddSoyComment implements Action {
     AddSoyComment create();
   }
 
-  /** Directory (relative to site) to search templates in */
-  private static final String ITS_TEMPLATE_DIR =
-      "etc" + File.separator + "its" + File.separator + "templates";
-
   private final ItsFacade its;
-  private final Path sitePath;
+  /** Directory (relative to site) to search templates in */
+  private final Path templateDir;
+
   protected HashMap<String, Object> soyContext;
 
   @Inject
   public AddSoyComment(@SitePath Path sitePath, ItsFacade its) {
-    this.sitePath = sitePath;
+    this.templateDir = sitePath.normalize().resolve("etc").resolve("its").resolve("templates");
     this.its = its;
-  }
-
-  private HashMap<String, Object> getSoyContext(Set<Property> properties) {
-    HashMap<String, Object> soyContext = new HashMap<>();
-    for (Property property : properties) {
-      String key = property.getKey();
-      if (!Strings.isNullOrEmpty(key)) {
-        String value = property.getValue();
-        if (!Strings.isNullOrEmpty(value)) {
-          soyContext.put(key, value);
-        }
-      }
-    }
-
-    return soyContext;
   }
 
   private String soyTemplate(
       SoyFileSet.Builder builder,
       String template,
       SanitizedContent.ContentKind kind,
-      Set<Property> properties) {
-    Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
+      Map<String, String> properties) {
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
@@ -94,39 +75,35 @@ public class AddSoyComment implements Action {
     }
 
     builder.add(content, templatePath.toAbsolutePath().toString());
-
-    HashMap<String, Object> context = getSoyContext(properties);
-
     SoyTofu.Renderer renderer =
         builder
             .build()
             .compileToTofu()
             .newRenderer("etc.its.templates." + template)
             .setContentKind(kind)
-            .setData(context);
+            .setData(properties);
     return renderer.render();
   }
 
-  protected String soyTextTemplate(
-      SoyFileSet.Builder builder, String template, Set<Property> properties) {
+  private String soyTextTemplate(Builder builder, String template, Map<String, String> properties) {
     return soyTemplate(builder, template, SanitizedContent.ContentKind.TEXT, properties);
   }
 
-  @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
-      throws IOException {
-    String comment = buildComment(actionRequest, properties);
-    if (!Strings.isNullOrEmpty(comment)) {
-      its.addComment(issue, comment);
-    }
-  }
-
-  private String buildComment(ActionRequest actionRequest, Set<Property> properties) {
+  private String buildComment(ActionRequest actionRequest, Map<String, String> properties) {
     String template = actionRequest.getParameter(1);
     if (!template.isEmpty()) {
       return soyTextTemplate(SoyFileSet.builder(), template, properties);
     }
     log.error("No template name given in {}", actionRequest);
     return "";
+  }
+
+  @Override
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
+      throws IOException {
+    String comment = buildComment(actionRequest, properties);
+    if (!Strings.isNullOrEmpty(comment)) {
+      its.addComment(issue, comment);
+    }
   }
 }

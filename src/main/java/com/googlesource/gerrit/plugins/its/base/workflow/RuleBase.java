@@ -14,22 +14,25 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.storage.file.FileBasedConfig;
+import org.eclipse.jgit.util.FS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.storage.file.FileBasedConfig;
-import org.eclipse.jgit.util.FS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
 
 /** Collection and matcher against {@link Rule}s. */
 public class RuleBase {
@@ -110,8 +113,8 @@ public class RuleBase {
    * @param properties The properties to search actions for.
    * @return Requests for the actions that should be fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(Collection<Property> properties) {
-    String projectName = getProjectFromProperties(properties);
+  public Collection<ActionRequest> actionRequestsFor(Map<String, String> properties) {
+    String projectName = properties.get("project");
     Collection<Rule> fromProjectConfig = rulesProjectCache.get(new Project.NameKey(projectName));
     Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
 
@@ -120,14 +123,5 @@ public class RuleBase {
       actions.addAll(rule.actionRequestsFor(properties));
     }
     return actions;
-  }
-
-  private String getProjectFromProperties(Collection<Property> properties) {
-    for (Property property : properties) {
-      if ("project".equals(property.getKey())) {
-        return property.getValue();
-      }
-    }
-    return "";
   }
 }

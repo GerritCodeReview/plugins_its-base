@@ -25,7 +25,6 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.util.Collection;
 import org.eclipse.jgit.lib.Config;
-import org.junit.Test;
 
 public class RulesConfigReaderTest extends LoggingMockingTestCase {
 
