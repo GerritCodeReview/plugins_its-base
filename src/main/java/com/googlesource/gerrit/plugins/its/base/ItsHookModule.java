@@ -35,7 +35,6 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import java.nio.file.Path;
 
@@ -64,7 +63,6 @@ public class ItsHookModule extends FactoryModule {
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
     factory(ActionRequest.Factory.class);
-    factory(Property.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
     factory(AddComment.Factory.class);
