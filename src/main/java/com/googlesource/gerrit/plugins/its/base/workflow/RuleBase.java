@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
@@ -93,8 +94,8 @@ public class RuleBase {
    * @param properties The properties to search actions for.
    * @return Requests for the actions that should be fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(Collection<Property> properties) {
-    String projectName = getProjectFromProperties(properties);
+  public Collection<ActionRequest> actionRequestsFor(Map<String, String> properties) {
+    String projectName = properties.get("project");
     Collection<Rule> fromProjectConfig = rulesProjectCache.get(new Project.NameKey(projectName));
     Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
     if (rulesToAdd.isEmpty() && !globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
@@ -111,14 +112,5 @@ public class RuleBase {
       actions.addAll(rule.actionRequestsFor(properties));
     }
     return actions;
-  }
-
-  private String getProjectFromProperties(Collection<Property> properties) {
-    for (Property property : properties) {
-      if ("project".equals(property.getKey())) {
-        return property.getValue();
-      }
-    }
-    return "";
   }
 }
