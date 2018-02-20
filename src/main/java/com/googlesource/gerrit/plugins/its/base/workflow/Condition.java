@@ -23,6 +23,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -87,13 +88,12 @@ public class Condition {
    *     conditions, true iff properties does not contain any property that matches the rules key
    *     and whose value matches at least one of the rule's value.
    */
-  public boolean isMetBy(Iterable<Property> properties) {
-    for (Property property : properties) {
-      String propertyKey = property.getKey();
-      if ((key == null && propertyKey == null) || (key != null && key.equals(propertyKey))) {
-        if (values.contains(property.getValue())) {
-          return !negated;
-        }
+  public boolean isMetBy(Map<String, String> properties) {
+    String property = properties.get(key);
+    String[] prpts = property != null ? property.split(",") : new String[] {};
+    for (String p : prpts) {
+      if (values.contains(p.trim())) {
+        return !negated;
       }
     }
     return negated;

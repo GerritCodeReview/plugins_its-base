@@ -33,7 +33,6 @@ import com.googlesource.gerrit.plugins.its.base.workflow.ActionController;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCache;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
@@ -67,7 +66,6 @@ public class ItsHookModule extends FactoryModule {
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
     DynamicSet.bind(binder(), GitReferenceUpdatedListener.class).to(ItsRulesProjectCache.class);
     factory(ActionRequest.Factory.class);
-    factory(Property.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
     factory(AddComment.Factory.class);
