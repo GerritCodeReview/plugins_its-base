@@ -15,13 +15,13 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
-import java.util.HashSet;
 
 public class AddCommentTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -35,7 +35,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<>());
+    addComment.execute("4711", actionRequest, ImmutableMap.of());
   }
 
   public void testPlain() throws IOException {
@@ -47,7 +47,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute("4711", actionRequest, new HashSet<>());
+    addComment.execute("4711", actionRequest, ImmutableMap.of());
   }
 
   private AddComment createAddComment() {

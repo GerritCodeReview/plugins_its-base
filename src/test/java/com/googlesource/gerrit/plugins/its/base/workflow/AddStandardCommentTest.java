@@ -13,16 +13,14 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
-
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 
 public class AddStandardCommentTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -32,12 +30,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeMergedPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-merged").anyTimes();
-    properties.add(propertyEventType);
+    Map<String, String> properties = ImmutableMap.of("event-type", "change-merged");
 
     its.addComment("42", "Change merged");
     replayMocks();
@@ -49,32 +42,14 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeMergedFull() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-merged").anyTimes();
-    properties.add(propertyEventType);
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Test-Change-Subject").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
-    expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
-    properties.add(propertyChangeNumber);
-
-    Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("submitterName").anyTimes();
-    expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
-    properties.add(propertySubmitterName);
-
-    Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
-    properties.add(propertyChangeUrl);
+    Map<String, String> properties =
+        ImmutableMap.<String, String>builder()
+            .put("event-type", "change-merged")
+            .put("subject", "Test-Change-Subject")
+            .put("changeNumber", "4711")
+            .put("submitterName", "John Doe")
+            .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
+            .build();
 
     its.addComment(
         "176",
@@ -91,12 +66,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeAbandonedPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-abandoned").anyTimes();
-    properties.add(propertyEventType);
+    Map<String, String> properties = ImmutableMap.of("event-type", "change-abandoned");
 
     its.addComment("42", "Change abandoned");
     replayMocks();
@@ -108,37 +78,15 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeAbandonedFull() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-abandoned").anyTimes();
-    properties.add(propertyEventType);
-
-    Property propertyReason = createMock(Property.class);
-    expect(propertyReason.getKey()).andReturn("reason").anyTimes();
-    expect(propertyReason.getValue()).andReturn("Test-Reason").anyTimes();
-    properties.add(propertyReason);
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Test-Change-Subject").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
-    expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
-    properties.add(propertyChangeNumber);
-
-    Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("abandonerName").anyTimes();
-    expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
-    properties.add(propertySubmitterName);
-
-    Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
-    properties.add(propertyChangeUrl);
+    Map<String, String> properties =
+        ImmutableMap.<String, String>builder()
+            .put("event-type", "change-abandoned")
+            .put("reason", "Test-Reason")
+            .put("subject", "Test-Change-Subject")
+            .put("changeNumber", "4711")
+            .put("abandonerName", "John Doe")
+            .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
+            .build();
 
     its.addComment(
         "176",
@@ -158,12 +106,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeRestoredPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-restored").anyTimes();
-    properties.add(propertyEventType);
+    Map<String, String> properties = ImmutableMap.of("event-type", "change-restored");
 
     its.addComment("42", "Change restored");
     replayMocks();
@@ -175,37 +118,15 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testChangeRestoredFull() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("change-restored").anyTimes();
-    properties.add(propertyEventType);
-
-    Property propertyReason = createMock(Property.class);
-    expect(propertyReason.getKey()).andReturn("reason").anyTimes();
-    expect(propertyReason.getValue()).andReturn("Test-Reason").anyTimes();
-    properties.add(propertyReason);
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Test-Change-Subject").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
-    expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
-    properties.add(propertyChangeNumber);
-
-    Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("restorerName").anyTimes();
-    expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
-    properties.add(propertySubmitterName);
-
-    Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
-    properties.add(propertyChangeUrl);
+    Map<String, String> properties =
+        ImmutableMap.<String, String>builder()
+            .put("event-type", "change-restored")
+            .put("reason", "Test-Reason")
+            .put("subject", "Test-Change-Subject")
+            .put("changeNumber", "4711")
+            .put("restorerName", "John Doe")
+            .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
+            .build();
 
     its.addComment(
         "176",
@@ -225,12 +146,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testPatchSetCreatedPlain() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("patchset-created").anyTimes();
-    properties.add(propertyEventType);
+    Map<String, String> properties = ImmutableMap.of("event-type", "patchset-created");
 
     its.addComment("42", "Change had a related patch set uploaded");
     replayMocks();
@@ -242,32 +158,14 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   public void testPatchSetCreatedFull() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertyEventType = createMock(Property.class);
-    expect(propertyEventType.getKey()).andReturn("event-type").anyTimes();
-    expect(propertyEventType.getValue()).andReturn("patchset-created").anyTimes();
-    properties.add(propertyEventType);
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Test-Change-Subject").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyChangeNumber = createMock(Property.class);
-    expect(propertyChangeNumber.getKey()).andReturn("changeNumber").anyTimes();
-    expect(propertyChangeNumber.getValue()).andReturn("4711").anyTimes();
-    properties.add(propertyChangeNumber);
-
-    Property propertySubmitterName = createMock(Property.class);
-    expect(propertySubmitterName.getKey()).andReturn("uploaderName").anyTimes();
-    expect(propertySubmitterName.getValue()).andReturn("John Doe").anyTimes();
-    properties.add(propertySubmitterName);
-
-    Property propertyChangeUrl = createMock(Property.class);
-    expect(propertyChangeUrl.getKey()).andReturn("formatChangeUrl").anyTimes();
-    expect(propertyChangeUrl.getValue()).andReturn("HtTp://ExAmPlE.OrG/ChAnGe").anyTimes();
-    properties.add(propertyChangeUrl);
+    Map<String, String> properties =
+        ImmutableMap.<String, String>builder()
+            .put("event-type", "patchset-created")
+            .put("subject", "Test-Change-Subject")
+            .put("changeNumber", "4711")
+            .put("uploaderName", "John Doe")
+            .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
+            .build();
 
     its.addComment(
         "176",
