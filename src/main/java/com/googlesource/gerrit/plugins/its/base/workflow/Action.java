@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 
 /** Interface for actions on an issue tracking system */
 interface Action {
@@ -27,6 +27,6 @@ interface Action {
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException;
 }
