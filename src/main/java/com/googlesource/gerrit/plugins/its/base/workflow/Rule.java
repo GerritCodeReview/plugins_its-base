@@ -21,6 +21,7 @@ import com.google.inject.assistedinject.Assisted;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /** A single rule that associates {@code Action}s to {@code Condition}s. */
@@ -71,7 +72,7 @@ public class Rule {
    * @param properties The properties to check against the rule's conditions.
    * @return The actions that should get fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(Iterable<Property> properties) {
+  public Collection<ActionRequest> actionRequestsFor(Map<String, String> properties) {
     for (Condition condition : conditions) {
       if (!condition.isMetBy(properties)) {
         return Collections.emptyList();
