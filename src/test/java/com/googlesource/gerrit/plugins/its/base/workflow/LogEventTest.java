@@ -15,14 +15,13 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.expect;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 import org.apache.log4j.Level;
 
 public class LogEventTest extends LoggingMockingTestCase {
@@ -35,7 +34,7 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, new HashSet<>());
+    logEvent.execute("4711", actionRequest, ImmutableMap.of());
   }
 
   public void testEmpty() throws IOException {
@@ -45,95 +44,92 @@ public class LogEventTest extends LoggingMockingTestCase {
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
-    logEvent.execute("4711", actionRequest, new HashSet<>());
+    logEvent.execute("4711", actionRequest, ImmutableMap.of());
   }
 
   public void testLevelDefault() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.INFO);
+    assertLogMessageContains("KeyA = ValueA", Level.INFO);
   }
 
   public void testLevelError() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("error");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.ERROR);
+    assertLogMessageContains("KeyA = ValueA", Level.ERROR);
   }
 
   public void testLevelWarn() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("warn");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.WARN);
+    assertLogMessageContains("KeyA = ValueA", Level.WARN);
   }
 
   public void testLevelInfo() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("info");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.INFO);
+    assertLogMessageContains("KeyA = ValueA", Level.INFO);
   }
 
   public void testLevelDebug() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("debug");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
+    Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.DEBUG);
+    assertLogMessageContains("KeyA = ValueA", Level.DEBUG);
   }
 
   public void testMultipleProperties() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("info");
 
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(new PropertyMock("KeyA", "ValueA", "PropertyA"));
-    properties.add(new PropertyMock("KeyB", "ValueB", "PropertyB"));
-    properties.add(new PropertyMock("KeyC", "ValueC", "PropertyC"));
+    Map<String, String> properties =
+        ImmutableMap.<String, String>builder()
+            .put("KeyA", "ValueA")
+            .put("KeyB", "ValueB")
+            .put("KeyC", "ValueC")
+            .build();
     replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute("4711", actionRequest, properties);
 
-    assertLogMessageContains("PropertyA", Level.INFO);
-    assertLogMessageContains("PropertyB", Level.INFO);
-    assertLogMessageContains("PropertyC", Level.INFO);
+    assertLogMessageContains("KeyA = ValueA", Level.INFO);
+    assertLogMessageContains("KeyB = ValueB", Level.INFO);
+    assertLogMessageContains("KeyC = ValueC", Level.INFO);
   }
 
   private LogEvent createLogEvent() {
@@ -149,19 +145,5 @@ public class LogEventTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {}
-  }
-
-  private class PropertyMock extends Property {
-    private final String toString;
-
-    public PropertyMock(String key, String value, String toString) {
-      super(key, value);
-      this.toString = toString;
-    }
-
-    @Override
-    public String toString() {
-      return toString;
-    }
   }
 }
