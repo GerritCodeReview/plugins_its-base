@@ -15,12 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Adds a short predefined comments to an issue.
@@ -85,50 +83,28 @@ public class AddStandardComment implements Action {
     return "";
   }
 
-  private String getCommentChangeAbandoned(Map<String, String> map) {
-    return getCommentChangeEvent("abandoned", "abandoner", map);
-  }
-
-  private String getCommentChangeMerged(Map<String, String> map) {
-    return getCommentChangeEvent("merged", "submitter", map);
-  }
-
-  private String getCommentChangeRestored(Map<String, String> map) {
-    return getCommentChangeEvent("restored", "restorer", map);
-  }
-
-  private String getCommentPatchSetCreated(Map<String, String> map) {
-    return getCommentChangeEvent("had a related patch set uploaded", "uploader", map);
-  }
-
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
-    String comment = "";
-    Map<String, String> map = Maps.newHashMap();
-    for (Property property : properties) {
-      String current = property.getValue();
-      if (!Strings.isNullOrEmpty(current)) {
-        String key = property.getKey();
-        String old = Strings.nullToEmpty(map.get(key));
-        if (!old.isEmpty()) {
-          old += ", ";
-        }
-        map.put(key, old + current);
-      }
-    }
-    String eventType = map.get("event-type");
-    if ("change-abandoned".equals(eventType)) {
-      comment = getCommentChangeAbandoned(map);
-    } else if ("change-merged".equals(eventType)) {
-      comment = getCommentChangeMerged(map);
-    } else if ("change-restored".equals(eventType)) {
-      comment = getCommentChangeRestored(map);
-    } else if ("patchset-created".equals(eventType)) {
-      comment = getCommentPatchSetCreated(map);
-    }
+    String comment = buildComment(properties);
+
     if (!Strings.isNullOrEmpty(comment)) {
       its.addComment(issue, comment);
+    }
+  }
+
+  private String buildComment(Map<String, String> properties) {
+    switch (properties.get("event-type")) {
+      case "change-abandoned":
+        return getCommentChangeEvent("abandoned", "abandoner", properties);
+      case "change-merged":
+        return getCommentChangeEvent("merged", "submitter", properties);
+      case "change-restored":
+        return getCommentChangeEvent("restored", "restorer", properties);
+      case "patchset-created":
+        return getCommentChangeEvent("had a related patch set uploaded", "uploader", properties);
+      default:
+        return "";
     }
   }
 }

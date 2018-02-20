@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
@@ -23,7 +22,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
@@ -53,24 +52,13 @@ public class AddVelocityComment implements Action {
     this.its = its;
   }
 
-  private VelocityContext getVelocityContext(Set<Property> properties) {
-    VelocityContext velocityContext = new VelocityContext();
-    for (Property property : properties) {
-      String key = property.getKey();
-      if (!Strings.isNullOrEmpty(key)) {
-        String value = property.getValue();
-        if (!Strings.isNullOrEmpty(value)) {
-          velocityContext.put(key, value);
-        }
-      }
-    }
-
+  private VelocityContext getVelocityContext(Map<String, String> properties) {
+    VelocityContext velocityContext = new VelocityContext(properties);
     velocityContext.put("its", new VelocityAdapterItsFacade(its));
-
     return velocityContext;
   }
 
-  private String velocify(String template, Set<Property> properties) {
+  private String velocify(String template, Map<String, String> properties) {
     VelocityContext context = getVelocityContext(properties);
     StringWriter w = new StringWriter();
     velocityRuntime.evaluate(context, w, "ItsComment", template);
@@ -78,7 +66,7 @@ public class AddVelocityComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String template = null;
     String templateName = actionRequest.getParameter(1);
@@ -103,18 +91,15 @@ public class AddVelocityComment implements Action {
       its.addComment(issue, comment);
     }
   }
-
   /** Adapter for ItsFacade to be used through Velocity */
   // Although we'd prefer to keep this class private, Velocity will only pick
   // it up, if it is public.
   public class VelocityAdapterItsFacade {
-
     private final ItsFacade facade;
 
     private VelocityAdapterItsFacade(ItsFacade facade) {
       this.facade = facade;
     }
-
     /**
      * Format a link to a URL in the used Its' syntax.
      *
@@ -125,7 +110,6 @@ public class AddVelocityComment implements Action {
     public String formatLink(String url, String caption) {
       return facade.createLinkForWebui(url, caption);
     }
-
     /**
      * Format a link to an URL.
      *

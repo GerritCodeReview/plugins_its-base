@@ -16,14 +16,15 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
@@ -36,19 +37,21 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
 
+  private Map<String, String> properties = ImmutableMap.of("issue", "4711");
+
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     its.performAction("4711", "unparsed action 1");
 
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testExecuteItemException() throws IOException {
@@ -56,7 +59,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     its.performAction("4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
@@ -64,7 +67,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
 
     assertLogThrowableMessageContains("injected exception 1");
   }
@@ -78,7 +81,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     expect(actionRequest2.getName()).andReturn("unparsed");
     expect(actionRequest2.getUnparsed()).andReturn("unparsed action 2");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest1, actionRequest2);
 
     its.performAction("4711", "unparsed action 1");
     its.performAction("4711", "unparsed action 2");
@@ -86,7 +89,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", Sets.newHashSet(actionRequest1, actionRequest2), properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testExecuteIterableExceptions() throws IOException {
@@ -102,7 +105,8 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     expect(actionRequest3.getName()).andReturn("unparsed");
     expect(actionRequest3.getUnparsed()).andReturn("unparsed action 3");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests =
+        ImmutableSet.of(actionRequest1, actionRequest2, actionRequest3);
 
     its.performAction("4711", "unparsed action 1");
     expectLastCall().andThrow(new IOException("injected exception 1"));
@@ -113,8 +117,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(
-        "4711", Sets.newHashSet(actionRequest1, actionRequest2, actionRequest3), properties);
+    actionExecutor.execute(actionRequests, properties);
 
     assertLogThrowableMessageContains("injected exception 1");
     assertLogThrowableMessageContains("injected exception 3");
@@ -124,7 +127,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-comment");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     AddComment addComment = createMock(AddComment.class);
     expect(addCommentFactory.create()).andReturn(addComment);
@@ -134,14 +137,14 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testAddSoyCommentDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-soy-comment");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     AddSoyComment addSoyComment = createMock(AddSoyComment.class);
     expect(addSoyCommentFactory.create()).andReturn(addSoyComment);
@@ -151,14 +154,14 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testAddStandardCommentDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-standard-comment");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     AddStandardComment addStandardComment = createMock(AddStandardComment.class);
     expect(addStandardCommentFactory.create()).andReturn(addStandardComment);
@@ -168,14 +171,14 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testAddVelocityCommentDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("add-velocity-comment");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     AddVelocityComment addVelocityComment = createMock(AddVelocityComment.class);
     expect(addVelocityCommentFactory.create()).andReturn(addVelocityComment);
@@ -185,14 +188,14 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   public void testLogEventDelegation() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("log-event");
 
-    Set<Property> properties = Collections.emptySet();
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
     LogEvent logEvent = createMock(LogEvent.class);
     expect(logEventFactory.create()).andReturn(logEvent);
@@ -202,7 +205,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute("4711", actionRequest, properties);
+    actionExecutor.execute(actionRequests, properties);
   }
 
   private ActionExecutor createActionExecutor() {

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
@@ -153,7 +154,7 @@ public class RuleBase {
    * @param properties The properties to search actions for.
    * @return Requests for the actions that should be fired.
    */
-  public Collection<ActionRequest> actionRequestsFor(Iterable<Property> properties) {
+  public Collection<ActionRequest> actionRequestsFor(Map<String, String> properties) {
     Collection<ActionRequest> ret = Lists.newLinkedList();
     for (Rule rule : rules) {
       ret.addAll(rule.actionRequestsFor(properties));

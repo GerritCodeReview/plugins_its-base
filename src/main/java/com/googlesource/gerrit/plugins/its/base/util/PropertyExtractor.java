@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
@@ -32,26 +31,26 @@ import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.eclipse.jgit.lib.ObjectId;
 
-/** Extractor to translate an {@link ChangeEvent} to {@link Property Properties}. */
+/** Extractor to translate an {@link ChangeEvent} to a map of properties}. */
 public class PropertyExtractor {
   private IssueExtractor issueExtractor;
-  private Property.Factory propertyFactory;
   private PropertyAttributeExtractor propertyAttributeExtractor;
   private final String pluginName;
 
   @Inject
   PropertyExtractor(
       IssueExtractor issueExtractor,
-      Property.Factory propertyFactory,
       PropertyAttributeExtractor propertyAttributeExtractor,
       @PluginName String pluginName) {
     this.issueExtractor = issueExtractor;
-    this.propertyFactory = propertyFactory;
     this.propertyAttributeExtractor = propertyAttributeExtractor;
     this.pluginName = pluginName;
   }
@@ -72,71 +71,70 @@ public class PropertyExtractor {
     }
   }
 
-  private Map<String, Set<String>> extractFrom(PatchSetEvent event, Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
+  private Map<String, Set<String>> extractMapFrom(PatchSetEvent event, Map<String, String> common) {
     ChangeAttribute change = event.change.get();
     PatchSetAttribute patchSet = event.patchSet.get();
-    common.addAll(propertyAttributeExtractor.extractFrom(change));
-    common.addAll(propertyAttributeExtractor.extractFrom(patchSet));
+    common.putAll(propertyAttributeExtractor.extractFrom(change));
+    common.putAll(propertyAttributeExtractor.extractFrom(patchSet));
     PatchSet.Id patchSetId =
         newPatchSetId(Integer.toString(change.number), Integer.toString(patchSet.number));
     return issueExtractor.getIssueIds(change.project, patchSet.revision, patchSetId);
   }
 
-  private Map<String, Set<String>> extractFrom(ChangeAbandonedEvent event, Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.abandoner.get(), "abandoner"));
-    common.add(propertyFactory.create("reason", event.reason));
-    return extractFrom((PatchSetEvent) event, common);
+  private Map<String, Set<String>> extractFrom(
+      ChangeAbandonedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.abandoner.get(), "abandoner"));
+    common.put("reason", event.reason);
+    return extractMapFrom(event, common);
   }
 
-  private Map<String, Set<String>> extractFrom(ChangeMergedEvent event, Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
-    return extractFrom((PatchSetEvent) event, common);
+  private Map<String, Set<String>> extractFrom(
+      ChangeMergedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    return extractMapFrom(event, common);
   }
 
-  private Map<String, Set<String>> extractFrom(ChangeRestoredEvent event, Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
-    common.add(propertyFactory.create("reason", event.reason));
-    return extractFrom((PatchSetEvent) event, common);
+  private Map<String, Set<String>> extractFrom(
+      ChangeRestoredEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
+    return extractMapFrom(event, common);
   }
 
-  private Map<String, Set<String>> extractFrom(RefUpdatedEvent event, Set<Property> common) {
-    common.add(propertyFactory.create("event-type", event.type));
-    if (event.submitter != null) {
-      common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+  private Map<String, Set<String>> extractFrom(RefUpdatedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    common.putAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
+    RefUpdateAttribute refUpdated = event.refUpdate.get();
+    if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
+      return Collections.emptyMap();
     }
-    common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
-    RefUpdateAttribute refUpdateEvent = event.refUpdate.get();
-    String commitId =
-        (refUpdateEvent.newRev.equals(ObjectId.zeroId().name())
-            ? refUpdateEvent.oldRev
-            : refUpdateEvent.newRev);
-    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), commitId);
+    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), refUpdated.newRev);
   }
 
-  private Map<String, Set<String>> extractFrom(PatchSetCreatedEvent event, Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.uploader.get(), "uploader"));
-    return extractFrom((PatchSetEvent) event, common);
+  private Map<String, Set<String>> extractFrom(
+      PatchSetCreatedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.uploader.get(), "uploader"));
+    return extractMapFrom(event, common);
   }
 
-  private Map<String, Set<String>> extractFrom(CommentAddedEvent event, Set<Property> common) {
-    common.addAll(propertyAttributeExtractor.extractFrom(event.author.get(), "commenter"));
+  private Map<String, Set<String>> extractFrom(
+      CommentAddedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.author.get(), "commenter"));
+    common.put("comment", event.comment);
     if (event.approvals != null) {
       for (ApprovalAttribute approvalAttribute : event.approvals.get()) {
-        common.addAll(propertyAttributeExtractor.extractFrom(approvalAttribute));
+        common.putAll(propertyAttributeExtractor.extractFrom(approvalAttribute));
       }
     }
-    common.add(propertyFactory.create("comment", event.comment));
-    return extractFrom((PatchSetEvent) event, common);
+    return extractMapFrom(event, common);
   }
 
   /**
-   * A set of property sets extracted from an event.
+   * A set of properties extracted from an event.
    *
-   * <p>As events may relate to more that a single issue, and properties sets are should be tied to
-   * a single issue, returning {@code Set<Property>} is not sufficient, and we need to return {@code
-   * Set<Set<Property>>}. Using this approach, a PatchSetCreatedEvent for a patch set with commit
-   * message:
+   * <p>As events may relate to more that a single issue and a group of properties should be tied to
+   * a single issue, we need to return {@code Set<Map>} of properties. As properties we understand a
+   * map of event attributes. Using this approach, a PatchSetCreatedEvent for a patch set with
+   * commit message:
    *
    * <pre>
    *   (bug 4711) Fix treatment of special characters in title
@@ -166,16 +164,17 @@ public class PropertyExtractor {
    * same event. So in the above example, a comment "mentioned in change 123" may be added for issue
    * 42, and a comment "fixed by change 123” may be added for issue 4711.
    *
-   * @param event The event to extract property sets from.
-   * @return sets of property sets extracted from the event.
+   * @param event The event to extract property maps from.
+   * @return set of property maps extracted from the event.
    */
-  public Set<Set<Property>> extractFrom(RefEvent event) {
+  public Set<Map<String, String>> extractFrom(RefEvent event) {
     Map<String, Set<String>> associations = null;
-    Set<Set<Property>> ret = Sets.newHashSet();
-
-    Set<Property> common = Sets.newHashSet();
-    common.add(propertyFactory.create("event", event.getClass().getName()));
-    common.add(propertyFactory.create("project", event.getProjectNameKey().get()));
+    Map<String, String> common = new HashMap<>();
+    common.put("event", event.getClass().getName());
+    common.put("event-type", event.type);
+    common.put("project", event.getProjectNameKey().get());
+    common.put("ref", event.getRefName());
+    common.put("itsName", pluginName);
 
     if (event instanceof ChangeAbandonedEvent) {
       associations = extractFrom((ChangeAbandonedEvent) event, common);
@@ -191,18 +190,13 @@ public class PropertyExtractor {
       associations = extractFrom((RefUpdatedEvent) event, common);
     }
 
+    Set<Map<String, String>> ret = new HashSet<>();
     if (associations != null) {
-      for (String issue : associations.keySet()) {
-        Set<Property> properties = Sets.newHashSet();
-        Property property = propertyFactory.create("issue", issue);
-        properties.add(property);
-        property = propertyFactory.create("its-name", pluginName);
-        properties.add(property);
-        for (String occurrence : associations.get(issue)) {
-          property = propertyFactory.create("association", occurrence);
-          properties.add(property);
-        }
-        properties.addAll(common);
+      for (Entry<String, Set<String>> assoc : associations.entrySet()) {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("issue", assoc.getKey());
+        properties.put("association", String.join(" ", assoc.getValue()));
+        properties.putAll(common);
         ret.add(properties);
       }
     }
