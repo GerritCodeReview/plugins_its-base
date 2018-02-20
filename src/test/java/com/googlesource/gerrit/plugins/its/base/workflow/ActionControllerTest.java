@@ -16,8 +16,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
@@ -26,8 +27,11 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
@@ -43,7 +47,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Set<Set<Property>> propertySets = Collections.emptySet();
+    Set<Map<String, String>> propertySets = new HashSet<>();
     expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
     replayMocks();
@@ -51,117 +55,73 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     actionController.onEvent(event);
   }
 
-  public void testNoActions() {
+  public void testNoActionsOrNotIssues() {
     ActionController actionController = createActionController();
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Set<Set<Property>> propertySets = Sets.newHashSet();
-    Set<Property> propertySet = Collections.emptySet();
-    propertySets.add(propertySet);
+    Set<Map<String, String>> propertySets = new HashSet<>();
+    Map<String, String> properties = ImmutableMap.of("fake", "property");
+    propertySets.add(properties);
 
     expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
+    // When no issues are found in the commit message, the list of actions is empty
+    // as there are no matchs with an empty map of properties.
     Collection<ActionRequest> actions = Collections.emptySet();
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).once();
+    expect(ruleBase.actionRequestsFor(properties)).andReturn(actions).once();
 
     replayMocks();
 
     actionController.onEvent(event);
   }
 
-  public void testNoIssues() {
+  public void testSinglePropertyMapSingleActionSingleIssue() {
     ActionController actionController = createActionController();
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Set<Set<Property>> propertySets = Sets.newHashSet();
-    Set<Property> propertySet = Collections.emptySet();
-    propertySets.add(propertySet);
+    Map<String, String> properties = ImmutableMap.of("issue", "testIssue");
+
+    Set<Map<String, String>> propertySets = ImmutableSet.of(properties);
 
     expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
-    Collection<ActionRequest> actions = Lists.newArrayListWithCapacity(1);
-    ActionRequest action1 = createMock(ActionRequest.class);
-    actions.add(action1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).once();
-
-    replayMocks();
-
-    actionController.onEvent(event);
-  }
-
-  public void testSinglePropertySetSingleActionSingleIssue() {
-    ActionController actionController = createActionController();
-
-    ChangeEvent event = createMock(ChangeEvent.class);
-
-    Property propertyIssue1 = createMock(Property.class);
-    expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
-    expect(propertyIssue1.getValue()).andReturn("testIssue").anyTimes();
-
-    Set<Property> propertySet = Sets.newHashSet();
-    propertySet.add(propertyIssue1);
-
-    Set<Set<Property>> propertySets = Sets.newHashSet();
-    propertySets.add(propertySet);
-
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
-
-    Collection<ActionRequest> actionRequests = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    actionRequests.add(actionRequest1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests).once();
+    Collection<ActionRequest> actionRequests = ImmutableList.of(actionRequest1);
+    expect(ruleBase.actionRequestsFor(properties)).andReturn(actionRequests).once();
 
-    actionExecutor.execute("testIssue", actionRequests, propertySet);
+    actionExecutor.execute(actionRequests, properties);
 
     replayMocks();
 
     actionController.onEvent(event);
   }
 
-  public void testMultiplePropertySetsMultipleActionMultipleIssue() {
+  public void testMultiplePropertyMapsMultipleActionMultipleIssue() {
     ActionController actionController = createActionController();
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Property propertyIssue1 = createMock(Property.class);
-    expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
-    expect(propertyIssue1.getValue()).andReturn("testIssue").anyTimes();
+    Map<String, String> properties1 = ImmutableMap.of("issue", "testIssue");
+    Map<String, String> properties2 = ImmutableMap.of("issue", "testIssue2");
 
-    Property propertyIssue2 = createMock(Property.class);
-    expect(propertyIssue2.getKey()).andReturn("issue").anyTimes();
-    expect(propertyIssue2.getValue()).andReturn("testIssue2").anyTimes();
-
-    Set<Property> propertySet1 = Sets.newHashSet();
-    propertySet1.add(propertyIssue1);
-
-    Set<Property> propertySet2 = Sets.newHashSet();
-    propertySet2.add(propertyIssue1);
-    propertySet2.add(propertyIssue2);
-
-    Set<Set<Property>> propertySets = Sets.newHashSet();
-    propertySets.add(propertySet1);
-    propertySets.add(propertySet2);
+    Set<Map<String, String>> propertySets = ImmutableSet.of(properties1, properties2);
 
     expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
 
-    Collection<ActionRequest> actionRequests1 = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    actionRequests1.add(actionRequest1);
+    Collection<ActionRequest> actionRequests1 = ImmutableList.of(actionRequest1);
 
-    Collection<ActionRequest> actionRequests2 = Lists.newArrayListWithCapacity(2);
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
-    actionRequests2.add(actionRequest2);
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
-    actionRequests2.add(actionRequest3);
+    Collection<ActionRequest> actionRequests2 = ImmutableList.of(actionRequest2, actionRequest3);
 
-    expect(ruleBase.actionRequestsFor(propertySet1)).andReturn(actionRequests1).once();
-    expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2).once();
+    expect(ruleBase.actionRequestsFor(properties1)).andReturn(actionRequests1).once();
+    expect(ruleBase.actionRequestsFor(properties2)).andReturn(actionRequests2).once();
 
-    actionExecutor.execute("testIssue", actionRequests1, propertySet1);
-    actionExecutor.execute("testIssue", actionRequests2, propertySet2);
-    actionExecutor.execute("testIssue2", actionRequests2, propertySet2);
+    actionExecutor.execute(actionRequests1, properties1);
+    actionExecutor.execute(actionRequests2, properties2);
 
     replayMocks();
 

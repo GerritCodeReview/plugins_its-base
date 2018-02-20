@@ -19,21 +19,21 @@ import com.google.common.io.CharStreams;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
+import com.google.template.soy.SoyFileSet.Builder;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Map;
 
 /**
  * Adds a short predefined comments to an issue.
@@ -57,26 +57,11 @@ public class AddSoyComment implements Action {
     this.its = its;
   }
 
-  private HashMap<String, Object> getSoyContext(Set<Property> properties) {
-    HashMap<String, Object> soyContext = new HashMap<>();
-    for (Property property : properties) {
-      String key = property.getKey();
-      if (!Strings.isNullOrEmpty(key)) {
-        String value = property.getValue();
-        if (!Strings.isNullOrEmpty(value)) {
-          soyContext.put(key, value);
-        }
-      }
-    }
-
-    return soyContext;
-  }
-
   private String soyTemplate(
       SoyFileSet.Builder builder,
       String template,
       SanitizedContent.ContentKind kind,
-      Set<Property> properties) {
+      Map<String, String> properties) {
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
@@ -88,26 +73,22 @@ public class AddSoyComment implements Action {
     }
 
     builder.add(content, templatePath.toAbsolutePath().toString());
-
-    HashMap<String, Object> context = getSoyContext(properties);
-
     SoyTofu.Renderer renderer =
         builder
             .build()
             .compileToTofu()
             .newRenderer("etc.its.templates." + template)
             .setContentKind(kind)
-            .setData(context);
+            .setData(properties);
     return renderer.render();
   }
 
-  protected String soyTextTemplate(
-      SoyFileSet.Builder builder, String template, Set<Property> properties) {
+  private String soyTextTemplate(Builder builder, String template, Map<String, String> properties) {
     return soyTemplate(builder, template, SanitizedContent.ContentKind.TEXT, properties);
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String comment = buildComment(actionRequest, properties);
     if (!Strings.isNullOrEmpty(comment)) {
@@ -115,7 +96,7 @@ public class AddSoyComment implements Action {
     }
   }
 
-  private String buildComment(ActionRequest actionRequest, Set<Property> properties) {
+  private String buildComment(ActionRequest actionRequest, Map<String, String> properties) {
     String template = actionRequest.getParameter(1);
     if (!template.isEmpty()) {
       return soyTextTemplate(SoyFileSet.builder(), template, properties);
