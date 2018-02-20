@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -22,85 +22,68 @@ import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-/** Extractor to translate the various {@code *Attribute}s to {@link Property Properties}. */
+/** Extractor to translate the various {@code *Attribute}s to properties. */
 class PropertyAttributeExtractor {
-  private Property.Factory propertyFactory;
   private ItsFacade its;
 
   @Inject
-  PropertyAttributeExtractor(ItsFacade its, Property.Factory propertyFactory) {
+  PropertyAttributeExtractor(ItsFacade its) {
     this.its = its;
-    this.propertyFactory = propertyFactory;
   }
 
-  Set<Property> extractFrom(AccountAttribute accountAttribute, String prefix) {
-    Set<Property> properties = Sets.newHashSet();
+  Map<String, String> extractFrom(AccountAttribute accountAttribute, String prefix) {
+    Map<String, String> properties = new HashMap<>();
     if (accountAttribute != null) {
-      properties.add(propertyFactory.create(prefix + "Email", accountAttribute.email));
-      properties.add(propertyFactory.create(prefix + "Username", accountAttribute.username));
-      properties.add(propertyFactory.create(prefix + "Name", accountAttribute.name));
+      properties.put(prefix + "Email", accountAttribute.email);
+      properties.put(prefix + "Username", accountAttribute.username);
+      properties.put(prefix + "Name", accountAttribute.name);
     }
     return properties;
   }
 
-  Set<Property> extractFrom(ChangeAttribute changeAttribute) {
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(propertyFactory.create("branch", changeAttribute.branch));
-    properties.add(propertyFactory.create("topic", changeAttribute.topic));
-    properties.add(propertyFactory.create("subject", changeAttribute.subject));
-
-    properties.add(propertyFactory.create("commitMessage", changeAttribute.commitMessage));
-    properties.add(propertyFactory.create("changeId", changeAttribute.id));
-    properties.add(propertyFactory.create("changeNumber", String.valueOf(changeAttribute.number)));
-    properties.add(propertyFactory.create("changeUrl", changeAttribute.url));
-
-    properties.add(
-        propertyFactory.create(
-            "formatChangeUrl", its.createLinkForWebui(changeAttribute.url, changeAttribute.url)));
-
-    String status = null;
-    if (changeAttribute.status != null) {
-      status = changeAttribute.status.toString();
-    }
-    properties.add(propertyFactory.create("status", status));
-    properties.addAll(extractFrom(changeAttribute.owner, "owner"));
-    return properties;
+  Map<String, String> extractFrom(ChangeAttribute changeAttribute) {
+    return ImmutableMap.<String, String>builder()
+        .put("branch", changeAttribute.branch)
+        .put("topic", changeAttribute.topic != null ? changeAttribute.topic : "")
+        .put("subject", changeAttribute.subject)
+        .put("commitMessage", changeAttribute.commitMessage)
+        .put("changeId", changeAttribute.id)
+        .put("changeNumber", String.valueOf(changeAttribute.number))
+        .put("changeUrl", changeAttribute.url)
+        .put("formatChangeUrl", its.createLinkForWebui(changeAttribute.url, changeAttribute.url))
+        .put("status", changeAttribute.status != null ? changeAttribute.status.toString() : "")
+        .putAll(extractFrom(changeAttribute.owner, "owner"))
+        .build();
   }
 
-  Set<Property> extractFrom(PatchSetAttribute patchSetAttribute) {
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(propertyFactory.create("revision", patchSetAttribute.revision));
-    properties.add(
-        propertyFactory.create("patchSetNumber", String.valueOf(patchSetAttribute.number)));
-    properties.add(propertyFactory.create("ref", patchSetAttribute.ref));
-    properties.add(propertyFactory.create("createdOn", patchSetAttribute.createdOn.toString()));
-
-    properties.add(propertyFactory.create("parents", patchSetAttribute.parents.toString()));
-    properties.add(
-        propertyFactory.create("deletions", Integer.toString(patchSetAttribute.sizeDeletions)));
-    properties.add(
-        propertyFactory.create("insertions", Integer.toString(patchSetAttribute.sizeInsertions)));
-    properties.addAll(extractFrom(patchSetAttribute.uploader, "uploader"));
-    properties.addAll(extractFrom(patchSetAttribute.author, "author"));
-    return properties;
+  Map<String, String> extractFrom(PatchSetAttribute patchSetAttribute) {
+    return ImmutableMap.<String, String>builder()
+        .put("revision", patchSetAttribute.revision)
+        .put("patchSetNumber", String.valueOf(patchSetAttribute.number))
+        .put("ref", patchSetAttribute.ref)
+        .put("createdOn", patchSetAttribute.createdOn.toString())
+        .put("parents", patchSetAttribute.parents.toString())
+        .put("deletions", Integer.toString(patchSetAttribute.sizeDeletions))
+        .put("insertions", Integer.toString(patchSetAttribute.sizeInsertions))
+        .putAll(extractFrom(patchSetAttribute.uploader, "uploader"))
+        .putAll(extractFrom(patchSetAttribute.author, "author"))
+        .build();
   }
 
-  Set<Property> extractFrom(RefUpdateAttribute refUpdateAttribute) {
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(propertyFactory.create("revision", refUpdateAttribute.newRev));
-    properties.add(propertyFactory.create("revisionOld", refUpdateAttribute.oldRev));
-    properties.add(propertyFactory.create("ref", refUpdateAttribute.refName));
-    return properties;
+  Map<String, String> extractFrom(RefUpdateAttribute refUpdateAttribute) {
+    return ImmutableMap.<String, String>builder()
+        .put("revision", refUpdateAttribute.newRev)
+        .put("revisionOld", refUpdateAttribute.oldRev)
+        .put("ref", refUpdateAttribute.refName)
+        .build();
   }
 
-  Set<Property> extractFrom(ApprovalAttribute approvalAttribute) {
-    Set<Property> properties = Sets.newHashSet();
-    properties.add(
-        propertyFactory.create(
-            "approval" + approvalAttribute.type.replace("-", ""), approvalAttribute.value));
-    return properties;
+  public Map<String, String> extractFrom(ApprovalAttribute approvalAttribute) {
+    return ImmutableMap.<String, String>builder()
+        .put("approval" + approvalAttribute.type.replace("-", ""), approvalAttribute.value)
+        .build();
   }
 }
