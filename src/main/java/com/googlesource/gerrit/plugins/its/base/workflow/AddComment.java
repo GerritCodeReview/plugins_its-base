@@ -17,8 +17,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Adds a fixed comment to an issue.
@@ -38,7 +39,7 @@ public class AddComment implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     String comment = String.join(" ", actionRequest.getParameters());
     if (!Strings.isNullOrEmpty(comment)) {

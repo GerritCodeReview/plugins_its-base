@@ -20,6 +20,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
@@ -35,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.easymock.Capture;
 import org.eclipse.jgit.lib.Config;
@@ -139,10 +141,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Rule rule1 = createMock(Rule.class);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
 
-    Property property1 = createMock(Property.class);
-    expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn(TEST_PROJECT);
-    Collection<Property> properties = ImmutableList.of(property1);
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
     expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
@@ -181,10 +180,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Rule rule2 = createMock(Rule.class);
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
 
-    Property property1 = createMock(Property.class);
-    expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn(TEST_PROJECT);
-    Collection<Property> properties = ImmutableList.of(property1);
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1, actionRequest2);
     expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match).anyTimes();
@@ -230,10 +226,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     injectRuleBase("[rule \"rule3\"]\n\taction = action3", RuleBaseKind.ITS);
 
-    Property property1 = createMock(Property.class);
-    expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn(TEST_PROJECT);
-    Collection<Property> properties = ImmutableList.of(property1);
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     Rule rule2 = createMock(Rule.class);
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
@@ -269,10 +262,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     Rule rule1 = createMock(Rule.class);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
 
-    Property property1 = createMock(Property.class);
-    expect(property1.getKey()).andReturn(PROJECT_KEY);
-    expect(property1.getValue()).andReturn(TEST_PROJECT);
-    Collection<Property> properties = ImmutableList.of(property1);
+    Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
     expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
