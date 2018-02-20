@@ -15,6 +15,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
@@ -23,6 +24,7 @@ import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class RuleTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -33,7 +35,7 @@ public class RuleTest extends LoggingMockingTestCase {
   }
 
   public void testActionsForUnconditionalRule() {
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of();
 
     Rule rule = createRule("testRule");
 
@@ -50,7 +52,7 @@ public class RuleTest extends LoggingMockingTestCase {
   }
 
   public void testActionRequestsForConditionalRuleEmptyProperties() {
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of();
 
     Rule rule = createRule("testRule");
 
@@ -70,7 +72,7 @@ public class RuleTest extends LoggingMockingTestCase {
   }
 
   public void testActionRequestsForConditionalRules() {
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of();
 
     Rule rule = createRule("testRule");
 
@@ -94,7 +96,7 @@ public class RuleTest extends LoggingMockingTestCase {
   }
 
   public void testActionRequestsForMultipleActionRequests() {
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of();
 
     Rule rule = createRule("testRule");
 
