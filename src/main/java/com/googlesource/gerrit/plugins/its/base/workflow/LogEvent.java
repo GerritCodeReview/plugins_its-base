@@ -15,8 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +55,8 @@ public class LogEvent implements Action {
   @Inject
   public LogEvent() {}
 
-  private void logProperty(Level level, Property property) {
-    String message = property.toString();
+  private void logProperty(Level level, Entry<String, String> property) {
+    String message = String.format("[%s = %s]", property.getKey(), property.getValue());
     switch (level) {
       case ERROR:
         log.error(message);
@@ -74,10 +76,10 @@ public class LogEvent implements Action {
   }
 
   @Override
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  public void execute(String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
     Level level = Level.fromString(actionRequest.getParameter(1));
-    for (Property property : properties) {
+    for (Entry<String, String> property : properties.entrySet()) {
       logProperty(level, property);
     }
   }
