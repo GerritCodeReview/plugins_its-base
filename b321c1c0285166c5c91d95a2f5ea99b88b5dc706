@@ -46,6 +46,30 @@
       "revId": "b321c1c0285166c5c91d95a2f5ea99b88b5dc706",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ed8324fd_0d35a582",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-02-20T02:12:04Z",
+      "side": 0,
+      "message": "canonical form*",
+      "parentUuid": "514260aa_acb8a5f1",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 137,
+        "endChar": 7
+      },
+      "revId": "b321c1c0285166c5c91d95a2f5ea99b88b5dc706",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
