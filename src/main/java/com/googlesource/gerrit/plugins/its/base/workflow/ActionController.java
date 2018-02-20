@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -58,16 +59,11 @@ public class ActionController implements EventListener {
   }
 
   private void handleEvent(RefEvent refEvent) {
-    Set<Set<Property>> propertiesCollections = propertyExtractor.extractFrom(refEvent);
-    for (Set<Property> properties : propertiesCollections) {
-      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(properties);
+    Set<Map<String, String>> properties = propertyExtractor.extractFrom(refEvent);
+    for (Map<String, String> propertiesMap : properties) {
+      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(propertiesMap);
       if (!actions.isEmpty()) {
-        for (Property property : properties) {
-          if ("issue".equals(property.getKey())) {
-            String issue = property.getValue();
-            actionExecutor.execute(issue, actions, properties);
-          }
-        }
+        actionExecutor.execute(actions, propertiesMap);
       }
     }
   }

@@ -17,7 +17,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class ActionExecutor {
     this.logEventFactory = logEventFactory;
   }
 
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
+  private void execute(String issue, ActionRequest actionRequest, Map<String, String> properties) {
     try {
       String name = actionRequest.getName();
       Action action = null;
@@ -74,9 +74,9 @@ public class ActionExecutor {
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+  public void execute(Iterable<ActionRequest> actions, Map<String, String> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(issue, actionRequest, properties);
+      execute(properties.get("issue"), actionRequest, properties);
     }
   }
 }

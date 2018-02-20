@@ -18,7 +18,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -31,8 +31,8 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
@@ -56,7 +56,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, ImmutableMap.of());
 
     assertLogMessageContains("No template name");
   }
@@ -80,15 +80,13 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testInlineWithMultipleParameters() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("inline");
     expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Param2", "Param3"});
-
-    Set<Property> properties = Sets.newHashSet();
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Param2 Param3");
     expect(
@@ -104,7 +102,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, properties);
+    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testInlineWithSingleProperty() throws IOException {
@@ -112,12 +110,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("inline");
     expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "${subject}"});
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Rosebud").anyTimes();
-    properties.add(propertySubject);
+    Map<String, String> properties = new HashMap<>();
+    properties.put("subject", "Rosebud");
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud");
     Capture<VelocityContext> contextCapture = createCapture();
@@ -145,12 +139,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameter(1)).andReturn("inline");
     expect(actionRequest.getParameters()).andReturn(new String[] {"inline", "Test"});
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Rosebud").anyTimes();
-    properties.add(propertySubject);
+    Map<String, String> properties = new HashMap<>();
+    properties.put("subject", "Rosebud");
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Test");
     expect(
@@ -175,17 +165,9 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     expect(actionRequest.getParameters())
         .andReturn(new String[] {"inline", "${subject}", "${reason}", "${subject}"});
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Rosebud").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyReason = createMock(Property.class);
-    expect(propertyReason.getKey()).andReturn("reason").anyTimes();
-    expect(propertyReason.getValue()).andReturn("Life").anyTimes();
-    properties.add(propertyReason);
+    Map<String, String> properties = new HashMap<>();
+    properties.put("subject", "Rosebud");
+    properties.put("reason", "Life");
 
     IAnswer<Boolean> answer = new VelocityWriterFiller("Rosebud Life Rosebud");
     Capture<VelocityContext> contextCapture = createCapture();
@@ -233,7 +215,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -270,7 +252,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
 
     VelocityContext context = contextCapture.getValue();
     Object itsAdapterObj = context.get("its");
@@ -290,7 +272,7 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, ImmutableMap.of());
 
     assertLogMessageContains("non-existing-template");
   }
@@ -315,25 +297,16 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddVelocityComment addVelocityComment = createAddVelocityComment();
-    addVelocityComment.execute("4711", actionRequest, new HashSet<>());
+    addVelocityComment.execute("4711", actionRequest, new HashMap<String, String>());
   }
 
   public void testTemplateMultipleParametersAndProperties() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getParameter(1)).andReturn("test-template");
 
-    Set<Property> properties = Sets.newHashSet();
-
-    Property propertySubject = createMock(Property.class);
-    expect(propertySubject.getKey()).andReturn("subject").anyTimes();
-    expect(propertySubject.getValue()).andReturn("Rosebud").anyTimes();
-    properties.add(propertySubject);
-
-    Property propertyReason = createMock(Property.class);
-    expect(propertyReason.getKey()).andReturn("reason").anyTimes();
-    expect(propertyReason.getValue()).andReturn("Life").anyTimes();
-    properties.add(propertyReason);
-
+    Map<String, String> properties = new HashMap<>();
+    properties.put("subject", "Rosebud");
+    properties.put("reason", "Life");
     injectTestTemplate(
         "Test Template with subject: ${subject}.\n" + "${reason} is the reason for ${subject}.");
 

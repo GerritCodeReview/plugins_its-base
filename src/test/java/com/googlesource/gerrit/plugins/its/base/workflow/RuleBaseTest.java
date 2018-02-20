@@ -15,6 +15,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -27,8 +28,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.eclipse.jgit.util.FileUtils;
 
@@ -154,7 +155,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     expect(actionRequestFactory.create("action1")).andReturn(actionRequest1);
     rule1.addActionRequest(actionRequest1);
 
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of();
 
     List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(1);
     rule1Match.add(actionRequest1);
@@ -198,9 +199,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     expect(actionRequestFactory.create("action3")).andReturn(actionRequest3);
     rule2.addActionRequest(actionRequest3);
 
-    Collection<Property> properties = Lists.newArrayListWithCapacity(1);
-    Property property1 = createMock(Property.class);
-    properties.add(property1);
+    Map<String, String> properties = ImmutableMap.of("sample", "property");
 
     List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(2);
     rule1Match.add(actionRequest1);
@@ -286,7 +285,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     injectRuleBase("[rule \"rule3\"]\n" + "\taction = action3", RuleBaseKind.ITS);
 
-    Collection<Property> properties = Collections.emptySet();
+    Map<String, String> properties = ImmutableMap.of("sample", "property");
 
     Rule rule1 = createMock(Rule.class);
     expect(ruleFactory.create("rule1")).andReturn(rule1);
