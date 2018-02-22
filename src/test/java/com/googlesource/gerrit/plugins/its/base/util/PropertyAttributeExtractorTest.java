@@ -120,6 +120,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     Property propertySubject = createMock(Property.class);
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
+    Property propertyEscapedSubject = createMock(Property.class);
+    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
+
     Property propertyId2 = createMock(Property.class);
     expect(propertyFactory.create("change-id", "testId")).andReturn(propertyId2);
 
@@ -187,6 +190,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyBranch);
     expected.add(propertyTopic);
     expected.add(propertySubject);
+    expected.add(propertyEscapedSubject);
     expected.add(propertyId);
     expected.add(propertyId2);
     expected.add(propertyNumber);
@@ -235,6 +239,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     Property propertySubject = createMock(Property.class);
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
+
+    Property propertyEscapedSubject = createMock(Property.class);
+    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
 
     Property propertyId = createMock(Property.class);
     expect(propertyFactory.create("changeId", "testId")).andReturn(propertyId);
@@ -303,6 +310,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyBranch);
     expected.add(propertyTopic);
     expected.add(propertySubject);
+    expected.add(propertyEscapedSubject);
     expected.add(propertyId);
     expected.add(propertyNumber);
     expected.add(propertyUrl);
