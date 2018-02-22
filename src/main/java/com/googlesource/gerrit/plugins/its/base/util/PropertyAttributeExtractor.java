@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.util.Set;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /** Extractor to translate the various {@code *Attribute}s to {@link Property Properties}. */
 public class PropertyAttributeExtractor {
@@ -57,7 +58,7 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("project", changeAttribute.project));
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
-    properties.add(propertyFactory.create("subject", changeAttribute.subject));
+    properties.add(propertyFactory.create("subject", StringEscapeUtils.unescapeJava(changeAttribute.subject)));
 
     // deprecated, to be removed soon. migrate to ones without dash.
     properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
