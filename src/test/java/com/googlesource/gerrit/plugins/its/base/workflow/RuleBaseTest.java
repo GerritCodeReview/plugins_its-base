@@ -23,10 +23,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
   private Injector injector;
 
-  private Path sitePath;
+  private Path itsPath;
   private RulesConfigReader rulesConfigReader;
   private ItsRulesProjectCache rulesProjectCache;
 
@@ -305,7 +305,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   private void injectRuleBase(String rules, RuleBaseKind ruleBaseKind) throws IOException {
-    Path ruleBaseFile = sitePath.resolve("etc").resolve("its").resolve(ruleBaseKind.fileName);
+    Path ruleBaseFile = itsPath.resolve(ruleBaseKind.fileName);
     Files.createDirectories(ruleBaseFile.getParent());
     Files.write(ruleBaseFile, rules.getBytes());
   }
@@ -320,8 +320,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   @Override
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
-      if (Files.exists(sitePath)) {
-        FileUtils.delete(sitePath.toFile(), FileUtils.RECURSIVE);
+      if (Files.exists(itsPath)) {
+        FileUtils.delete(itsPath.toFile(), FileUtils.RECURSIVE);
       }
     }
     super.tearDown();
@@ -337,8 +337,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
-      sitePath = randomTargetPath();
-      assertFalse("sitePath already (" + sitePath + ") already exists", Files.exists(sitePath));
+      itsPath = randomTargetPath().resolve("etc").resolve("its");
+      assertFalse("itsPath (" + itsPath + ") already exists", Files.exists(itsPath));
       cleanupSitePath = true;
 
       rulesConfigReader = createMock(RulesConfigReader.class);
@@ -347,7 +347,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       rulesProjectCache = createMock(ItsRulesProjectCache.class);
       bind(ItsRulesProjectCache.class).toInstance(rulesProjectCache);
 
-      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      bind(Path.class).annotatedWith(ItsPath.class).toInstance(itsPath);
 
       bind(String.class)
           .annotatedWith(GlobalRulesFileName.class)
