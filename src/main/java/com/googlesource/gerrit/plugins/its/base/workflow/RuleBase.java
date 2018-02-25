@@ -15,9 +15,9 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import java.io.File;
 import java.io.IOException;
@@ -49,12 +49,12 @@ public class RuleBase {
 
   @Inject
   public RuleBase(
-      @SitePath Path sitePath,
+      @ItsPath Path itsPath,
       ItsRulesProjectCache rulesProjectCache,
       RulesConfigReader rulesConfigReader,
       @GlobalRulesFileName String globalRulesFileName,
       @PluginRulesFileName String pluginRulesFileName) {
-    this.itsPath = sitePath.normalize().resolve("etc").resolve("its");
+    this.itsPath = itsPath;
     this.rulesConfigReader = rulesConfigReader;
     this.rulesProjectCache = rulesProjectCache;
     this.globalRulesFileName = globalRulesFileName;

@@ -21,8 +21,10 @@ import com.google.gerrit.extensions.events.GitReferenceUpdatedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
+import com.google.gerrit.server.config.SitePath;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
+import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
@@ -37,6 +39,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
 
@@ -81,5 +84,12 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  @Provides
+  @ItsPath
+  @Inject
+  Path itsPath(@SitePath Path sitePath) {
+    return sitePath.normalize().resolve("etc").resolve("its");
   }
 }

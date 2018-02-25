@@ -16,16 +16,15 @@ package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -48,17 +47,13 @@ public class AddSoyComment implements Action {
     AddSoyComment create();
   }
 
-  /** Directory (relative to site) to search templates in */
-  private static final String ITS_TEMPLATE_DIR =
-      "etc" + File.separator + "its" + File.separator + "templates";
-
   private final ItsFacade its;
-  private final Path sitePath;
+  private final Path templateDir;
   protected HashMap<String, Object> soyContext;
 
   @Inject
-  public AddSoyComment(@SitePath Path sitePath, ItsFacade its) {
-    this.sitePath = sitePath;
+  public AddSoyComment(@ItsPath Path itsPath, ItsFacade its) {
+    this.templateDir = itsPath.resolve("templates");
     this.its = its;
   }
 
@@ -82,7 +77,6 @@ public class AddSoyComment implements Action {
       String template,
       SanitizedContent.ContentKind kind,
       Set<Property> properties) {
-    Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
