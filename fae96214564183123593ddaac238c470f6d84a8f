@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62611b9f_970ea9d6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-02-26T03:37:01Z",
+      "side": 1,
+      "message": "Make \"etc\" and \"its\" constants?\n\n(I\u0027m not sure but there might already be a constant in core gerrit for \"etc\").",
+      "range": {
+        "startLine": 93,
+        "startChar": 39,
+        "endLine": 93,
+        "endChar": 61
+      },
+      "revId": "fae96214564183123593ddaac238c470f6d84a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96287491_a7a17ee8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddSoyComment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-02-26T03:37:01Z",
+      "side": 1,
+      "message": "Make this a constant?",
+      "range": {
+        "startLine": 56,
+        "startChar": 40,
+        "endLine": 56,
+        "endChar": 49
+      },
+      "revId": "fae96214564183123593ddaac238c470f6d84a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
