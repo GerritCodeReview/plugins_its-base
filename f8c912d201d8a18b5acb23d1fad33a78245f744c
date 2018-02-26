@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ea770ff_189daefe",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-26T06:51:29Z",
+      "side": 1,
+      "message": "Nit: we usually return already module instance form Cache class, e.g.:\n\n  install(AccountCacheImpl.module());",
+      "revId": "f8c912d201d8a18b5acb23d1fad33a78245f744c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e173fcc_bfa8dd54",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-26T06:51:29Z",
+      "side": 1,
+      "message": "Can be:\n\n  public static Module module() {\n      return new CacheModule() {\n  [...]\n\nto avoid instantiation in module registration.",
+      "revId": "f8c912d201d8a18b5acb23d1fad33a78245f744c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ca86664_99d1df16",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-26T06:51:29Z",
+      "side": 1,
+      "message": "2018.",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "f8c912d201d8a18b5acb23d1fad33a78245f744c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
