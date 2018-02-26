@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b24199ed_91083d06",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-02-26T12:08:41Z",
+      "side": 1,
+      "message": "Yes, in fact \"etc\" folder exists under the SitePaths object and we could inject that object here. Done.",
+      "parentUuid": "62611b9f_970ea9d6",
+      "range": {
+        "startLine": 93,
+        "startChar": 39,
+        "endLine": 93,
+        "endChar": 61
+      },
+      "revId": "fae96214564183123593ddaac238c470f6d84a8f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96287491_a7a17ee8",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddSoyComment.java",
         "patchSetId": 1
