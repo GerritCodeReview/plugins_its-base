@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4504ef4b_ebdc429b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-27T10:27:50Z",
+      "side": 1,
+      "message": "This is a change on a public method. Have you checked the consequences on the other its-* plugins?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42ac4e9b_08421fd6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-27T10:27:50Z",
+      "side": 1,
+      "message": "This is breaking compatibility with all its-* plugins.",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
