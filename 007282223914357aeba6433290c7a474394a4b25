@@ -166,6 +166,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7acaece8_987914d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-02-27T13:04:52Z",
+      "side": 1,
+      "message": "Well, the fact is that it is possible.  It doesn\u0027t necessarily mean that someone did it.",
+      "parentUuid": "f8ee614c_27c42196",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
