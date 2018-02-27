@@ -22,6 +22,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2dd48a25_5347696a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-27T11:43:12Z",
+      "side": 1,
+      "message": "That\u0027s the thing: at the moment we say Code-Review -2 for saying two things:\n- Veto, do not merge this yet\n- I have serious concerns about this code\n\nThis flag is an attempt to avoid misunderstanding about the code quality calls :-)",
+      "parentUuid": "0430095d_d3503533",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
