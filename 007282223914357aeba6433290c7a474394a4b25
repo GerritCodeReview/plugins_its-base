@@ -70,6 +70,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9a949a5_b8b43ea7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-02-27T12:02:12Z",
+      "side": 1,
+      "message": "I think blocking a change due to serious concerns, or as we often see with changes on gerrit-review to block submit until a convenient time, is a valid use of CR-2.\n\nWhat has led to this is simply that Luca and I disagree about whether CR-2 is necessary for the change in question (see previous link).",
+      "parentUuid": "2bdc0015_329534ab",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
