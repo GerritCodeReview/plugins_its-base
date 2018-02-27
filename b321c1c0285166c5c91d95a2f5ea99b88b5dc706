@@ -70,6 +70,30 @@
       "revId": "b321c1c0285166c5c91d95a2f5ea99b88b5dc706",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd24522d_e93fc4c9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-27T08:39:05Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "ed8324fd_0d35a582",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 137,
+        "endChar": 7
+      },
+      "revId": "b321c1c0285166c5c91d95a2f5ea99b88b5dc706",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
