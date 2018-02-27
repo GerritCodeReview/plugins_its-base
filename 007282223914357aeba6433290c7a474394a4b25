@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0430095d_d3503533",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-27T11:27:57Z",
+      "side": 1,
+      "message": "What this solves i addition, that CRVW-2 doesn\u0027t? In both hcases you must explain what is wrong with this change. I would try to avoid to add another confusion. CRVW-2 says it al: The maintainer of a project has a serious concerns, that may or may not be able to be reserved with the current approach.",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
