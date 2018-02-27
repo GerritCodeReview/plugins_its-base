@@ -94,6 +94,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9074264_f910347c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-27T12:22:14Z",
+      "side": 1,
+      "message": "OK. Thanks for the link. I re-read the discussion on another change and I see your both points. I still think that CRVW-2 or (CRVW-1 with explanation) addresses all use cases. Remember, that originally CRVW-2 was just saying: \"Does no submit\", wrong time, wrong order, wrong approach, ... put here any further justfication.\n\nAgain, no matter, how you call your dislike/reject labels, foo or bar, just name doesn\u0027t say anything to a change owner. You will have to explain it. So the actually what matters, is not the label name, but your explanation, accompanied by your -1 or -2 vote.",
+      "parentUuid": "c9a949a5_b8b43ea7",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
