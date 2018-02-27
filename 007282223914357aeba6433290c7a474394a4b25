@@ -142,6 +142,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8ee614c_27c42196",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-02-27T13:02:53Z",
+      "side": 1,
+      "message": "\u003e The problem I have with -1 is that still allows\n \u003e other people to give a +2 and submit as-is :-(\n\nDo you have any reasons for saying that? It\u0027s well known fact that you are the founder and maintainer of its-* plugins. Can you point me to one single change, where your -1 vote was over rulled?",
+      "parentUuid": "6823dded_e3289695",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
