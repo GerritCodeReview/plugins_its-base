@@ -118,6 +118,30 @@
       "revId": "007282223914357aeba6433290c7a474394a4b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6823dded_e3289695",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-27T12:34:06Z",
+      "side": 1,
+      "message": "I remember someone saying as well that for some cultures the negatives are not politically correct, so they turned all the reviews into positives :-)\n\nWhatever approach or number, I need a label that says \"DO NOT SUBMIT\" as-is. The problem I have with -1 is that still allows other people to give a +2 and submit as-is :-(",
+      "parentUuid": "a9074264_f910347c",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "007282223914357aeba6433290c7a474394a4b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
