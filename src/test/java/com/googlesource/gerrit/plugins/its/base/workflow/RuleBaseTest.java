@@ -20,7 +20,9 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
+import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -331,6 +333,14 @@ public class RuleBaseTest extends LoggingMockingTestCase {
       cleanupSitePath = true;
 
       bind(Path.class).annotatedWith(ItsPath.class).toInstance(itsPath);
+
+      bind(String.class)
+          .annotatedWith(GlobalRulesFileName.class)
+          .toInstance(RuleBaseKind.GLOBAL.fileName);
+
+      bind(String.class)
+          .annotatedWith(PluginRulesFileName.class)
+          .toInstance(RuleBaseKind.ITS.fileName);
 
       ruleFactory = createMock(Rule.Factory.class);
       bind(Rule.Factory.class).toInstance(ruleFactory);
