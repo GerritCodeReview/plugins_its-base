@@ -18,9 +18,9 @@ import static org.easymock.EasyMock.expect;
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,7 +35,7 @@ import org.eclipse.jgit.util.FileUtils;
 public class RuleBaseTest extends LoggingMockingTestCase {
   private Injector injector;
 
-  private Path sitePath;
+  private Path itsPath;
   private Rule.Factory ruleFactory;
   private Condition.Factory conditionFactory;
   private ActionRequest.Factory actionRequestFactory;
@@ -294,7 +294,7 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   private void injectRuleBase(String rules, RuleBaseKind ruleBaseKind) throws IOException {
-    Path ruleBaseFile = sitePath.resolve("etc").resolve("its").resolve(ruleBaseKind.fileName);
+    Path ruleBaseFile = itsPath.resolve(ruleBaseKind.fileName);
     Files.createDirectories(ruleBaseFile.getParent());
     Files.write(ruleBaseFile, rules.getBytes());
   }
@@ -309,8 +309,8 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   @Override
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
-      if (Files.exists(sitePath)) {
-        FileUtils.delete(sitePath.toFile(), FileUtils.RECURSIVE);
+      if (Files.exists(itsPath)) {
+        FileUtils.delete(itsPath.toFile(), FileUtils.RECURSIVE);
       }
     }
     super.tearDown();
@@ -326,11 +326,11 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
-      sitePath = randomTargetPath();
-      assertFalse("sitePath already (" + sitePath + ") already exists", Files.exists(sitePath));
+      itsPath = randomTargetPath().resolve("etc").resolve("its");
+      assertFalse("itsPath (" + itsPath + ") already exists", Files.exists(itsPath));
       cleanupSitePath = true;
 
-      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      bind(Path.class).annotatedWith(ItsPath.class).toInstance(itsPath);
 
       ruleFactory = createMock(Rule.Factory.class);
       bind(Rule.Factory.class).toInstance(ruleFactory);

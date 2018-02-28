@@ -16,8 +16,8 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.Lists;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -55,12 +55,12 @@ public class RuleBase {
 
   @Inject
   public RuleBase(
-      SitePaths sitePaths,
+      @ItsPath Path itsPath,
       Rule.Factory ruleFactory,
       Condition.Factory conditionFactory,
       ActionRequest.Factory actionRequestFactory,
       @PluginName String pluginName) {
-    this.itsPath = sitePaths.etc_dir.normalize().resolve("its");
+    this.itsPath = itsPath;
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;

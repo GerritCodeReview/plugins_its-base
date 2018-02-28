@@ -20,8 +20,11 @@ import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
+import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
+import com.google.inject.Inject;
+import com.google.inject.Provides;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -34,8 +37,12 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
+
+  /** Folder where rules configuration files are located */
+  private static final String ITS_FOLDER = "its";
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
@@ -61,5 +68,12 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+  }
+
+  @Provides
+  @ItsPath
+  @Inject
+  Path itsPath(SitePaths sitePaths) {
+    return sitePaths.etc_dir.normalize().resolve(ITS_FOLDER);
   }
 }
