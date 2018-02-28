@@ -22,6 +22,30 @@
       "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bde45e0_c2ef7a2f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-02-28T17:25:33Z",
+      "side": 1,
+      "message": "Yes, it is.",
+      "parentUuid": "891a17f3_93609cec",
+      "range": {
+        "startLine": 103,
+        "startChar": 56,
+        "endLine": 103,
+        "endChar": 59
+      },
+      "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
