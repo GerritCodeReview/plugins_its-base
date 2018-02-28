@@ -15,9 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.Lists;
-import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
+import com.googlesource.gerrit.plugins.its.base.PluginRulesFileName;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,9 +33,6 @@ import org.slf4j.LoggerFactory;
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
-  /** Rules configuration filename pattern */
-  private static final String CONFIG_FILE_NAME = "actions%s.config";
-
   /** The section for rules within rulebases */
   private static final String RULE_SECTION = "rule";
 
@@ -45,7 +43,8 @@ public class RuleBase {
   private final Rule.Factory ruleFactory;
   private final Condition.Factory conditionFactory;
   private final ActionRequest.Factory actionRequestFactory;
-  private final String pluginName;
+  private final String globalRulesFileName;
+  private final String pluginRulesFileName;
 
   private Collection<Rule> rules;
 
@@ -59,12 +58,14 @@ public class RuleBase {
       Rule.Factory ruleFactory,
       Condition.Factory conditionFactory,
       ActionRequest.Factory actionRequestFactory,
-      @PluginName String pluginName) {
+      @GlobalRulesFileName String globalRulesFileName,
+      @PluginRulesFileName String pluginRulesFileName) {
     this.itsPath = itsPath;
     this.ruleFactory = ruleFactory;
     this.conditionFactory = conditionFactory;
     this.actionRequestFactory = actionRequestFactory;
-    this.pluginName = pluginName;
+    this.globalRulesFileName = globalRulesFileName;
+    this.pluginRulesFileName = pluginRulesFileName;
     reloadRules();
   }
 
@@ -117,12 +118,11 @@ public class RuleBase {
     rules = Lists.newArrayList();
 
     // Add global rules
-    File globalRuleFile = itsPath.resolve(String.format(CONFIG_FILE_NAME, "")).toFile();
+    File globalRuleFile = itsPath.resolve(globalRulesFileName).toFile();
     addRulesFromFile(globalRuleFile);
 
     // Add its-specific rules
-    File itsSpecificRuleFile =
-        itsPath.resolve(String.format(CONFIG_FILE_NAME, "-" + pluginName)).toFile();
+    File itsSpecificRuleFile = itsPath.resolve(pluginRulesFileName).toFile();
     addRulesFromFile(itsSpecificRuleFile);
 
     if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {

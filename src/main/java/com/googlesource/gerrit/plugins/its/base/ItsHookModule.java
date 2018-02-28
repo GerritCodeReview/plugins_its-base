@@ -41,6 +41,9 @@ import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
 
+  /** Rules configuration filename pattern */
+  private static final String CONFIG_FILE_NAME = "actions%s.config";
+
   /** Folder where rules configuration files are located */
   private static final String ITS_FOLDER = "its";
 
@@ -75,5 +78,17 @@ public class ItsHookModule extends FactoryModule {
   @Inject
   Path itsPath(SitePaths sitePaths) {
     return sitePaths.etc_dir.normalize().resolve(ITS_FOLDER);
+  }
+
+  @Provides
+  @GlobalRulesFileName
+  String globalRulesFileName() {
+    return String.format(CONFIG_FILE_NAME, "");
+  }
+
+  @Provides
+  @PluginRulesFileName
+  String pluginRulesFileName() {
+    return String.format(CONFIG_FILE_NAME, "-" + pluginName);
   }
 }
