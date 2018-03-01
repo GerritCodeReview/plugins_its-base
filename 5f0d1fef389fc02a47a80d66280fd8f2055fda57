@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a550eaf_522b1789",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Indeed. The caveat here is this is called from the constructor, so at this time we do not have the information about possible project configuration. But you\u0027re right; I\u0027ll move this warning to the point where we have access to all possible sources of rules and only if there is none available, a similar message will be shown.",
+      "parentUuid": "802b662e_4aa824df",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 31
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09bb4e22_0e0eeeab",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33973545_646a7c97",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09bb4e22_0e0eeeab",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 3
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0e654c10_e73ecafd",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d36dabc3_a1f71280",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 16
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db7faa98_b9d957be",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 8
@@ -91,6 +163,30 @@
       "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd0afe20_449a1da1",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db7faa98_b9d957be",
+      "range": {
+        "startLine": 27,
+        "startChar": 25,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "819b531a_fe8d146c",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a60799ce_22c78304",
+      "range": {
+        "startLine": 32,
+        "startChar": 26,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c6f354e_ec71e35d",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
         "patchSetId": 8
@@ -137,6 +257,30 @@
       "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f49032c_ce518164",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "You\u0027re right, it is not. Done.",
+      "parentUuid": "2c6f354e_ec71e35d",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 66
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "d3fdb7ef_85c497ac",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "I agree 100%. The problem here is the way the tests were done originally: they\u0027re checking the log messages and the test fails whenever a log message is not verified, as doing here. Fixing this would involve a significant rework of the tests hierarchy.",
+      "parentUuid": "9b58e30f_0fc32717",
+      "range": {
+        "startLine": 365,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 57
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1ab7356_6086ce7c",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
         "patchSetId": 8
@@ -183,6 +351,30 @@
       "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d0d0eb9_ba9a4796",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:23:37Z",
+      "side": 1,
+      "message": "Please see my answer above.",
+      "parentUuid": "e1ab7356_6086ce7c",
+      "range": {
+        "startLine": 422,
+        "startChar": 4,
+        "endLine": 422,
+        "endChar": 57
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
