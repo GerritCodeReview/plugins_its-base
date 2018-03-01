@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf08c20a_246b8040",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:48:15Z",
+      "side": 1,
+      "message": "In reality, this method is never accessed by the child its-* plugins. This is an \"internal\" API in the sense that these methods are only used by the ActionController in order to extract the properties from an event to be able to determine if the event has or not a related ITS action.",
+      "parentUuid": "4504ef4b_ebdc429b",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42ac4e9b_08421fd6",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0db2a79_da220684",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-01T02:48:15Z",
+      "side": 1,
+      "message": "Not really, its-* child plugins never access this method directly. A quick search in Zoekt fro this method only returns internal its-base calls [1]. In fact, this interface serves to define the built-in actions that every child plugin inherits by default. Child plugins use only the ItsFacade interface. \n\n[1] https://cs.bazel.build/search?q\u003dexecute%5C%28String+issue%2C+ActionRequest+actionRequest",
+      "parentUuid": "42ac4e9b_08421fd6",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
