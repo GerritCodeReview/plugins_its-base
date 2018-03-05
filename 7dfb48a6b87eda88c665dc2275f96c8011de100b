@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "5cfc4f3d_cf63f3e2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-05T16:11:45Z",
+      "side": 1,
+      "message": "Or just move to another package?",
+      "parentUuid": "d7439e56_66ede001",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42ac4e9b_08421fd6",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
         "patchSetId": 9
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "No one is referring to this code apart from its-base as the Zoekt search shows. As with the other comment, unfortunately we cannot make this interface private because it is being called from another package.",
       "parentUuid": "be5b6ef5_c62ba009",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3631399b_36cc9c30",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-05T16:11:45Z",
+      "side": 1,
+      "message": "See the previous comment: just make it package-private and move it to another package.",
+      "parentUuid": "b3f85177_743334b8",
       "range": {
         "startLine": 31,
         "startChar": 65,
