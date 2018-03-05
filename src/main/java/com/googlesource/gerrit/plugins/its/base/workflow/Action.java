@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.its.base.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.util.Set;
 
@@ -29,6 +27,6 @@ public interface Action {
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
       throws IOException;
 }
