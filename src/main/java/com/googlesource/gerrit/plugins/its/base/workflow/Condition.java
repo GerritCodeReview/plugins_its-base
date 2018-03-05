@@ -20,7 +20,6 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.common.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
