@@ -27,7 +27,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /** Extractor to translate the various {@code *Attribute}s to {@link Property Properties}. */
-public class PropertyAttributeExtractor {
+class PropertyAttributeExtractor {
   private Property.Factory propertyFactory;
   private ItsFacade its;
 
@@ -37,7 +37,7 @@ public class PropertyAttributeExtractor {
     this.propertyFactory = propertyFactory;
   }
 
-  public Set<Property> extractFrom(AccountAttribute accountAttribute, String prefix) {
+  Set<Property> extractFrom(AccountAttribute accountAttribute, String prefix) {
     Set<Property> properties = Sets.newHashSet();
     if (accountAttribute != null) {
       properties.add(propertyFactory.create(prefix + "Email", accountAttribute.email));
@@ -47,7 +47,7 @@ public class PropertyAttributeExtractor {
     return properties;
   }
 
-  public Set<Property> extractFrom(ChangeAttribute changeAttribute) {
+  Set<Property> extractFrom(ChangeAttribute changeAttribute) {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
@@ -74,7 +74,7 @@ public class PropertyAttributeExtractor {
     return properties;
   }
 
-  public Set<Property> extractFrom(PatchSetAttribute patchSetAttribute) {
+  Set<Property> extractFrom(PatchSetAttribute patchSetAttribute) {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision", patchSetAttribute.revision));
     properties.add(
@@ -92,7 +92,7 @@ public class PropertyAttributeExtractor {
     return properties;
   }
 
-  public Set<Property> extractFrom(RefUpdateAttribute refUpdateAttribute) {
+  Set<Property> extractFrom(RefUpdateAttribute refUpdateAttribute) {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision", refUpdateAttribute.newRev));
     properties.add(propertyFactory.create("revisionOld", refUpdateAttribute.oldRev));
@@ -100,7 +100,7 @@ public class PropertyAttributeExtractor {
     return properties;
   }
 
-  public Set<Property> extractFrom(ApprovalAttribute approvalAttribute) {
+  Set<Property> extractFrom(ApprovalAttribute approvalAttribute) {
     Set<Property> properties = Sets.newHashSet();
     properties.add(
         propertyFactory.create(
