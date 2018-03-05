@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.its.base.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.util.Set;
 import org.slf4j.Logger;
