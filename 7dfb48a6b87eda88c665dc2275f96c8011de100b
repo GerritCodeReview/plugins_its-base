@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d7439e56_66ede001",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-05T16:07:39Z",
+      "side": 1,
+      "message": "The problem is we cannot because this in a different package than ActionController. This is a limitation of current Java version as we cannot limit access to this method to external callers without putting everything in the same package. Let\u0027s hope we can fix this when using modules in the upcoming (from Gerrit perspective) Java (9, 10 or 11).",
+      "parentUuid": "e8360bfa_8fb13a60",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42ac4e9b_08421fd6",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
         "patchSetId": 9
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Then the interface shouldn\u0027t be public after all, correct?\nHave you checked if anyone is referring to it?",
       "parentUuid": "d0db2a79_da220684",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3f85177_743334b8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-05T16:07:39Z",
+      "side": 1,
+      "message": "No one is referring to this code apart from its-base as the Zoekt search shows. As with the other comment, unfortunately we cannot make this interface private because it is being called from another package.",
+      "parentUuid": "be5b6ef5_c62ba009",
       "range": {
         "startLine": 31,
         "startChar": 65,
