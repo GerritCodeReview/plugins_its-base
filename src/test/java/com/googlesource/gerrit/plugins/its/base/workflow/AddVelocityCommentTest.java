@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.googlesource.gerrit.plugins.its.base.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
@@ -25,9 +25,7 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
+import com.googlesource.gerrit.plugins.its.base.workflow.AddVelocityComment.VelocityAdapterItsFacade;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;

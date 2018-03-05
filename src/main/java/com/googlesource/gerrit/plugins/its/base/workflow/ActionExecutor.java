@@ -16,12 +16,6 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 import java.io.IOException;
 import java.util.Set;
 import org.slf4j.Logger;
