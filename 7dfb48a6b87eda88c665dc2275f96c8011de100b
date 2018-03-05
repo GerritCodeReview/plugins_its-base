@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e8360bfa_8fb13a60",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-05T15:43:09Z",
+      "side": 1,
+      "message": "Cool, let\u0027s make it private and check that the other its-* plugins are still building and working fine.",
+      "parentUuid": "bf08c20a_246b8040",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42ac4e9b_08421fd6",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
         "patchSetId": 9
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Not really, its-* child plugins never access this method directly. A quick search in Zoekt fro this method only returns internal its-base calls [1]. In fact, this interface serves to define the built-in actions that every child plugin inherits by default. Child plugins use only the ItsFacade interface. \n\n[1] https://cs.bazel.build/search?q\u003dexecute%5C%28String+issue%2C+ActionRequest+actionRequest",
       "parentUuid": "42ac4e9b_08421fd6",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be5b6ef5_c62ba009",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-05T15:43:09Z",
+      "side": 1,
+      "message": "Then the interface shouldn\u0027t be public after all, correct?\nHave you checked if anyone is referring to it?",
+      "parentUuid": "d0db2a79_da220684",
       "range": {
         "startLine": 31,
         "startChar": 65,
