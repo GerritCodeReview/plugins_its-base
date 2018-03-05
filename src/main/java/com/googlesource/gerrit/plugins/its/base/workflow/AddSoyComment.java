@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.its.base.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
@@ -23,8 +23,6 @@ import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.tofu.SoyTofu;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
-import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
