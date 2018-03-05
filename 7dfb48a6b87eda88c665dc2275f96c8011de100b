@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "ea197af5_4be79283",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-05T19:41:37Z",
+      "side": 1,
+      "message": "I limited access (in the separate, previous commit) so this method is not accessible to its-* child plugins. Done.",
+      "parentUuid": "5cfc4f3d_cf63f3e2",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 28
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42ac4e9b_08421fd6",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
         "patchSetId": 9
@@ -228,6 +252,30 @@
       "side": 1,
       "message": "See the previous comment: just make it package-private and move it to another package.",
       "parentUuid": "b3f85177_743334b8",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "7dfb48a6b87eda88c665dc2275f96c8011de100b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ccd60ff5_08365411",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/Action.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-05T19:41:37Z",
+      "side": 1,
+      "message": "Done (in the separate, previous commit).",
+      "parentUuid": "3631399b_36cc9c30",
       "range": {
         "startLine": 31,
         "startChar": 65,
