@@ -1,0 +1,337 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6600fb43_87c2f19e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsFacade.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "The interface is getting a bit messy: have you thought about a different solution?\nWhat about creating a ItsFacadeFactory that gets an ItsServerInfo and returns an ItsFacade?",
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b95c1d8c_1ae50406",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Why can\u0027t this be the ItsFacadeFactory that gets an ItsFacade based on the project?",
+      "range": {
+        "startLine": 20,
+        "startChar": 17,
+        "endLine": 20,
+        "endChar": 26
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dd4946a_e56fc917",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Can you return here the ItsFacade instead of returning the ItsServerInfo?",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8199519e_af631b8d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServerInfo.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Does this make any sense? What type of other info are you planning to put here? If yes, why don\u0027t you put it now? If no, can we get rid of this class?",
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91ca32f6_e8c6bd81",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/UniqueItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Just return the ItsFacade here.",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f38c85a_ceffe9ed",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/UniqueItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Why don\u0027t you return the ItsFacade singleton here?",
+      "range": {
+        "startLine": 25,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72b511f2_84c3f531",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell meaning that you are investing in the wrong solution: instead of introducing if/then/else you should try to follow a different path. See my suggestions above.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "038c430d_929ad374",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Action.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell, see my suggestions above.",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c80f470_daa6218e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "leftover?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 0
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59499991_cdace610",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "You have the facade already, see my suggestion above. By introducing a \"facade factory\" you can avoid having all those changes and just relying on the facade to work on the right remote server.",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 25
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca532161_8dfd075d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell: you should not rely on the implementation during tests. The method is private, keep it private during testing as well.",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 69,
+        "endChar": 24
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "246ceabc_a3a39553",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell: see my suggestion above.",
+      "range": {
+        "startLine": 52,
+        "startChar": 6,
+        "endLine": 56,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbfd6071_326533b6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell, see my suggestion above.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d35b3958_4a00b30b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell. See my suggestion above.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95a5a89a_d96bd948",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-06T12:47:49Z",
+      "side": 1,
+      "message": "Code smell. See my suggestion above.",
+      "range": {
+        "startLine": 82,
+        "startChar": 7,
+        "endLine": 82,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
