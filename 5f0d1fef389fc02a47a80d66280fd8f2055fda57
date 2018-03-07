@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "df80453c_ca905e8d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-07T01:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a550eaf_522b1789",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 31
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09bb4e22_0e0eeeab",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
         "patchSetId": 8
@@ -400,6 +424,30 @@
       "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bee69ff_30a01ea9",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-07T01:19:58Z",
+      "side": 1,
+      "message": "Oups! Done.",
+      "parentUuid": "e9e8729b_d9a91cbf",
+      "range": {
+        "startLine": 365,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 57
+      },
+      "revId": "5f0d1fef389fc02a47a80d66280fd8f2055fda57",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
