@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "25b24974_e8fb7760",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsFacade.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Uploaded a latest patchset considering your suggestions. Please have a look if this meets the expectations.",
+      "parentUuid": "259e84e1_60b7f1ba",
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b95c1d8c_1ae50406",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
         "patchSetId": 22
@@ -60,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "57068e83_65ad8da3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b95c1d8c_1ae50406",
+      "range": {
+        "startLine": 20,
+        "startChar": 17,
+        "endLine": 20,
+        "endChar": 26
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8dd4946a_e56fc917",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
         "patchSetId": 22
@@ -71,6 +113,30 @@
       "writtenOn": "2018-03-06T12:47:49Z",
       "side": 1,
       "message": "Can you return here the ItsFacade instead of returning the ItsServerInfo?",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c91ce7_57e570ca",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dd4946a_e56fc917",
       "range": {
         "startLine": 24,
         "startChar": 2,
@@ -169,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "aec6649b_fc6092d3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72b511f2_84c3f531",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "038c430d_929ad374",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Action.java",
         "patchSetId": 22
@@ -180,6 +270,30 @@
       "writtenOn": "2018-03-06T12:47:49Z",
       "side": 1,
       "message": "Code smell, see my suggestions above.",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a75b0045_254c8689",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Action.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "038c430d_929ad374",
       "range": {
         "startLine": 35,
         "startChar": 7,
@@ -215,6 +329,30 @@
     },
     {
       "key": {
+        "uuid": "0338eb3d_ad965280",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c80f470_daa6218e",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 0
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59499991_cdace610",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
         "patchSetId": 22
@@ -226,6 +364,30 @@
       "writtenOn": "2018-03-06T12:47:49Z",
       "side": 1,
       "message": "You have the facade already, see my suggestion above. By introducing a \"facade factory\" you can avoid having all those changes and just relying on the facade to work on the right remote server.",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 25
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b491ec8f_59bd7fa3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59499991_cdace610",
       "range": {
         "startLine": 41,
         "startChar": 6,
@@ -261,6 +423,30 @@
     },
     {
       "key": {
+        "uuid": "50da3d5a_23dcf1b9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca532161_8dfd075d",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 69,
+        "endChar": 24
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "246ceabc_a3a39553",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
         "patchSetId": 22
@@ -272,6 +458,30 @@
       "writtenOn": "2018-03-06T12:47:49Z",
       "side": 1,
       "message": "Code smell: see my suggestion above.",
+      "range": {
+        "startLine": 52,
+        "startChar": 6,
+        "endLine": 56,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b5c58e5_d6873a7a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "246ceabc_a3a39553",
       "range": {
         "startLine": 52,
         "startChar": 6,
@@ -307,6 +517,30 @@
     },
     {
       "key": {
+        "uuid": "6bac837e_f91779e7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfd6071_326533b6",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d35b3958_4a00b30b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
         "patchSetId": 22
@@ -330,6 +564,30 @@
     },
     {
       "key": {
+        "uuid": "644ada4b_3679df42",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d35b3958_4a00b30b",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 7
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95a5a89a_d96bd948",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
         "patchSetId": 22
@@ -341,6 +599,30 @@
       "writtenOn": "2018-03-06T12:47:49Z",
       "side": 1,
       "message": "Code smell. See my suggestion above.",
+      "range": {
+        "startLine": 82,
+        "startChar": 7,
+        "endLine": 82,
+        "endChar": 15
+      },
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f84466_815346a7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T18:18:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95a5a89a_d96bd948",
       "range": {
         "startLine": 82,
         "startChar": 7,
