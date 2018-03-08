@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "259e84e1_60b7f1ba",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsFacade.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1055597
+      },
+      "writtenOn": "2018-03-08T15:33:33Z",
+      "side": 1,
+      "message": "I am not sure if I follow this suggestion or maybe I am missing something as an ITsFacadeFactory will need to be aware of the concrete classes of interface ItsFacade to be able to return the ItsFacade. If there is a way to return just the interface, please guide me.\n\n\nAlso, even if we have an ItsFacadeFactory taking ItsserverInfo object, we still need to be able to pass the server info while executing every single action. Otherwise, it will not work in a multi-server scenario if we keep the info centralized.",
+      "parentUuid": "6600fb43_87c2f19e",
+      "revId": "bd3d860d954199e243804fe0ee4b4a1419787753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b95c1d8c_1ae50406",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsServer.java",
         "patchSetId": 22
