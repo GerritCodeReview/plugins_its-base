@@ -208,8 +208,7 @@ public class ItsConfig {
    * <p>When no pattern is specified, it will return a pattern which never matches.
    */
   public Optional<Pattern> getDummyIssuePattern() {
-    return Optional.ofNullable(getPluginConfigString("dummyIssuePattern"))
-        .map(Pattern::compile);
+    return Optional.ofNullable(getPluginConfigString("dummyIssuePattern")).map(Pattern::compile);
   }
 
   /**

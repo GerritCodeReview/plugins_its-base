@@ -98,6 +98,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     owner.username = "testUsername";
 
     ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
     changeAttribute.branch = "testBranch";
     changeAttribute.topic = "testTopic";
     changeAttribute.subject = "testSubject";
@@ -106,6 +107,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.url = "http://www.example.org/test";
     changeAttribute.owner = owner;
     changeAttribute.commitMessage = "Commit Message";
+
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     Property propertyBranch = createMock(Property.class);
     expect(propertyFactory.create("branch", "testBranch")).andReturn(propertyBranch);
@@ -117,7 +121,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyEscapedSubject = createMock(Property.class);
-    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
+    expect(propertyFactory.create("escapedSubject", "testSubject"))
+        .andReturn(propertyEscapedSubject);
 
     Property propertyId2 = createMock(Property.class);
     expect(propertyFactory.create("change-id", "testId")).andReturn(propertyId2);
@@ -182,6 +187,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     Set<Property> actual = extractor.extractFrom(changeAttribute);
 
     Set<Property> expected = Sets.newHashSet();
+    expected.add(propertyProject);
     expected.add(propertyBranch);
     expected.add(propertyTopic);
     expected.add(propertySubject);
@@ -212,6 +218,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     owner.username = "testUsername";
 
     ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.project = "testProject";
     changeAttribute.branch = "testBranch";
     changeAttribute.topic = "testTopic";
     changeAttribute.subject = "testSubject";
@@ -221,6 +228,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.status = Status.ABANDONED;
     changeAttribute.owner = owner;
     changeAttribute.commitMessage = "Commit Message";
+
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     Property propertyBranch = createMock(Property.class);
     expect(propertyFactory.create("branch", "testBranch")).andReturn(propertyBranch);
@@ -232,7 +242,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyEscapedSubject = createMock(Property.class);
-    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
+    expect(propertyFactory.create("escapedSubject", "testSubject"))
+        .andReturn(propertyEscapedSubject);
 
     Property propertyId = createMock(Property.class);
     expect(propertyFactory.create("changeId", "testId")).andReturn(propertyId);
@@ -297,6 +308,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     Set<Property> actual = extractor.extractFrom(changeAttribute);
 
     Set<Property> expected = Sets.newHashSet();
+    expected.add(propertyProject);
     expected.add(propertyBranch);
     expected.add(propertyTopic);
     expected.add(propertySubject);
@@ -446,6 +458,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     RefUpdateAttribute refUpdateAttribute = new RefUpdateAttribute();
     refUpdateAttribute.newRev = "1234567891123456789212345678931234567894";
     refUpdateAttribute.oldRev = "9876543211987654321298765432139876543214";
+    refUpdateAttribute.project = "testProject";
     refUpdateAttribute.refName = "testRef";
 
     Property propertyRevision = createMock(Property.class);
@@ -460,6 +473,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("revision-old", "9876543211987654321298765432139876543214"))
         .andReturn(propertyRevisionOld2);
 
+    Property propertyProject = createMock(Property.class);
+    expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+
     Property propertyRef = createMock(Property.class);
     expect(propertyFactory.create("ref", "testRef")).andReturn(propertyRef);
 
@@ -473,6 +489,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyRevision);
     expected.add(propertyRevisionOld);
     expected.add(propertyRevisionOld2);
+    expected.add(propertyProject);
     expected.add(propertyRef);
     assertEquals("Properties do not match", expected, actual);
   }
