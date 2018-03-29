@@ -46,6 +46,30 @@
       "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc483840_ea36775f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-29T09:57:27Z",
+      "side": 1,
+      "message": "I believe we deprecated the old velocity templates, why do we still need this?",
+      "parentUuid": "9bde45e0_c2ef7a2f",
+      "range": {
+        "startLine": 103,
+        "startChar": 56,
+        "endLine": 103,
+        "endChar": 59
+      },
+      "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
