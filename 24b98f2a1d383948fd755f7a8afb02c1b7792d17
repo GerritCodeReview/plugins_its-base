@@ -94,6 +94,30 @@
       "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22b91dc7_a4f98691",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-03-29T13:18:52Z",
+      "side": 1,
+      "message": "Gotcha, I believe I did not pay enough attention on the Soy adoption in its-base, as I would have possibly just translated the \u0027-\u0027 to another separator rather than just removing it ... whatever, that\u0027s history :-)\n\nThanks for clarifying.",
+      "parentUuid": "2f26a8d1_32ac4eb1",
+      "range": {
+        "startLine": 103,
+        "startChar": 56,
+        "endLine": 103,
+        "endChar": 59
+      },
+      "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
