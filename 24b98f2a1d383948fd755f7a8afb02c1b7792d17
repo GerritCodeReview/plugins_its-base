@@ -70,6 +70,30 @@
       "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2f26a8d1_32ac4eb1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-03-29T12:44:26Z",
+      "side": 1,
+      "message": "Because the type of this attribute can be, for example, Code-Review. In this case, we need to remove the dash so it\u0027s properly usable by Soy templates.",
+      "parentUuid": "fc483840_ea36775f",
+      "range": {
+        "startLine": 103,
+        "startChar": 56,
+        "endLine": 103,
+        "endChar": 59
+      },
+      "revId": "24b98f2a1d383948fd755f7a8afb02c1b7792d17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
