@@ -1,0 +1,262 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e534a23f_0ee05be7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "Very unusual hierarchy. I would expect this to follow the same structure of the caches in Gerrit:\n- Cache (interface)\n- CacheImpl (implementation)\n- CacheRefresherListener (implement listener and refresh cache)\n\nHere you are mixing up all the three of them in a single class, no SRP",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 72
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60618254_2e4599d2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "None of the Gerrit cache names have a camel case.\nExample: project_list (not projectList)",
+      "range": {
+        "startLine": 45,
+        "startChar": 44,
+        "endLine": 45,
+        "endChar": 64
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d40d39e4_97954696",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "changes? I believe you\u0027ve mentioned refs/meta/config in the commit message. Why should we capture the changes?",
+      "range": {
+        "startLine": 69,
+        "startChar": 47,
+        "endLine": 69,
+        "endChar": 59
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d85225c_665fa325",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "Here you are evicting the project cache all the times that a change gets pushed. Do we really want that?",
+      "range": {
+        "startLine": 70,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 57
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7aa7090_42bbeb2d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "So the general is always added? I thought that if a project had a specific one, the general ones were ignored.",
+      "range": {
+        "startLine": 124,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 64
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ba3dd9a_9bd66195",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "Why don\u0027t we just index the rulesProjectCache by project name as a String instead?",
+      "range": {
+        "startLine": 98,
+        "startChar": 63,
+        "endLine": 98,
+        "endChar": 95
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a345be_e5a89c31",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "This is going to be very inefficient :-(",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 14
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48270573_5eaf771a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RulesConfigReader.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "This is more related to a refactory of the reading of the rules out of rulebase, which i personally like as it separates two concerns.\n\nWorth submitting as a separate commit?",
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ee1b7c7_2e58bf34",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "mentioned above? \"aformentioned\" is a bit difficult to read and less immediate.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43c3d0d3_9acad3d0",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "This is quite complex: I believe that it is worth dedicating a separate chapter to describe how the mechanism works, in different paragraphs and with specific examples.",
+      "range": {
+        "startLine": 28,
+        "startChar": 28,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d7de3bc_299b66f9",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "I don\u0027t like that this test is getting modified in the same change: we should add tests for the new functionality and keep the ones for the existing. If we change all tests, for new and existing, we will never be sure that we\u0027re not breaking anything.\n\nTests aren\u0027t tested. Tests are the most fragile part of the code. They are just read and validated visually.",
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e7411a9_23f69b00",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RulesConfigReaderTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-24T22:18:24Z",
+      "side": 1,
+      "message": "This isn\u0027t related to this change but rather to the refactoring of the reading of the config from the RuleBase. Extract into separate change?",
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
