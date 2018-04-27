@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
@@ -34,18 +36,8 @@ import org.slf4j.LoggerFactory;
 public class RuleBase {
   private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
 
-  /** The section for rules within rulebases */
-  private static final String RULE_SECTION = "rule";
-
-  /** The key for actions within rulebases */
-  private static final String ACTION_KEY = "action";
-
-  private final Path itsPath;
-  private final Rule.Factory ruleFactory;
-  private final Condition.Factory conditionFactory;
-  private final ActionRequest.Factory actionRequestFactory;
-  private final String globalRulesFileName;
-  private final String pluginRulesFileName;
+  private final File globalRuleFile;
+  private final File itsSpecificRuleFile;
 
   private Collection<Rule> rules;
 
@@ -56,82 +48,40 @@ public class RuleBase {
   @Inject
   public RuleBase(
       @ItsPath Path itsPath,
-      Rule.Factory ruleFactory,
-      Condition.Factory conditionFactory,
-      ActionRequest.Factory actionRequestFactory,
       @GlobalRulesFileName String globalRulesFileName,
-      @PluginRulesFileName String pluginRulesFileName) {
-    this.itsPath = itsPath;
-    this.ruleFactory = ruleFactory;
-    this.conditionFactory = conditionFactory;
-    this.actionRequestFactory = actionRequestFactory;
-    this.globalRulesFileName = globalRulesFileName;
-    this.pluginRulesFileName = pluginRulesFileName;
-    reloadRules();
+      @PluginRulesFileName String pluginRulesFileName,
+      RulesConfigReader rulesConfigReader) {
+    this.globalRuleFile = itsPath.resolve(globalRulesFileName).toFile();
+    this.itsSpecificRuleFile = itsPath.resolve(pluginRulesFileName).toFile();
+    this.rules =
+        new ImmutableList.Builder<Rule>()
+            .addAll(getRulesFromFile(rulesConfigReader, globalRuleFile))
+            .addAll(getRulesFromFile(rulesConfigReader, itsSpecificRuleFile))
+            .build();
   }
 
   /**
-   * Adds rules from a file to the RuleBase.
+   * Gets rules from a file.
    *
    * <p>If the given file does not exist, it is silently ignored
    *
+   * @param rulesConfigReader The rules reader
    * @param ruleFile File from which to read the rules
+   * @return A collection of rules or an empty collection if the file does not exist or contains an
+   *     invalid configuration
    */
-  private void addRulesFromFile(File ruleFile) {
+  private static Collection<Rule> getRulesFromFile(
+      RulesConfigReader rulesConfigReader, File ruleFile) {
     if (ruleFile.exists()) {
       FileBasedConfig cfg = new FileBasedConfig(ruleFile, FS.DETECTED);
       try {
         cfg.load();
+        return rulesConfigReader.getRulesFromConfig(cfg);
       } catch (IOException | ConfigInvalidException e) {
         log.error("Invalid ITS action configuration", e);
-        return;
-      }
-
-      for (String subsection : cfg.getSubsections(RULE_SECTION)) {
-        Rule rule = ruleFactory.create(subsection);
-        for (String key : cfg.getNames(RULE_SECTION, subsection)) {
-          String[] values = cfg.getStringList(RULE_SECTION, subsection, key);
-          if (ACTION_KEY.equals(key)) {
-            addActions(rule, values);
-          } else {
-            addConditions(rule, key, values);
-          }
-        }
-        rules.add(rule);
       }
     }
-  }
-
-  private void addActions(Rule rule, String[] values) {
-    for (String value : values) {
-      rule.addActionRequest(actionRequestFactory.create(value));
-    }
-  }
-
-  private void addConditions(Rule rule, String key, String[] values) {
-    for (String value : values) {
-      rule.addCondition(conditionFactory.create(key, value));
-    }
-  }
-
-  /** Loads the rules for the RuleBase. */
-  private void reloadRules() {
-    rules = Lists.newArrayList();
-
-    // Add global rules
-    File globalRuleFile = itsPath.resolve(globalRulesFileName).toFile();
-    addRulesFromFile(globalRuleFile);
-
-    // Add its-specific rules
-    File itsSpecificRuleFile = itsPath.resolve(pluginRulesFileName).toFile();
-    addRulesFromFile(itsSpecificRuleFile);
-
-    if (!globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
-      log.warn(
-          "Neither global rule file {} nor Its specific rule file {} exist. Please configure rules.",
-          globalRuleFile,
-          itsSpecificRuleFile);
-    }
+    return Collections.emptyList();
   }
 
   /**
