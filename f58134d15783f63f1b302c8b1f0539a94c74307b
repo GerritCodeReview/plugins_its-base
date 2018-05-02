@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "798e4b13_2d15befc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheImpl.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "Should this always be a warning? What about if there are no project-specific rules? Do we still display a warning on the error_log?",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "923fefab_9050cc8e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheRefresher.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "we do know that is refs/meta/config: why not checking the exact ref name?",
+      "range": {
+        "startLine": 18,
+        "startChar": 27,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "323942b5_5720ffc4",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "refers",
+      "range": {
+        "startLine": 70,
+        "startChar": 18,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77fdf6b9_fdcb239d",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "-",
+      "range": {
+        "startLine": 74,
+        "startChar": 7,
+        "endLine": 74,
+        "endChar": 8
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6111331e_f6efbbb2",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "project",
+      "range": {
+        "startLine": 92,
+        "startChar": 34,
+        "endLine": 92,
+        "endChar": 42
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "892f61cf_64dd4cc3",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "apply",
+      "range": {
+        "startLine": 131,
+        "startChar": 37,
+        "endLine": 131,
+        "endChar": 41
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}

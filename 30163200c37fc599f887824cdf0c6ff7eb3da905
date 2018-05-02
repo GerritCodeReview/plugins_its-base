@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "db6e6f39_e1c6a2ad",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "I am fine with either of the two behaviours (inherit \u0026 combine OR override), as long as it is backward compatible and well documented :-)",
+      "parentUuid": "8dce04ba_a9937873",
+      "range": {
+        "startLine": 124,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 64
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ba3dd9a_9bd66195",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
         "patchSetId": 15
@@ -331,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "7b25624f_af3e8f98",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "Yes, but I believe we are relying on this method *a lot more* than before. I an fine in addressing this in a follow-up commit, as long as they are in the same topic and we merge them together.",
+      "parentUuid": "ecbaa0ea_f413d4d4",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 14
+      },
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48270573_5eaf771a",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RulesConfigReader.java",
         "patchSetId": 15
@@ -360,6 +408,24 @@
       "side": 1,
       "message": "Done. Extracted to a new change:",
       "parentUuid": "48270573_5eaf771a",
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ef3a3ff_b5a2e396",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RulesConfigReader.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c533b18b_6700ef32",
       "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -489,6 +555,24 @@
       "side": 1,
       "message": "There are different reasons for changing this test:\n\n* Mainly, to accommodate the fact that RuleBase no longer reads the rules (now done in RulesConfigReader) which simplifies \n  this test\n* To simplify the tests; for example, replacing:\n     List\u003cActionRequest\u003e rule1Match \u003d Lists.newArrayListWithCapacity(1);\n     rule1Match.add(actionRequest1)\n  with:\n     List\u003cActionRequest\u003e expected \u003d ImmutableList.of(actionRequest1)\n  and some other similar cases.\n* To remove some \"implementation leaks\", e.g., asserting logs.\n* To add assertions to tests that were only verifying mocks\n\nSo yes, I agree that changing the tests could look like a bad idea from the \"reproducibility\" point of view but sometimes they need to be modified to reflect the new way the code is done. And while being there, is tempting to do some \"behavior neutral\" changes as those referred in the second point above.\n\nNow in this change, some of those points above are no longer present as they were moved to the change that extracts the reading of the rules from a configuration object from RuleBase.\n\nBut in the end, you\u0027re right that tests are untested and that they need to be evaluated in the context of the code they\u0027re testing to see if they make sense or not and I think that\u0027s always the case.",
       "parentUuid": "9d7de3bc_299b66f9",
+      "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89e54be0_037d5c59",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T21:14:49Z",
+      "side": 1,
+      "message": "\u003e There are different reasons for changing this test:\n\u003e \n\u003e * Mainly, to accommodate the fact that RuleBase no longer reads the rules (now done in RulesConfigReader) which simplifies \n\u003e   this test\n\u003e * To simplify the tests; for example, replacing:\n\u003e      List\u003cActionRequest\u003e rule1Match \u003d Lists.newArrayListWithCapacity(1);\n\u003e      rule1Match.add(actionRequest1)\n\u003e   with:\n\u003e      List\u003cActionRequest\u003e expected \u003d ImmutableList.of(actionRequest1)\n\u003e   and some other similar cases.\n\u003e * To remove some \"implementation leaks\", e.g., asserting logs.\n\u003e * To add assertions to tests that were only verifying mocks\n\nOk, makes sense, and I would do in this way:\n\n1. Improve the tests without changing the code (Change #1)\n2. Refactor the code without changing the tests (Change #2)\n\nThose are the basics of TDD and the reasons why it works :-)\n\n\u003e So yes, I agree that changing the tests could look like a bad idea from the \"reproducibility\" point of view but sometimes they need to be modified to reflect the new way the code is done.\n\nThat makes perfect sense.\n\n\u003e And while being there, is tempting to do some \"behavior neutral\" changes as those referred in the second point above.\n\nYes, and you should resist to the temptation and not doing it :-)\n\n\u003e Now in this change, some of those points above are no longer present as they were moved to the change that extracts the reading of the rules from a configuration object from RuleBase.\n\nThat is fine.\n\n\u003e But in the end, you\u0027re right that tests are untested and that they need to be evaluated in the context of the code they\u0027re testing to see if they make sense or not and I think that\u0027s always the case.",
+      "parentUuid": "81412dc4_2dbecba5",
       "revId": "30163200c37fc599f887824cdf0c6ff7eb3da905",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
