@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73ac675c_21afa203",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Use imperative: Simplify",
+      "range": {
+        "startLine": 12,
+        "startChar": 3,
+        "endLine": 12,
+        "endChar": 13
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4af57ec_77cd9ad6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Imperative form: Prepare",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 11
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e78a04ce_445014f7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Use simply \u003c\u003e because Java detects the generic from the target type.",
+      "range": {
+        "startLine": 58,
+        "startChar": 34,
+        "endLine": 58,
+        "endChar": 38
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f7e01db_27e79270",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Anti-pattern: you should not rely on a partially initialized instance for calling a method in its constructor.\n\nYou need either to delay the rules loading or to make the method static and pass all the necessary fields values as input parameters.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 58
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11013481_fa4c4078",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "You are relying on a field of a partially initialized instance, which is an anti-pattern.",
+      "range": {
+        "startLine": 78,
+        "startChar": 15,
+        "endLine": 78,
+        "endChar": 32
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5409d056_017316b2",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Tests are the only part of the code that isn\u0027t tested but can only be read for checking if it is right.\n\nThe above mocking seems very unneeded to me and rather unreadable :-(\n\nCan you just create a real Config() without any values in it?",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 16
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee4a766_cfcc09c7",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Same as before.",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c6eb05_638319fd",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Same as before.",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd5be912_0712467d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/RuleBaseTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T20:42:40Z",
+      "side": 1,
+      "message": "Same as before.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 16
+      },
+      "revId": "9062b3f0a88571e895ed46f56055c352f77ab29f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
