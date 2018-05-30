@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "757baa5f_7edcfe2e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T10:51:42Z",
+      "side": 1,
+      "message": "Would it make sense to define property constants?",
+      "range": {
+        "startLine": 78,
+        "startChar": 29,
+        "endLine": 78,
+        "endChar": 36
+      },
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a922b899_1b939e01",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T10:51:42Z",
+      "side": 1,
+      "message": "May be propertyArray or propertyValue?",
+      "range": {
+        "startLine": 92,
+        "startChar": 13,
+        "endLine": 92,
+        "endChar": 18
+      },
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "411de3e5_2d29a909",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T10:51:42Z",
+      "side": 1,
+      "message": "David is working on improving message formating using native logger feature:\n\n  log.debug(\"this is a log format {}\", foo);\n\nMay be address this here as well (not in this change). Something like:\n\n  private final static String MESSAGE \u003d \"[{} \u003d {}]\";\n  private void logProperty(Level level, Entry\u003cString, String\u003e property) {\n     switch (level) {\n     case ERROR:\n       log.error(MESSAGE, property.getKey(), property.getValue());\n       break;\n     [....]\n\nThe point is: we shouldn\u0027t render the message in advance, before we cannot know, whether or not Logger is going to log it with current configuration level.",
+      "range": {
+        "startLine": 58,
+        "startChar": 21,
+        "endLine": 58,
+        "endChar": 86
+      },
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee7fb086_3ec2579f",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/PropertyAttributeExtractorTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T10:51:42Z",
+      "side": 1,
+      "message": "Should we define constants here too?",
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
