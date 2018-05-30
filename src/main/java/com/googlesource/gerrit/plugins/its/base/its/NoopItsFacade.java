@@ -32,6 +32,13 @@ public class NoopItsFacade implements ItsFacade {
   }
 
   @Override
+  public void addValueToField(String issueId, String fieldId, String value) throws IOException {
+    if (log.isDebugEnabled()) {
+      log.debug("addValueToField({},{},{})", issueId, fieldId, value);
+    }
+  }
+
+  @Override
   public void addRelatedLink(String issueId, URL relatedUrl, String description)
       throws IOException {
     if (log.isDebugEnabled()) {
