@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f689a3a9_554e38f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 33
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T12:35:49Z",
+      "side": 1,
+      "message": "I wonder if it would be feasable to implement jenkins integratios tests against real Jenkins instance (in single and multiple instances mode), that is running in docker and integrated with JUnit tests via Testcontainers project: [1]? We just switched ElasticSearch integration tests from embedded mode to docker mode and it just worked.\n\n* [1] https://github.com/testcontainers/testcontainers-java",
+      "revId": "436d0aded2528f84e048a0355173aa6ead5c40cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
