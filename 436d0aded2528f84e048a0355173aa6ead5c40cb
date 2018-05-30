@@ -34,6 +34,24 @@
       "revId": "436d0aded2528f84e048a0355173aa6ead5c40cb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21c774ac_f6a231f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 33
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T13:05:48Z",
+      "side": 1,
+      "message": "\u003e You mean Jenkins or Jira?\n\nI meant Jira, of course ;-)\n\n \u003e But yes, that\u0027ll be definitively the way\n \u003e to go in order to test this integration. Once these changes are in,\n \u003e we have some budget to implement integration tests in our pipeline.\n \u003e We\u0027ll certainly try to get your proposal working.\n\nCool. I have seen Gerrit users have had hard time setting Gerrit-\u003eJira bridge up and running in the past and working intergration tests could help here a lot.",
+      "parentUuid": "488dbfc8_724f6530",
+      "revId": "436d0aded2528f84e048a0355173aa6ead5c40cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
