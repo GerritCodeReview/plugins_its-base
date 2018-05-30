@@ -31,6 +31,11 @@ public interface ItsFacade {
 
   public void addComment(String issueId, String comment) throws IOException;
 
+  default void addValueToField(String issueId, String value, String fieldId) throws IOException {
+    throw new UnsupportedOperationException(
+        "add-value-to-field is not currently implemented by " + getClass());
+  }
+
   public void performAction(String issueId, String actionName) throws IOException;
 
   public boolean exists(final String issueId) throws IOException;
