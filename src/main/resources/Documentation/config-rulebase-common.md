@@ -135,7 +135,7 @@ The common properties for each event are
     make a rule in the rulebase match only for certain ITS plugins, if more
     than one is installed.
 
-    For example
+For example
 
     ```
     [rule "someRuleForBugzillaOnly"]
@@ -148,10 +148,10 @@ The common properties for each event are
       action = add-comment Dear JIRA users, the change had a -2 Code-Review approval.
     ```
 
-    would report the “Heya Bugzilla...” text only through its-bugzilla for
-    changes that had a -2 Code-Review and have an association through
-    its-bugzilla. And for changes that had a -2 Code-Review and have an
-    association through its-jira, its-jira would report “Dear Jira users, ...”.
+would report the “Heya Bugzilla...” text only through its-bugzilla for
+changes that had a -2 Code-Review and have an association through
+its-bugzilla. And for changes that had a -2 Code-Review and have an
+association through its-jira, its-jira would report “Dear Jira users, ...”.
 
 The further properties are listed in the event's
 corresponding subsection below:
@@ -195,30 +195,30 @@ values are:
 	change/the most recent patch set, and is in a line with a key
 	(part before the colon).
 
-	So for example, if the footer would contain a line
+So for example, if the footer would contain a line
 
-	```
+```
 Fixes-Issue: issue 4711
 ```
 
-	then a property `association` with value `footer-Fixes-Issue`
-	would get added to the event for issue “4711”.
+then a property `association` with value `footer-Fixes-Issue`
+would get added to the event for issue “4711”.
 
 `added@<Association-Value>`
 :	(only for events that allow to determine the patch set number.
 	So for example, this `association` property is not set for
 	RevUpdatedEvents)
 
-	issue id occurs at `<Association-Value>` in the most recent
-	patch set of the change, and either the event is for patch set
-	1 or the issue id does not occur at `<Association-Value>` in
-	the previous patch set.
+issue id occurs at `<Association-Value>` in the most recent
+patch set of the change, and either the event is for patch set
+1 or the issue id does not occur at `<Association-Value>` in
+the previous patch set.
 
-	So for example if issue “4711” occurs in the subject of patch
-	set 3 (the most recent patch set) of a change, but not in
-	patch set 2.  When adding a comment to this change, the event
-	for issue “4711” would get a property 'association' with value
-	`added@subject`.
+So for example if issue “4711” occurs in the subject of patch
+set 3 (the most recent patch set) of a change, but not in
+patch set 2.  When adding a comment to this change, the event
+for issue “4711” would get a property 'association' with value
+`added@subject`.
 
 [event-properties-ChangeAbandonedEvent]: #event-properties-ChangeAbandonedEvent
 ### <a name="event-properties-ChangeAbandonedEvent">ChangeAbandonedEvent</a>
