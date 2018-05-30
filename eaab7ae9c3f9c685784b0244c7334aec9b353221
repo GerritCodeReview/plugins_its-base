@@ -50,6 +50,30 @@
     },
     {
       "key": {
+        "uuid": "98fe3e02_e521cd29",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-05-30T12:28:34Z",
+      "side": 1,
+      "message": "I meant one songle place for ITS constants or even enum with most usable values like issue, project etc. Then this values could be used across production and test code.",
+      "parentUuid": "910a6fa8_331e9e29",
+      "range": {
+        "startLine": 78,
+        "startChar": 29,
+        "endLine": 78,
+        "endChar": 36
+      },
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a922b899_1b939e01",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
         "patchSetId": 19
