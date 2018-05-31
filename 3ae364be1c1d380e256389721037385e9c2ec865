@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eab9583_c38fe60a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Please undo this. Star imports are discouraged in the project style guide.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 66
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c76d066_c574c140",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Same comment as previous class.",
+      "range": {
+        "startLine": 19,
+        "startChar": 64,
+        "endLine": 19,
+        "endChar": 66
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2503a954_3ff63413",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddPropertyToField.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Another (most frequently used in this project) option is to use the Guava counterpart:\n\n  Strings.isNullOrEmpty(propertyId)",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f65e7a8_83795d97",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Unrelated changes. If you want to fix this, the recommendation is to do it in a separate change.",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 75
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "014a42ea_6bb62760",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Same comment as above. In fact, the formatting fixes can be done in one separate change.",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 16
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7f4b62_bd05f0ad",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutorTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Same comment as in the other classes.",
+      "range": {
+        "startLine": 25,
+        "startChar": 64,
+        "endLine": 25,
+        "endChar": 66
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f28ff9d5_507e9ca7",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddPropertyToFieldTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "We don\u0027t use this kind of entries in the javadoc.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 3
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20fdf52a_614d2beb",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddPropertyToFieldTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-05-31T19:49:00Z",
+      "side": 1,
+      "message": "Even if it is the same in other tests classes, we are trying to avoid doing this kind of checks in new code.\nSame applies for all other log checks below.",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 72
+      },
+      "revId": "3ae364be1c1d380e256389721037385e9c2ec865",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
