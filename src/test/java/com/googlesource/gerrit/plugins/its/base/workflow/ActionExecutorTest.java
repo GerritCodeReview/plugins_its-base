@@ -22,10 +22,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
-import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.*;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
@@ -38,6 +36,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
+  private AddPropertyToField.Factory addPropertyToFieldFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -191,6 +190,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.execute("4711", actionRequest, properties);
   }
 
+  public void testAddPropertyToFieldDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-property-to-field");
+
+    Set<Property> properties = Collections.emptySet();
+
+    AddPropertyToField addPropertyToField = createMock(AddPropertyToField.class);
+    expect(addPropertyToFieldFactory.create()).andReturn(addPropertyToField);
+
+    addPropertyToField.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute("4711", actionRequest, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -218,6 +234,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
+
+      addPropertyToFieldFactory = createMock(AddPropertyToField.Factory.class);
+      bind(AddPropertyToField.Factory.class).toInstance(addPropertyToFieldFactory);
     }
   }
 }
