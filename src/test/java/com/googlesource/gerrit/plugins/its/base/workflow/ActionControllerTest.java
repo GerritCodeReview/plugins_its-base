@@ -13,9 +13,6 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.expect;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -26,9 +23,13 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -36,6 +37,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   private PropertyExtractor propertyExtractor;
   private RuleBase ruleBase;
   private ActionExecutor actionExecutor;
+  private ProjectActionExecutor projectActionExecutor;
   private ItsConfig itsConfig;
 
   public void testNoPropertySets() {
@@ -43,8 +45,10 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Set<Set<Property>> propertySets = Collections.emptySet();
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
+    RefEventProperties refEventProperties =
+        new RefEventProperties(Collections.emptySet(), Collections.emptySet());
+    expect(propertyExtractor.extractFrom(event)).andReturn(refEventProperties).anyTimes();
+    expect(ruleBase.actionRequestsFor(Collections.emptySet())).andReturn(Collections.emptySet()).once();
 
     replayMocks();
 
@@ -60,10 +64,12 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Property> propertySet = Collections.emptySet();
     propertySets.add(propertySet);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
+    expect(propertyExtractor.extractFrom(event))
+        .andReturn(new RefEventProperties(Collections.emptySet(), propertySets))
+        .anyTimes();
 
     Collection<ActionRequest> actions = Collections.emptySet();
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).once();
+    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).times(2);
 
     replayMocks();
 
@@ -79,12 +85,21 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Property> propertySet = Collections.emptySet();
     propertySets.add(propertySet);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
+    Property propertyProject = createMock(Property.class);
+    expect(propertyProject.getKey()).andReturn("its-project").anyTimes();
+    expect(propertyProject.getValue()).andReturn("testProject").anyTimes();
+    Set<Property> propertyProjectSet = Sets.newHashSet(propertyProject);
+
+    expect(propertyExtractor.extractFrom(event))
+        .andReturn(new RefEventProperties(propertyProjectSet, propertySets))
+        .anyTimes();
 
     Collection<ActionRequest> actions = Lists.newArrayListWithCapacity(1);
     ActionRequest action1 = createMock(ActionRequest.class);
     actions.add(action1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).once();
+    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actions).times(1);
+    expect(ruleBase.actionRequestsFor(propertyProjectSet)).andReturn(actions).times(1);
+    projectActionExecutor.execute("testProject", actions, propertyProjectSet);
 
     replayMocks();
 
@@ -96,24 +111,33 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     ChangeEvent event = createMock(ChangeEvent.class);
 
-    Property propertyIssue1 = createMock(Property.class);
-    expect(propertyIssue1.getKey()).andReturn("issue").anyTimes();
-    expect(propertyIssue1.getValue()).andReturn("testIssue").anyTimes();
+    Property propertyProject = createMock(Property.class);
+    expect(propertyProject.getKey()).andReturn("its-project").anyTimes();
+    expect(propertyProject.getValue()).andReturn("testProject").anyTimes();
+    Set<Property> propertyProjectSet = Sets.newHashSet(propertyProject);
 
-    Set<Property> propertySet = Sets.newHashSet();
-    propertySet.add(propertyIssue1);
+    Property issuePropertyIssue1 = createMock(Property.class);
+    expect(issuePropertyIssue1.getKey()).andReturn("issue").anyTimes();
+    expect(issuePropertyIssue1.getValue()).andReturn("testIssue").anyTimes();
 
-    Set<Set<Property>> propertySets = Sets.newHashSet();
-    propertySets.add(propertySet);
+    Set<Property> issuePropertySet = Sets.newHashSet();
+    issuePropertySet.add(issuePropertyIssue1);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
+    Set<Set<Property>> issuePropertySets = Sets.newHashSet();
+    issuePropertySets.add(issuePropertySet);
+
+    expect(propertyExtractor.extractFrom(event))
+        .andReturn(new RefEventProperties(propertyProjectSet, issuePropertySets))
+        .anyTimes();
 
     Collection<ActionRequest> actionRequests = Lists.newArrayListWithCapacity(1);
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
     actionRequests.add(actionRequest1);
-    expect(ruleBase.actionRequestsFor(propertySet)).andReturn(actionRequests).once();
+    expect(ruleBase.actionRequestsFor(issuePropertySet)).andReturn(actionRequests).once();
+    expect(ruleBase.actionRequestsFor(propertyProjectSet)).andReturn(actionRequests).once();
 
-    actionExecutor.execute("testIssue", actionRequests, propertySet);
+    actionExecutor.execute("testIssue", actionRequests, issuePropertySet);
+    projectActionExecutor.execute("testProject", actionRequests, propertyProjectSet);
 
     replayMocks();
 
@@ -133,35 +157,49 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(propertyIssue2.getKey()).andReturn("issue").anyTimes();
     expect(propertyIssue2.getValue()).andReturn("testIssue2").anyTimes();
 
-    Set<Property> propertySet1 = Sets.newHashSet();
-    propertySet1.add(propertyIssue1);
+    Property propertyProject = createMock(Property.class);
+    expect(propertyProject.getKey()).andReturn("its-project").anyTimes();
+    expect(propertyProject.getValue()).andReturn("testProject").anyTimes();
 
-    Set<Property> propertySet2 = Sets.newHashSet();
-    propertySet2.add(propertyIssue1);
-    propertySet2.add(propertyIssue2);
+    Set<Property> issuePropertySet1 = Sets.newHashSet();
+    issuePropertySet1.add(propertyIssue1);
+
+    Set<Property> issuePropertySet2 = Sets.newHashSet();
+    issuePropertySet2.add(propertyIssue1);
+    issuePropertySet2.add(propertyIssue2);
 
     Set<Set<Property>> propertySets = Sets.newHashSet();
-    propertySets.add(propertySet1);
-    propertySets.add(propertySet2);
+    propertySets.add(issuePropertySet1);
+    propertySets.add(issuePropertySet2);
 
-    expect(propertyExtractor.extractFrom(event)).andReturn(propertySets).anyTimes();
+    Set<Property> projectPropertySet = Sets.newHashSet(propertyProject);
 
-    Collection<ActionRequest> actionRequests1 = Lists.newArrayListWithCapacity(1);
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    actionRequests1.add(actionRequest1);
+    expect(propertyExtractor.extractFrom(event))
+        .andReturn(new RefEventProperties(projectPropertySet, propertySets))
+        .anyTimes();
 
-    Collection<ActionRequest> actionRequests2 = Lists.newArrayListWithCapacity(2);
-    ActionRequest actionRequest2 = createMock(ActionRequest.class);
-    actionRequests2.add(actionRequest2);
-    ActionRequest actionRequest3 = createMock(ActionRequest.class);
-    actionRequests2.add(actionRequest3);
+    Collection<ActionRequest> issueActionRequests1 = Lists.newArrayListWithCapacity(1);
+    ActionRequest issueActionRequest1 = createMock(ActionRequest.class);
+    issueActionRequests1.add(issueActionRequest1);
 
-    expect(ruleBase.actionRequestsFor(propertySet1)).andReturn(actionRequests1).once();
-    expect(ruleBase.actionRequestsFor(propertySet2)).andReturn(actionRequests2).once();
+    Collection<ActionRequest> issueActionRequests2 = Lists.newArrayListWithCapacity(2);
+    ActionRequest issueActionRequest2 = createMock(ActionRequest.class);
+    issueActionRequests2.add(issueActionRequest2);
+    ActionRequest issueActionRequest3 = createMock(ActionRequest.class);
+    issueActionRequests2.add(issueActionRequest3);
 
-    actionExecutor.execute("testIssue", actionRequests1, propertySet1);
-    actionExecutor.execute("testIssue", actionRequests2, propertySet2);
-    actionExecutor.execute("testIssue2", actionRequests2, propertySet2);
+    Collection<ActionRequest> projectActionRequests = Lists.newArrayListWithCapacity(1);
+    ActionRequest projectActionRequest1 = createMock(ActionRequest.class);
+    projectActionRequests.add(projectActionRequest1);
+
+    expect(ruleBase.actionRequestsFor(issuePropertySet1)).andReturn(issueActionRequests1).once();
+    expect(ruleBase.actionRequestsFor(issuePropertySet2)).andReturn(issueActionRequests2).once();
+    expect(ruleBase.actionRequestsFor(projectPropertySet)).andReturn(projectActionRequests).once();
+
+    actionExecutor.execute("testIssue", issueActionRequests1, issuePropertySet1);
+    actionExecutor.execute("testIssue", issueActionRequests2, issuePropertySet2);
+    actionExecutor.execute("testIssue2", issueActionRequests2, issuePropertySet2);
+    projectActionExecutor.execute("testProject", projectActionRequests, projectPropertySet);
 
     replayMocks();
 
@@ -195,6 +233,9 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       actionExecutor = createMock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);
+
+      projectActionExecutor = createMock(ProjectActionExecutor.class);
+      bind(ProjectActionExecutor.class).toInstance(projectActionExecutor);
 
       itsConfig = createMock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);

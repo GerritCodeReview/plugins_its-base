@@ -13,8 +13,6 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import static org.easymock.EasyMock.expect;
-
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -40,12 +38,17 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
+
+import static org.easymock.EasyMock.expect;
 
 public class PropertyExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
 
+  private ItsProjectExtractor itsProjectExtractor;
   private IssueExtractor issueExtractor;
   private Property.Factory propertyFactory;
   private PropertyAttributeExtractor propertyAttributeExtractor;
@@ -62,10 +65,14 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         .andReturn(property1);
     Property propertyProject = createMock(Property.class);
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.of("itsProject"));
+    Property propertyItsProject = createMock(Property.class);
+    expect(propertyFactory.create("its-project", "itsProject")).andReturn(propertyItsProject);
 
     replayMocks();
 
-    Set<Set<Property>> actual = propertyExtractor.extractFrom(new DummyEvent());
+    Set<Set<Property>> actual =
+        propertyExtractor.extractFrom(new DummyEvent()).getIssuesProperties();
 
     Set<Set<Property>> expected = Sets.newHashSet();
     assertEquals("Properties do not match", expected, actual);
@@ -73,6 +80,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testChangeAbandonedEvent() {
     ChangeAbandonedEvent event = new ChangeAbandonedEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -118,6 +127,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testChangeMergedEvent() {
     ChangeMergedEvent event = new ChangeMergedEvent(testChange("testProject", "testBranch"));
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Property propertyChange = createMock(Property.class);
@@ -156,6 +167,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testChangeRestoredEvent() {
     ChangeRestoredEvent event = new ChangeRestoredEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -201,6 +214,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testCommentAddedEventWOApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Property propertyChange = createMock(Property.class);
@@ -244,6 +259,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testCommentAddedEventWApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -302,6 +319,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testPatchSetCreatedEvent() {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Property propertyChange = createMock(Property.class);
@@ -359,6 +378,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     refUpdateAttribute.project = "testProject";
     refUpdateAttribute.newRev = "testRevision";
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     Set<Property> common = Sets.newHashSet();
     common.add(propertyProject);
     common.add(propertySubmitter);
@@ -411,7 +432,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Set<Set<Property>> actual = propertyExtractor.extractFrom(event);
+    Set<Set<Property>> actual = propertyExtractor.extractFrom(event).getIssuesProperties();
 
     Set<Set<Property>> expected = Sets.newHashSet();
     Set<Property> properties = Sets.newHashSet();
@@ -447,6 +468,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     protected void configure() {
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
+      itsProjectExtractor = createMock(ItsProjectExtractor.class);
+      bind(ItsProjectExtractor.class).toInstance(itsProjectExtractor);
+
       issueExtractor = createMock(IssueExtractor.class);
       bind(IssueExtractor.class).toInstance(issueExtractor);
 
@@ -455,7 +479,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
       propertyFactory = createMock(Property.Factory.class);
       bind(Property.Factory.class).toInstance(propertyFactory);
-      //factory(Property.Factory.class);
+      // factory(Property.Factory.class);
     }
   }
 

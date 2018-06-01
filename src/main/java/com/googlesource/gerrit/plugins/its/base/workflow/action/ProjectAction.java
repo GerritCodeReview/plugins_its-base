@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,16 +20,15 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import java.io.IOException;
 import java.util.Set;
 
-/** Interface for actions on an issue tracking system */
-public interface Action {
+public interface ProjectAction {
 
   /**
    * Execute this action.
    *
-   * @param issue The issue to execute on.
+   * @param itsProject The its itsProject to execute on.
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties)
+  void execute(String itsProject, ActionRequest actionRequest, Set<Property> properties)
       throws IOException;
 }
