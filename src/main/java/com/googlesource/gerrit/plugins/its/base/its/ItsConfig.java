@@ -14,8 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import static java.util.stream.Collectors.toList;
-
 import com.google.gerrit.common.data.RefConfigSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
@@ -37,13 +35,16 @@ import com.google.gerrit.server.project.ProjectState;
 import com.google.gerrit.server.project.RefPatternMatcher;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static java.util.stream.Collectors.toList;
 
 public class ItsConfig {
   private static final String PLUGIN = "plugin";
@@ -139,6 +140,16 @@ public class ItsConfig {
 
   private boolean match(String refName, String refPattern) {
     return RefPatternMatcher.getMatcher(refPattern).match(refName, null);
+  }
+
+  // Project association
+  public Optional<String> getItsProjectName(Project.NameKey projectNK) {
+    ProjectState projectState = projectCache.get(projectNK);
+    if (projectState == null) {
+      return Optional.empty();
+    }
+    return Optional.ofNullable(
+        pluginCfgFactory.getFromProjectConfig(projectState, pluginName).getString("its-project"));
   }
 
   // Issue association --------------------------------------------------------

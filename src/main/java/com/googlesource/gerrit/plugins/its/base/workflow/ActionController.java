@@ -14,12 +14,16 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.base.Strings;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -30,9 +34,13 @@ import java.util.Set;
  * issue's status).
  */
 public class ActionController implements EventListener {
+
+  private static final Logger log = LoggerFactory.getLogger(ActionController.class);
+
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
+  private final ProjectActionExecutor projectActionExecutor;
   private final ItsConfig itsConfig;
 
   @Inject
@@ -40,10 +48,12 @@ public class ActionController implements EventListener {
       PropertyExtractor propertyExtractor,
       RuleBase ruleBase,
       ActionExecutor actionExecutor,
+      ProjectActionExecutor projectActionExecutor,
       ItsConfig itsConfig) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
+    this.projectActionExecutor = projectActionExecutor;
     this.itsConfig = itsConfig;
   }
 
@@ -58,17 +68,52 @@ public class ActionController implements EventListener {
   }
 
   private void handleEvent(RefEvent refEvent) {
-    Set<Set<Property>> propertiesCollections = propertyExtractor.extractFrom(refEvent);
-    for (Set<Property> properties : propertiesCollections) {
-      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(properties);
-      if (!actions.isEmpty()) {
-        for (Property property : properties) {
-          if ("issue".equals(property.getKey())) {
-            String issue = property.getValue();
-            actionExecutor.execute(issue, actions, properties);
-          }
+    RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+
+    handleIssuesEvent(refEventProperties.getIssuesProperties());
+    handleProjectEvent(refEventProperties.getProjectProperties());
+  }
+
+  private void handleIssuesEvent(Set<Set<Property>> issuesProperties) {
+    for (Set<Property> issueProperties : issuesProperties) {
+      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
+      if (actions.isEmpty()) {
+        return;
+      }
+
+      for (Property property : issueProperties) {
+        if ("issue".equals(property.getKey())) {
+          String issue = property.getValue();
+          actionExecutor.execute(issue, actions, issueProperties);
         }
       }
     }
+  }
+
+  private void handleProjectEvent(Set<Property> projectProperties) {
+    Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
+    if (projectActions.isEmpty()) {
+      return;
+    }
+    String itsProject = getValue(projectProperties, "its-project");
+    if (Strings.isNullOrEmpty(itsProject)) {
+      String project = getValue(projectProperties, "project");
+      log.error(
+          "Could not process project event. No its-project associated with project {}. "
+              + "Did you forget to configure the ITS project association in project.config?",
+          project);
+      return;
+    }
+
+    projectActionExecutor.execute(itsProject, projectActions, projectProperties);
+  }
+
+  private String getValue(Set<Property> properties, String key) {
+    return properties
+        .stream()
+        .filter(property -> key.equals(property.getKey()))
+        .map(Property::getValue)
+        .findFirst()
+        .orElse(null);
   }
 }
