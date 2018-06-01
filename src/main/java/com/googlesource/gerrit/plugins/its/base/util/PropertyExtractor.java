@@ -33,26 +33,31 @@ import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
+import org.eclipse.jgit.lib.ObjectId;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import org.eclipse.jgit.lib.ObjectId;
 
 /** Extractor to translate an {@link ChangeEvent} to {@link Property Properties}. */
 public class PropertyExtractor {
-  private IssueExtractor issueExtractor;
-  private Property.Factory propertyFactory;
-  private PropertyAttributeExtractor propertyAttributeExtractor;
+  private final ItsProjectExtractor itsProjectExtractor;
+  private final IssueExtractor issueExtractor;
+  private final Property.Factory propertyFactory;
+  private final PropertyAttributeExtractor propertyAttributeExtractor;
   private final String pluginName;
 
   @Inject
   PropertyExtractor(
       IssueExtractor issueExtractor,
+      ItsProjectExtractor itsProjectExtractor,
       Property.Factory propertyFactory,
       PropertyAttributeExtractor propertyAttributeExtractor,
       @PluginName String pluginName) {
     this.issueExtractor = issueExtractor;
     this.propertyFactory = propertyFactory;
+    this.itsProjectExtractor = itsProjectExtractor;
     this.propertyAttributeExtractor = propertyAttributeExtractor;
     this.pluginName = pluginName;
   }
@@ -169,13 +174,18 @@ public class PropertyExtractor {
    * @param event The event to extract property sets from.
    * @return sets of property sets extracted from the event.
    */
-  public Set<Set<Property>> extractFrom(RefEvent event) {
+  public RefEventProperties extractFrom(RefEvent event) {
     Map<String, Set<String>> associations = null;
     Set<Set<Property>> ret = Sets.newHashSet();
 
     Set<Property> common = Sets.newHashSet();
     common.add(propertyFactory.create("event", event.getClass().getName()));
-    common.add(propertyFactory.create("project", event.getProjectNameKey().get()));
+    String project = event.getProjectNameKey().get();
+    common.add(propertyFactory.create("project", project));
+
+    itsProjectExtractor
+        .getItsProject(project)
+        .ifPresent(itsProject -> common.add(propertyFactory.create("its-project", itsProject)));
 
     if (event instanceof ChangeAbandonedEvent) {
       associations = extractFrom((ChangeAbandonedEvent) event, common);
@@ -206,6 +216,6 @@ public class PropertyExtractor {
         ret.add(properties);
       }
     }
-    return ret;
+    return new RefEventProperties(common, ret);
   }
 }
