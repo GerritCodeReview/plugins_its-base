@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 
 import com.google.common.base.Suppliers;
@@ -47,7 +48,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   private PluginConfigFactory pluginConfigFactory;
   private Config serverConfig;
 
-  public void setupIsEnabled(String enabled, String parentEnabled, String[] branches) {
+  public void setupIsEnabled(
+      String enabled, String itsProject, String parentEnabled, String[] branches) {
     ProjectState projectState = createMock(ProjectState.class);
 
     expect(projectCache.get(new Project.NameKey("testProject"))).andReturn(projectState).anyTimes();
@@ -81,7 +83,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
       parents = Arrays.asList(parentProjectState, projectState);
     }
-    expect(projectState.treeInOrder()).andReturn(parents);
+    expect(projectState.treeInOrder()).andReturn(parents).anyTimes();
 
     PluginConfig pluginConfig = createMock(PluginConfig.class);
 
@@ -90,6 +92,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
         .anyTimes();
 
     expect(pluginConfig.getString("enabled", "false")).andReturn(enabled).anyTimes();
+    expect(pluginConfig.getString(eq("its-project"))).andReturn(itsProject).anyTimes();
 
     PluginConfig pluginConfigWI = createMock(PluginConfig.class);
 
@@ -104,7 +107,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentNoBranchEnabled() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -116,7 +119,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentNoBranchDisabled() {
     String[] branches = {};
-    setupIsEnabled("false", null, branches);
+    setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -128,7 +131,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentNoBranchEnforced() {
     String[] branches = {};
-    setupIsEnabled("enforced", null, branches);
+    setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -140,7 +143,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentMatchingBranchEnabled() {
     String[] branches = {"^refs/heads/test.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -152,7 +155,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentMatchingBranchDisabled() {
     String[] branches = {"^refs/heads/test.*"};
-    setupIsEnabled("false", null, branches);
+    setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -164,7 +167,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentMatchingBranchEnforced() {
     String[] branches = {"^refs/heads/test.*"};
-    setupIsEnabled("enforced", null, branches);
+    setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -176,7 +179,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentNonMatchingBranchEnabled() {
     String[] branches = {"^refs/heads/foo.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -188,7 +191,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentNonMatchingBranchDisabled() {
     String[] branches = {"^refs/heads/foo.*"};
-    setupIsEnabled("false", null, branches);
+    setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -200,7 +203,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentNonMatchingBranchEnforced() {
     String[] branches = {"^refs/heads/foo.*"};
-    setupIsEnabled("enforced", null, branches);
+    setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -212,7 +215,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentMatchingBranchMiddleEnabled() {
     String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -224,7 +227,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefNoParentMatchingBranchMiddleDisabled() {
     String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
-    setupIsEnabled("false", null, branches);
+    setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -236,7 +239,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefNoParentMatchingBranchMiddleEnforced() {
     String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*", "^refs/heads/baz.*"};
-    setupIsEnabled("enforced", null, branches);
+    setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -248,7 +251,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefParentNoBranchEnabled() {
     String[] branches = {};
-    setupIsEnabled("false", "true", branches);
+    setupIsEnabled("false", null, "true", branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -260,7 +263,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledRefParentNoBranchDisabled() {
     String[] branches = {};
-    setupIsEnabled("false", "false", branches);
+    setupIsEnabled("false", null, "false", branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -272,7 +275,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefParentNoBranchEnforced() {
     String[] branches = {};
-    setupIsEnabled("false", "enforced", branches);
+    setupIsEnabled("false", null, "enforced", branches);
 
     ItsConfig itsConfig = createItsConfig();
 
@@ -284,7 +287,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventNoBranches() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -297,7 +300,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventSingleBranchExact() {
     String[] branches = {"refs/heads/testBranch"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -310,7 +313,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventSingleBranchRegExp() {
     String[] branches = {"^refs/heads/test.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -323,7 +326,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledEventSingleBranchNonMatchingRegExp() {
     String[] branches = {"^refs/heads/foo.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -336,7 +339,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventMultiBranchExact() {
     String[] branches = {"refs/heads/foo", "refs/heads/testBranch"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -349,7 +352,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventMultiBranchRegExp() {
     String[] branches = {"^refs/heads/foo.*", "^refs/heads/test.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -362,7 +365,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventMultiBranchMixedMatchExact() {
     String[] branches = {"refs/heads/testBranch", "refs/heads/foo.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -375,7 +378,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledEventMultiBranchMixedMatchRegExp() {
     String[] branches = {"refs/heads/foo", "^refs/heads/test.*"};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -388,7 +391,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void BROKEN_testIsEnabledEventDisabled() {
     String[] branches = {"^refs/heads/testBranch"};
-    setupIsEnabled("false", null, branches);
+    setupIsEnabled("false", null, null, branches);
 
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
@@ -401,7 +404,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledCommentAddedEvent() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
@@ -414,7 +417,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledChangeMergedEvent() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ChangeMergedEvent event = new ChangeMergedEvent(testChange("testProject", "testBranch"));
 
@@ -427,7 +430,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledChangeAbandonedEvent() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ChangeAbandonedEvent event = new ChangeAbandonedEvent(testChange("testProject", "testBranch"));
 
@@ -440,7 +443,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledChangeRestoredEvent() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     ChangeRestoredEvent event = new ChangeRestoredEvent(testChange("testProject", "testBranch"));
 
@@ -453,7 +456,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void testIsEnabledRefUpdatedEvent() {
     String[] branches = {};
-    setupIsEnabled("true", null, branches);
+    setupIsEnabled("true", null, null, branches);
 
     RefUpdatedEvent event = new RefUpdatedEvent();
     RefUpdateAttribute refUpdateAttribute = new RefUpdateAttribute();
@@ -477,6 +480,29 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     assertFalse(itsConfig.isEnabled(event));
     assertLogMessageContains("not recognised and ignored");
+  }
+
+  public void testGetItsProjectNull() {
+    String[] branches = {};
+    setupIsEnabled("true", null, null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertNull(itsConfig.getItsProjectName(new Project.NameKey("testProject")).orElse(null));
+  }
+
+  public void testGetItsProjectConfigured() {
+    String[] branches = {};
+    setupIsEnabled("true", "itsProject", null, branches);
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertEquals(
+        "itsProject", itsConfig.getItsProjectName(new Project.NameKey("testProject")).orElse(null));
   }
 
   public void testGetIssuePatternNullMatch() {
