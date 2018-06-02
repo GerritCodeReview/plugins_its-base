@@ -20,11 +20,15 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.Action;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.ItsAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
-import java.io.IOException;
-import java.util.Set;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.ProjectAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Set;
 
 /** Executes an {@link ActionRequest} */
 public class ActionExecutor {
@@ -35,6 +39,7 @@ public class ActionExecutor {
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
+  private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
 
   @Inject
   public ActionExecutor(
@@ -42,15 +47,17 @@ public class ActionExecutor {
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
-      LogEvent.Factory logEventFactory) {
+      LogEvent.Factory logEventFactory,
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
+    this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
   }
 
-  private Action getAction(String actionName) {
+  private ItsAction getAction(String actionName) {
     switch (actionName) {
       case "add-comment":
         return addCommentFactory.create();
@@ -60,27 +67,55 @@ public class ActionExecutor {
         return addSoyCommentFactory.create();
       case "log-event":
         return logEventFactory.create();
+      case "create-version-from-property":
+        return createVersionFromPropertyFactory.create();
       default:
         return null;
     }
   }
 
-  public void execute(String issue, ActionRequest actionRequest, Set<Property> properties) {
+  public void executeOnIssue(String issue, ActionRequest actionRequest, Set<Property> properties) {
     try {
-      Action action = getAction(actionRequest.getName());
+      ItsAction action = getAction(actionRequest.getName());
       if (action == null) {
         its.performAction(issue, actionRequest.getUnparsed());
-      } else {
-        action.execute(issue, actionRequest, properties);
+      } else if (Action.class.isInstance(action)) {
+        Action.class.cast(action).execute(issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }
   }
 
-  public void execute(String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
+  public void executeOnIssue(
+      String issue, Iterable<ActionRequest> actions, Set<Property> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(issue, actionRequest, properties);
+      executeOnIssue(issue, actionRequest, properties);
+    }
+  }
+
+  public void executeOnProject(
+      String itsProject, ActionRequest actionRequest, Set<Property> properties) {
+    try {
+      String actionName = actionRequest.getName();
+      ItsAction action = getAction(actionName);
+      if (action == null) {
+        log.debug("No action found for name {}", actionName);
+        return;
+      }
+      if (!ProjectAction.class.isInstance(action)) {
+        return;
+      }
+      ProjectAction.class.cast(action).execute(itsProject, actionRequest, properties);
+    } catch (IOException e) {
+      log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
+  public void executeOnProject(
+      String itsProject, Iterable<ActionRequest> actions, Set<Property> properties) {
+    for (ActionRequest actionRequest : actions) {
+      executeOnProject(itsProject, actionRequest, properties);
     }
   }
 }
