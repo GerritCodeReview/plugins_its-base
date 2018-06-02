@@ -36,6 +36,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 import java.nio.file.Path;
 
@@ -70,6 +71,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddComment.Factory.class);
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
+    factory(CreateVersionFromProperty.class);
     factory(LogEvent.Factory.class);
   }
 
