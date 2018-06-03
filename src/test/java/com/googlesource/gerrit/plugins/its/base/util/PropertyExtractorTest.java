@@ -67,6 +67,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.of("itsProject"));
     Property propertyItsProject = createMock(Property.class);
     expect(propertyFactory.create("its-project", "itsProject")).andReturn(propertyItsProject);
+    Property originProperty = createMock(Property.class);
+    expect(propertyFactory.create("event-origin", "project")).andReturn(originProperty);
 
     replayMocks();
 
@@ -84,28 +86,28 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.abandoner = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "abandoner"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     event.reason = "testReason";
-    Property propertyReason = createMock(Property.class);
+    Property propertyReason = createMockProperty();
     expect(propertyFactory.create("reason", "testReason")).andReturn(propertyReason);
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -130,24 +132,24 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.submitter = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -171,28 +173,28 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.restorer = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "restorer"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     event.reason = "testReason";
-    Property propertyReason = createMock(Property.class);
+    Property propertyReason = createMockProperty();
     expect(propertyFactory.create("reason", "testReason")).andReturn(propertyReason);
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -217,28 +219,28 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.author = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     event.comment = "testComment";
-    Property propertyComment = createMock(Property.class);
+    Property propertyComment = createMockProperty();
     expect(propertyFactory.create("comment", "testComment")).andReturn(propertyComment);
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -263,39 +265,39 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.author = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     ApprovalAttribute approvalAttribute1 = createMock(ApprovalAttribute.class);
-    Property propertyApproval1 = createMock(Property.class);
+    Property propertyApproval1 = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(approvalAttribute1))
         .andReturn(Sets.newHashSet(propertyApproval1));
     ApprovalAttribute approvalAttribute2 = createMock(ApprovalAttribute.class);
-    Property propertyApproval2 = createMock(Property.class);
+    Property propertyApproval2 = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(approvalAttribute2))
         .andReturn(Sets.newHashSet(propertyApproval2));
     ApprovalAttribute[] approvalAttributes = {approvalAttribute1, approvalAttribute2};
     event.approvals = Suppliers.ofInstance(approvalAttributes);
 
     event.comment = "testComment";
-    Property propertyComment = createMock(Property.class);
+    Property propertyComment = createMockProperty();
     expect(propertyFactory.create("comment", "testComment")).andReturn(propertyComment);
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -322,24 +324,24 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
-    Property propertyChange = createMock(Property.class);
+    Property propertyChange = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(changeAttribute))
         .andReturn(Sets.newHashSet(propertyChange));
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.uploader = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "uploader"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
-    Property propertyPatchSet = createMock(Property.class);
+    Property propertyPatchSet = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(patchSetAttribute))
         .andReturn(Sets.newHashSet(propertyPatchSet));
 
     event.project = new Project.NameKey("testProject");
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject);
 
     changeAttribute.project = "testProject";
@@ -361,17 +363,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     AccountAttribute accountAttribute = createMock(AccountAttribute.class);
     event.submitter = Suppliers.ofInstance(accountAttribute);
-    Property propertySubmitter = createMock(Property.class);
+    Property propertySubmitter = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
         .andReturn(Sets.newHashSet(propertySubmitter));
 
     RefUpdateAttribute refUpdateAttribute = createMock(RefUpdateAttribute.class);
     event.refUpdate = Suppliers.ofInstance(refUpdateAttribute);
-    Property propertyRefUpdated = createMock(Property.class);
+    Property propertyRefUpdated = createMockProperty();
     expect(propertyAttributeExtractor.extractFrom(refUpdateAttribute))
         .andReturn(Sets.newHashSet(propertyRefUpdated));
 
-    Property propertyProject = createMock(Property.class);
+    Property propertyProject = createMockProperty();
     expect(propertyFactory.create("project", "testProject")).andReturn(propertyProject).anyTimes();
 
     refUpdateAttribute.project = "testProject";
@@ -391,31 +393,39 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
       RefEvent event, String className, String type, Set<Property> common, boolean withRevision) {
     PropertyExtractor propertyExtractor = injector.getInstance(PropertyExtractor.class);
 
-    Property propertyItsName = createMock(Property.class);
+    Property propertyEventOrigin = createMockProperty();
+    expect(propertyFactory.create("event-origin", "project"))
+        .andReturn(propertyEventOrigin)
+        .anyTimes();
+    expect(propertyFactory.create("event-origin", "issue"))
+        .andReturn(propertyEventOrigin)
+        .anyTimes();
+
+    Property propertyItsName = createMockProperty();
     expect(propertyFactory.create("its-name", "ItsTestName")).andReturn(propertyItsName).anyTimes();
 
-    Property propertyEvent = createMock(Property.class);
+    Property propertyEvent = createMockProperty();
     expect(propertyFactory.create("event", "com.google.gerrit.server.events." + className))
         .andReturn(propertyEvent);
 
-    Property propertyEventType = createMock(Property.class);
+    Property propertyEventType = createMockProperty();
     expect(propertyFactory.create("event-type", type)).andReturn(propertyEventType);
 
-    Property propertyAssociationFooter = createMock(Property.class);
+    Property propertyAssociationFooter = createMockProperty();
     expect(propertyFactory.create("association", "footer")).andReturn(propertyAssociationFooter);
 
-    Property propertyAssociationAnywhere = createMock(Property.class);
+    Property propertyAssociationAnywhere = createMockProperty();
     expect(propertyFactory.create("association", "anywhere"))
         .andReturn(propertyAssociationAnywhere)
         .times(2);
 
-    Property propertyAssociationBody = createMock(Property.class);
+    Property propertyAssociationBody = createMockProperty();
     expect(propertyFactory.create("association", "body")).andReturn(propertyAssociationBody);
 
-    Property propertyIssue42 = createMock(Property.class);
+    Property propertyIssue42 = createMockProperty();
     expect(propertyFactory.create("issue", "42")).andReturn(propertyIssue42);
 
-    Property propertyIssue4711 = createMock(Property.class);
+    Property propertyIssue4711 = createMockProperty();
     expect(propertyFactory.create("issue", "4711")).andReturn(propertyIssue4711);
 
     HashMap<String, Set<String>> issueMap = Maps.newHashMap();
@@ -454,6 +464,12 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     properties.addAll(common);
     expected.add(properties);
     assertEquals("Properties do not match", expected, actual);
+  }
+
+  private Property createMockProperty() {
+    Property property = createMock(Property.class);
+    expect(property.getKey()).andReturn(null).anyTimes();
+    return property;
   }
 
   @Override
