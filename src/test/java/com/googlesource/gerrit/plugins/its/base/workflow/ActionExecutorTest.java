@@ -13,6 +13,9 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
@@ -23,14 +26,11 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -41,6 +41,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private FireEventOnCommits.Factory fireEventOnCommitsFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -213,6 +214,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnProject("its-project", actionRequest, properties);
   }
 
+  public void testFireEventOnCommitsDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("fire-event-on-commits");
+
+    Set<Property> properties = Collections.emptySet();
+
+    FireEventOnCommits fireEventOnCommits = createMock(FireEventOnCommits.class);
+    expect(fireEventOnCommitsFactory.create()).andReturn(fireEventOnCommits);
+
+    fireEventOnCommits.execute("its-project", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject("its-project", actionRequest, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -243,6 +261,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      fireEventOnCommitsFactory = createMock(FireEventOnCommits.Factory.class);
+      bind(FireEventOnCommits.Factory.class).toInstance(fireEventOnCommitsFactory);
     }
   }
 }
