@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.common.collect.Sets;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -23,8 +24,9 @@ import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.util.Set;
 import org.apache.commons.lang.StringEscapeUtils;
+
+import java.util.Set;
 
 /** Extractor to translate the various {@code *Attribute}s to {@link Property Properties}. */
 public class PropertyAttributeExtractor {
@@ -96,7 +98,13 @@ public class PropertyAttributeExtractor {
     Set<Property> properties = Sets.newHashSet();
     properties.add(propertyFactory.create("revision", refUpdateAttribute.newRev));
     properties.add(propertyFactory.create("revisionOld", refUpdateAttribute.oldRev));
-    properties.add(propertyFactory.create("ref", refUpdateAttribute.refName));
+    String refName = refUpdateAttribute.refName;
+    properties.add(propertyFactory.create("ref", refName));
+    String refShortName = RefNames.shortName(refName);
+    properties.add(propertyFactory.create("refShort", refShortName));
+    properties.add(
+        propertyFactory.create(
+            "refGroup", refName.substring(0, refName.length() - refShortName.length())));
     return properties;
   }
 
