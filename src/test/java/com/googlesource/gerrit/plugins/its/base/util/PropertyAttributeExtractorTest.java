@@ -339,7 +339,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     RefUpdateAttribute refUpdateAttribute = new RefUpdateAttribute();
     refUpdateAttribute.newRev = "1234567891123456789212345678931234567894";
     refUpdateAttribute.oldRev = "9876543211987654321298765432139876543214";
-    refUpdateAttribute.refName = "testRef";
+    refUpdateAttribute.refName = "refs/heads/master";
 
     Property propertyRevision = createMock(Property.class);
     expect(propertyFactory.create("revision", "1234567891123456789212345678931234567894"))
@@ -350,7 +350,13 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
         .andReturn(propertyRevisionOld);
 
     Property propertyRef = createMock(Property.class);
-    expect(propertyFactory.create("ref", "testRef")).andReturn(propertyRef);
+    expect(propertyFactory.create("ref", "refs/heads/master")).andReturn(propertyRef);
+
+    Property propertyRefShort = createMock(Property.class);
+    expect(propertyFactory.create("refShort", "master")).andReturn(propertyRefShort);
+
+    Property propertyRefGroup = createMock(Property.class);
+    expect(propertyFactory.create("refGroup", "refs/heads/")).andReturn(propertyRefGroup);
 
     replayMocks();
 
@@ -362,6 +368,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expected.add(propertyRevision);
     expected.add(propertyRevisionOld);
     expected.add(propertyRef);
+    expected.add(propertyRefShort);
+    expected.add(propertyRefGroup);
     assertEquals("Properties do not match", expected, actual);
   }
 
