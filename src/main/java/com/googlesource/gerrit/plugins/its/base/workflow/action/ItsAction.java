@@ -14,6 +14,4 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
-public interface ItsAction {
-
-}
+public interface ItsAction {}

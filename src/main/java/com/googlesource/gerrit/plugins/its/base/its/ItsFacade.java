@@ -37,6 +37,11 @@ public interface ItsFacade {
     throw new UnsupportedOperationException("create-version is not implemented by " + getClass());
   }
 
+  default void markVersionAsReleased(String itsProject, String version) throws IOException {
+    throw new UnsupportedOperationException(
+        "mark-version-as-released is not implemented by " + getClass());
+  }
+
   public boolean exists(final String issueId) throws IOException;
 
   public String createLinkForWebui(String url, String text);
