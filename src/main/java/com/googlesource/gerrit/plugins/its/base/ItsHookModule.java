@@ -38,6 +38,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.MarkPropertyAsReleasedVersion;
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
@@ -72,6 +73,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(CreateVersionFromProperty.Factory.class);
+    factory(MarkPropertyAsReleasedVersion.Factory.class);
     factory(LogEvent.Factory.class);
   }
 
