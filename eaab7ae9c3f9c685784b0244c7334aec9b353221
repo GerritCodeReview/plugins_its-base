@@ -74,6 +74,30 @@
     },
     {
       "key": {
+        "uuid": "a99c6121_71083b39",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-05T09:04:10Z",
+      "side": 1,
+      "message": "Yes, definitively. I\u0027ll propose a change as soon as this series is in.\nThanks for the suggestion.",
+      "parentUuid": "98fe3e02_e521cd29",
+      "range": {
+        "startLine": 78,
+        "startChar": 29,
+        "endLine": 78,
+        "endChar": 36
+      },
+      "revId": "eaab7ae9c3f9c685784b0244c7334aec9b353221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a922b899_1b939e01",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/Condition.java",
         "patchSetId": 19
