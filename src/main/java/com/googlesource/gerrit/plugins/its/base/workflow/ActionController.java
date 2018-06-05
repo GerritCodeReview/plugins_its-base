@@ -21,6 +21,7 @@ import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+import com.googlesource.gerrit.plugins.its.base.util.PropertyUtils;
 import java.util.Collection;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public class ActionController implements EventListener {
     handleProjectEvent(refEventProperties.getProjectProperties());
   }
 
-  private void handleIssuesEvent(Set<Set<Property>> issuesProperties) {
+  public void handleIssuesEvent(Set<Set<Property>> issuesProperties) {
     for (Set<Property> issueProperties : issuesProperties) {
       Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
       if (actions.isEmpty()) {
@@ -91,9 +92,9 @@ public class ActionController implements EventListener {
     if (projectActions.isEmpty()) {
       return;
     }
-    String itsProject = getValue(projectProperties, "its-project");
+    String itsProject = PropertyUtils.getValue(projectProperties, "its-project");
     if (Strings.isNullOrEmpty(itsProject)) {
-      String project = getValue(projectProperties, "project");
+      String project = PropertyUtils.getValue(projectProperties, "project");
       log.error(
           "Could not process project event. No its-project associated with project {}. "
               + "Did you forget to configure the ITS project association in project.config?",
@@ -102,14 +103,5 @@ public class ActionController implements EventListener {
     }
 
     actionExecutor.executeOnProject(itsProject, projectActions, projectProperties);
-  }
-
-  private String getValue(Set<Property> properties, String key) {
-    return properties
-        .stream()
-        .filter(property -> key.equals(property.getKey()))
-        .map(Property::getValue)
-        .findFirst()
-        .orElse(null);
   }
 }

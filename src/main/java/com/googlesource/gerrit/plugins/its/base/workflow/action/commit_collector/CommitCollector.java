@@ -12,6 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.its.base.workflow.action;
+package com.googlesource.gerrit.plugins.its.base.workflow.action.commit_collector;
 
-public interface ItsAction {}
+import com.googlesource.gerrit.plugins.its.base.workflow.Property;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
+/** Collects commits based on the event properties provided in input */
+public interface CommitCollector {
+  List<String> collect(Set<Property> properties) throws IOException;
+}

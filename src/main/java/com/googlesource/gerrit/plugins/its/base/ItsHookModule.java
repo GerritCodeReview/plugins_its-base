@@ -37,7 +37,9 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.commit_collector.SinceLastTagCommitCollector;
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
@@ -73,6 +75,8 @@ public class ItsHookModule extends FactoryModule {
     factory(AddStandardComment.Factory.class);
     factory(CreateVersionFromProperty.Factory.class);
     factory(LogEvent.Factory.class);
+    factory(FireEventOnCommits.Factory.class);
+    factory(SinceLastTagCommitCollector.Factory.class);
   }
 
   @Provides

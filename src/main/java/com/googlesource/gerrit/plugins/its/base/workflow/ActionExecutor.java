@@ -21,14 +21,14 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.ItsAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.ProjectAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Executes an {@link ActionRequest} */
 public class ActionExecutor {
@@ -40,6 +40,7 @@ public class ActionExecutor {
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final FireEventOnCommits.Factory fireEventOnCommitsFactory;
 
   @Inject
   public ActionExecutor(
@@ -48,13 +49,15 @@ public class ActionExecutor {
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory,
-      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      FireEventOnCommits.Factory fireEventOnCommitsFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.fireEventOnCommitsFactory = fireEventOnCommitsFactory;
   }
 
   private ItsAction getAction(String actionName) {
@@ -69,6 +72,8 @@ public class ActionExecutor {
         return logEventFactory.create();
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
+      case "fire-event-on-commits":
+        return fireEventOnCommitsFactory.create();
       default:
         return null;
     }
