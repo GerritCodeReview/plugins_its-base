@@ -27,6 +27,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.MarkPropertyAsReleasedVersion;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory;
 
   public void testExecuteItem() throws IOException {
     ActionRequest actionRequest = createMock(ActionRequest.class);
@@ -212,6 +214,24 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnProject("its-project", actionRequest, properties);
   }
 
+  public void testMarkPropertyAsReleasedVersionDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("mark-property-as-released-version");
+
+    Set<Property> properties = Collections.emptySet();
+
+    MarkPropertyAsReleasedVersion markPropertyAsReleasedVersion =
+        createMock(MarkPropertyAsReleasedVersion.class);
+    expect(markPropertyAsReleasedVersionFactory.create()).andReturn(markPropertyAsReleasedVersion);
+
+    markPropertyAsReleasedVersion.execute("its-project", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject("its-project", actionRequest, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -242,6 +262,11 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      markPropertyAsReleasedVersionFactory =
+          createMock(MarkPropertyAsReleasedVersion.Factory.class);
+      bind(MarkPropertyAsReleasedVersion.Factory.class)
+          .toInstance(markPropertyAsReleasedVersionFactory);
     }
   }
 }
