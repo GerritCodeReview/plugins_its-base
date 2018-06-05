@@ -200,21 +200,39 @@ public class PropertyExtractor {
       associations = extractFrom((RefUpdatedEvent) event, common);
     }
 
-    if (associations != null) {
-      for (String issue : associations.keySet()) {
-        Set<Property> properties = Sets.newHashSet();
-        Property property = propertyFactory.create("issue", issue);
-        properties.add(property);
-        property = propertyFactory.create("its-name", pluginName);
-        properties.add(property);
-        for (String occurrence : associations.get(issue)) {
-          property = propertyFactory.create("association", occurrence);
-          properties.add(property);
-        }
-        properties.addAll(common);
-        ret.add(properties);
-      }
+    ret.addAll(extractIssuesProperties(common, associations));
+
+    Set<Property> projectProperties = Sets.newHashSet(common);
+    projectProperties.add(propertyFactory.create("event-origin", "project"));
+    return new RefEventProperties(projectProperties, ret);
+  }
+
+  public Set<Set<Property>> extractIssuesProperties(
+      Set<Property> commonProperties, Map<String, Set<String>> associations) {
+    if (associations == null) {
+      return Collections.emptySet();
     }
-    return new RefEventProperties(common, ret);
+
+    Set<Set<Property>> issuesProperties = Sets.newHashSet();
+    Set<Property> completedCommonProperties = Sets.newHashSet(commonProperties);
+    if (!PropertyUtils.containsKey(completedCommonProperties, "event-origin")) {
+      completedCommonProperties.add(propertyFactory.create("event-origin", "issue"));
+    }
+
+    for (String issue : associations.keySet()) {
+      Set<Property> properties = Sets.newHashSet();
+      Property property = propertyFactory.create("issue", issue);
+      properties.add(property);
+      property = propertyFactory.create("its-name", pluginName);
+      properties.add(property);
+      for (String occurrence : associations.get(issue)) {
+        property = propertyFactory.create("association", occurrence);
+        properties.add(property);
+      }
+      properties.addAll(commonProperties);
+      issuesProperties.add(properties);
+    }
+
+    return issuesProperties;
   }
 }
