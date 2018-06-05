@@ -23,9 +23,12 @@ import com.googlesource.gerrit.plugins.its.base.workflow.action.AddStandardComme
 import com.googlesource.gerrit.plugins.its.base.workflow.action.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.ItsAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.action.MarkPropertyAsReleasedVersion;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.ProjectAction;
 import java.io.IOException;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Executes an {@link ActionRequest} */
 public class ActionExecutor {
@@ -37,6 +40,7 @@ public class ActionExecutor {
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory;
 
   @Inject
   public ActionExecutor(
@@ -45,13 +49,15 @@ public class ActionExecutor {
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory,
-      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.markPropertyAsReleasedVersionFactory = markPropertyAsReleasedVersionFactory;
   }
 
   private ItsAction getAction(String actionName) {
@@ -66,6 +72,8 @@ public class ActionExecutor {
         return logEventFactory.create();
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
+      case "mark-property-as-released-version":
+        return markPropertyAsReleasedVersionFactory.create();
       default:
         return null;
     }
