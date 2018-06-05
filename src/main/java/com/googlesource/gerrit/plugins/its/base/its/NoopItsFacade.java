@@ -55,6 +55,13 @@ public class NoopItsFacade implements ItsFacade {
   }
 
   @Override
+  public void createVersion(String itsProject, String version) {
+    if (log.isDebugEnabled()) {
+      log.debug("createVersion({},{})", itsProject, version);
+    }
+  }
+
+  @Override
   public String healthCheck(Check check) throws IOException {
     if (log.isDebugEnabled()) {
       log.debug("healthCheck()");
