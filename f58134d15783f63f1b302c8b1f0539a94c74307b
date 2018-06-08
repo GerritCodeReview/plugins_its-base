@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "4acbb00d_969b1a39",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-08T19:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "323942b5_5720ffc4",
+      "range": {
+        "startLine": 70,
+        "startChar": 18,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77fdf6b9_fdcb239d",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 18
@@ -91,6 +115,30 @@
       "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6a9b4d7_97688d5f",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-08T19:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77fdf6b9_fdcb239d",
+      "range": {
+        "startLine": 74,
+        "startChar": 7,
+        "endLine": 74,
+        "endChar": 8
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "fcedbb0a_b4a510d0",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-08T19:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6111331e_f6efbbb2",
+      "range": {
+        "startLine": 92,
+        "startChar": 34,
+        "endLine": 92,
+        "endChar": 42
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "892f61cf_64dd4cc3",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 18
@@ -137,6 +209,30 @@
       "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "220d57b4_76d15619",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-08T19:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "892f61cf_64dd4cc3",
+      "range": {
+        "startLine": 131,
+        "startChar": 37,
+        "endLine": 131,
+        "endChar": 41
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
