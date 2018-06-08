@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03ad70a5_947cc564",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/UniqueItsServer.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-08T15:18:17Z",
+      "side": 1,
+      "message": "Single?",
+      "range": {
+        "startLine": 22,
+        "startChar": 13,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "acf037491b54590d3fe07b56cb91d229831911ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8bd6faa_9b2559c4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-08T15:18:17Z",
+      "side": 1,
+      "message": "projectName?",
+      "range": {
+        "startLine": 143,
+        "startChar": 20,
+        "endLine": 143,
+        "endChar": 27
+      },
+      "revId": "acf037491b54590d3fe07b56cb91d229831911ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94ea383_84c80020",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-08T15:18:17Z",
+      "side": 1,
+      "message": "AddCommentAction?",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "acf037491b54590d3fe07b56cb91d229831911ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8f8103c_c36a6a0a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-08T15:18:17Z",
+      "side": 1,
+      "message": "LogEventAction?",
+      "range": {
+        "startLine": 30,
+        "startChar": 13,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "acf037491b54590d3fe07b56cb91d229831911ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f09cea_b3c6713e",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionControllerTest.java",
+        "patchSetId": 34
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-08T15:18:17Z",
+      "side": 1,
+      "message": "No",
+      "range": {
+        "startLine": 57,
+        "startChar": 29,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "acf037491b54590d3fe07b56cb91d229831911ed",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
