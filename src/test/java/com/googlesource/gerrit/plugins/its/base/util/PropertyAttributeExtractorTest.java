@@ -211,7 +211,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     RefUpdateAttribute refUpdateAttribute = new RefUpdateAttribute();
     refUpdateAttribute.newRev = "1234567891123456789212345678931234567894";
     refUpdateAttribute.oldRev = "9876543211987654321298765432139876543214";
-    refUpdateAttribute.refName = "testRef";
+    refUpdateAttribute.refName = "refs/heads/master";
 
     replayMocks();
 
@@ -223,7 +223,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
         new ImmutableMap.Builder<String, String>()
             .put("revision", "1234567891123456789212345678931234567894")
             .put("revisionOld", "9876543211987654321298765432139876543214")
-            .put("ref", "testRef")
+            .put("ref", "refs/heads/master")
+            .put("refShort", "master")
+            .put("refGroup", "refs/heads/")
             .build();
     assertEquals("Properties do not match", expected, actual);
   }

@@ -436,8 +436,15 @@ and the [Change][event-properties-change] it belongs to.
 : full name of the project from which a ref was updated.
 
 `ref`
-: git ref that has been updated (Typcially the branch, as for example
+: git ref that has been updated (Typically the branch, as for example
+  `refs/heads/master`).
+
+`refShort`
+: short name of the git ref that has been updated (Typically the branch or the tag, as for example
   `master`).
+  
+`refGroup`
+: group of the git ref that has been updated (Example for a branch `refs/heads/`).
 
 `revision`
 : git commit hash the rev is pointing to now.
