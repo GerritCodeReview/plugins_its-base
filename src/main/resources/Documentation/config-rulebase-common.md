@@ -555,6 +555,20 @@ templates. So for example `$subject` in the above example refers to
 the event's subject property, and `$changeNumber` would refer to the
 change's number.
 
+[action-add-property-to-field]: #action-add-property-to-field
+### <a name="action-add-property-to-field">Action: add-property-to-field</a>
+
+The `add-property-to-field` action adds an event property value to an ITS designated field.
+
+The field is expected to be able to hold multiple values.
+The ITS field value deduplication depends on the its implementation.
+
+Example with the event property `branch` and a field identified as `labels`:
+
+```
+  action = add-property-to-field branch labels
+```
+
 [action-log-event]: #action-log-event
 ### <a name="action-log-event">Action: log-event</a>
 
