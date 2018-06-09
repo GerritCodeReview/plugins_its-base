@@ -43,20 +43,25 @@ import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class PropertyExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
 
+  private ItsProjectExtractor itsProjectExtractor;
   private IssueExtractor issueExtractor;
   private PropertyAttributeExtractor propertyAttributeExtractor;
 
   public void testDummyChangeEvent() {
     PropertyExtractor propertyExtractor = injector.getInstance(PropertyExtractor.class);
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     replayMocks();
 
-    Set<Map<String, String>> actual = propertyExtractor.extractFrom(new DummyEvent());
+    Set<Map<String, String>> actual =
+        propertyExtractor.extractFrom(new DummyEvent()).getIssuesProperties();
 
     Set<Map<String, String>> expected = new HashSet<>();
     assertEquals("Properties do not match", expected, actual);
@@ -64,6 +69,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testChangeAbandonedEvent() {
     ChangeAbandonedEvent event = new ChangeAbandonedEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -104,6 +111,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testChangeMergedEvent() {
     ChangeMergedEvent event = new ChangeMergedEvent(testChange("testProject", "testBranch"));
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
@@ -140,6 +149,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testChangeRestoredEvent() {
     ChangeRestoredEvent event = new ChangeRestoredEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -179,6 +190,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testCommentAddedEventWOApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
@@ -217,6 +230,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testCommentAddedEventWApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -269,6 +284,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
   public void testPatchSetCreatedEvent() {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
+
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
 
     ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
@@ -325,6 +342,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     refUpdateAttribute.oldRev = "oldRevision";
     refUpdateAttribute.refName = "testBranch";
 
+    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+
     Map<String, String> common =
         ImmutableMap.<String, String>builder()
             .putAll(accountProperties)
@@ -357,7 +376,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Set<Map<String, String>> actual = propertyExtractor.extractFrom(event);
+    Set<Map<String, String>> actual = propertyExtractor.extractFrom(event).getIssuesProperties();
 
     Map<String, String> propertiesIssue4711 =
         ImmutableMap.<String, String>builder()
@@ -394,6 +413,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     @Override
     protected void configure() {
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
+
+      itsProjectExtractor = createMock(ItsProjectExtractor.class);
+      bind(ItsProjectExtractor.class).toInstance(itsProjectExtractor);
 
       issueExtractor = createMock(IssueExtractor.class);
       bind(IssueExtractor.class).toInstance(issueExtractor);
