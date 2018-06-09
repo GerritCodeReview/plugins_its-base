@@ -37,6 +37,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory;
 
   private Map<String, String> properties = ImmutableMap.of("issue", "4711");
 
@@ -210,6 +211,24 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnProject(Collections.singleton(actionRequest), properties);
   }
 
+  public void testMarkPropertyAsReleasedVersionDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("mark-property-as-released-version");
+
+    Map<String, String> properties = ImmutableMap.of("its-project", "its-project");
+
+    MarkPropertyAsReleasedVersion markPropertyAsReleasedVersion =
+        createMock(MarkPropertyAsReleasedVersion.class);
+    expect(markPropertyAsReleasedVersionFactory.create()).andReturn(markPropertyAsReleasedVersion);
+
+    markPropertyAsReleasedVersion.execute("its-project", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(Collections.singleton(actionRequest), properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -240,6 +259,11 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      markPropertyAsReleasedVersionFactory =
+          createMock(MarkPropertyAsReleasedVersion.Factory.class);
+      bind(MarkPropertyAsReleasedVersion.Factory.class)
+          .toInstance(markPropertyAsReleasedVersionFactory);
     }
   }
 }
