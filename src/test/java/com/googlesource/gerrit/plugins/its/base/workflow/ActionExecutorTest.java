@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
+  private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
 
   private Map<String, String> properties = ImmutableMap.of("issue", "4711");
 
@@ -50,7 +52,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
   public void testExecuteItemException() throws IOException {
@@ -66,7 +68,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
 
     assertLogThrowableMessageContains("injected exception 1");
   }
@@ -88,7 +90,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
   public void testExecuteIterableExceptions() throws IOException {
@@ -116,7 +118,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
 
     assertLogThrowableMessageContains("injected exception 1");
     assertLogThrowableMessageContains("injected exception 3");
@@ -136,7 +138,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
   public void testAddSoyCommentDelegation() throws IOException {
@@ -153,7 +155,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
   public void testAddStandardCommentDelegation() throws IOException {
@@ -170,7 +172,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
   public void testLogEventDelegation() throws IOException {
@@ -187,7 +189,25 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     replayMocks();
 
     ActionExecutor actionExecutor = createActionExecutor();
-    actionExecutor.execute(actionRequests, properties);
+    actionExecutor.executeOnIssue(actionRequests, properties);
+  }
+
+  public void testCreateVersionFromPropertyDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("create-version-from-property");
+
+    Map<String, String> properties = Collections.singletonMap("its-project", "its-project");
+
+    CreateVersionFromProperty createVersionFromProperty =
+        createMock(CreateVersionFromProperty.class);
+    expect(createVersionFromPropertyFactory.create()).andReturn(createVersionFromProperty);
+
+    createVersionFromProperty.execute("its-project", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(Collections.singleton(actionRequest), properties);
   }
 
   private ActionExecutor createActionExecutor() {
@@ -217,6 +237,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
+
+      createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
+      bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
     }
   }
 }
