@@ -31,6 +31,7 @@ public class ActionExecutor {
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory;
 
   @Inject
   public ActionExecutor(
@@ -39,13 +40,15 @@ public class ActionExecutor {
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory,
-      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory) {
     this.its = its;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.markPropertyAsReleasedVersionFactory = markPropertyAsReleasedVersionFactory;
   }
 
   private ItsAction getAction(String actionName) {
@@ -60,6 +63,8 @@ public class ActionExecutor {
         return logEventFactory.create();
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
+      case "mark-property-as-released-version":
+        return markPropertyAsReleasedVersionFactory.create();
       default:
         return null;
     }
