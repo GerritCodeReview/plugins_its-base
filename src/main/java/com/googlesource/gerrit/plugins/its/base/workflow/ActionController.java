@@ -70,7 +70,7 @@ public class ActionController implements EventListener {
     handleProjectEvent(refEventProperties.getProjectProperties());
   }
 
-  private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
+  public void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
     for (Map<String, String> issueProperties : issuesProperties) {
       Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
       if (!actions.isEmpty()) {
