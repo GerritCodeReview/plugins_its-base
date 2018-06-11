@@ -461,6 +461,12 @@ and the [Change][event-properties-change] it belongs to.
 `uploaderUsername`
 : username of the user that uploaded this patch set.
 
+[event-properties-all]: #event-properties-all
+### <a name="event-properties-all">Common properties for all events</a>
+
+`event-origin`
+: origin of the event that triggered the action. Can be `issue` or `project`.
+
 [actions]: #actions
 <a name="actions">Actions</a>
 -----------------------------
@@ -571,6 +577,26 @@ Example with the event property `ref`:
 
 ```
   action = create-version-from-property ref
+```
+
+[action-fire-event-on-commits]: #fire-event-on-commits
+### <a name="fire-event-on-commits">Action: fire-event-on-commits</a>
+
+The `fire-event-on-commits` action start by collecting commits using a collector then fire the event
+on each collected commit.
+
+This is useful when you want to trigger rules on a multiple past commits.
+
+Available collectors are:
+- `since-last-tag`: Collects all commits between the current ref and previous tag
+
+To avoid to trigger issue actions twice for the same event, you should condition your rule on
+the event property `event-origin`.
+
+Example:
+
+```
+  action = fire-event-on-commits since-last-tag
 ```
 
 
