@@ -35,6 +35,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private AddStandardComment.Factory addStandardCommentFactory;
   private AddSoyComment.Factory addSoyCommentFactory;
   private LogEvent.Factory logEventFactory;
+  private AddPropertyToField.Factory addPropertyToFieldFactory;
 
   private Map<String, String> properties = ImmutableMap.of("issue", "4711");
 
@@ -190,6 +191,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.execute(actionRequests, properties);
   }
 
+  public void testAddPropertyToFieldDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("add-property-to-field");
+
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
+
+    AddPropertyToField addPropertyToField = createMock(AddPropertyToField.class);
+    expect(addPropertyToFieldFactory.create()).andReturn(addPropertyToField);
+
+    addPropertyToField.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.execute(actionRequests, properties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -217,6 +235,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       logEventFactory = createMock(LogEvent.Factory.class);
       bind(LogEvent.Factory.class).toInstance(logEventFactory);
+
+      addPropertyToFieldFactory = createMock(AddPropertyToField.Factory.class);
+      bind(AddPropertyToField.Factory.class).toInstance(addPropertyToFieldFactory);
     }
   }
 }

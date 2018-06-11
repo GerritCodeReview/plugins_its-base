@@ -31,6 +31,7 @@ import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionController;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.AddPropertyToField;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
@@ -69,6 +70,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(LogEvent.Factory.class);
+    factory(AddPropertyToField.Factory.class);
   }
 
   @Provides
