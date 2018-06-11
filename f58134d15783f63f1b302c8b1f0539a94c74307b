@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ae007891_924be129",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheImpl.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T11:23:03Z",
+      "side": 1,
+      "message": "Thanks for the confirmation: WARN is appropriate in this case, keep it",
+      "parentUuid": "5ab1ca4b_ca50e01c",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "923fefab_9050cc8e",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheRefresher.java",
         "patchSetId": 18
