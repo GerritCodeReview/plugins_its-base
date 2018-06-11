@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5ab1ca4b_ca50e01c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheImpl.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-11T11:11:57Z",
+      "side": 1,
+      "message": "The loader returns an empty list if the project does not define project-specific rules. The ExecutionException, in this case, is wrapping up the IOException that can occur when reading the project from the project cache. That means we\u0027ll have this warning in the logs only when there is an issue trying to read the project, not when there are not project-specific rules defined. Would you prefer to use debug level here given this?",
+      "parentUuid": "fc9e65a0_f69e9c75",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "f58134d15783f63f1b302c8b1f0539a94c74307b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "923fefab_9050cc8e",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsRulesProjectCacheRefresher.java",
         "patchSetId": 18
