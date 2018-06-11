@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "76f35a04_e5695961",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T14:38:42Z",
+      "side": 1,
+      "message": "True, testing on the log messages is bad as well.\n\nIn a nutshell, regardless of the implementation, the test will always pass. In this case the test is just redundant OR the code is not structured in a way that can be easily tested.\n\nWhy don\u0027t you just write a \"parameters validator\" that returns true or false if the parameters are correct? And then you can test the parameters validation in isolation.\n\nMocks are good, but they are like a medicine: abuse is forbidden and they can lead to addition :-) and then they start becoming a problem.\n\nUse them when they are needed, don\u0027t use them if you can test the functionality without them and by just making your code more modular, following the SOLID design principles ;-)",
+      "parentUuid": "0b7c8c6e_885dc86a",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4cce5ab2_431acfa8",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
         "patchSetId": 12
