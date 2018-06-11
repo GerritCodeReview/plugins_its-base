@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea374309_daff8cc9",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "Cannot see any assertion here: I tried to blank the implementation altogether and all the tests using \u0027testWrongNumberOfReceivedParameters\u0027 are passing.\n\nThis test is broken, because is always green, regardless of what the implementation does.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cce5ab2_431acfa8",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c44a9ee_ae1e85fc",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84726f37_70a5775d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "No assertions?",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf40b457_3fbadaf9",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "No assertions?",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "113232b5_b2a3a341",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "No assertions?",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70aaf669_9a8f2703",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "This seems to be an internal utility method, not really a test.\nCan\u0027t see any assertion inside, right?",
+      "range": {
+        "startLine": 94,
+        "startChar": 15,
+        "endLine": 94,
+        "endChar": 50
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa8195d1_144d441c",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-11T07:31:26Z",
+      "side": 1,
+      "message": "Put these at the beginning of the class",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 3
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
