@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b7c8c6e_885dc86a",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "testWrongNumberOfReceivedParameters verifies that in case of wrong number of received parameters:\n- its.addValueToField is not called\n- no exception is thrown\n\nits-base uses EasyMock. Compared to Mockito, EasyMock creates implicit assertions, i.e. if no expect is set on its.addValueToField and the method is called anyway, the test will fail.\n\nSo assertions are implicits.\n\nThe test passes if you blank the implementation, because we expect nothing to happen, this is normal. \nIf you blank only the first exit conditions of AddPropertyToField, and keep calling its.addValueToField, the test will fail.\nIf you blank the first condition controlling the number of parameters (between line 44 and 50 in AddPropertyToField), the test will fail with an ArrayOutOfBoundException.\n\nThe first iteration of my tests was extending LoggingMockingTestCase, and used assertions on log methods. Hector told me that this kind of test was deprecated, therefore I removed those explicit assertions\n\nI personally don\u0027t see how to improve this kind of test. Can you show me?",
+      "parentUuid": "ea374309_daff8cc9",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4cce5ab2_431acfa8",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
         "patchSetId": 12
@@ -39,6 +63,24 @@
       "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3034ea36_60b77d70",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4cce5ab2_431acfa8",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "152dc474_56b0c767",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7c44a9ee_ae1e85fc",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84726f37_70a5775d",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
         "patchSetId": 12
@@ -73,6 +133,24 @@
       "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4efcb76f_61f87e4c",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84726f37_70a5775d",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "cc24fcaa_beacb36e",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf40b457_3fbadaf9",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "113232b5_b2a3a341",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
         "patchSetId": 12
@@ -107,6 +203,24 @@
       "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75728ccc_6598cbfb",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "113232b5_b2a3a341",
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -133,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "9946faf3_4918848b",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70aaf669_9a8f2703",
+      "range": {
+        "startLine": 94,
+        "startChar": 15,
+        "endLine": 94,
+        "endChar": 50
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa8195d1_144d441c",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
         "patchSetId": 12
@@ -153,6 +291,30 @@
       "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c68019a_55cef375",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-11T14:25:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa8195d1_144d441c",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 3
+      },
+      "revId": "d8ec030e38c3f074e7eb9e12214bed84bfc8207c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
