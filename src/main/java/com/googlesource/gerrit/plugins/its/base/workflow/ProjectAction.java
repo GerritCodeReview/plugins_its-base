@@ -1,4 +1,4 @@
-// Copyright (C) 2013 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,18 +18,17 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
 
-/** Interface for actions on an issue tracking system */
-interface Action extends ItsAction {
+public interface ProjectAction extends ItsAction {
 
   /**
    * Execute this action.
    *
    * @param its The facade interface to execute actions.
-   * @param issue The issue to execute on.
+   * @param itsProject The its itsProject to execute on.
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
   void execute(
-      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
+      ItsFacade its, String itsProject, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException;
 }

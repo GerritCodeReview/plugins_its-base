@@ -32,6 +32,7 @@ public class ActionExecutor {
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
+  private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
 
   @Inject
   public ActionExecutor(
@@ -39,15 +40,17 @@ public class ActionExecutor {
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
-      LogEvent.Factory logEventFactory) {
+      LogEvent.Factory logEventFactory,
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
     this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
+    this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
   }
 
-  private Action getAction(String actionName) {
+  private ItsAction getAction(String actionName) {
     switch (actionName) {
       case "add-comment":
         return addCommentFactory.create();
@@ -57,28 +60,56 @@ public class ActionExecutor {
         return addSoyCommentFactory.create();
       case "log-event":
         return logEventFactory.create();
+      case "create-version-from-property":
+        return createVersionFromPropertyFactory.create();
       default:
         return null;
     }
   }
 
-  private void execute(String issue, ActionRequest actionRequest, Map<String, String> properties) {
+  private void executeOnIssue(
+      String issue, ActionRequest actionRequest, Map<String, String> properties) {
     ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
     try {
-      Action action = getAction(actionRequest.getName());
+      ItsAction action = getAction(actionRequest.getName());
       if (action == null) {
         its.performAction(issue, actionRequest.getUnparsed());
-      } else {
-        action.execute(its, issue, actionRequest, properties);
+      } else if (Action.class.isInstance(action)) {
+        Action.class.cast(action).execute(its, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }
   }
 
-  public void execute(Iterable<ActionRequest> actions, Map<String, String> properties) {
+  public void executeOnIssue(Iterable<ActionRequest> actions, Map<String, String> properties) {
     for (ActionRequest actionRequest : actions) {
-      execute(properties.get("issue"), actionRequest, properties);
+      executeOnIssue(properties.get("issue"), actionRequest, properties);
+    }
+  }
+
+  private void executeOnProject(
+      String itsProject, ActionRequest actionRequest, Map<String, String> properties) {
+    try {
+      String actionName = actionRequest.getName();
+      ItsAction action = getAction(actionName);
+      if (action == null) {
+        log.debug("No action found for name {}", actionName);
+        return;
+      }
+      if (!ProjectAction.class.isInstance(action)) {
+        return;
+      }
+      ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
+      ProjectAction.class.cast(action).execute(its, itsProject, actionRequest, properties);
+    } catch (IOException e) {
+      log.error("Error while executing action " + actionRequest, e);
+    }
+  }
+
+  public void executeOnProject(Iterable<ActionRequest> actions, Map<String, String> properties) {
+    for (ActionRequest actionRequest : actions) {
+      executeOnProject(properties.get("its-project"), actionRequest, properties);
     }
   }
 }
