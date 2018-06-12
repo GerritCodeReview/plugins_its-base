@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d38f7fba_524407d4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldParameters.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-12T16:19:26Z",
+      "side": 1,
+      "message": "This will be now part of the its-base interface. JavaDoc?\n\nPeople needs to know what this is for and how to leverage it.",
+      "range": {
+        "startLine": 17,
+        "startChar": 13,
+        "endLine": 17,
+        "endChar": 42
+      },
+      "revId": "c0dd02294db405c403e41185512bee3c83797c1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c02ba0d8_64f45712",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldParameters.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-12T16:19:26Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 27,
+        "startChar": 16,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "c0dd02294db405c403e41185512bee3c83797c1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5750307b_fadc4e84",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToFieldParameters.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-12T16:19:26Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 26
+      },
+      "revId": "c0dd02294db405c403e41185512bee3c83797c1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
