@@ -32,6 +32,7 @@ public class ActionExecutor {
   private final AddStandardComment.Factory addStandardCommentFactory;
   private final AddSoyComment.Factory addSoyCommentFactory;
   private final LogEvent.Factory logEventFactory;
+  private final AddPropertyToField.Factory addPropertyToFieldFactory;
 
   @Inject
   public ActionExecutor(
@@ -39,12 +40,14 @@ public class ActionExecutor {
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
-      LogEvent.Factory logEventFactory) {
+      LogEvent.Factory logEventFactory,
+      AddPropertyToField.Factory addPropertyToFieldFactory) {
     this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
     this.addSoyCommentFactory = addSoyCommentFactory;
     this.logEventFactory = logEventFactory;
+    this.addPropertyToFieldFactory = addPropertyToFieldFactory;
   }
 
   private Action getAction(String actionName) {
@@ -57,6 +60,8 @@ public class ActionExecutor {
         return addSoyCommentFactory.create();
       case "log-event":
         return logEventFactory.create();
+      case "add-property-to-field":
+        return addPropertyToFieldFactory.create();
       default:
         return null;
     }
