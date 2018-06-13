@@ -41,6 +41,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private LogEvent.Factory logEventFactory;
   private AddPropertyToField.Factory addPropertyToFieldFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private FireEventOnCommits.Factory fireEventOnCommitsFactory;
 
   private Map<String, String> properties =
       ImmutableMap.of("issue", "4711", "project", "testProject");
@@ -227,7 +228,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     CreateVersionFromProperty createVersionFromProperty =
         createMock(CreateVersionFromProperty.class);
     expect(createVersionFromPropertyFactory.create()).andReturn(createVersionFromProperty);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
+    expect(itsFacadeFactory.getFacade(new Project.NameKey(projectProperties.get("project"))))
         .andReturn(its);
 
     createVersionFromProperty.execute(its, "itsTestProject", actionRequest, projectProperties);
@@ -255,6 +256,23 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     ActionExecutor actionExecutor = createActionExecutor();
     actionExecutor.executeOnIssue(actionRequests, properties);
+  }
+
+  public void testFireEventOnCommitsDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("fire-event-on-commits");
+
+    FireEventOnCommits fireEventOnCommits = createMock(FireEventOnCommits.class);
+    expect(fireEventOnCommitsFactory.create()).andReturn(fireEventOnCommits);
+    expect(itsFacadeFactory.getFacade(new Project.NameKey(projectProperties.get("project"))))
+        .andReturn(its);
+
+    fireEventOnCommits.execute(its, "itsTestProject", actionRequest, projectProperties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(Collections.singleton(actionRequest), projectProperties);
   }
 
   private ActionExecutor createActionExecutor() {
@@ -293,6 +311,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      fireEventOnCommitsFactory = createMock(FireEventOnCommits.Factory.class);
+      bind(FireEventOnCommits.Factory.class).toInstance(fireEventOnCommitsFactory);
     }
   }
 }
