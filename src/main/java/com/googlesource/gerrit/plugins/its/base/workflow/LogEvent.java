@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>This event helps when developing rules as available properties become visible.
  */
-public class LogEvent implements Action {
+public class LogEvent extends IssueAction {
   private static final Logger log = LoggerFactory.getLogger(LogEvent.class);
 
   private enum Level {

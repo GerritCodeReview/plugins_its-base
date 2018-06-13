@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
-public class AddSoyComment implements Action {
+public class AddSoyComment extends IssueAction {
   private static final Logger log = LoggerFactory.getLogger(AddSoyComment.class);
 
   public interface Factory {

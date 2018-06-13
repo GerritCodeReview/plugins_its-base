@@ -35,6 +35,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddPropertyToField;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
+import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
@@ -70,6 +71,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddComment.Factory.class);
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
+    factory(CreateVersionFromProperty.Factory.class);
     factory(LogEvent.Factory.class);
     factory(AddPropertyToField.Factory.class);
     install(ItsRulesProjectCacheImpl.module());

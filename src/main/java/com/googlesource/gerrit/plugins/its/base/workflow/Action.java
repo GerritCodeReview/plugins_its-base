@@ -21,15 +21,18 @@ import java.util.Map;
 /** Interface for actions on an issue tracking system */
 interface Action {
 
+  /** @return The type of this action */
+  ActionType getType();
+
   /**
    * Execute this action.
    *
    * @param its The facade interface to execute actions.
-   * @param issue The issue to execute on.
+   * @param target The target to execute on. Its kind will depend on the action type.
    * @param actionRequest The request to execute.
    * @param properties The properties for the execution.
    */
   void execute(
-      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
+      ItsFacade its, String target, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException;
 }

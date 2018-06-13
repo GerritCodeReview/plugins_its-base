@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
-public class AddStandardComment implements Action {
+public class AddStandardComment extends IssueAction {
   public interface Factory {
     AddStandardComment create();
   }
