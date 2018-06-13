@@ -23,6 +23,8 @@ import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller that takes actions according to {@code ChangeEvents@}.
@@ -31,6 +33,9 @@ import java.util.Set;
  * issue's status).
  */
 public class ActionController implements EventListener {
+
+  private static final Logger log = LoggerFactory.getLogger(ActionController.class);
+
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
@@ -59,12 +64,39 @@ public class ActionController implements EventListener {
   }
 
   private void handleEvent(RefEvent refEvent) {
-    Set<Map<String, String>> properties = propertyExtractor.extractFrom(refEvent);
-    for (Map<String, String> propertiesMap : properties) {
-      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(propertiesMap);
+    RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+
+    handleIssuesEvent(refEventProperties.getIssuesProperties());
+    handleProjectEvent(refEventProperties.getProjectProperties());
+  }
+
+  private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
+    for (Map<String, String> issueProperties : issuesProperties) {
+      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
       if (!actions.isEmpty()) {
-        actionExecutor.execute(actions, propertiesMap);
+        actionExecutor.executeOnIssue(actions, issueProperties);
       }
     }
+  }
+
+  private void handleProjectEvent(Map<String, String> projectProperties) {
+    if (projectProperties.isEmpty()) {
+      return;
+    }
+
+    Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
+    if (projectActions.isEmpty()) {
+      return;
+    }
+    if (!projectProperties.containsKey("its-project")) {
+      String project = projectProperties.get("project");
+      log.error(
+          "Could not process project event. No its-project associated with project {}. "
+              + "Did you forget to configure the ITS project association in project.config?",
+          project);
+      return;
+    }
+
+    actionExecutor.executeOnProject(projectActions, projectProperties);
   }
 }
