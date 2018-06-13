@@ -37,6 +37,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.MarkPropertyAsReleasedVersion;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import java.nio.file.Path;
 
@@ -71,6 +72,7 @@ public class ItsHookModule extends FactoryModule {
     factory(AddSoyComment.Factory.class);
     factory(AddStandardComment.Factory.class);
     factory(CreateVersionFromProperty.Factory.class);
+    factory(MarkPropertyAsReleasedVersion.Factory.class);
     factory(LogEvent.Factory.class);
     install(ItsRulesProjectCacheImpl.module());
   }
