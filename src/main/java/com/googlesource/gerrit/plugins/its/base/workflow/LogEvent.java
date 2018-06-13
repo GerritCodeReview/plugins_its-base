@@ -55,6 +55,11 @@ public class LogEvent implements Action {
   @Inject
   public LogEvent() {}
 
+  @Override
+  public ActionType getType() {
+    return ActionType.ISSUE;
+  }
+
   private void logProperty(Level level, Entry<String, String> property) {
     String message = String.format("[%s = %s]", property.getKey(), property.getValue());
     switch (level) {

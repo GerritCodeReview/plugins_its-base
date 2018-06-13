@@ -564,6 +564,9 @@ The following actions are available:
 [`add-soy-comment`][action-add-soy-comment]
 : adds a rendered Closure Template (soy) template as issue comment
 
+[`create-version-from-property`][action-create-version-from-property]
+: creates a version based on an event's property value
+
 [`log-event`][action-log-event]
 : appends the event's properties to Gerrit's log
 
@@ -647,6 +650,22 @@ Example with the event property `branch` and a field identified as `labels`:
 ```
   action = add-property-to-field branch labels
 ```
+
+[action-create-version-from-property]: #create-version-from-property
+### <a name="create-version-from-property">Action: create-version-from-property</a>
+
+The `create-version-from-property` action creates a version in the ITS project
+by using an event property value as the version value.
+
+This is useful when you want to create a new version in the ITS when a tag is
+created in the Gerrit project.
+
+Example with the event property `ref`:
+
+```
+  action = create-version-from-property ref
+```
+
 
 [action-log-event]: #action-log-event
 ### <a name="action-log-event">Action: log-event</a>

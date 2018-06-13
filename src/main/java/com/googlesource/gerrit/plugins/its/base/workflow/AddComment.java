@@ -30,6 +30,11 @@ public class AddComment implements Action {
   }
 
   @Override
+  public ActionType getType() {
+    return ActionType.ISSUE;
+  }
+
+  @Override
   public void execute(
       ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {

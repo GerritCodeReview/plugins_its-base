@@ -54,6 +54,11 @@ public class AddSoyComment implements Action {
     this.templateDir = itsPath.resolve("templates");
   }
 
+  @Override
+  public ActionType getType() {
+    return ActionType.ISSUE;
+  }
+
   private String soyTemplate(
       SoyFileSet.Builder builder,
       String template,

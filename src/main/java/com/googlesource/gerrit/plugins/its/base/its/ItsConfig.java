@@ -141,6 +141,16 @@ public class ItsConfig {
     return RefPatternMatcher.getMatcher(refPattern).match(refName, null);
   }
 
+  // Project association
+  public Optional<String> getItsProjectName(Project.NameKey projectNK) {
+    ProjectState projectState = projectCache.get(projectNK);
+    if (projectState == null) {
+      return Optional.empty();
+    }
+    return Optional.ofNullable(
+        pluginCfgFactory.getFromProjectConfig(projectState, pluginName).getString("its-project"));
+  }
+
   // Issue association --------------------------------------------------------
 
   /**

@@ -122,6 +122,23 @@ branch and all stable branches the following could be configured:
     branch = ^refs/heads/stable-.*
 ```
 
+[associating-its-project]: #associating-its-project
+<a name="associating-its-project">Associating a Gerrit project with its ITS 
+project counterpart</a>
+---------------------------------------------------------------
+
+To be able to make use of actions acting at the ITS project level, you must
+associate a Gerrit project to its ITS project counterpart.
+
+It must be configured per project and per plugin. To configure the association
+for a project mapping to an ITS project named `manhattan-project`, the project
+must have the following entry in its `project.config` file in the
+`refs/meta/config` branch:
+
+```
+  [plugin "@PLUGIN@"]
+    its-project = manhattan-project
+```
 
 
 [configure-rules]: #configure-rules

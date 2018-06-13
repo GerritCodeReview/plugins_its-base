@@ -20,33 +20,36 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-public class AddPropertyToField implements Action {
+/** Creates a version in the ITS. The value of the version is extracted from an event property. */
+public class CreateVersionFromProperty implements Action {
 
   public interface Factory {
-    AddPropertyToField create();
+    CreateVersionFromProperty create();
   }
 
-  private final AddPropertyToFieldParametersExtractor parametersExtractor;
+  private final CreateVersionFromPropertyParametersExtractor parametersExtractor;
 
   @Inject
-  public AddPropertyToField(AddPropertyToFieldParametersExtractor parametersExtractor) {
+  public CreateVersionFromProperty(
+      CreateVersionFromPropertyParametersExtractor parametersExtractor) {
     this.parametersExtractor = parametersExtractor;
   }
 
   @Override
   public ActionType getType() {
-    return ActionType.ISSUE;
+    return ActionType.PROJECT;
   }
 
   @Override
   public void execute(
-      ItsFacade its, String issue, ActionRequest actionRequest, Map<String, String> properties)
+      ItsFacade its, String itsProject, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
-    Optional<AddPropertyToFieldParameters> parameters =
+    Optional<CreateVersionFromPropertyParameters> parameters =
         parametersExtractor.extract(actionRequest, properties);
     if (!parameters.isPresent()) {
       return;
     }
-    its.addValueToField(issue, parameters.get().getPropertyValue(), parameters.get().getFieldId());
+
+    its.createVersion(itsProject, parameters.get().getPropertyValue());
   }
 }

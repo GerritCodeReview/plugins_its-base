@@ -29,6 +29,11 @@ public class AddStandardComment implements Action {
     AddStandardComment create();
   }
 
+  @Override
+  public ActionType getType() {
+    return ActionType.ISSUE;
+  }
+
   private String getCommentChangeEvent(String action, String prefix, Map<String, String> map) {
     String ret = "";
     String changeNumber = Strings.nullToEmpty(map.get("changeNumber"));
