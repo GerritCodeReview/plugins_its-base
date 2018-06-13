@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6c496d83_9b187dfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab50c381_50dd33f3",
+      "range": {
+        "startLine": 9,
+        "startChar": 53,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c090ebe_5ce2850e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 26
@@ -45,6 +69,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d893b12c_e52aeeab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c090ebe_5ce2850e",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "011c96a9_a9420ca6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd985520_14cdca02",
+      "range": {
+        "startLine": 17,
+        "startChar": 29,
+        "endLine": 17,
+        "endChar": 39
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3364d50e_a333f6c8",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
         "patchSetId": 26
@@ -91,6 +163,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85949d31_a87dfb7d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3364d50e_a333f6c8",
+      "range": {
+        "startLine": 82,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 26
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a648a83a_a884c269",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7fd57ef_107f981a",
+      "range": {
+        "startLine": 105,
+        "startChar": 6,
+        "endLine": 107,
+        "endChar": 7
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b344337_e876fd96",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromProperty.java",
         "patchSetId": 26
@@ -137,6 +257,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f63726e_2522aa07",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromProperty.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b344337_e876fd96",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "39ed9084_f0603728",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromPropertyParameters.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d64e3ff1_a3e81c4b",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8591156_db11f332",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromPropertyParametersExtractor.java",
         "patchSetId": 26
@@ -183,6 +351,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb29fd2f_1e75a30f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromPropertyParametersExtractor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "I switched it to default visibility.",
+      "parentUuid": "c8591156_db11f332",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "baeaa10f_fd51411f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsAction.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9a579e1_29d2aaa6",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bdd1cdfb_fdb1599d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ProjectAction.java",
         "patchSetId": 26
@@ -229,6 +445,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "265292e9_ac24d11b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ProjectAction.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdd1cdfb_fdb1599d",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "cda2d736_dd3458b1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RefEventProperties.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0c2796e_dd382e92",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54567c32_fe7a1030",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RefEventProperties.java",
         "patchSetId": 26
@@ -275,6 +539,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce8e0ceb_c3708989",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RefEventProperties.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54567c32_fe7a1030",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 8
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -301,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "34e30a46_36cf0e6e",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4b63bc8_49e084ae",
+      "range": {
+        "startLine": 126,
+        "startChar": 75,
+        "endLine": 126,
+        "endChar": 84
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dcc90a9_42d25991",
         "filename": "src/main/resources/Documentation/config-common.md",
         "patchSetId": 26
@@ -321,6 +633,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ede00f04_69797971",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dcc90a9_42d25991",
+      "range": {
+        "startLine": 129,
+        "startChar": 85,
+        "endLine": 129,
+        "endChar": 86
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -370,6 +706,54 @@
     },
     {
       "key": {
+        "uuid": "df42fdd7_5ed82b8a",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00dbabff_e540ed56",
+      "range": {
+        "startLine": 133,
+        "startChar": 79,
+        "endLine": 133,
+        "endChar": 92
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b298c7c7_d9683b3a",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6886e4af_b368627c",
+      "range": {
+        "startLine": 133,
+        "startChar": 92,
+        "endLine": 133,
+        "endChar": 93
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34bc4072_3000cd0a",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 26
@@ -416,6 +800,54 @@
     },
     {
       "key": {
+        "uuid": "a9f86237_7c66f8a1",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bba0fda_6f4cfb43",
+      "range": {
+        "startLine": 657,
+        "startChar": 96,
+        "endLine": 657,
+        "endChar": 97
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9584a69_91c56566",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34bc4072_3000cd0a",
+      "range": {
+        "startLine": 657,
+        "startChar": 80,
+        "endLine": 657,
+        "endChar": 96
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17c44aed_dfca66a6",
         "filename": "src/main/resources/Documentation/config-rulebase-common.md",
         "patchSetId": 26
@@ -436,6 +868,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e005c4b_a92b841f",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17c44aed_dfca66a6",
+      "range": {
+        "startLine": 660,
+        "startChar": 78,
+        "endLine": 660,
+        "endChar": 92
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -462,6 +918,30 @@
     },
     {
       "key": {
+        "uuid": "f1c48954_7a983838",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c01e6e_f1a63a2a",
+      "range": {
+        "startLine": 493,
+        "startChar": 78,
+        "endLine": 493,
+        "endChar": 91
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36c665ae_a39a626a",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 26
@@ -482,6 +962,30 @@
       "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee5d381e_eda2df8a",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T22:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36c665ae_a39a626a",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 505,
+        "endChar": 100
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
