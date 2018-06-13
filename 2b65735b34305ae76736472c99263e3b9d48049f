@@ -378,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "fc64ee27_e4c0a14d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:36:12Z",
+      "side": 1,
+      "message": "Apologies, got confused with the Scala Option, which has isEmpty() as well.",
+      "parentUuid": "acd50db0_e23234b8",
+      "range": {
+        "startLine": 494,
+        "startChar": 4,
+        "endLine": 494,
+        "endChar": 15
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "266df24e_069d41b7",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 28
