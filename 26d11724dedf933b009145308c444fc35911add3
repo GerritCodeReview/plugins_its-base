@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "66f0619b_12b23112",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e1f2c66_ae9813f6",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c790481_3e248af9",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -39,6 +63,24 @@
       "revId": "26d11724dedf933b009145308c444fc35911add3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94208b6d_c7862b43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c790481_3e248af9",
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "428e43c9_876a2742",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "See my comment below.",
+      "parentUuid": "6e4d8c71_5e7f3464",
+      "range": {
+        "startLine": 205,
+        "startChar": 42,
+        "endLine": 205,
+        "endChar": 51
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a769a7e_6692af08",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
         "patchSetId": 5
@@ -76,6 +142,30 @@
       "writtenOn": "2018-06-11T07:53:22Z",
       "side": 1,
       "message": "Interesting :-) So basically you put into the event additional properties coming from the issue tracker?",
+      "range": {
+        "startLine": 218,
+        "startChar": 6,
+        "endLine": 218,
+        "endChar": 61
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad8ff2bb_47ab48cb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "I didn\u0027t find a better name than \u0027event-origin\u0027.\nThe purpose of this property is to prevent double action triggering for a specific event.\n\nFor example:\n\n- the event is a tag creation, i.e. RefUpdatedEvent\n- action \u0027fire-event-on-commit\u0027 listens on RefUdpdatedEvent\n- an action X listens on RefUpdatedEvent\n\nWe want action X to be only triggered by \u0027fire-event-on-commit\u0027.\n\nIf the tag is created on a commit having an ITS issue number, this would trigger action X twice:\n\n- as a direct listener\n- as an indirect listener subsequent to action \u0027fire-event-on-commit\u0027 action\n\nAlways following the example, adding a condition \u0027event-origin \u003d project\u0027 to action X, allows to execute action X only via \u0027fire-event-on-commit\u0027 and fixes the duplicate trigger issue.\n\nMaybe event-origin could be renamed to \u0027first-responder-action-type\u0027? Since we have now (when the previous change is merged) two kind of actions, at issue level and at project level.",
+      "parentUuid": "0a769a7e_6692af08",
       "range": {
         "startLine": 218,
         "startChar": 6,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "9e7522e1_ff74c9bd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "The method was reset to private.\nI am using RuleBase and ActionExecutor from FireEventOnCommits now.",
+      "parentUuid": "b1903a79_f4d8c42b",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 8
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfd8f70a_f23df1b8",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
         "patchSetId": 5
@@ -122,6 +236,30 @@
       "writtenOn": "2018-06-11T07:53:22Z",
       "side": 1,
       "message": "Have you done some benchmark on large repos?",
+      "range": {
+        "startLine": 53,
+        "startChar": 23,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7311ebc_74f799a3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Defined large repo :)\nWe have a git repo of 18 millions lines of code aged of 8 years.\nIt works pretty fast.\n\nI understand that repo.getTags() could fetch a lot of tags. Does jgit exposes a method allowing to stream tags instead of collecting them in a huge collection?",
+      "parentUuid": "dfd8f70a_f23df1b8",
       "range": {
         "startLine": 53,
         "startChar": 23,
@@ -151,6 +289,24 @@
     },
     {
       "key": {
+        "uuid": "61701795_74fa2872",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30c12b5c_2a5f0afb",
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "015cda84_3b38ab07",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
         "patchSetId": 5
@@ -165,6 +321,24 @@
       "revId": "26d11724dedf933b009145308c444fc35911add3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8327ffef_b81988ad",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "015cda84_3b38ab07",
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -191,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "48728fbc_8620e865",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c328cac_bfbc4e41",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 71
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00c89a84_2274f84f",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
         "patchSetId": 5
@@ -214,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "42e2bad6_dea24a08",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00c89a84_2274f84f",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 64
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8151370b_67cfd10f",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
         "patchSetId": 5
@@ -234,6 +456,30 @@
       "revId": "26d11724dedf933b009145308c444fc35911add3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e9c862d_ce6dcce6",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T14:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8151370b_67cfd10f",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 3
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
