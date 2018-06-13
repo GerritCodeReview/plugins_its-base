@@ -31,6 +31,7 @@ import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,16 +42,19 @@ import org.eclipse.jgit.lib.ObjectId;
 
 /** Extractor to translate an {@link ChangeEvent} to a map of properties}. */
 public class PropertyExtractor {
-  private IssueExtractor issueExtractor;
-  private PropertyAttributeExtractor propertyAttributeExtractor;
+  private final ItsProjectExtractor itsProjectExtractor;
+  private final IssueExtractor issueExtractor;
+  private final PropertyAttributeExtractor propertyAttributeExtractor;
   private final String pluginName;
 
   @Inject
   PropertyExtractor(
       IssueExtractor issueExtractor,
+      ItsProjectExtractor itsProjectExtractor,
       PropertyAttributeExtractor propertyAttributeExtractor,
       @PluginName String pluginName) {
     this.issueExtractor = issueExtractor;
+    this.itsProjectExtractor = itsProjectExtractor;
     this.propertyAttributeExtractor = propertyAttributeExtractor;
     this.pluginName = pluginName;
   }
@@ -167,12 +171,17 @@ public class PropertyExtractor {
    * @param event The event to extract property maps from.
    * @return set of property maps extracted from the event.
    */
-  public Set<Map<String, String>> extractFrom(RefEvent event) {
+  public RefEventProperties extractFrom(RefEvent event) {
     Map<String, Set<String>> associations = null;
     Map<String, String> common = new HashMap<>();
     common.put("event", event.getClass().getName());
+    String project = event.getProjectNameKey().get();
     common.put("event-type", event.type);
-    common.put("project", event.getProjectNameKey().get());
+    common.put("project", project);
+
+    itsProjectExtractor
+        .getItsProject(project)
+        .ifPresent(itsProject -> common.put("its-project", itsProject));
     common.put("ref", event.getRefName());
     common.put("itsName", pluginName);
 
@@ -200,6 +209,6 @@ public class PropertyExtractor {
         ret.add(properties);
       }
     }
-    return ret;
+    return new RefEventProperties(common, ret);
   }
 }

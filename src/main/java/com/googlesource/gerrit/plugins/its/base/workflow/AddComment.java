@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * <p>The action requests parameters get concatenated and get added to the issue.
  */
-public class AddComment implements Action {
+public class AddComment extends IssueAction {
   public interface Factory {
     AddComment create();
   }
