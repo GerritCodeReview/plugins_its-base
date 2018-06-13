@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7a10d9c_e466057a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "This is repeated too many times: why don\u0027t you extract to a common abstract IssueAction class that has a common implementation of getType() { return ActionType.ISSUE; } ?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cb64208_3e02689f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToField.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e087f94_b24ddb43",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "711fca91_a0d9fa12",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13702b6e_fdebc683",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "IssueAction",
+      "range": {
+        "startLine": 30,
+        "startChar": 33,
+        "endLine": 30,
+        "endChar": 39
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4851bb0_b12448e5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Inherit from IssueAction",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 0
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e1c3a64_a90d1939",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 28
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Blank",
+      "range": {
+        "startLine": 126,
+        "startChar": 75,
+        "endLine": 126,
+        "endChar": 76
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cefeb8b0_bf02b7c8",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Assertions are more readable when expressed in positive form",
+      "range": {
+        "startLine": 494,
+        "startChar": 4,
+        "endLine": 494,
+        "endChar": 15
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266df24e_069d41b7",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T23:06:43Z",
+      "side": 1,
+      "message": "Why not an assertion?",
+      "range": {
+        "startLine": 507,
+        "startChar": 0,
+        "endLine": 509,
+        "endChar": 5
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
