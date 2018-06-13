@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "795fe6d0_54bac170",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7a10d9c_e466057a",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cb64208_3e02689f",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToField.java",
         "patchSetId": 28
@@ -45,6 +69,30 @@
       "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "539d05ec_46e78293",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddPropertyToField.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cb64208_3e02689f",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0caad970_9502c1de",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e087f94_b24ddb43",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "711fca91_a0d9fa12",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
         "patchSetId": 28
@@ -91,6 +163,30 @@
       "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a11724ef_5dfac34e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardComment.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "711fca91_a0d9fa12",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 3
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a8373afb_e0cf749f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13702b6e_fdebc683",
+      "range": {
+        "startLine": 30,
+        "startChar": 33,
+        "endLine": 30,
+        "endChar": 39
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4851bb0_b12448e5",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
         "patchSetId": 28
@@ -137,6 +257,30 @@
       "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71e2b056_85b6d7f2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LogEvent.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4851bb0_b12448e5",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 0
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "bcf4b7e3_0fc65701",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 28
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e1c3a64_a90d1939",
+      "range": {
+        "startLine": 126,
+        "startChar": 75,
+        "endLine": 126,
+        "endChar": 76
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cefeb8b0_bf02b7c8",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 28
@@ -174,6 +342,30 @@
       "writtenOn": "2018-06-13T23:06:43Z",
       "side": 1,
       "message": "Assertions are more readable when expressed in positive form",
+      "range": {
+        "startLine": 494,
+        "startChar": 4,
+        "endLine": 494,
+        "endChar": 15
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acd50db0_e23234b8",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "isEmpty() does not exist on java.util.Optional.\nWhat do you have in mind?",
+      "parentUuid": "cefeb8b0_bf02b7c8",
       "range": {
         "startLine": 494,
         "startChar": 4,
@@ -206,6 +398,30 @@
       "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5174feff_352664f3",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2018-06-13T23:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "266df24e_069d41b7",
+      "range": {
+        "startLine": 507,
+        "startChar": 0,
+        "endLine": 509,
+        "endChar": 5
+      },
+      "revId": "2b65735b34305ae76736472c99263e3b9d48049f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
