@@ -41,6 +41,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private LogEvent.Factory logEventFactory;
   private AddPropertyToField.Factory addPropertyToFieldFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private MarkPropertyAsReleasedVersion.Factory markPropertyAsReleasedVersionFactory;
 
   private Map<String, String> properties =
       ImmutableMap.of("issue", "4711", "project", "testProject");
@@ -257,6 +258,24 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
+  public void testMarkPropertyAsReleasedVersionDelegation() throws IOException {
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn("mark-property-as-released-version");
+
+    MarkPropertyAsReleasedVersion markPropertyAsReleasedVersion =
+        createMock(MarkPropertyAsReleasedVersion.class);
+    expect(markPropertyAsReleasedVersionFactory.create()).andReturn(markPropertyAsReleasedVersion);
+    expect(itsFacadeFactory.getFacade(new Project.NameKey(projectProperties.get("project"))))
+        .andReturn(its);
+
+    markPropertyAsReleasedVersion.execute(its, "itsTestProject", actionRequest, projectProperties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(Collections.singleton(actionRequest), projectProperties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -293,6 +312,11 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      markPropertyAsReleasedVersionFactory =
+          createMock(MarkPropertyAsReleasedVersion.Factory.class);
+      bind(MarkPropertyAsReleasedVersion.Factory.class)
+          .toInstance(markPropertyAsReleasedVersionFactory);
     }
   }
 }
