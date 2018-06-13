@@ -1,0 +1,487 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab50c381_50dd33f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Use imperative form rather than a descriptive language verbs.\n\"is a new type of action named ...\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 53,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c090ebe_5ce2850e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "This action (is only one right?)",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd985520_14cdca02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "can be used",
+      "range": {
+        "startLine": 17,
+        "startChar": 29,
+        "endLine": 17,
+        "endChar": 39
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3364d50e_a333f6c8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "This part is a bit \"smelly\": why do you need to check the instance class and to casting? I am a bit lost ...",
+      "range": {
+        "startLine": 82,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 26
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7fd57ef_107f981a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionExecutor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Why don\u0027t you just define an ActionType enum and check that value? This \"instanceof\" and casting is a bit dangerous :-O",
+      "range": {
+        "startLine": 105,
+        "startChar": 6,
+        "endLine": 107,
+        "endChar": 7
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b344337_e876fd96",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromProperty.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "As this is public, JavaDoc?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d64e3ff1_a3e81c4b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromPropertyParameters.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8591156_db11f332",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/CreateVersionFromPropertyParametersExtractor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Are we sure that this needs to be public? Will it be part of the interface of its-base?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9a579e1_29d2aaa6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ItsAction.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Completely empty? :-O",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdd1cdfb_fdb1599d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ProjectAction.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0c2796e_dd382e92",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RefEventProperties.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54567c32_fe7a1030",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RefEventProperties.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "JavaDoc?",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 8
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4b63bc8_49e084ae",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "wrap long lines",
+      "range": {
+        "startLine": 126,
+        "startChar": 75,
+        "endLine": 126,
+        "endChar": 84
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dcc90a9_42d25991",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Blank",
+      "range": {
+        "startLine": 129,
+        "startChar": 85,
+        "endLine": 129,
+        "endChar": 86
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00dbabff_e540ed56",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "wrap long lines",
+      "range": {
+        "startLine": 133,
+        "startChar": 79,
+        "endLine": 133,
+        "endChar": 92
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6886e4af_b368627c",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Blank",
+      "range": {
+        "startLine": 133,
+        "startChar": 92,
+        "endLine": 133,
+        "endChar": 93
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34bc4072_3000cd0a",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Wrap long line",
+      "range": {
+        "startLine": 657,
+        "startChar": 80,
+        "endLine": 657,
+        "endChar": 96
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bba0fda_6f4cfb43",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "blank",
+      "range": {
+        "startLine": 657,
+        "startChar": 96,
+        "endLine": 657,
+        "endChar": 97
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c44aed_dfca66a6",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 26
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "wrap long line, empty space at the end",
+      "range": {
+        "startLine": 660,
+        "startChar": 78,
+        "endLine": 660,
+        "endChar": 92
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c01e6e_f1a63a2a",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Hold on ... you test what you have entered here?\nJust test:\n   assertTrue(itsConfig.getItsProjectName().isEmpty())",
+      "range": {
+        "startLine": 493,
+        "startChar": 78,
+        "endLine": 493,
+        "endChar": 91
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36c665ae_a39a626a",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-06-13T21:30:28Z",
+      "side": 1,
+      "message": "Same as before",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 505,
+        "endChar": 100
+      },
+      "revId": "675b4a847f3344df8d93ce3254fa0397c6ef63a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
