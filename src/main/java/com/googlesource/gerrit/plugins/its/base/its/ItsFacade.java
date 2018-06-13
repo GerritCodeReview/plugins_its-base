@@ -38,6 +38,10 @@ public interface ItsFacade {
 
   public void performAction(String issueId, String actionName) throws IOException;
 
+  default void createVersion(String itsProject, String version) throws IOException {
+    throw new UnsupportedOperationException("create-version is not implemented by " + getClass());
+  }
+
   public boolean exists(final String issueId) throws IOException;
 
   public String createLinkForWebui(String url, String text);
