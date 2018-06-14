@@ -126,7 +126,26 @@ public class IssueExtractor {
   public Map<String, Set<String>> getIssueIds(String projectName, String commitId) {
     Map<String, Set<String>> ret = Maps.newHashMap();
     String commitMessage = commitMessageFetcher.fetchGuarded(projectName, commitId);
+    addIssueIdsFromCommitMessage(ret, commitMessage);
+    return ret;
+  }
 
+  /**
+   * Gets issues from a commit message.
+   *
+   * @param commitMessage The commit message string.
+   * @return A mapping, whose keys are issue ids and whose values is a set of places where the issue
+   *     occurs. Each issue occurs at least in "somewhere". Issues from the first line get tagged
+   *     with an occurrence "subject". Issues in the last block get tagged with "footer". Issues
+   *     occurring between "subject" and "footer" get tagged with "body".
+   */
+  public Map<String, Set<String>> getIssueIdsFromCommitMessage(String commitMessage) {
+    Map<String, Set<String>> ret = Maps.newHashMap();
+    addIssueIdsFromCommitMessage(ret, commitMessage);
+    return ret;
+  }
+
+  private void addIssueIdsFromCommitMessage(Map<String, Set<String>> ret, String commitMessage) {
     addIssuesOccurrence(commitMessage, "somewhere", ret);
 
     String[] lines = commitMessage.split("\n");
@@ -190,7 +209,6 @@ public class IssueExtractor {
         addIssuesOccurrence(footer, "footer", ret);
       }
     }
-    return ret;
   }
 
   /**

@@ -235,6 +235,8 @@ corresponding subsection below:
 * [CommentAddedEvent](#commentaddedevent)
 * [PatchSetCreatedEvent](#patchSetcreatedevent)
 * [RefUpdatedEvent](#refupdatedevent)
+* [WorkInProgressStateChangedEvent](#workinprogressstatechangedevent)
+* [PrivateStateChangedEvent](#privatestatechangedevent)
 * [Common properties for events on a change](#common-properties-for-events-on-a-change)
 * [Common properties for events on a patch set](#common-properties-for-events-on-a-patch-set)
 
@@ -440,6 +442,40 @@ and the [Change][common-properties-for-events-on-a-change] it belongs to.
 
 `submitterUsername`
 : username of the user that updated the ref.
+
+### WorkInProgressStateChangedEvent
+
+`event`
+:   `com.google.gerrit.server.events.WorkInProgressStateChangedEvent`
+
+`event-type`
+:   `wip-state-changed`
+
+`changerEmail`
+:   email address of the user that changed the WIP state
+
+`submitterName`
+:   name of the user that changed the WIP state
+
+`changerUsername`
+:   username of the user that changed the WIP state
+
+### PrivateStateChangedEvent
+
+`event`
+:   `com.google.gerrit.server.events.PrivateStateChangedEvent`
+
+`event-type`
+:   `private-state-changed`
+
+`changerEmail`
+:   email address of the user that changed the private state
+
+`submitterName`
+:   name of the user that changed the private state
+
+`changerUsername`
+:   username of the user that changed the private state
 
 ### Common properties for events on a change
 
