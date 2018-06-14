@@ -483,6 +483,12 @@ and the [Change][common-properties-for-events-on-a-change] it belongs to.
 `topic`
 : name of the topic the change belongs to.
 
+`private`
+:   whether the change is marked private
+
+`wip`
+:   whether the change is marked work in progress (WIP)
+
 ### Common properties for events on a patch set
 
 `authorEmail`
