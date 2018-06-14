@@ -452,7 +452,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
       propertyFactory = createMock(Property.Factory.class);
       bind(Property.Factory.class).toInstance(propertyFactory);
-      //factory(Property.Factory.class);
+      // factory(Property.Factory.class);
     }
   }
 
