@@ -28,8 +28,10 @@ import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
 import com.google.gerrit.server.events.PatchSetEvent;
+import com.google.gerrit.server.events.PrivateStateChangedEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
 import java.util.Collections;
@@ -132,6 +134,28 @@ public class PropertyExtractor {
     return extractMapFrom(event, common);
   }
 
+  private Map<String, Set<String>> extractFrom(
+      WorkInProgressStateChangedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.changer.get(), "changer"));
+    return extractFrom((ChangeEvent) event, common);
+  }
+
+  private Map<String, Set<String>> extractFrom(
+      PrivateStateChangedEvent event, Map<String, String> common) {
+    common.putAll(propertyAttributeExtractor.extractFrom(event.changer.get(), "changer"));
+    return extractFrom((ChangeEvent) event, common);
+  }
+
+  private Map<String, Set<String>> extractFrom(ChangeEvent event, Map<String, String> common) {
+    common.put("event-type", event.type);
+    ChangeAttribute change = event.change.get();
+    common.putAll(propertyAttributeExtractor.extractFrom(change));
+    common.put("refName", event.refName);
+
+    // Got no patch set information, extract from commit message.
+    return issueExtractor.getIssueIdsFromCommitMessage(change.commitMessage);
+  }
+
   /**
    * A set of properties extracted from an event.
    *
@@ -197,6 +221,10 @@ public class PropertyExtractor {
       associations = extractFrom((PatchSetCreatedEvent) event, common);
     } else if (event instanceof RefUpdatedEvent) {
       associations = extractFrom((RefUpdatedEvent) event, common);
+    } else if (event instanceof PrivateStateChangedEvent) {
+      associations = extractFrom((PrivateStateChangedEvent) event, common);
+    } else if (event instanceof WorkInProgressStateChangedEvent) {
+      associations = extractFrom((WorkInProgressStateChangedEvent) event, common);
     }
 
     Set<Map<String, String>> ret = new HashSet<>();
