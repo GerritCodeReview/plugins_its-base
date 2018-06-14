@@ -29,8 +29,10 @@ import com.google.gerrit.server.events.ChangeMergedEvent;
 import com.google.gerrit.server.events.ChangeRestoredEvent;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.events.PatchSetCreatedEvent;
+import com.google.gerrit.server.events.PrivateStateChangedEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
+import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
@@ -82,6 +84,8 @@ public class ItsConfig {
         || event instanceof ChangeMergedEvent
         || event instanceof ChangeAbandonedEvent
         || event instanceof ChangeRestoredEvent
+        || event instanceof PrivateStateChangedEvent
+        || event instanceof WorkInProgressStateChangedEvent
         || event instanceof RefUpdatedEvent) {
       return isEnabled(event.getProjectNameKey(), event.getRefName());
     }
