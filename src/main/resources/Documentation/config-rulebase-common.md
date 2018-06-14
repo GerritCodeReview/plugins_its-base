@@ -686,6 +686,21 @@ Example with the event property `ref`:
   action = create-version-from-property ref
 ```
 
+### Action: mark-property-as-released-version
+
+The `mark-property-as-released-version` action marks a version as released in
+the ITS project.
+The version to mark as released is identified by an event property value.
+
+This is useful when you want to mark a version as released in the ITS when a
+tag is created in the Gerrit project.
+
+Example with the event property `ref`:
+
+```
+  action = mark-property-as-released-version ref
+```
+
 ### Action: log-event
 
 The `log-event` action appends the event's properties to Gerrit's log.
