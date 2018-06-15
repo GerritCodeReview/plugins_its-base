@@ -117,8 +117,6 @@ public class IssueExtractor {
       if (footerStart == -1) {
         // No footer could be found. So all lines after the first one (that's
         // the subject) is the body.
-        // body = String[] templateParameters =
-        //  Arrays.copyOfRange(allParameters, 1, allParameters.length);
         if (lines.length > 0) {
           body = StringUtils.join(lines, "\n", 1, lines.length);
         }
