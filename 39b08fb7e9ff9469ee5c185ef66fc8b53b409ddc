@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04757e13_1cf87395",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-15T01:16:58Z",
+      "side": 1,
+      "message": "We should probably remove this commented out code, for sure, in a different change.",
+      "range": {
+        "startLine": 120,
+        "startChar": 8,
+        "endLine": 121,
+        "endChar": 71
+      },
+      "revId": "39b08fb7e9ff9469ee5c185ef66fc8b53b409ddc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "242e967c_125f918e",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-06-15T01:16:58Z",
+      "side": 1,
+      "message": "Same here: probably we should delete this commented out code.",
+      "range": {
+        "startLine": 455,
+        "startChar": 6,
+        "endLine": 455,
+        "endChar": 41
+      },
+      "revId": "39b08fb7e9ff9469ee5c185ef66fc8b53b409ddc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
