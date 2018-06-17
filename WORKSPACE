@@ -3,7 +3,7 @@ workspace(name = "its_base")
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "34d5ef186f73c80e61dcfa057ee400b2725164bf",
+    commit = "7ce9a3f58f030635b3a1229b7fb4c62ee7979bc8",
     # local_path = "/home/<user>/projects/bazlets",
 )
 
