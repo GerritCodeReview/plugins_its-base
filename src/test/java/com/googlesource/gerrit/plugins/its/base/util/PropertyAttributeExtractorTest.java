@@ -121,7 +121,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyEscapedSubject = createMock(Property.class);
-    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
+    expect(propertyFactory.create("escapedSubject", "testSubject"))
+        .andReturn(propertyEscapedSubject);
 
     Property propertyId2 = createMock(Property.class);
     expect(propertyFactory.create("change-id", "testId")).andReturn(propertyId2);
@@ -241,7 +242,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     expect(propertyFactory.create("subject", "testSubject")).andReturn(propertySubject);
 
     Property propertyEscapedSubject = createMock(Property.class);
-    expect(propertyFactory.create("escapedSubject", "testSubject")).andReturn(propertyEscapedSubject);
+    expect(propertyFactory.create("escapedSubject", "testSubject"))
+        .andReturn(propertyEscapedSubject);
 
     Property propertyId = createMock(Property.class);
     expect(propertyFactory.create("changeId", "testId")).andReturn(propertyId);

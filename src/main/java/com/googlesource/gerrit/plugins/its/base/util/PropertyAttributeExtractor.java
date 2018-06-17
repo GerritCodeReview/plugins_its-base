@@ -59,7 +59,9 @@ public class PropertyAttributeExtractor {
     properties.add(propertyFactory.create("branch", changeAttribute.branch));
     properties.add(propertyFactory.create("topic", changeAttribute.topic));
     properties.add(propertyFactory.create("subject", changeAttribute.subject));
-    properties.add(propertyFactory.create("escapedSubject", StringEscapeUtils.escapeJava(changeAttribute.subject)));
+    properties.add(
+        propertyFactory.create(
+            "escapedSubject", StringEscapeUtils.escapeJava(changeAttribute.subject)));
 
     // deprecated, to be removed soon. migrate to ones without dash.
     properties.add(propertyFactory.create("commit-message", changeAttribute.commitMessage));
