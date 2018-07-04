@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -76,10 +77,14 @@ class PropertyAttributeExtractor {
   }
 
   Map<String, String> extractFrom(RefUpdateAttribute refUpdateAttribute) {
+    String refName = refUpdateAttribute.refName;
+    String refShortName = RefNames.shortName(refName);
     return ImmutableMap.<String, String>builder()
         .put("revision", refUpdateAttribute.newRev)
         .put("revisionOld", refUpdateAttribute.oldRev)
         .put("ref", refUpdateAttribute.refName)
+        .put("refShort", refShortName)
+        .put("refPrefix", refName.substring(0, refName.length() - refShortName.length()))
         .build();
   }
 
