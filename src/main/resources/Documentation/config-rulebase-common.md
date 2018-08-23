@@ -1,16 +1,9 @@
 Rule base configuration
 =======================
 
-#### Table of Contents
-* [Overview][overview]
-* [Rules][rules]
-* [Conditions][conditions]
-* [Event Properties][event-properties]
-* [Actions][actions]
+[TOC]: # "Table of Contents"
 
-[overview]: #overview
-<a name="overview">Overview</a>
--------------------------------
+## Overview
 
 In this part we describe how to specify which events in Gerrit (E.g.:
 “Change Merged”, or “User ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a
@@ -130,9 +123,7 @@ The same applies to the rules defined at the site level: if any project
 defines their own rule base files, the global ones defined in the
 `gerrit_site/etc/its/` folder do not apply to this project.
 
-[rules]: #rules
-<a name="rules">Rules</a>
--------------------------
+## Rules
 
 Each rule consists of three items: A name, a set of conditions, and a
 set of actions.
@@ -151,9 +142,7 @@ respected.
 There is no upper limit on the number of elements in a rules set of
 conditions, and set of actions. Each of those sets may be empty.
 
-[conditions]: #conditions
-<a name="conditions">Conditions</a>
------------------------------------
+## Conditions
 
 The conditions are lines of the form
 
@@ -180,9 +169,7 @@ having `DRAFT`, the following condition can be used:
   status = !,DRAFT
 ```
 
-[event-properties]: #event-properties
-<a name="event-properties">Event Properties</a>
------------------------------------------------
+## Event Properties
 
 The properties exposed by events depend on the kind of event.
 
@@ -235,14 +222,14 @@ association through its-jira, its-jira would report “Dear Jira users, ...”.
 The further properties are listed in the event's
 corresponding subsection below:
 
-* [ChangeAbandonedEvent][event-properties-ChangeAbandonedEvent]
-* [ChangeMergedEvent][event-properties-ChangeMergedEvent]
-* [ChangeRestoredEvent][event-properties-ChangeRestoredEvent]
-* [CommentAddedEvent][event-properties-CommentAddedEvent]
-* [PatchSetCreatedEvent][event-properties-PatchSetCreatedEvent]
-* [RefUpdatedEvent][event-properties-RefUpdatedEvent]
-* [Common properties for events on a change][event-properties-change]
-* [Common properties for events on a patch set][event-properties-patch-set]
+* [ChangeAbandonedEvent][changeabandonedevent]
+* [ChangeMergedEvent][changemergedevent]
+* [ChangeRestoredEvent][changerestoredevent]
+* [CommentAddedEvent][commentaddedevent]
+* [PatchSetCreatedEvent][patchSetcreatedevent]
+* [RefUpdatedEvent][refupdatedevent]
+* [Common properties for events on a change][common-properties-for-events-on-a-change]
+* [Common properties for events on a patch set][common-properties-for-events-on-a-patch-set]
 
 [property-association]: #property-association
 ### <a name="property-association">Property: `association`</a>
@@ -299,8 +286,8 @@ patch set 2.  When adding a comment to this change, the event
 for issue “4711” would get a property 'association' with value
 `added@subject`.
 
-[event-properties-ChangeAbandonedEvent]: #event-properties-ChangeAbandonedEvent
-### <a name="event-properties-ChangeAbandonedEvent">ChangeAbandonedEvent</a>
+[changeabandonedevent]: #changeabandonedevent
+### ChangeAbandonedEvent
 
 `abandonerEmail`
 : email address of the user abandoning the change.
@@ -321,11 +308,11 @@ for issue “4711” would get a property 'association' with value
 : reason why the change has been abandoned.
 
 In addition to the above properties, the event also provides
-properties for the abandoned [Change][event-properties-change], and
-its most recent [Patch Set][event-properties-patch-set].
+properties for the abandoned [Change][common-properties-for-events-on-a-change], and
+its most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 
-[event-properties-ChangeMergedEvent]: #event-properties-ChangeMergedEvent
-### <a name="event-properties-ChangeMergedEvent">ChangeMergedEvent</a>
+[changemergedevent]: #changemergedevent
+### ChangeMergedEvent
 
 `event`
 : `com.google.gerrit.server.events.ChangeMergedEvent`
@@ -343,11 +330,11 @@ its most recent [Patch Set][event-properties-patch-set].
 : username of the user causing the merge of the change.
 
 In addition to the above properties, the event also provides
-properties for the merged [Change][event-properties-change], and its
-most recent [Patch Set][event-properties-patch-set].
+properties for the merged [Change][common-properties-for-events-on-a-change], and its
+most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 
-[event-properties-ChangeRestoredEvent]: #event-properties-ChangeRestoredEvent
-### <a name="event-properties-ChangeRestoredEvent">ChangeRestoredEvent</a>
+[changerestoredevent]: #changerestoredevent
+### ChangeRestoredEvent
 
 `event`
 : `com.google.gerrit.server.events.ChangeRestoredEvent`
@@ -368,11 +355,11 @@ most recent [Patch Set][event-properties-patch-set].
 : username of the user restoring the change.
 
 In addition to the above properties, the event also provides
-properties for the restored [Change][event-properties-change], and it's
-most recent [Patch Set][event-properties-patch-set].
+properties for the restored [Change][common-properties-for-events-on-a-change], and it's
+most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 
-[event-properties-CommentAddedEvent]: #event-properties-CommentAddedEvent
-### <a name="event-properties-CommentAddedEvent">CommentAddedEvent</a>
+[commentaddedevent]: #commentaddedevent
+### CommentAddedEvent
 
 NOTE: For consistency with the other events, the `author-...`
 properties of the CommentAddedEvent do not refer to the author of the
@@ -393,7 +380,7 @@ properties.
 : added comment itself.
 
 `event`
-: `com.google.gerrit.server.events.CommentAddedEvent+
+: `com.google.gerrit.server.events.CommentAddedEvent+`
 
 `event-type`
 : `comment-added`
@@ -407,11 +394,12 @@ value is added. So for example voting “-2” for the approval
 : `-2`
 
 In addition to the above properties, the event also provides
-properties for the [Change][event-properties-change] the comment was
-added for, and it's most recent [Patch Set][event-properties-patch-set].
+properties for the [Change][common-properties-for-events-on-a-change] the comment was
+added for, and it's most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 
-[event-properties-PatchSetCreatedEvent]: #event-properties-PatchSetCreatedEvent
-### <a name="event-properties-PatchSetCreatedEvent">PatchSetCreatedEvent</a>
+
+[patchsetcreatedevent]: #patchsetcreatedevent
+### PatchSetCreatedEvent
 
 `event`
 : `com.google.gerrit.server.events.PatchSetCreatedEvent`
@@ -420,11 +408,12 @@ added for, and it's most recent [Patch Set][event-properties-patch-set].
 : `patchset-created`
 
 In addition to the above properties, the event also provides
-properties for the uploaded [Patch Set][event-properties-patch-set],
-and the [Change][event-properties-change] it belongs to.
+properties for the uploaded [Patch Set][common-properties-for-events-on-a-patch-set],
+and the [Change][common-properties-for-events-on-a-change] it belongs to.
 
-[event-properties-RefUpdatedEvent]: #event-properties-RefUpdatedEvent
-### <a name="event-properties-RefUpdatedEvent">RefUpdatedEvent</a>
+
+[refupdatedevent]: #refupdatedevent
+### RefUpdatedEvent
 
 `event`
 : `com.google.gerrit.server.events.RefUpdatedEvent`
@@ -454,8 +443,8 @@ and the [Change][event-properties-change] it belongs to.
 `submitterUsername`
 : username of the user that updated the ref.
 
-[event-properties-change]: #event-properties-change
-### <a name="event-properties-change">Common properties for events on a change</a>
+[common-properties-for-events-on-a-change]: #common-properties-for-events-on-a-change
+### Common properties for events on a change
 
 `branch`
 : name of the branch the change belongs to.
@@ -497,8 +486,8 @@ and the [Change][event-properties-change] it belongs to.
 `topic`
 : name of the topic the change belongs to.
 
-[event-properties-patch-set]: #event-properties-patch-set
-### <a name="event-properties-patch-set">Common properties for events on a patch set</a>
+[common-properties-for-events-on-a-patch-set]: #common-properties-for-events-on-a-patch-set
+### Common properties for events on a patch set
 
 `authorEmail`
 : email address of this patch set's author.
@@ -541,8 +530,7 @@ and the [Change][event-properties-change] it belongs to.
 : username of the user that uploaded this patch set.
 
 [actions]: #actions
-<a name="actions">Actions</a>
------------------------------
+## Actions
 
 Lines of the form
 
@@ -575,7 +563,7 @@ The following actions are available:
 [further-actions]: config-rulebase-plugin-actions.md
 
 [action-add-comment]: #action-add-comment
-### <a name="action-add-comment">Action: add-comment</a>
+### Action: add-comment
 
 The `add-comment` action adds the given parameters as comment to any
 associated rule.
@@ -591,7 +579,7 @@ would add a comment “This is a sample command” to associated issues.
 If no parameters are given, no comment gets added.
 
 [action-add-standard-comment]: #action-add-standard-comment
-### <a name="action-add-standard-comment">Action: add-standard-comment</a>
+### Action: add-standard-comment
 
 The `add-standard-comment` action adds predefined comments to
 associated issues for change abandoned, merged, restored, and patch
@@ -603,7 +591,7 @@ The added comments contain the person responsible for the event
 been given), and a link to the change.
 
 [action-add-soy-comment]: #action-add-soy-comment
-### <a name="action-add-soy-comment">Action: add-soy-comment</a>
+### Action: add-soy-comment
 
 The `add-soy-comment` action renders a Closure template (soy) for the
 event and adds the output as comment to any associated issue.
@@ -638,7 +626,7 @@ the event's subject property, and `$changeNumber` would refer to the
 change's number.
 
 [action-add-property-to-field]: #action-add-property-to-field
-### <a name="action-add-property-to-field">Action: add-property-to-field</a>
+### Action: add-property-to-field
 
 The `add-property-to-field` action adds an event property value to an ITS designated field.
 
@@ -652,7 +640,7 @@ Example with the event property `branch` and a field identified as `labels`:
 ```
 
 [action-create-version-from-property]: #create-version-from-property
-### <a name="create-version-from-property">Action: create-version-from-property</a>
+### Action: create-version-from-property
 
 The `create-version-from-property` action creates a version in the ITS project
 by using an event property value as the version value.
@@ -668,7 +656,7 @@ Example with the event property `ref`:
 
 
 [action-log-event]: #action-log-event
-### <a name="action-log-event">Action: log-event</a>
+### Action: log-event
 
 The `log-event` action appends the event's properties to Gerrit's log.
 

@@ -1,17 +1,12 @@
 Common configuration for `its-base`-based plugins
 =================================================
 
-#### Table of Contents
-* [Identifying ITS ids][identifying-its-ids]
-* [Enabling ITS integration][enabling-its-integration]
-* [Configuring rules of when to take which actions in the ITS][configure-rules]
-* [Further common configuration details][config-common-detail]
+[TOC]: # "Table of Contents"
 
 
 
 [identifying-its-ids]: #identifying-its-ids
-<a name="identifying-its-ids">Identifying ITS ids</a>
------------------------------------------------------
+## Identifying ITS ids
 
 In order to extract ITS ids from commit messages, @PLUGIN@ uses
 [commentlink][upstream-comment-link-doc]s of
@@ -73,8 +68,7 @@ using the same syntax used in the gerrit.config. Project's hierarchy will be res
 when evaluating the links configuration and association policy.
 
 [enabling-its-integration]: #enabling-its-integration
-<a name="enabling-its-integration">Enabling ITS integration</a>
----------------------------------------------------------------
+## Enabling ITS integration
 
 It can be configured per project whether the issue tracker
 integration is enabled or not. To enable the issue tracker integration
@@ -141,9 +135,8 @@ must have the following entry in its `project.config` file in the
 ```
 
 
-[configure-rules]: #configure-rules
-<a name="configure-rules">Configuring rules of when to take which actions in the ITS</a>
-----------------------------------------------------------------------------------------
+[configuring-rules-of-when-to-take-which-actions-in-the-lts]: #configuring-rules-of-when-to-take-which-actions-in-the-lts
+## Configuring rules of when to take which actions in the ITS
 
 Setting up which event in Gerrit (E.g.: “Change Merged”, or “User
 ‘John Doe’ voted ‘+2’ for ‘Code-Review’ on a change”) should trigger
@@ -156,8 +149,7 @@ configured through a [rule base][rule-base] in
 
 
 [multiple-its]: #multiple-its
-<a name="mutiple-its">Multiple ITS</a>
---------------------------------------
+## Multiple ITS
 
 Although not a common setup the @PLUGIN@ plugin supports connecting
 Gerrit to multiple issue tracking systems.
@@ -178,14 +170,13 @@ just need to use the appropriate name to configure each plugin.
 
 
 
-[config-common-detail]: #config-common-detail
-<a name="config-common-detail">Further common configuration details</a>
------------------------------------------------------------------------
+[further-common-configuration-details]: #further-common-configuration-details
+## Further common configuration details
 
 [common-config-commentlink]: #common-config-commentlink
 [common-config-commentlinkGroupIndex]: #common-config-commentlinkGroupIndex
 
-<a name="common-config-commentlink">`@PLUGIN@.commentlink`
+<a name="common-config-commentlink">`@PLUGIN@.commentlink`</a>
 :   The name of the comment link to use to extract issue ids.
 
     This setting is useful to reuse the same comment link from different Its
@@ -195,14 +186,14 @@ just need to use the appropriate name to configure each plugin.
 
     Default is `@PLUGIN@`
 
-<a name="common-config-commentlinkGroupIndex">`@PLUGIN@.commentlinkGroupIndex`
+<a name="common-config-commentlinkGroupIndex">`@PLUGIN@.commentlinkGroupIndex`</a>
 :   The group index within `@PLUGIN@.commentlink` that holds the issue id.
 
     Default is `1`, if there are are groups within the regular expression for
     the `@PLUGIN@.commentlink` comment link, and the default is `0`, if there
     are no such groups.
 
-<a name="common-config-dummyIssuePattern">`@PLUGIN@.dummyIssuePattern`
+<a name="common-config-dummyIssuePattern">`@PLUGIN@.dummyIssuePattern`</a>
 :   Pattern which can be specified to match a dummy issue.
 
     This setting is useful to bypass the MANDATORY check for commits matching
