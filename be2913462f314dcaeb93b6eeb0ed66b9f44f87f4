@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c26de7b3_72be757c",
+        "filename": "src/main/templates/Documentation/about.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-09-27T23:40:59Z",
+      "side": 0,
+      "message": "The URLs should be changed in a separate commit",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 15,
+        "endChar": 82
+      },
+      "revId": "be2913462f314dcaeb93b6eeb0ed66b9f44f87f4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
