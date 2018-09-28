@@ -11,10 +11,10 @@ common functionality to other plugins, like:
 * [its-phabricator][its-phabricator]
 * [its-rtc][its-rtc]
 
-[its-bugzilla]: https://gerrit-review.googlesource.com/#/admin/projects/plugins/its-bugzilla
-[its-jira]: https://gerrit-review.googlesource.com/#/admin/projects/plugins/its-jira
-[its-phabricator]: https://gerrit-review.googlesource.com/#/admin/projects/plugins/its-phabricator
-[its-rtc]: https://gerrit-review.googlesource.com/#/admin/projects/plugins/its-rtc
+[its-bugzilla]: https://gerrit-review.googlesource.com/admin/repos/plugins/its-bugzilla
+[its-jira]: https://gerrit-review.googlesource.com/admin/repos/plugins/its-jira
+[its-phabricator]: https://gerrit-review.googlesource.com/admin/repos/plugins/its-phabricator
+[its-rtc]: https://gerrit-review.googlesource.com/admin/repos/plugins/its-rtc
 
 `its-base` provides means to:
 
