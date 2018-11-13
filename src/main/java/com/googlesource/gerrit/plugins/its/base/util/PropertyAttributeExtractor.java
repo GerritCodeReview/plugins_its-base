@@ -57,7 +57,9 @@ class PropertyAttributeExtractor {
         .put("changeUrl", changeAttribute.url)
         .put("formatChangeUrl", its.createLinkForWebui(changeAttribute.url, changeAttribute.url))
         .put("status", changeAttribute.status != null ? changeAttribute.status.toString() : "")
-        .put("private", changeAttribute.isPrivate != null ? changeAttribute.isPrivate.toString() : "false")
+        .put(
+            "private",
+            changeAttribute.isPrivate != null ? changeAttribute.isPrivate.toString() : "false")
         .put("wip", changeAttribute.wip != null ? changeAttribute.wip.toString() : "false")
         .putAll(extractFrom(changeAttribute.owner, "owner"))
         .build();
