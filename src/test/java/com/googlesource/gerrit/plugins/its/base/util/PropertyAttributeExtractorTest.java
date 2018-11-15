@@ -111,6 +111,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
             .put("ownerUsername", "testUsername")
             .put("commitMessage", "Commit Message")
             .put("formatChangeUrl", "http://www.example.org/test")
+            .put("private", "false")
+            .put("wip", "false")
             .build();
     assertEquals("Properties do not match", expected, actual);
   }
@@ -156,6 +158,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
             .put("ownerUsername", "testUsername")
             .put("commitMessage", "Commit Message")
             .put("formatChangeUrl", "http://www.example.org/test")
+            .put("private", "false")
+            .put("wip", "false")
             .build();
     assertEquals("Properties do not match", expected, actual);
   }
