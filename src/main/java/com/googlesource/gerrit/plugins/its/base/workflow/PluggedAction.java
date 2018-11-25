@@ -14,11 +14,22 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-/** Abstraction for actions on ITS issues */
-public abstract class IssueAction implements StandardAction {
+import com.google.gerrit.extensions.annotations.ExtensionPoint;
 
-  @Override
-  public final ActionType getType() {
-    return ActionType.ISSUE;
-  }
+import java.io.IOException;
+import java.util.Map;
+
+/** Interface for actions plugged by its-* plugins * */
+@ExtensionPoint
+public interface PluggedAction extends Action {
+
+  /**
+   * Execute this action.
+   *
+   * @param target The target to execute on. Its kind will depend on the action type.
+   * @param actionRequest The request to execute.
+   * @param properties The properties for the execution.
+   */
+  void execute(String target, ActionRequest actionRequest, Map<String, String> properties)
+      throws IOException;
 }

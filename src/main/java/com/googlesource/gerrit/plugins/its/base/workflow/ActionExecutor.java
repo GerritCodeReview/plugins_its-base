@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
@@ -27,6 +29,7 @@ import org.slf4j.LoggerFactory;
 public class ActionExecutor {
   private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
+  private final String pluginName;
   private final ItsFacadeFactory itsFactory;
   private final AddComment.Factory addCommentFactory;
   private final AddStandardComment.Factory addStandardCommentFactory;
@@ -34,16 +37,20 @@ public class ActionExecutor {
   private final LogEvent.Factory logEventFactory;
   private final AddPropertyToField.Factory addPropertyToFieldFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final DynamicMap<PluggedAction> pluggedActions;
 
   @Inject
   public ActionExecutor(
+      @PluginName String pluginName,
       ItsFacadeFactory itsFactory,
       AddComment.Factory addCommentFactory,
       AddStandardComment.Factory addStandardCommentFactory,
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory,
       AddPropertyToField.Factory addPropertyToFieldFactory,
-      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      DynamicMap<PluggedAction> pluggedActions) {
+    this.pluginName = pluginName;
     this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
@@ -51,6 +58,7 @@ public class ActionExecutor {
     this.logEventFactory = logEventFactory;
     this.addPropertyToFieldFactory = addPropertyToFieldFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.pluggedActions = pluggedActions;
   }
 
   private Action getAction(String actionName) {
@@ -68,19 +76,34 @@ public class ActionExecutor {
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
       default:
-        return null;
+        return pluggedActions.get(pluginName, actionName);
+    }
+  }
+
+  private void execute(
+      Action action, String target, ActionRequest actionRequest, Map<String, String> properties)
+      throws IOException {
+    if (action instanceof StandardAction) {
+      ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
+      StandardAction standardAction = (StandardAction) action;
+      standardAction.execute(its, target, actionRequest, properties);
+    } else if (action instanceof PluggedAction) {
+      PluggedAction pluggedAction = (PluggedAction) action;
+      pluggedAction.execute(target, actionRequest, properties);
+    } else {
+      log.error("Action " + action + " has unexpected type " + action.getClass());
     }
   }
 
   private void executeOnIssue(
       String issue, ActionRequest actionRequest, Map<String, String> properties) {
-    ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
+        ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
         its.performAction(issue, actionRequest.getUnparsed());
       } else if (action.getType() == ActionType.ISSUE) {
-        action.execute(its, issue, actionRequest, properties);
+        execute(action, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
@@ -105,8 +128,7 @@ public class ActionExecutor {
       if (action.getType() != ActionType.PROJECT) {
         return;
       }
-      ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
-      action.execute(its, itsProject, actionRequest, properties);
+      execute(action, itsProject, actionRequest, properties);
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }

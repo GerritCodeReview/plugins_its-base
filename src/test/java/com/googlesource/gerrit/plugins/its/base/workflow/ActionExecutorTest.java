@@ -18,7 +18,10 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.gerrit.extensions.annotations.Exports;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -31,6 +34,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
+
+  private static final String PLUGGED_ACTION_NAME = "plugged-action-name";
+
   private Injector injector;
 
   private ItsFacade its;
@@ -41,6 +47,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private LogEvent.Factory logEventFactory;
   private AddPropertyToField.Factory addPropertyToFieldFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private PluggedAction pluggedAction;
 
   private Map<String, String> properties =
       ImmutableMap.of("issue", "4711", "project", "testProject");
@@ -257,6 +264,38 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
+  public void testExecuteIssuePluggedAction() throws IOException {
+    expect(pluggedAction.getType()).andReturn(ActionType.ISSUE);
+
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn(PLUGGED_ACTION_NAME);
+
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
+
+    pluggedAction.execute("4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnIssue(actionRequests, properties);
+  }
+
+  public void testExecuteProjectPluggedAction() throws IOException {
+    expect(pluggedAction.getType()).andReturn(ActionType.PROJECT);
+
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn(PLUGGED_ACTION_NAME);
+
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
+
+    pluggedAction.execute("itsTestProject", actionRequest, projectProperties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(actionRequests, projectProperties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -270,6 +309,10 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
+      bind(String.class)
+          .annotatedWith(PluginName.class)
+          .toInstance(com.google.gerrit.extensions.registration.PluginName.GERRIT);
+
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
 
@@ -293,6 +336,13 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      DynamicMap.mapOf(binder(), PluggedAction.class);
+      pluggedAction = createMock(PluggedAction.class);
+
+      bind(PluggedAction.class)
+          .annotatedWith(Exports.named(PLUGGED_ACTION_NAME))
+          .toInstance(pluggedAction);
     }
   }
 }
