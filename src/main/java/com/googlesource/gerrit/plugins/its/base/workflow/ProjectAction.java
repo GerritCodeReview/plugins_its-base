@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 /** Abstraction for actions on ITS projects */
-public abstract class ProjectAction implements Action {
+public abstract class ProjectAction implements StandardAction {
 
   @Override
   public final ActionType getType() {

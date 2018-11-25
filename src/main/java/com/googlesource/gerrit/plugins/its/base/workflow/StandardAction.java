@@ -14,8 +14,22 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-/** Interface for actions on an issue tracking system */
-public interface Action {
-  /** @return The type of this action */
-  ActionType getType();
+import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+import java.io.IOException;
+import java.util.Map;
+
+/** Interface for actions defined by base module */
+interface StandardAction extends Action {
+
+  /**
+   * Execute this action.
+   *
+   * @param its The facade interface to execute actions.
+   * @param target The target to execute on. Its kind will depend on the action type.
+   * @param actionRequest The request to execute.
+   * @param properties The properties for the execution.
+   */
+  void execute(
+      ItsFacade its, String target, ActionRequest actionRequest, Map<String, String> properties)
+      throws IOException;
 }
