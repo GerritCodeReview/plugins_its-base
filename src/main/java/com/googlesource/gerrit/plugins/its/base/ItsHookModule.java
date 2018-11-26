@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
@@ -39,6 +40,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProper
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
+import com.googlesource.gerrit.plugins.its.base.workflow.SpecificAction;
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
@@ -74,6 +76,7 @@ public class ItsHookModule extends FactoryModule {
     factory(CreateVersionFromProperty.Factory.class);
     factory(LogEvent.Factory.class);
     factory(AddPropertyToField.Factory.class);
+    DynamicMap.mapOf(binder(), SpecificAction.class);
     install(ItsRulesProjectCacheImpl.module());
   }
 
