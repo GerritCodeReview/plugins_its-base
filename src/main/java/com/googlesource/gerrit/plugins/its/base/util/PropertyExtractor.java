@@ -103,6 +103,7 @@ public class PropertyExtractor {
   private Map<String, Set<String>> extractFrom(
       ChangeRestoredEvent event, Map<String, String> common) {
     common.putAll(propertyAttributeExtractor.extractFrom(event.restorer.get(), "restorer"));
+    common.put("reason", event.reason);
     return extractMapFrom(event, common);
   }
 
