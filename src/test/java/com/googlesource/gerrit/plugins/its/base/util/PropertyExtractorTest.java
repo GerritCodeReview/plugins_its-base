@@ -181,6 +181,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
             .putAll(changeProperties)
             .putAll(accountProperties)
             .putAll(patchSetProperties)
+            .put("reason", "testReason")
             .put("ref", "refs/heads/testBranch")
             .build();
 
