@@ -47,6 +47,7 @@ class PropertyAttributeExtractor {
 
   Map<String, String> extractFrom(ChangeAttribute changeAttribute) {
     return ImmutableMap.<String, String>builder()
+        .put("project", changeAttribute.project)
         .put("branch", changeAttribute.branch)
         .put("topic", changeAttribute.topic != null ? changeAttribute.topic : "")
         .put("subject", changeAttribute.subject)
@@ -61,6 +62,7 @@ class PropertyAttributeExtractor {
             "private",
             changeAttribute.isPrivate != null ? changeAttribute.isPrivate.toString() : "false")
         .put("wip", changeAttribute.wip != null ? changeAttribute.wip.toString() : "false")
+        .put("status", (changeAttribute.status == null) ? null : changeAttribute.status.toString())
         .putAll(extractFrom(changeAttribute.owner, "owner"))
         .build();
   }

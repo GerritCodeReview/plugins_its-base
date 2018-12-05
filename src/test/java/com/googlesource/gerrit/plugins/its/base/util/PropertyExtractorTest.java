@@ -423,6 +423,9 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
       propertyAttributeExtractor = createMock(PropertyAttributeExtractor.class);
       bind(PropertyAttributeExtractor.class).toInstance(propertyAttributeExtractor);
+
+      propertyFactory = createMock(Property.Factory.class);
+      bind(Property.Factory.class).toInstance(propertyFactory);
     }
   }
 
