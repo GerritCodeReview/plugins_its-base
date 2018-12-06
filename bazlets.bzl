@@ -1,3 +1,5 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 NAME = "com_googlesource_gerrit_bazlets"
 
 def load_bazlets(

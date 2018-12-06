@@ -11,17 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.googlesource.gerrit.plugins.its.base.workflow;
+package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import static org.easymock.EasyMock.expect;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class AddCommentTest extends LoggingMockingTestCase {
   private Injector injector;
@@ -35,7 +36,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute(null, "4711", actionRequest, ImmutableMap.of());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   public void testPlain() throws IOException {
@@ -47,7 +48,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
     replayMocks();
 
     AddComment addComment = createAddComment();
-    addComment.execute(its, "4711", actionRequest, ImmutableMap.of());
+    addComment.execute("4711", actionRequest, new HashSet<>());
   }
 
   private AddComment createAddComment() {
