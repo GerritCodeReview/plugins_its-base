@@ -33,7 +33,6 @@ import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.eclipse.jgit.lib.ObjectId;
@@ -107,11 +106,12 @@ public class PropertyExtractor {
       common.addAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
     }
     common.addAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
-    RefUpdateAttribute refUpdated = event.refUpdate.get();
-    if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
-      return Collections.emptyMap();
-    }
-    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), refUpdated.newRev);
+    RefUpdateAttribute refUpdateEvent = event.refUpdate.get();
+    String commitId =
+        (refUpdateEvent.newRev.equals(ObjectId.zeroId().name())
+            ? refUpdateEvent.oldRev
+            : refUpdateEvent.newRev);
+    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), commitId);
   }
 
   private Map<String, Set<String>> extractFrom(PatchSetCreatedEvent event, Set<Property> common) {
