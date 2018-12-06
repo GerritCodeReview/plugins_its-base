@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
@@ -36,6 +37,7 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
+import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
@@ -74,6 +76,7 @@ public class ItsHookModule extends FactoryModule {
     factory(CreateVersionFromProperty.Factory.class);
     factory(LogEvent.Factory.class);
     factory(AddPropertyToField.Factory.class);
+    DynamicMap.mapOf(binder(), CustomAction.class);
     install(ItsRulesProjectCacheImpl.module());
   }
 

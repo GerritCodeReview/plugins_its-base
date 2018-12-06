@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.extensions.registration.PluginName;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
@@ -34,6 +36,7 @@ public class ActionExecutor {
   private final LogEvent.Factory logEventFactory;
   private final AddPropertyToField.Factory addPropertyToFieldFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final DynamicMap<CustomAction> customActions;
 
   @Inject
   public ActionExecutor(
@@ -43,7 +46,8 @@ public class ActionExecutor {
       AddSoyComment.Factory addSoyCommentFactory,
       LogEvent.Factory logEventFactory,
       AddPropertyToField.Factory addPropertyToFieldFactory,
-      CreateVersionFromProperty.Factory createVersionFromPropertyFactory) {
+      CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      DynamicMap<CustomAction> customActions) {
     this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
     this.addStandardCommentFactory = addStandardCommentFactory;
@@ -51,6 +55,7 @@ public class ActionExecutor {
     this.logEventFactory = logEventFactory;
     this.addPropertyToFieldFactory = addPropertyToFieldFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.customActions = customActions;
   }
 
   private Action getAction(String actionName) {
@@ -68,19 +73,26 @@ public class ActionExecutor {
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
       default:
-        return null;
+        return customActions.get(PluginName.GERRIT, actionName);
     }
+  }
+
+  private void execute(
+      Action action, String target, ActionRequest actionRequest, Map<String, String> properties)
+      throws IOException {
+    ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
+    action.execute(its, target, actionRequest, properties);
   }
 
   private void executeOnIssue(
       String issue, ActionRequest actionRequest, Map<String, String> properties) {
-    ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
     try {
       Action action = getAction(actionRequest.getName());
       if (action == null) {
+        ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
         its.performAction(issue, actionRequest.getUnparsed());
       } else if (action.getType() == ActionType.ISSUE) {
-        action.execute(its, issue, actionRequest, properties);
+        execute(action, issue, actionRequest, properties);
       }
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
@@ -105,8 +117,7 @@ public class ActionExecutor {
       if (action.getType() != ActionType.PROJECT) {
         return;
       }
-      ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
-      action.execute(its, itsProject, actionRequest, properties);
+      execute(action, itsProject, actionRequest, properties);
     } catch (IOException e) {
       log.error("Error while executing action " + actionRequest, e);
     }

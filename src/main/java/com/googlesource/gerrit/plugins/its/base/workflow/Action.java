@@ -19,8 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /** Interface for actions on an issue tracking system */
-interface Action {
-
+public interface Action {
   /** @return The type of this action */
   ActionType getType();
 

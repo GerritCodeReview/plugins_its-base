@@ -18,7 +18,9 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -31,6 +33,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
+
+  private static final String CUSTOM_ACTION_NAME = "custom-action-name";
+
   private Injector injector;
 
   private ItsFacade its;
@@ -41,6 +46,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private LogEvent.Factory logEventFactory;
   private AddPropertyToField.Factory addPropertyToFieldFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private CustomAction customAction;
 
   private Map<String, String> properties =
       ImmutableMap.of("issue", "4711", "project", "testProject");
@@ -257,6 +263,42 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnIssue(actionRequests, properties);
   }
 
+  public void testExecuteIssueCustomAction() throws IOException {
+    expect(customAction.getType()).andReturn(ActionType.ISSUE);
+
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn(CUSTOM_ACTION_NAME);
+    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
+        .andReturn(its);
+
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
+
+    customAction.execute(its, "4711", actionRequest, properties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnIssue(actionRequests, properties);
+  }
+
+  public void testExecuteProjectCustomAction() throws IOException {
+    expect(customAction.getType()).andReturn(ActionType.PROJECT);
+
+    ActionRequest actionRequest = createMock(ActionRequest.class);
+    expect(actionRequest.getName()).andReturn(CUSTOM_ACTION_NAME);
+    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
+        .andReturn(its);
+
+    Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
+
+    customAction.execute(its, "itsTestProject", actionRequest, projectProperties);
+
+    replayMocks();
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(actionRequests, projectProperties);
+  }
+
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
   }
@@ -293,6 +335,13 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = createMock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      DynamicMap.mapOf(binder(), CustomAction.class);
+      customAction = createMock(CustomAction.class);
+
+      bind(CustomAction.class)
+          .annotatedWith(Exports.named(CUSTOM_ACTION_NAME))
+          .toInstance(customAction);
     }
   }
 }
