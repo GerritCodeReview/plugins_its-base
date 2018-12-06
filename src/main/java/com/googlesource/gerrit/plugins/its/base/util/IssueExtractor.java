@@ -77,7 +77,8 @@ public class IssueExtractor {
    * Gets issues for a commit.
    *
    * @param projectName The project to fetch {@code commitId} from.
-   * @param commitId The commit id to fetch issues for.
+   * @param commitId The commit id to fetch issues for. It can be Objectid.zeroId() in case of ref
+   *     deletion.
    * @return A mapping, whose keys are issue ids and whose values is a set of places where the issue
    *     occurs. Each issue occurs at least in "somewhere". Issues from the first line get tagged
    *     with an occurrence "subject". Issues in the last block get tagged with "footer". Issues

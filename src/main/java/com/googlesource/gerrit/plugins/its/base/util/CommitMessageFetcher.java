@@ -33,7 +33,9 @@ public class CommitMessageFetcher {
   public String fetchGuarded(String projectName, String commitId) {
     String ret = "";
     try {
-      ret = fetch(projectName, commitId);
+      if (!commitId.equals(ObjectId.zeroId().name())) {
+        ret = fetch(projectName, commitId);
+      }
     } catch (IOException e) {
       log.error(
           "Could not fetch commit message for commit " + commitId + " of project " + projectName,
