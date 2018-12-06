@@ -108,7 +108,9 @@ public class PropertyExtractor {
   }
 
   private Map<String, Set<String>> extractFrom(RefUpdatedEvent event, Map<String, String> common) {
-    common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    if (event.submitter != null) {
+      common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    }
     common.putAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
     RefUpdateAttribute refUpdated = event.refUpdate.get();
     if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
