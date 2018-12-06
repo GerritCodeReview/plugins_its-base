@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ee03d24_4f9b2ed2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-12-06T08:42:37Z",
+      "side": 1,
+      "message": "This is the wrong fix: you may want to trigger actions on change deleted, such as a Jira ticket issue transition.\n\nExample:\nI start working on issue ABC-1 and I push a change for review as R1.\nIssue ABC-1 is automatically moved from Ready to InProgress.\nThe change R1 is then deleted.\nI would like the issue ABC-1 to come back to Ready, because it is like no changes were never pushed or reviewed, possibly with a message saying that the change for review has been deleted.",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 5
+      },
+      "revId": "eefe1b85c540be7e0634a3621466bd0e4f52527c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
