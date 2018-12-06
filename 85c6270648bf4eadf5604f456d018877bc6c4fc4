@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a9da090_77cbd985",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2018-12-06T23:47:59Z",
+      "side": 1,
+      "message": "Judging by https://github.com/GerritCodeReview/plugins_its-base/commit/be079f45d55e07287f2433bee1b888bb12ffe15e#diff-513b4cfae938771f71151f7c918c7115 this was removed, im not sure why though.\n\nShould i put this back to what it was originally?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 5
+      },
+      "revId": "85c6270648bf4eadf5604f456d018877bc6c4fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
