@@ -1,4 +1,4 @@
-// Copyright (C) 2018 The Android Open Source Project
+// Copyright (C) 2013 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,5 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-/** Abstraction for actions on ITS issues */
-public abstract class IssueAction implements StandardAction {
-
-  @Override
-  public final ActionType getType() {
-    return ActionType.ISSUE;
-  }
-}
+/** Interface for actions defined by base module */
+interface StandardAction extends Action {}

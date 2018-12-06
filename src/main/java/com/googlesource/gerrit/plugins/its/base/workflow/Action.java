@@ -15,12 +15,12 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
+
 import java.io.IOException;
 import java.util.Map;
 
 /** Interface for actions on an issue tracking system */
-interface Action {
-
+public interface Action {
   /** @return The type of this action */
   ActionType getType();
 
