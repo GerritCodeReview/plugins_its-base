@@ -35,7 +35,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     its.addComment("42", "Change merged");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
   }
 
@@ -59,7 +59,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
   }
 
@@ -71,7 +71,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     its.addComment("42", "Change abandoned");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
   }
 
@@ -99,7 +99,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
   }
 
@@ -111,7 +111,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     its.addComment("42", "Change restored");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
   }
 
@@ -139,7 +139,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
   }
 
@@ -151,7 +151,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
     its.addComment("42", "Change had a related patch set uploaded");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
   }
 
@@ -176,7 +176,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             + "HtTp://ExAmPlE.OrG/ChAnGe");
     replayMocks();
 
-    Action action = injector.getInstance(AddStandardComment.class);
+    StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
   }
 

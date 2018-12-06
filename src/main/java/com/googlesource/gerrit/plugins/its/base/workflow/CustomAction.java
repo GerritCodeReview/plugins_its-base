@@ -14,11 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-/** Abstraction for actions on ITS issues */
-public abstract class IssueAction implements StandardAction {
+import com.google.gerrit.extensions.annotations.ExtensionPoint;
 
-  @Override
-  public final ActionType getType() {
-    return ActionType.ISSUE;
-  }
-}
+/** Interface for actions specific to its-* plugins * */
+@ExtensionPoint
+public interface CustomAction extends Action {}
