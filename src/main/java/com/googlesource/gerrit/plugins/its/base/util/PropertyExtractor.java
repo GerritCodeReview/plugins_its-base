@@ -34,6 +34,7 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -230,16 +231,33 @@ public class PropertyExtractor {
       associations = extractFrom((WorkInProgressStateChangedEvent) event, common);
     }
 
-    Set<Map<String, String>> ret = new HashSet<>();
-    if (associations != null) {
-      for (Entry<String, Set<String>> assoc : associations.entrySet()) {
-        Map<String, String> properties = new HashMap<>();
-        properties.put("issue", assoc.getKey());
-        properties.put("association", String.join(" ", assoc.getValue()));
-        properties.putAll(common);
-        ret.add(properties);
-      }
+    Set<Map<String, String>> issuesProperties = extractIssuesProperties(common, associations);
+
+    Map<String, String> projectProperties = new HashMap<>(common);
+    projectProperties.put("source", "gerrit");
+    return new RefEventProperties(projectProperties, issuesProperties);
+  }
+
+  public Set<Map<String, String>> extractIssuesProperties(
+      Map<String, String> commonProperties, Map<String, Set<String>> associations) {
+    if (associations == null) {
+      return Collections.emptySet();
     }
-    return new RefEventProperties(common, ret);
+
+    Set<Map<String, String>> issuesProperties = new HashSet<>();
+    Map<String, String> completedCommonProperties = new HashMap<>(commonProperties);
+    if (!completedCommonProperties.containsKey("source")) {
+      completedCommonProperties.put("source", "its");
+    }
+
+    for (Entry<String, Set<String>> assoc : associations.entrySet()) {
+      Map<String, String> properties = new HashMap<>();
+      properties.put("issue", assoc.getKey());
+      properties.put("association", String.join(" ", assoc.getValue()));
+      properties.putAll(completedCommonProperties);
+      issuesProperties.add(properties);
+    }
+
+    return issuesProperties;
   }
 }
