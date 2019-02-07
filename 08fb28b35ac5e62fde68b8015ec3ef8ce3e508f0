@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a0517e0_ad299afe",
+        "filename": "src/main/resources/Documentation/config-rulebase-common.md",
+        "patchSetId": 21
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-02-07T11:46:13Z",
+      "side": 1,
+      "message": "Can you say a bit more of what does it mean when it is \u0027its\u0027 and when it is \u0027gerrit\u0027?",
+      "range": {
+        "startLine": 573,
+        "startChar": 49,
+        "endLine": 573,
+        "endChar": 74
+      },
+      "revId": "08fb28b35ac5e62fde68b8015ec3ef8ce3e508f0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
