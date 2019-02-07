@@ -46,6 +46,30 @@
       "revId": "df34b0bd795175967e60759ec977c77af542476f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed06801c_fffeac82",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2019-02-07T21:08:07Z",
+      "side": 0,
+      "message": "Done, through the newly pushed I6795d24d. As for stable-2.16, trying to merge stable-2.15 into it lends many conflicts already.",
+      "parentUuid": "c8b4686e_1d7c4deb",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 2
+      },
+      "revId": "df34b0bd795175967e60759ec977c77af542476f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
