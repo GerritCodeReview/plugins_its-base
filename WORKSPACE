@@ -23,4 +23,4 @@ load(
 gerrit_api()
 
 # Load snapshot Plugin API
-# gerrit_api_maven_local()
+#gerrit_api_maven_local()
