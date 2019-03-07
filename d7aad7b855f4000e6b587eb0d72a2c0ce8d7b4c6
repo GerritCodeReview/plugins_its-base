@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3603f9d_10a97a1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-03-07T22:20:46Z",
+      "side": 1,
+      "message": "Is then the suffix? Why not name it \"refSuffix\"?\n\nExample: refs/tags/v1.5\nrefPrefix: refs/tags/\nrefSuffix: v1.5",
+      "range": {
+        "startLine": 18,
+        "startChar": 39,
+        "endLine": 18,
+        "endChar": 47
+      },
+      "revId": "d7aad7b855f4000e6b587eb0d72a2c0ce8d7b4c6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
