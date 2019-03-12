@@ -46,6 +46,30 @@
       "revId": "d7aad7b855f4000e6b587eb0d72a2c0ce8d7b4c6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "63fb377a_8d2620c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-03-12T23:01:00Z",
+      "side": 1,
+      "message": "I believe there is a misunderstanding: I am fine with the prefix called \u0027refPrefix\u0027 but not with the suffix called \u0027refShort\u0027. Can we just rename the suffix from refShort to refSuffix?",
+      "parentUuid": "f6aeac55_27f058b0",
+      "range": {
+        "startLine": 18,
+        "startChar": 39,
+        "endLine": 18,
+        "endChar": 47
+      },
+      "revId": "d7aad7b855f4000e6b587eb0d72a2c0ce8d7b4c6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
