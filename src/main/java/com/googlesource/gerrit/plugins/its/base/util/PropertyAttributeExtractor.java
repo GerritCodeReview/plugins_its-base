@@ -61,7 +61,7 @@ class PropertyAttributeExtractor {
             "private",
             changeAttribute.isPrivate != null ? changeAttribute.isPrivate.toString() : "false")
         .put("wip", changeAttribute.wip != null ? changeAttribute.wip.toString() : "false")
-        .putAll(extractFrom(changeAttribute.owner, "owner"))
+        .putAll(extractFrom(changeAttribute.owner != null ? changeAttribute.owner : "", "owner"))
         .build();
   }
 
