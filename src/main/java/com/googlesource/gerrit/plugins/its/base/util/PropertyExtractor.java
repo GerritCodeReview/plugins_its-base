@@ -34,7 +34,6 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.events.WorkInProgressStateChangedEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -96,7 +95,9 @@ public class PropertyExtractor {
 
   private Map<String, Set<String>> extractFrom(
       ChangeMergedEvent event, Map<String, String> common) {
-    common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    if (event.submitter != null) {
+      common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
+    }
     return extractMapFrom(event, common);
   }
 
@@ -110,11 +111,12 @@ public class PropertyExtractor {
   private Map<String, Set<String>> extractFrom(RefUpdatedEvent event, Map<String, String> common) {
     common.putAll(propertyAttributeExtractor.extractFrom(event.submitter.get(), "submitter"));
     common.putAll(propertyAttributeExtractor.extractFrom(event.refUpdate.get()));
-    RefUpdateAttribute refUpdated = event.refUpdate.get();
-    if (ObjectId.zeroId().name().equals(refUpdated.newRev)) {
-      return Collections.emptyMap();
-    }
-    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), refUpdated.newRev);
+    RefUpdateAttribute refUpdateEvent = event.refUpdate.get();
+    String commitId =
+        (refUpdateEvent.newRev.equals(ObjectId.zeroId().name())
+            ? refUpdateEvent.oldRev
+            : refUpdateEvent.newRev);
+    return issueExtractor.getIssueIds(event.getProjectNameKey().get(), commitId);
   }
 
   private Map<String, Set<String>> extractFrom(
