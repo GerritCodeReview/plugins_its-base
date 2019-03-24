@@ -39,9 +39,15 @@ class PropertyAttributeExtractor {
   Map<String, String> extractFrom(AccountAttribute accountAttribute, String prefix) {
     Map<String, String> properties = new HashMap<>();
     if (accountAttribute != null) {
-      properties.put(prefix + "Email", accountAttribute.email);
-      properties.put(prefix + "Username", accountAttribute.username);
-      properties.put(prefix + "Name", accountAttribute.name);
+      if (accountAttribute.email != null) {
+        properties.put(prefix + "Email", accountAttribute.email);
+      }
+      if (accountAttribute.username != null) {
+        properties.put(prefix + "Username", accountAttribute.username);
+      }
+      if (accountAttribute.name != null) {
+        properties.put(prefix + "Name", accountAttribute.name);
+      }
     }
     return properties;
   }

@@ -117,6 +117,51 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     assertEquals("Properties do not match", expected, actual);
   }
 
+  public void testChangeAttributeNoOwnerEmail() {
+    AccountAttribute owner = new AccountAttribute();
+    owner.name = "testName";
+    owner.username = "testUsername";
+
+    ChangeAttribute changeAttribute = new ChangeAttribute();
+    changeAttribute.branch = "testBranch";
+    changeAttribute.topic = "testTopic";
+    changeAttribute.subject = "testSubject";
+    changeAttribute.id = "testId";
+    changeAttribute.number = 4711;
+    changeAttribute.url = "http://www.example.org/test";
+    changeAttribute.owner = owner;
+    changeAttribute.commitMessage = "Commit Message";
+    changeAttribute.status = Change.Status.NEW;
+
+    expect(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
+        .andReturn("http://www.example.org/test");
+
+    replayMocks();
+
+    PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
+
+    Map<String, String> actual = extractor.extractFrom(changeAttribute);
+
+    ImmutableMap<String, String> expected =
+        new ImmutableMap.Builder<String, String>()
+            .put("branch", "testBranch")
+            .put("topic", "testTopic")
+            .put("subject", "testSubject")
+            .put("escapedSubject", "testSubject")
+            .put("changeId", "testId")
+            .put("changeNumber", "4711")
+            .put("changeUrl", "http://www.example.org/test")
+            .put("status", Change.Status.NEW.name())
+            .put("ownerName", "testName")
+            .put("ownerUsername", "testUsername")
+            .put("commitMessage", "Commit Message")
+            .put("formatChangeUrl", "http://www.example.org/test")
+            .put("private", "false")
+            .put("wip", "false")
+            .build();
+    assertEquals("Properties do not match", expected, actual);
+  }
+
   public void testChangeAttributeFull() {
     AccountAttribute owner = new AccountAttribute();
     owner.email = "testEmail";
