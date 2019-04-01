@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38f3223e_71d63d44",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-04-01T20:49:32Z",
+      "side": 0,
+      "message": "Why are you removing this NPE fix in the merge?",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "a1dfb5685b517f47a2d150c294256ea691a4318b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85519ddf_f9b213a2",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddCommentTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-04-01T20:49:32Z",
+      "side": 0,
+      "message": "Why is this test removed?",
+      "revId": "a1dfb5685b517f47a2d150c294256ea691a4318b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
