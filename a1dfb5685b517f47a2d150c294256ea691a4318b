@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "21e30309_ade9f545",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-04-01T20:57:24Z",
+      "side": 0,
+      "message": "Ah, thanks for catching that! I thought i did this, but i did it in the wrong place, fixed now!",
+      "parentUuid": "38f3223e_71d63d44",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "a1dfb5685b517f47a2d150c294256ea691a4318b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85519ddf_f9b213a2",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddCommentTest.java",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "a1dfb5685b517f47a2d150c294256ea691a4318b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58f83175_9ed1c2b1",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/action/AddCommentTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-04-01T20:57:24Z",
+      "side": 0,
+      "message": "If you see https://gerrit-review.googlesource.com/c/plugins/its-base/+/218751/-1..7 i didn\u0027t remove the file :)",
+      "parentUuid": "85519ddf_f9b213a2",
+      "revId": "a1dfb5685b517f47a2d150c294256ea691a4318b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
