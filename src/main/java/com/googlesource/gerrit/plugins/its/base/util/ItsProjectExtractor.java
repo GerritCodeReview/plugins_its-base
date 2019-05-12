@@ -29,6 +29,6 @@ public class ItsProjectExtractor {
   }
 
   public Optional<String> getItsProject(String gerritProjectName) {
-    return itsConfig.getItsProjectName(new Project.NameKey(gerritProjectName));
+    return itsConfig.getItsProjectName(Project.nameKey(gerritProjectName));
   }
 }
