@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.its;
 
 import com.google.common.base.Strings;
-import com.google.gerrit.common.data.RefConfigSection;
+import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.pgm.init.api.AllProjectsConfig;
 import com.google.gerrit.pgm.init.api.AllProjectsNameOnInitProvider;
 import com.google.gerrit.pgm.init.api.ConsoleUI;
@@ -140,7 +140,7 @@ public class InitIts implements InitStep {
               branch,
               "Branches for which the issue tracker integration"
                   + " should be enabled (ref, ref pattern or regular expression)");
-      validRef = RefConfigSection.isValid(v);
+      validRef = AccessSection.isValidRefSectionName(v);
       if (validRef) {
         branch = v;
       } else {
