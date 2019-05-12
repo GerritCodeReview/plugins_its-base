@@ -1,6 +1,6 @@
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import com.google.gerrit.reviewdb.client.Project.NameKey;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class CommitMessageFetcher {
   }
 
   public String fetch(String projectName, String commitId) throws IOException {
-    try (Repository repo = repoManager.openRepository(new NameKey(projectName))) {
+    try (Repository repo = repoManager.openRepository(Project.nameKey(projectName))) {
       try (RevWalk revWalk = new RevWalk(repo)) {
         RevCommit commit = revWalk.parseCommit(ObjectId.fromString(commitId));
         return commit.getFullMessage();
