@@ -80,7 +80,7 @@ public class ActionExecutor {
   private void execute(
       Action action, String target, ActionRequest actionRequest, Map<String, String> properties)
       throws IOException {
-    ItsFacade its = itsFactory.getFacade(new Project.NameKey(properties.get("project")));
+    ItsFacade its = itsFactory.getFacade(Project.NameKey(properties.get("project")));
     action.execute(its, target, actionRequest, properties);
   }
 
