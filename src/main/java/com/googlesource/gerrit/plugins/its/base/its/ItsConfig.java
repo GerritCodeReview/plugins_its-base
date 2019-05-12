@@ -16,7 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.its;
 
 import static java.util.stream.Collectors.toList;
 
-import com.google.gerrit.common.data.RefConfigSection;
+import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
 import com.google.gerrit.reviewdb.client.Project;
@@ -134,7 +134,7 @@ public class ItsConfig {
       return true;
     }
     for (String refPattern : refPatterns) {
-      if (RefConfigSection.isValid(refPattern) && match(refName, refPattern)) {
+      if (AccessSection.isValidRefSectionName(refPattern) && match(refName, refPattern)) {
         return true;
       }
     }
