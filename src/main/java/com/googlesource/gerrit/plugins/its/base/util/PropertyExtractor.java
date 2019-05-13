@@ -70,7 +70,7 @@ public class PropertyExtractor {
    */
   private PatchSet.Id newPatchSetId(String changeId, String patchId) {
     try {
-      return new PatchSet.Id(new Change.Id(Integer.parseInt(changeId)), Integer.parseInt(patchId));
+      return PatchSet.id(Change.id(Integer.parseInt(changeId)), Integer.parseInt(patchId));
     } catch (NumberFormatException e) {
       return null;
     }

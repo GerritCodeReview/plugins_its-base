@@ -368,7 +368,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     issueMap.put("4711", Sets.newHashSet("body", "anywhere"));
     issueMap.put("42", Sets.newHashSet("footer", "anywhere"));
     if (withRevision) {
-      PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(176), 3);
+      PatchSet.Id patchSetId = PatchSet.id(Change.id(176), 3);
       expect(issueExtractor.getIssueIds("testProject", "testRevision", patchSetId))
           .andReturn(issueMap);
     } else {
@@ -438,7 +438,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     @Override
     public NameKey getProjectNameKey() {
-      return new Project.NameKey("testProject");
+      return Project.nameKey("testProject");
     }
   }
 }

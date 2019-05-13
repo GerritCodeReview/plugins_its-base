@@ -47,7 +47,7 @@ public class IssueExtractor {
       try {
         ChangeInfo info =
             gApi.changes()
-                .id(patchSetId.getParentKey().get())
+                .id(patchSetId.changeId().get())
                 .get(EnumSet.of(ListChangesOption.ALL_REVISIONS));
         for (Map.Entry<String, RevisionInfo> e : info.revisions.entrySet()) {
           if (e.getValue()._number == patchSetId.get()) {
@@ -235,8 +235,7 @@ public class IssueExtractor {
     if (patchSetId != null) {
       Map<String, Set<String>> previous = Maps.newHashMap();
       if (patchSetId.get() != 1) {
-        PatchSet.Id previousPatchSetId =
-            new PatchSet.Id(patchSetId.getParentKey(), patchSetId.get() - 1);
+        PatchSet.Id previousPatchSetId = PatchSet.id(patchSetId.changeId(), patchSetId.get() - 1);
         String previousPatchSet = db.getRevision(previousPatchSetId);
         if (previousPatchSet != null) {
           previous = getIssueIds(projectName, previousPatchSet);

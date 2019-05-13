@@ -35,7 +35,7 @@ public class ItsProjectExtractorTest extends MockingTestCase {
   public void test() {
     ItsProjectExtractor projectExtractor = injector.getInstance(ItsProjectExtractor.class);
 
-    expect(itsConfig.getItsProjectName(new Project.NameKey(PROJECT)))
+    expect(itsConfig.getItsProjectName(Project.nameKey(PROJECT)))
         .andReturn(Optional.of(ITS_PROJECT))
         .once();
 
