@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0304e3e5_07d3b580",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-05-24T05:50:49Z",
+      "side": 0,
+      "message": "Would it make sense to extract this switch to the snapshot plugin API in its own change, or at least mention it in the commit message?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "443fd3fd85f0e434dec72504d44835b0b2118d34",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
