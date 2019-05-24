@@ -12,7 +12,6 @@ import java.util.Optional;
 
 public class CreateVersionFromPropertyParametersExtractorTest extends MockingTestCase {
 
-  private static final String ITS_PROJECT = "test-project";
   private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
 
