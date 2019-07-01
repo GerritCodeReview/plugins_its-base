@@ -4,9 +4,11 @@ import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import java.io.IOException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,10 @@ public class CommitMessageFetcher {
   public String fetch(String projectName, String commitId) throws IOException {
     try (Repository repo = repoManager.openRepository(new NameKey(projectName))) {
       try (RevWalk revWalk = new RevWalk(repo)) {
+        RevObject obj = revWalk.peel(revWalk.parseAny(ObjectId.fromString(commitId)));
+        if (obj != null && Constants.typeString(obj.getType()) == Constants.TYPE_BLOB) {
+          return "";
+        }
         RevCommit commit = revWalk.parseCommit(ObjectId.fromString(commitId));
         return commit.getFullMessage();
       }
