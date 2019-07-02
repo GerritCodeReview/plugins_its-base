@@ -20,17 +20,14 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
 import com.googlesource.gerrit.plugins.its.base.workflow.action.AddVelocityComment.VelocityAdapterItsFacade;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -49,7 +46,7 @@ import org.eclipse.jgit.util.FileUtils;
 public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private Injector injector;
 
-  private Path sitePath;
+  private Path itsPath;
   private ItsFacade its;
   private RuntimeInstance velocityRuntime;
 
@@ -374,18 +371,10 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   }
 
   private void injectTestTemplate(String template) throws IOException {
-    File templateParentFile =
-        new File(
-            sitePath.toFile(), "etc" + File.separatorChar + "its" + File.separator + "templates");
-    assertTrue(
-        "Failed to create parent (" + templateParentFile + ") for " + "rule base",
-        templateParentFile.mkdirs());
-    File templateFile = new File(templateParentFile, "test-template.vm");
-
-    try (FileWriter unbufferedWriter = new FileWriter(templateFile);
-        BufferedWriter writer = new BufferedWriter(unbufferedWriter)) {
-      writer.write(template);
-    }
+    Path templatesFolder = itsPath.resolve("templates");
+    Files.createDirectories(templatesFolder);
+    Path templateFile = templatesFolder.resolve("test-template.vm");
+    Files.write(templateFile, template.getBytes());
   }
 
   @Override
@@ -398,8 +387,8 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   @Override
   public void tearDown() throws Exception {
     if (cleanupSitePath) {
-      if (Files.exists(sitePath)) {
-        FileUtils.delete(sitePath.toFile(), FileUtils.RECURSIVE);
+      if (Files.exists(itsPath)) {
+        FileUtils.delete(itsPath.toFile(), FileUtils.RECURSIVE);
       }
     }
     super.tearDown();
@@ -412,11 +401,11 @@ public class AddVelocityCommentTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      sitePath = randomTargetPath();
-      assertFalse("sitePath already (" + sitePath + ") already exists", Files.exists(sitePath));
+      itsPath = randomTargetPath();
+      assertFalse("sitePath already (" + itsPath + ") already exists", Files.exists(itsPath));
       cleanupSitePath = true;
 
-      bind(Path.class).annotatedWith(SitePath.class).toInstance(sitePath);
+      bind(Path.class).annotatedWith(ItsPath.class).toInstance(itsPath);
 
       its = createMock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
