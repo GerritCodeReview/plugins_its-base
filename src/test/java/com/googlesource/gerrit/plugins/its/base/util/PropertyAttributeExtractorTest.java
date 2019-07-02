@@ -63,6 +63,9 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     ImmutableMap<String, String> expected =
         new ImmutableMap.Builder<String, String>()
+            .put("prefix-email", "testEmail")
+            .put("prefix-name", "testName")
+            .put("prefix-username", "testUsername")
             .put("prefixEmail", "testEmail")
             .put("prefixName", "testName")
             .put("prefixUsername", "testUsername")
@@ -102,6 +105,13 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
             .put("topic", "testTopic")
             .put("subject", "testSubject")
             .put("escapedSubject", "testSubject")
+            .put("change-id", "testId")
+            .put("change-number", "4711")
+            .put("change-url", "http://www.example.org/test")
+            .put("commit-message", "Commit Message")
+            .put("owner-name", "testName")
+            .put("owner-email", "testEmail")
+            .put("owner-username", "testUsername")
             .put("changeId", "testId")
             .put("changeNumber", "4711")
             .put("changeUrl", "http://www.example.org/test")
@@ -147,6 +157,13 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
             .put("topic", "testTopic")
             .put("subject", "testSubject")
             .put("escapedSubject", "testSubject")
+            .put("change-id", "testId")
+            .put("change-number", "4711")
+            .put("change-url", "http://www.example.org/test")
+            .put("owner-name", "testName")
+            .put("owner-email", "testEmail")
+            .put("owner-username", "testUsername")
+            .put("commit-message", "Commit Message")
             .put("changeId", "testId")
             .put("changeNumber", "4711")
             .put("changeUrl", "http://www.example.org/test")
@@ -191,6 +208,14 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     ImmutableMap<String, String> expected =
         new ImmutableMap.Builder<String, String>()
             .put("revision", "1234567891123456789212345678931234567894")
+            .put("patch-set-number", "42")
+            .put("created-on", "1234567890")
+            .put("uploader-email", "testEmail1")
+            .put("uploader-name", "testName1")
+            .put("uploader-username", "testUsername1")
+            .put("author-email", "testEmail2")
+            .put("author-name", "testName2")
+            .put("author-username", "testUsername2")
             .put("patchSetNumber", "42")
             .put("ref", "testRef")
             .put("createdOn", "1234567890")
@@ -222,6 +247,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     ImmutableMap<String, String> expected =
         new ImmutableMap.Builder<String, String>()
             .put("revision", "1234567891123456789212345678931234567894")
+            .put("revision-old", "9876543211987654321298765432139876543214")
             .put("revisionOld", "9876543211987654321298765432139876543214")
             .put("ref", "testRef")
             .build();
@@ -239,7 +265,11 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     Map<String, String> actual = extractor.extractFrom(approvalAttribute);
 
-    Map<String, String> expected = ImmutableMap.of("approvalTestType", "TestValue");
+    Map<String, String> expected =
+        new ImmutableMap.Builder<String, String>()
+            .put("approvalTestType", "TestValue")
+            .put("approval-TestType", "TestValue")
+            .build();
     assertEquals("Properties do not match", expected, actual);
   }
 
@@ -254,7 +284,11 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
 
     Map<String, String> actual = extractor.extractFrom(approvalAttribute);
 
-    Map<String, String> expected = ImmutableMap.of("approvalTestType", "TestValue");
+    Map<String, String> expected =
+        new ImmutableMap.Builder<String, String>()
+            .put("approvalTestType", "TestValue")
+            .put("approval-Test-Type", "TestValue")
+            .build();
     assertEquals("Properties do not match", expected, actual);
   }
 
