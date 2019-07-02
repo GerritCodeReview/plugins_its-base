@@ -143,6 +143,30 @@
       "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb0c8a59_ba7a12ef",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2019-07-02T07:14:06Z",
+      "side": 1,
+      "message": "Also I was looking at master, not sure if these methods exist in 2.15.",
+      "parentUuid": "f65ad789_22012f6d",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
