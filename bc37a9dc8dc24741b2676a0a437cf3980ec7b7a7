@@ -22,6 +22,30 @@
       "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb2ae39_75caeba4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-07-02T06:46:31Z",
+      "side": 1,
+      "message": "Here we want to exclude all ref-updates that are NOT pointing to a Git commit. The NoteDb ref-updates are pointing to a commit, right?\n\nHowever, it\u0027s true though that I don\u0027t see the point of triggering an Its-* action on an internal NoteDb update.\n\nSo I presume it should be fine just to ignore the NoteDb and internal ref updates altogether.",
+      "parentUuid": "093037e0_901d3a21",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
