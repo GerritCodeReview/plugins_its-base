@@ -38,6 +38,9 @@ class PropertyAttributeExtractor {
   Map<String, String> extractFrom(AccountAttribute accountAttribute, String prefix) {
     Map<String, String> properties = new HashMap<>();
     if (accountAttribute != null) {
+      properties.put(prefix + "-email", accountAttribute.email);
+      properties.put(prefix + "-username", accountAttribute.username);
+      properties.put(prefix + "-name", accountAttribute.name);
       properties.put(prefix + "Email", accountAttribute.email);
       properties.put(prefix + "Username", accountAttribute.username);
       properties.put(prefix + "Name", accountAttribute.name);
@@ -51,6 +54,10 @@ class PropertyAttributeExtractor {
         .put("topic", changeAttribute.topic != null ? changeAttribute.topic : "")
         .put("subject", changeAttribute.subject)
         .put("escapedSubject", StringEscapeUtils.escapeJava(changeAttribute.subject))
+        .put("commit-message", changeAttribute.commitMessage)
+        .put("change-id", changeAttribute.id)
+        .put("change-number", String.valueOf(changeAttribute.number))
+        .put("change-url", changeAttribute.url)
         .put("commitMessage", changeAttribute.commitMessage)
         .put("changeId", changeAttribute.id)
         .put("changeNumber", String.valueOf(changeAttribute.number))
@@ -64,6 +71,8 @@ class PropertyAttributeExtractor {
   Map<String, String> extractFrom(PatchSetAttribute patchSetAttribute) {
     return ImmutableMap.<String, String>builder()
         .put("revision", patchSetAttribute.revision)
+        .put("patch-set-number", String.valueOf(patchSetAttribute.number))
+        .put("created-on", patchSetAttribute.createdOn.toString())
         .put("patchSetNumber", String.valueOf(patchSetAttribute.number))
         .put("ref", patchSetAttribute.ref)
         .put("createdOn", patchSetAttribute.createdOn.toString())
@@ -78,6 +87,7 @@ class PropertyAttributeExtractor {
   Map<String, String> extractFrom(RefUpdateAttribute refUpdateAttribute) {
     return ImmutableMap.<String, String>builder()
         .put("revision", refUpdateAttribute.newRev)
+        .put("revision-old", refUpdateAttribute.oldRev)
         .put("revisionOld", refUpdateAttribute.oldRev)
         .put("ref", refUpdateAttribute.refName)
         .build();
@@ -85,6 +95,7 @@ class PropertyAttributeExtractor {
 
   public Map<String, String> extractFrom(ApprovalAttribute approvalAttribute) {
     return ImmutableMap.<String, String>builder()
+        .put("approval-" + approvalAttribute.type, approvalAttribute.value)
         .put("approval" + approvalAttribute.type.replace("-", ""), approvalAttribute.value)
         .build();
   }
