@@ -167,6 +167,30 @@
       "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa2f8dd_00536373",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2019-07-02T08:06:58Z",
+      "side": 1,
+      "message": "It\u0027s not on stable-2.15.  I also suggested this on the previous PS.",
+      "parentUuid": "cb0c8a59_ba7a12ef",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
