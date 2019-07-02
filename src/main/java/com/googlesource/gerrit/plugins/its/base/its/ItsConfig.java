@@ -21,6 +21,7 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -102,6 +103,10 @@ public class ItsConfig {
   }
 
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
+    if (isInternalRef(refName)) {
+      return false;
+    }
+
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
       log.error(
@@ -121,6 +126,10 @@ public class ItsConfig {
                     .getFromProjectConfigWithInheritance(projectState, pluginName)
                     .getString("enabled", "false"))
         && isEnabledForBranch(projectState, refName);
+  }
+
+  private boolean isInternalRef(String refName) {
+    return RefNames.isNoteDbMetaRef(refName) || refName.startsWith(RefNames.REFS_SEQUENCES);
   }
 
   private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {

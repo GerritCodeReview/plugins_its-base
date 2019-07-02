@@ -20,6 +20,8 @@ import com.google.common.base.Suppliers;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.Project.NameKey;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -384,6 +386,48 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
+  }
+
+  public void testIsDisabledForStarredChangesRefs() {
+    RefUpdatedEvent event =
+        new RefUpdatedEvent() {
+          @Override
+          public String getRefName() {
+            return RefNames.REFS_STARRED_CHANGES + "123";
+          }
+
+          @Override
+          public NameKey getProjectNameKey() {
+            return new Project.NameKey("foo");
+          }
+        };
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled(event));
+  }
+
+  public void testIsDisabledForSequencesRefs() {
+    RefUpdatedEvent event =
+        new RefUpdatedEvent() {
+          @Override
+          public String getRefName() {
+            return RefNames.REFS_SEQUENCES + "changes";
+          }
+
+          @Override
+          public NameKey getProjectNameKey() {
+            return new Project.NameKey("foo");
+          }
+        };
+
+    ItsConfig itsConfig = createItsConfig();
+
+    replayMocks();
+
+    assertFalse(itsConfig.isEnabled(event));
   }
 
   public void BROKEN_testIsEnabledEventDisabled() {
