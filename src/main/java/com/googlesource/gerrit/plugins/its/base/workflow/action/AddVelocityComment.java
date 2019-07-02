@@ -15,12 +15,11 @@
 package com.googlesource.gerrit.plugins.its.base.workflow.action;
 
 import com.google.common.base.Strings;
-import com.google.gerrit.server.config.SitePath;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.workflow.ActionRequest;
 import com.googlesource.gerrit.plugins.its.base.workflow.Property;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -45,19 +44,14 @@ public class AddVelocityComment implements Action {
     AddVelocityComment create();
   }
 
-  /** Directory (relative to site) to search templates in */
-  private static final String ITS_TEMPLATE_DIR =
-      "etc" + File.separator + "its" + File.separator + "templates";
-
   private final ItsFacade its;
-  private final Path sitePath;
+  private final Path templateDir;
   private final RuntimeInstance velocityRuntime;
 
   @Inject
-  public AddVelocityComment(
-      RuntimeInstance velocityRuntime, @SitePath Path sitePath, ItsFacade its) {
+  public AddVelocityComment(RuntimeInstance velocityRuntime, @ItsPath Path itsPath, ItsFacade its) {
     this.velocityRuntime = velocityRuntime;
-    this.sitePath = sitePath;
+    this.templateDir = itsPath.resolve("templates");
     this.its = its;
   }
 
@@ -98,7 +92,6 @@ public class AddVelocityComment implements Action {
       if (templateName.isEmpty()) {
         log.error("No template name given in {}", actionRequest);
       } else {
-        Path templateDir = sitePath.resolve(ITS_TEMPLATE_DIR);
         Path templatePath = templateDir.resolve(templateName + ".vm");
         if (Files.isReadable(templatePath)) {
           template = new String(Files.readAllBytes(templatePath));
