@@ -21,6 +21,7 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -102,6 +103,10 @@ public class ItsConfig {
   }
 
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
+    if (isInternalRef(refName)) {
+      return false;
+    }
+
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
       log.error(
@@ -121,6 +126,11 @@ public class ItsConfig {
                     .getFromProjectConfigWithInheritance(projectState, pluginName)
                     .getString("enabled", "false"))
         && isEnabledForBranch(projectState, refName);
+  }
+
+  private boolean isInternalRef(String refName) {
+    return refName.startsWith(RefNames.REFS_STARRED_CHANGES)
+        || refName.startsWith(RefNames.REFS_SEQUENCES);
   }
 
   private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {
@@ -181,8 +191,7 @@ public class ItsConfig {
    */
   public Pattern getIssuePattern() {
     Optional<String> match =
-        getCommentLinkInfo(getCommentLinkName())
-            .stream()
+        getCommentLinkInfo(getCommentLinkName()).stream()
             .filter(input -> input.match != null && !input.match.trim().isEmpty())
             .map(input -> input.match)
             .reduce((a, b) -> b);
@@ -257,8 +266,7 @@ public class ItsConfig {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
-      return commentlinks
-          .stream()
+      return commentlinks.stream()
           .filter(input -> input.name.equals(commentlinkName))
           .collect(toList());
     }
