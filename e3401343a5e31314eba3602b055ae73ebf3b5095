@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "817fbfd0_401d35ab",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2019-07-02T00:30:44Z",
+      "side": 1,
+      "message": "Split to change 229772",
+      "parentUuid": "aeb4c1a7_89122836",
+      "revId": "e3401343a5e31314eba3602b055ae73ebf3b5095",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "887913ca_69895c3c",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 1
