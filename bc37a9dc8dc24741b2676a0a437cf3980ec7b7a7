@@ -95,6 +95,30 @@
       "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93bd23cd_56cf8c03",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-07-02T06:57:58Z",
+      "side": 1,
+      "message": "@Edwin you are amongst the top committers of the ITS-Jira plugin from the times you were at SAP",
+      "parentUuid": "00728207_f6c2f350",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
