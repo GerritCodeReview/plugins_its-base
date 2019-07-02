@@ -46,6 +46,30 @@
       "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d022bdf_7d147c33",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1003935
+      },
+      "writtenOn": "2019-07-02T06:55:49Z",
+      "side": 1,
+      "message": "\u003e The NoteDb ref-updates are pointing to a commit, right?\n\nYes, I think most of them point to commits.\n\n\u003e However, it\u0027s true though that I don\u0027t see the point of triggering an Its-* action on an\n\u003e internal NoteDb update.\n\u003e\n\u003e So I presume it should be fine just to ignore the NoteDb and internal ref updates altogether.\n\nThis is what I thought, but I have no stakes in this plugin. So my comment was just a suggestion that you are free to ignore :)",
+      "parentUuid": "eeb2ae39_75caeba4",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "bc37a9dc8dc24741b2676a0a437cf3980ec7b7a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
