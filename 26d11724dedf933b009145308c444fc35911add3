@@ -537,6 +537,99 @@
     },
     {
       "key": {
+        "uuid": "e6b167f6_19c1a884",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-09-10T12:53:53Z",
+      "side": 1,
+      "message": "So, I did the 100k tags test and found out that the getTags() uses 10Mbytes and is very fast. See below my suggestions on how to make this code lighter.",
+      "parentUuid": "7ee6a391_5db5d40a",
+      "range": {
+        "startLine": 53,
+        "startChar": 23,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd8a5025_3a2313be",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-09-10T12:53:53Z",
+      "side": 1,
+      "message": "Why are you expecting more than one?",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 20
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4743c8c0_5434dc71",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-09-10T12:53:53Z",
+      "side": 1,
+      "message": "Why don\u0027t you just open the currentRef?\n\n  repo.getRefDatabase.exactRef(currentRef)",
+      "range": {
+        "startLine": 59,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 69
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29eafdbf_981c1b79",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-09-10T12:53:53Z",
+      "side": 1,
+      "message": "Do not collect yet.",
+      "range": {
+        "startLine": 69,
+        "startChar": 14,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30c12b5c_2a5f0afb",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/FireEventOnCommitsTest.java",
         "patchSetId": 5
