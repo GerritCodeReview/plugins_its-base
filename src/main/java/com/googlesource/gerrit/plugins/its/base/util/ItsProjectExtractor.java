@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import java.util.Optional;
