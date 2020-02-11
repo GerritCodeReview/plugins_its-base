@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f76dbf6_b6ffa2e5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-02-11T23:13:14Z",
+      "side": 0,
+      "message": "Don\u0027t we still need this null check aswell?",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "0d8823641a51a54db49caac1b46b1bce03e6ea3c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
