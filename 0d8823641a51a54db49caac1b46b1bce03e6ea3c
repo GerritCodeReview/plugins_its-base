@@ -46,6 +46,30 @@
       "revId": "0d8823641a51a54db49caac1b46b1bce03e6ea3c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ee359ea_5f8c851f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-02-12T00:59:01Z",
+      "side": 0,
+      "message": "Ack.  If it\u0027s not needed, there\u0027s no need to put it back.",
+      "parentUuid": "ddeb98b3_4ba02ef4",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "0d8823641a51a54db49caac1b46b1bce03e6ea3c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
