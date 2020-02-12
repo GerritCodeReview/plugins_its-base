@@ -70,6 +70,30 @@
       "revId": "0d8823641a51a54db49caac1b46b1bce03e6ea3c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8b5e3bf_b37642d5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/PropertyExtractor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1095120
+      },
+      "writtenOn": "2020-02-12T18:14:12Z",
+      "side": 0,
+      "message": "Here\u0027s the relevant code from com.google.gerrit.server.events.StreamEventsApiListener:\n\nLine 387:\n\n    public void onCommentAdded(CommentAddedListener.Event ev) {\n      // snip\n      event.approvals \u003d approvalsAttributeSupplier(change, ev.getApprovals(), ev.getOldApprovals());\n      // snip\n    }\n\nLine 211:\n\n    private Supplier\u003cApprovalAttribute[]\u003e approvalsAttributeSupplier(\n        final Change change,\n        Map\u003cString, ApprovalInfo\u003e newApprovals,\n        final Map\u003cString, ApprovalInfo\u003e oldApprovals) {\n      final Map\u003cString, Short\u003e approvals \u003d convertApprovalsMap(newApprovals);\n      return Suppliers.memoize(\n          () -\u003e {\n            LabelTypes labelTypes \u003d projectCache.get(change.getProject()).getLabelTypes();\n            if (approvals.size() \u003e 0) {\n              ApprovalAttribute[] r \u003d new ApprovalAttribute[approvals.size()];\n              int i \u003d 0;\n              for (Map.Entry\u003cString, Short\u003e approval : approvals.entrySet()) {\n                r[i++] \u003d\n                    getApprovalAttribute(labelTypes, approval, convertApprovalsMap(oldApprovals));\n              }\n              return r;\n            }\n            return null;\n          });\n    }\n\nSo approvalsAttributeSupplier always returns a Supplier and never null. The Supplier returned _can_ return null, which is what this change guards against.",
+      "parentUuid": "6ee359ea_5f8c851f",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "0d8823641a51a54db49caac1b46b1bce03e6ea3c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
