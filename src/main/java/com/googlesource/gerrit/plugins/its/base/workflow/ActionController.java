@@ -57,6 +57,7 @@ public class ActionController implements EventListener {
   public void onEvent(Event event) {
     if (event instanceof RefEvent) {
       RefEvent refEvent = (RefEvent) event;
+      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
       if (itsConfig.isEnabled(refEvent)) {
         handleEvent(refEvent);
       }
