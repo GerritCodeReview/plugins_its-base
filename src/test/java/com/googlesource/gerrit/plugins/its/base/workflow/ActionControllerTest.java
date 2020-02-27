@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
@@ -34,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
+  private static Project.NameKey testProjectName = new Project.NameKey("test-project");
   private Injector injector;
 
   private PropertyExtractor propertyExtractor;
@@ -50,6 +52,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(propertyExtractor.extractFrom(event))
         .andReturn(new RefEventProperties(Collections.emptyMap(), propertySets))
         .anyTimes();
+    expect(event.getProjectNameKey()).andReturn(testProjectName).once();
 
     replayMocks();
 
@@ -68,6 +71,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(propertyExtractor.extractFrom(event))
         .andReturn(new RefEventProperties(properties, propertySets))
         .anyTimes();
+    expect(event.getProjectNameKey()).andReturn(testProjectName).once();
 
     // When no issues are found in the commit message, the list of actions is empty
     // as there are no matchs with an empty map of properties.
@@ -97,6 +101,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(propertyExtractor.extractFrom(event))
         .andReturn(new RefEventProperties(projectProperties, propertySets))
         .anyTimes();
+    expect(event.getProjectNameKey()).andReturn(testProjectName).once();
 
     ActionRequest issueActionRequest1 = createMock(ActionRequest.class);
     Collection<ActionRequest> issueActionRequests = ImmutableList.of(issueActionRequest1);
@@ -127,6 +132,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     expect(propertyExtractor.extractFrom(event))
         .andReturn(new RefEventProperties(Collections.emptyMap(), propertySets))
         .anyTimes();
+    expect(event.getProjectNameKey()).andReturn(testProjectName).once();
 
     ActionRequest actionRequest1 = createMock(ActionRequest.class);
     Collection<ActionRequest> actionRequests1 = ImmutableList.of(actionRequest1);
