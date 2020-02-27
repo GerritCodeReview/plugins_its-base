@@ -53,6 +53,7 @@ public class ItsValidateComment implements CommitValidationListener {
     ItsAssociationPolicy associationPolicy = itsConfig.getItsAssociationPolicy();
 
     switch (associationPolicy) {
+      case BEST_EFFORT:
       case MANDATORY:
       case SUGGESTED:
         String commitMessage = commit.getFullMessage();
@@ -69,8 +70,13 @@ public class ItsValidateComment implements CommitValidationListener {
             } catch (IOException e) {
               synopsis = "Failed to check whether or not issue " + issueId + " exists";
               log.warn(synopsis, e);
-              details = e.toString();
-              ret.add(commitValidationFailure(synopsis, details));
+              if (associationPolicy == ItsAssociationPolicy.BEST_EFFORT) {
+                log.warn("BEST EFFORT mode: overruling failure");
+                exists = true;
+              } else {
+                details = e.toString();
+                ret.add(commitValidationFailure(synopsis, details));
+              }
             }
             if (!exists) {
               nonExistingIssueIds.add(issueId);
@@ -131,7 +137,8 @@ public class ItsValidateComment implements CommitValidationListener {
   private CommitValidationMessage commitValidationFailure(String synopsis, String details)
       throws CommitValidationException {
     CommitValidationMessage ret = new CommitValidationMessage(synopsis + "\n" + details, false);
-    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
+    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY
+        || itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.BEST_EFFORT) {
       throw new CommitValidationException(synopsis, Collections.singletonList(ret));
     }
     return ret;
