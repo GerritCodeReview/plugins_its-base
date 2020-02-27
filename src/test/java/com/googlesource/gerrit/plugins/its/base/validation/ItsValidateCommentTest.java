@@ -489,6 +489,203 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertLogMessageContains("4711");
   }
 
+  public void testBestEffortMatchingSingleExisting() throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
+    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEmptyList(ret);
+  }
+
+  public void testBestEffortMatchingSingleNonExisting() throws IOException {
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
+    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
+  }
+
+  public void testBestEffortNonMatching() {
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+    expect(itsConfig.getDummyIssuePattern()).andReturn(Optional.empty()).atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("TestMessage")).andReturn(new String[] {}).atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Missing issue'",
+          e.getMessage().contains("Missing issue"));
+    }
+  }
+
+  public void testBestEffortMatchingMultiple() throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
+        .andReturn(new String[] {"4711", "42"})
+        .atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
+    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEmptyList(ret);
+  }
+
+  public void testBestEffortSingleIOException() throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("BOOM!")).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+    assertLogMessageContains("Failed to check whether or not issue 4711 exists");
+    assertLogMessageContains("BEST EFFORT mode: overruling failure");
+    assertEmptyList(ret);
+  }
+
+  public void testBestEffortMultipleExistingSomeIOException()
+      throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+
+    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
+        .andReturn(new String[] {"4711", "42"})
+        .atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("BOOM!")).atLeastOnce();
+    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+    assertLogMessageContains("Failed to check whether or not issue 4711 exists");
+    assertLogMessageContains("BEST EFFORT mode: overruling failure");
+    assertEmptyList(ret);
+  }
+
+  public void testBestEffortNonExistingMultipleSomeIOException() throws IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.BEST_EFFORT)
+        .atLeastOnce();
+
+    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
+        .andReturn(new String[] {"4711", "42"})
+        .atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("BOOM!")).atLeastOnce();
+    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertLogMessageContains("Failed to check whether or not issue 4711 exists");
+      assertLogMessageContains("BEST EFFORT mode: overruling failure");
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
+  }
+
   public void assertEmptyList(List<CommitValidationMessage> list) {
     if (!list.isEmpty()) {
       StringBuffer sb = new StringBuffer();

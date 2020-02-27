@@ -53,6 +53,11 @@ OPTIONAL
 :	 Bug-ids are liked when found in the git commit message, no warning is
 	 displayed otherwise.
 
+BEST_EFFORT
+:	 Same as MANDATORY, but falls back to SUGGESTED behavior when connectivity
+	 exception occurs. This allows issue-ids to be enforced as long as ITS is available
+	 but do not rejects pushes in case of ITS outages, making development more resilient.
+
 Example:
 
 ```
