@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5777f62b_96f54dd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "Wrap long line.",
+      "range": {
+        "startLine": 9,
+        "startChar": 72,
+        "endLine": 9,
+        "endChar": 80
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd039af_1d535952",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsAssociationPolicy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "This is not good for a stable release, the ItsAssociationPolicy is part of the ITS-*\ncontract and it should stay stable.\n\nFor master version, it can be extended.",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a7bee96_edef8173",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "This behave exactly as MANDATORY or SUGGESTED",
+      "range": {
+        "startLine": 56,
+        "startChar": 6,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0851874b_84258912",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "This concept seems orthogonal to the association policy.\nIt should be introduced differently.",
+      "range": {
+        "startLine": 73,
+        "startChar": 18,
+        "endLine": 73,
+        "endChar": 71
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ffb5f00_b648a95c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "It should also include the exception, otherwise the cause of the failure is lost.",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 64
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "888166b4_9aa306d3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "The client should know that the ITS-Jira association could not be checked.",
+      "range": {
+        "startLine": 75,
+        "startChar": 16,
+        "endLine": 75,
+        "endChar": 29
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c687842d_4579ce20",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "Again, this means that BEST_EFFORT is just behaving like MANDATORY.",
+      "range": {
+        "startLine": 141,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 82
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "482fe2c2_498fb423",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-02T23:10:46Z",
+      "side": 1,
+      "message": "Don\u0027t introduce new configurations in a stable release.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 0
+      },
+      "revId": "57c5ac0eecabc9ed8f3bfd04c3d3fa3efa2f8164",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
