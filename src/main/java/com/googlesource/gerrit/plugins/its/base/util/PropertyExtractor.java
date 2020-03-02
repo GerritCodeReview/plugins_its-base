@@ -14,9 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
+import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.PatchSet;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.reviewdb.client.Change;
-import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
@@ -70,7 +70,7 @@ public class PropertyExtractor {
    */
   private PatchSet.Id newPatchSetId(String changeId, String patchId) {
     try {
-      return new PatchSet.Id(new Change.Id(Integer.parseInt(changeId)), Integer.parseInt(patchId));
+      return PatchSet.id(Change.id(Integer.parseInt(changeId)), Integer.parseInt(patchId));
     } catch (NumberFormatException e) {
       return null;
     }

@@ -21,8 +21,8 @@ import static org.easymock.EasyMock.isA;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectLevelConfig;
 import com.google.gerrit.server.project.ProjectState;
@@ -90,7 +90,7 @@ public class ItsRulesProjectCacheTest extends LoggingMockingTestCase {
     ProjectLevelConfig projectLevelConfigPlugin = createMock(ProjectLevelConfig.class);
     expect(projectLevelConfigPlugin.get()).andReturn(new Config());
     expect(projectState.getConfig(RuleBaseKind.ITS.fileName)).andReturn(projectLevelConfigPlugin);
-    expect(projectCache.checkedGet(new Project.NameKey(TEST_PROJECT))).andReturn(projectState);
+    expect(projectCache.checkedGet(Project.nameKey(TEST_PROJECT))).andReturn(projectState);
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of(rule1))
         .andReturn(ImmutableList.of());
@@ -134,7 +134,7 @@ public class ItsRulesProjectCacheTest extends LoggingMockingTestCase {
     expect(parentProjectState.getConfig(RuleBaseKind.ITS.fileName))
         .andReturn(parentProjectConfigPlugin);
     expect(projectState.parents()).andReturn(FluentIterable.of(parentProjectState));
-    expect(projectCache.checkedGet(new Project.NameKey(TEST_PROJECT))).andReturn(projectState);
+    expect(projectCache.checkedGet(Project.nameKey(TEST_PROJECT))).andReturn(projectState);
 
     expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
         .andReturn(ImmutableList.of())

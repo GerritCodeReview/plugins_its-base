@@ -1,5 +1,6 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import static com.google.common.truth.Truth8.assertThat;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -11,7 +12,6 @@ import java.util.Optional;
 
 public class CreateVersionFromPropertyParametersExtractorTest extends MockingTestCase {
 
-  private static final String ITS_PROJECT = "test-project";
   private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
 
@@ -75,9 +75,7 @@ public class CreateVersionFromPropertyParametersExtractorTest extends MockingTes
 
     Optional<CreateVersionFromPropertyParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.singletonMap(PROPERTY_ID, PROPERTY_VALUE));
-    if (!extractedParameters.isPresent()) {
-      fail();
-    }
+    assertThat(extractedParameters).isPresent();
     assertEquals(PROPERTY_VALUE, extractedParameters.get().getPropertyValue());
   }
 }

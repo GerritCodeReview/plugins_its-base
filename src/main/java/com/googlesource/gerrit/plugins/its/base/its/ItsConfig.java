@@ -17,10 +17,10 @@ package com.googlesource.gerrit.plugins.its.base.its;
 import static java.util.stream.Collectors.toList;
 
 import com.google.gerrit.common.data.AccessSection;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.entities.Project.NameKey;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
-import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;

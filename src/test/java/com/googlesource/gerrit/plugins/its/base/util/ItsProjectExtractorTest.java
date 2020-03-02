@@ -16,8 +16,8 @@ package com.googlesource.gerrit.plugins.its.base.util;
 
 import static org.easymock.EasyMock.expect;
 
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -35,7 +35,7 @@ public class ItsProjectExtractorTest extends MockingTestCase {
   public void test() {
     ItsProjectExtractor projectExtractor = injector.getInstance(ItsProjectExtractor.class);
 
-    expect(itsConfig.getItsProjectName(new Project.NameKey(PROJECT)))
+    expect(itsConfig.getItsProjectName(Project.nameKey(PROJECT)))
         .andReturn(Optional.of(ITS_PROJECT))
         .once();
 

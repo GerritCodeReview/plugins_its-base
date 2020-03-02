@@ -18,10 +18,10 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.extensions.registration.DynamicMap;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
@@ -60,8 +60,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
@@ -77,8 +76,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn("unparsed");
     expect(actionRequest.getUnparsed()).andReturn("unparsed action 1");
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
@@ -101,7 +99,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest2 = createMock(ActionRequest.class);
     expect(actionRequest2.getName()).andReturn("unparsed");
     expect(actionRequest2.getUnparsed()).andReturn("unparsed action 2");
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project"))))
         .andReturn(its)
         .anyTimes();
 
@@ -128,7 +126,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest3 = createMock(ActionRequest.class);
     expect(actionRequest3.getName()).andReturn("unparsed");
     expect(actionRequest3.getUnparsed()).andReturn("unparsed action 3");
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project"))))
         .andReturn(its)
         .anyTimes();
 
@@ -158,8 +156,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddComment addComment = createMock(AddComment.class);
     expect(addCommentFactory.create()).andReturn(addComment);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     addComment.execute(its, "4711", actionRequest, properties);
 
@@ -177,8 +174,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddSoyComment addSoyComment = createMock(AddSoyComment.class);
     expect(addSoyCommentFactory.create()).andReturn(addSoyComment);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     addSoyComment.execute(its, "4711", actionRequest, properties);
 
@@ -196,8 +192,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddStandardComment addStandardComment = createMock(AddStandardComment.class);
     expect(addStandardCommentFactory.create()).andReturn(addStandardComment);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     addStandardComment.execute(its, "4711", actionRequest, properties);
 
@@ -215,8 +210,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     LogEvent logEvent = createMock(LogEvent.class);
     expect(logEventFactory.create()).andReturn(logEvent);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     logEvent.execute(its, "4711", actionRequest, properties);
 
@@ -233,8 +227,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     CreateVersionFromProperty createVersionFromProperty =
         createMock(CreateVersionFromProperty.class);
     expect(createVersionFromPropertyFactory.create()).andReturn(createVersionFromProperty);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     createVersionFromProperty.execute(its, "itsTestProject", actionRequest, projectProperties);
 
@@ -252,8 +245,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     AddPropertyToField addPropertyToField = createMock(AddPropertyToField.class);
     expect(addPropertyToFieldFactory.create()).andReturn(addPropertyToField);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     addPropertyToField.execute(its, "4711", actionRequest, properties);
 
@@ -268,8 +260,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn(CUSTOM_ACTION_NAME);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
@@ -286,8 +277,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     ActionRequest actionRequest = createMock(ActionRequest.class);
     expect(actionRequest.getName()).andReturn(CUSTOM_ACTION_NAME);
-    expect(itsFacadeFactory.getFacade(new Project.NameKey(properties.get("project"))))
-        .andReturn(its);
+    expect(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).andReturn(its);
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 

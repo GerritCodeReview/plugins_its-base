@@ -5,12 +5,12 @@ import static java.util.Arrays.copyOfRange;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.entities.PatchSet;
 import com.google.gerrit.extensions.api.GerritApi;
 import com.google.gerrit.extensions.client.ListChangesOption;
 import com.google.gerrit.extensions.common.ChangeInfo;
 import com.google.gerrit.extensions.common.RevisionInfo;
 import com.google.gerrit.extensions.restapi.RestApiException;
-import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -47,7 +47,7 @@ public class IssueExtractor {
       try {
         ChangeInfo info =
             gApi.changes()
-                .id(patchSetId.getParentKey().get())
+                .id(patchSetId.changeId().get())
                 .get(EnumSet.of(ListChangesOption.ALL_REVISIONS));
         for (Map.Entry<String, RevisionInfo> e : info.revisions.entrySet()) {
           if (e.getValue()._number == patchSetId.get()) {
@@ -235,8 +235,7 @@ public class IssueExtractor {
     if (patchSetId != null) {
       Map<String, Set<String>> previous = Maps.newHashMap();
       if (patchSetId.get() != 1) {
-        PatchSet.Id previousPatchSetId =
-            new PatchSet.Id(patchSetId.getParentKey(), patchSetId.get() - 1);
+        PatchSet.Id previousPatchSetId = PatchSet.id(patchSetId.changeId(), patchSetId.get() - 1);
         String previousPatchSet = db.getRevision(previousPatchSetId);
         if (previousPatchSet != null) {
           previous = getIssueIds(projectName, previousPatchSet);

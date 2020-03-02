@@ -19,12 +19,12 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.PatchSet;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.entities.Project.NameKey;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.reviewdb.client.Change;
-import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
@@ -368,7 +368,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     issueMap.put("4711", Sets.newHashSet("body", "anywhere"));
     issueMap.put("42", Sets.newHashSet("footer", "anywhere"));
     if (withRevision) {
-      PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(176), 3);
+      PatchSet.Id patchSetId = PatchSet.id(Change.id(176), 3);
       expect(issueExtractor.getIssueIds("testProject", "testRevision", patchSetId))
           .andReturn(issueMap);
     } else {
@@ -438,7 +438,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
 
     @Override
     public NameKey getProjectNameKey() {
-      return new Project.NameKey("testProject");
+      return Project.nameKey("testProject");
     }
   }
 }

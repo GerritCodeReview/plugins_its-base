@@ -13,11 +13,13 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.validation;
 
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.easymock.EasyMock.expect;
 
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.IdentifiedUser;
 import com.google.gerrit.server.events.CommitReceivedEvent;
 import com.google.gerrit.server.git.validators.CommitValidationException;
@@ -48,7 +50,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private ItsConfig itsConfig;
   private ItsFacadeFactory itsFacadeFactory;
 
-  private Project project = new Project(new Project.NameKey("myProject"));
+  private Project project = new Project(Project.nameKey("myProject"));
 
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
@@ -111,14 +113,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    try {
-      ivc.onCommitReceived(event);
-      fail("onCommitReceived did not throw any exception");
-    } catch (CommitValidationException e) {
-      assertTrue(
-          "Message of thrown CommitValidationException does not " + "contain 'Missing issue'",
-          e.getMessage().contains("Missing issue"));
-    }
+    CommitValidationException thrown =
+        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
+    assertThat(thrown).hasMessageThat().contains("Missing issue");
   }
 
   public void testOnlySkipMatching() throws CommitValidationException {
@@ -242,14 +239,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    try {
-      ivc.onCommitReceived(event);
-      fail("onCommitReceived did not throw any exception");
-    } catch (CommitValidationException e) {
-      assertTrue(
-          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
-          e.getMessage().contains("Non-existing"));
-    }
+    CommitValidationException thrown =
+        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
+    assertThat(thrown).hasMessageThat().contains("Non-existing");
   }
 
   public void testSuggestedMatchingMultiple() throws CommitValidationException, IOException {
@@ -363,14 +355,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    try {
-      ivc.onCommitReceived(event);
-      fail("onCommitReceived did not throw any exception");
-    } catch (CommitValidationException e) {
-      assertTrue(
-          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
-          e.getMessage().contains("Non-existing"));
-    }
+    CommitValidationException thrown =
+        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
+    assertThat(thrown).hasMessageThat().contains("Non-existing");
   }
 
   public void testSuggestedMatchingMultipleSomeNonExsting()
@@ -431,14 +418,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    try {
-      ivc.onCommitReceived(event);
-      fail("onCommitReceived did not throw any exception");
-    } catch (CommitValidationException e) {
-      assertTrue(
-          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
-          e.getMessage().contains("Non-existing"));
-    }
+    CommitValidationException thrown =
+        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
+    assertThat(thrown).hasMessageThat().contains("Non-existing");
   }
 
   public void testSuggestedMatchingMultipleIOExceptionIsNonExsting()
@@ -503,7 +485,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
   private void setupCommonMocks() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).anyTimes();
-    Project.NameKey projectNK = new Project.NameKey("myProject");
+    Project.NameKey projectNK = Project.nameKey("myProject");
     expect(itsConfig.isEnabled(projectNK, null)).andReturn(true).anyTimes();
   }
 

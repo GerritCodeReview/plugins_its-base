@@ -14,9 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PluginName;
-import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;

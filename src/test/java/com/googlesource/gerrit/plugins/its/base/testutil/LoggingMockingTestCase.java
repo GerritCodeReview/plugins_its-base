@@ -15,10 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.testutil;
 
 import com.google.common.collect.Lists;
-import com.google.gerrit.reviewdb.client.Account;
-import com.google.gerrit.reviewdb.client.Branch;
-import com.google.gerrit.reviewdb.client.Change;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Account;
+import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -29,9 +29,9 @@ import org.junit.After;
 public abstract class LoggingMockingTestCase extends MockingTestCase {
 
   protected final Change.Key testChangeKey =
-      new Change.Key("Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");
-  protected final Change.Id testChangeId = new Change.Id(1);
-  protected final Account.Id testAccountId = new Account.Id(1);
+      Change.key("Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");
+  protected final Change.Id testChangeId = Change.id(1);
+  protected final Account.Id testAccountId = Account.id(1);
 
   private java.util.Collection<LoggingEvent> loggedEvents;
 
@@ -115,7 +115,7 @@ public abstract class LoggingMockingTestCase extends MockingTestCase {
         testChangeKey,
         testChangeId,
         testAccountId,
-        new Branch.NameKey(new Project.NameKey(project), branch),
+        BranchNameKey.create(Project.nameKey(project), branch),
         new Timestamp(System.currentTimeMillis()));
   }
 }
