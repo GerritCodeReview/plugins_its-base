@@ -30,6 +30,7 @@ import org.easymock.EasyMock;
 public class CreateVersionFromPropertyTest extends MockingTestCase {
 
   private static final String ITS_PROJECT = "test-project";
+  private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
 
   private Injector injector;
