@@ -53,8 +53,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
       String enabled, String itsProject, String parentEnabled, String[] branches) {
     ProjectState projectState = createMock(ProjectState.class);
 
-    expect(projectCache.get(Project.nameKey("testProject"))).andReturn(projectState).anyTimes();
-    expect(projectCache.get(Project.nameKey("parentProject"))).andReturn(projectState).anyTimes();
+    expect(projectCache.get(new Project.NameKey("testProject"))).andReturn(projectState).anyTimes();
+    expect(projectCache.get(new Project.NameKey("parentProject")))
+        .andReturn(projectState)
+        .anyTimes();
 
     Iterable<ProjectState> parents;
     if (parentEnabled == null) {
@@ -112,7 +114,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -124,7 +126,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -136,7 +138,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -148,7 +150,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -160,7 +162,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -172,7 +174,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -184,7 +186,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -196,7 +198,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -208,7 +210,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -220,7 +222,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -232,7 +234,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -244,7 +246,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -256,7 +258,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -268,7 +270,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -280,7 +282,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Project.NameKey projectNK = Project.nameKey("testProject");
+    Project.NameKey projectNK = new Project.NameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
 
@@ -489,7 +491,7 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    assertFalse(itsConfig.getItsProjectName(Project.nameKey("testProject")).isPresent());
+    assertFalse(itsConfig.getItsProjectName(new Project.NameKey("testProject")).isPresent());
   }
 
   public void testGetItsProjectConfigured() {
@@ -500,7 +502,8 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    Optional<String> itsProjectName = itsConfig.getItsProjectName(Project.nameKey("testProject"));
+    Optional<String> itsProjectName =
+        itsConfig.getItsProjectName(new Project.NameKey("testProject"));
     assertTrue(itsProjectName.isPresent());
     assertEquals("itsProject", itsProjectName.get());
   }

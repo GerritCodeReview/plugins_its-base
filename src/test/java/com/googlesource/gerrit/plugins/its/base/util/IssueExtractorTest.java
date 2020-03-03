@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
+import com.google.gerrit.reviewdb.client.RevId;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
@@ -35,7 +36,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PatchSet.class})
+@PrepareForTest({PatchSet.class, RevId.class})
 public class IssueExtractorTest extends LoggingMockingTestCase {
   private Injector injector;
   private ItsConfig itsConfig;
@@ -753,7 +754,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    PatchSet.Id patchSetId = PatchSet.id(Change.id(4), 1);
+    PatchSet.Id patchSetId = new PatchSet.Id(new Change.Id(4), 1);
     IssueExtractor issueExtractor = injector.getInstance(IssueExtractor.class);
     Map<String, Set<String>> actual =
         issueExtractor.getIssueIds(
@@ -780,7 +781,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(1).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -813,7 +814,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(db.getRevision(previousPatchSetId))
         .andReturn("9876543211987654321298765432139876543214");
 
@@ -824,7 +825,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -862,7 +863,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(
             commitMessageFetcher.fetchGuarded(
                 "testProject", "9876543211987654321298765432139876543214"))
@@ -873,7 +874,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -911,7 +912,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
         .andReturn("bug#42\n" + "\n" + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(
             commitMessageFetcher.fetchGuarded(
                 "testProject", "9876543211987654321298765432139876543214"))
@@ -926,7 +927,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -968,7 +969,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
                 + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(
             commitMessageFetcher.fetchGuarded(
                 "testProject", "9876543211987654321298765432139876543214"))
@@ -979,7 +980,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -1026,7 +1027,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
                 + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(
             commitMessageFetcher.fetchGuarded(
                 "testProject", "9876543211987654321298765432139876543214"))
@@ -1041,7 +1042,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 
@@ -1096,7 +1097,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
                 + "Change-Id: I1234567891123456789212345678931234567894");
 
     // Call for previous patch set
-    PatchSet.Id previousPatchSetId = PatchSet.id(changeId, 1);
+    PatchSet.Id previousPatchSetId = new PatchSet.Id(changeId, 1);
     expect(
             commitMessageFetcher.fetchGuarded(
                 "testProject", "9876543211987654321298765432139876543214"))
@@ -1112,7 +1113,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
 
     PatchSet.Id currentPatchSetId = createMock(PatchSet.Id.class);
     expect(currentPatchSetId.get()).andReturn(2).anyTimes();
-    expect(currentPatchSetId.changeId()).andReturn(changeId).anyTimes();
+    expect(currentPatchSetId.getParentKey()).andReturn(changeId).anyTimes();
 
     replayMocks();
 

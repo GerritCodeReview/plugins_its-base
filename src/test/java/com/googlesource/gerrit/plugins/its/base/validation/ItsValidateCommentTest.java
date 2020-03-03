@@ -48,7 +48,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private ItsConfig itsConfig;
   private ItsFacadeFactory itsFacadeFactory;
 
-  private Project project = new Project(Project.nameKey("myProject"));
+  private Project project = new Project(new Project.NameKey("myProject"));
 
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
@@ -503,7 +503,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
   private void setupCommonMocks() {
     expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).anyTimes();
-    Project.NameKey projectNK = Project.nameKey("myProject");
+    Project.NameKey projectNK = new Project.NameKey("myProject");
     expect(itsConfig.isEnabled(projectNK, null)).andReturn(true).anyTimes();
   }
 
