@@ -182,7 +182,8 @@ public class ItsConfig {
    */
   public Pattern getIssuePattern() {
     Optional<String> match =
-        getCommentLinkInfo(getCommentLinkName()).stream()
+        getCommentLinkInfo(getCommentLinkName())
+            .stream()
             .filter(input -> input.match != null && !input.match.trim().isEmpty())
             .map(input -> input.match)
             .reduce((a, b) -> b);
@@ -267,7 +268,8 @@ public class ItsConfig {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
       List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
-      return commentlinks.stream()
+      return commentlinks
+          .stream()
           .filter(input -> input.name.equals(commentlinkName))
           .collect(toList());
     }
