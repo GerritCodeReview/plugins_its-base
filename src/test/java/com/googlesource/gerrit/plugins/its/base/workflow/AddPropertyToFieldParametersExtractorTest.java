@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static com.google.common.truth.Truth8.assertThat;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -97,7 +96,9 @@ public class AddPropertyToFieldParametersExtractorTest extends MockingTestCase {
 
     Optional<AddPropertyToFieldParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.singletonMap(PROPERTY_ID, PROPERTY_VALUE));
-    assertThat(extractedParameters).isPresent();
+    if (!extractedParameters.isPresent()) {
+      fail();
+    }
     assertEquals(PROPERTY_VALUE, extractedParameters.get().getPropertyValue());
     assertEquals(FIELD_ID, extractedParameters.get().getFieldId());
   }
