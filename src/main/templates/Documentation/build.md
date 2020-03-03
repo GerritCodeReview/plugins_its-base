@@ -16,7 +16,7 @@ the Gerrit tree to exist locally.
 The output is created in
 
 ```
-  bazel-bin/its-base.jar
+  bazel-genfiles/its-base.jar
 ```
 
 To execute the tests run:
@@ -52,7 +52,7 @@ This project can be imported into the Eclipse IDE:
 The output is created in
 
 ```
-  bazel-bin/plugins/its-base/its-base.jar
+  bazel-genfiles/plugins/its-base/its-base.jar
 ```
 
 This project can be imported into the Eclipse IDE:
