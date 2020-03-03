@@ -43,7 +43,8 @@ values are supported (default is `OPTIONAL`):
 
 MANDATORY
 :	 One or more issue-ids are required in the git commit message.  The git push will
-	 be rejected otherwise.
+	 be rejected otherwise. Note that in case of connectivity issues with ITS, the commit
+	 will be accepted.
 
 SUGGESTED
 :	 Whenever the git commit message does not contain one or more issue-ids,
