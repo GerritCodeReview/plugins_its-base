@@ -13,8 +13,6 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.validation;
 
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -113,9 +111,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    CommitValidationException thrown =
-        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Missing issue");
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Missing issue'",
+          e.getMessage().contains("Missing issue"));
+    }
   }
 
   public void testOnlySkipMatching() throws CommitValidationException {
@@ -239,9 +242,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    CommitValidationException thrown =
-        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
   }
 
   public void testSuggestedMatchingMultiple() throws CommitValidationException, IOException {
@@ -355,9 +363,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    CommitValidationException thrown =
-        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
   }
 
   public void testSuggestedMatchingMultipleSomeNonExsting()
@@ -418,9 +431,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     replayMocks();
 
-    CommitValidationException thrown =
-        assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
   }
 
   public void testSuggestedMatchingMultipleIOExceptionIsNonExsting()
