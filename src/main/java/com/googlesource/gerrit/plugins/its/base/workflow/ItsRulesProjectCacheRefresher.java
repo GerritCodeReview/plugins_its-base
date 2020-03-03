@@ -1,10 +1,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.api.GerritApi;
 import com.google.gerrit.extensions.common.ProjectInfo;
 import com.google.gerrit.extensions.events.GitReferenceUpdatedListener;
 import com.google.gerrit.extensions.restapi.RestApiException;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -17,9 +17,9 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.gerrit.entities.Change;
-import com.google.gerrit.entities.Change.Status;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.Change.Status;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;

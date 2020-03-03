@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import com.google.gerrit.entities.Project;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Inject;
 
 /* An ItsServer implementation that should be bound

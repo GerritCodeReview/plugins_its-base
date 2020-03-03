@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import com.google.gerrit.entities.Project;
+import com.google.gerrit.reviewdb.client.Project;
 
 /* An interface to get server information from child its-plugin embedded in the ItsFacade implementation */
 public interface ItsFacadeFactory {

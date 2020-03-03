@@ -17,9 +17,9 @@ import static org.easymock.EasyMock.expect;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gerrit.entities.Change;
-import com.google.gerrit.entities.PatchSet;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;

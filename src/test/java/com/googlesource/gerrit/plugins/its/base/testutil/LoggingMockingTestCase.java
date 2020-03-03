@@ -15,10 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.testutil;
 
 import com.google.common.collect.Lists;
-import com.google.gerrit.entities.Account;
-import com.google.gerrit.entities.BranchNameKey;
-import com.google.gerrit.entities.Change;
-import com.google.gerrit.entities.Project;
+import com.google.gerrit.reviewdb.client.Account;
+import com.google.gerrit.reviewdb.client.BranchNameKey;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 import java.sql.Timestamp;
 import java.util.Iterator;

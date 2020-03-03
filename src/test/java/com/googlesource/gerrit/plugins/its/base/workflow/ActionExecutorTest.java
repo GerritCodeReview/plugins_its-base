@@ -18,10 +18,10 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;

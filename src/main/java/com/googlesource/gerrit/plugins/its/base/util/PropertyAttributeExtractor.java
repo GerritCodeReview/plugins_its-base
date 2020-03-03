@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gerrit.entities.RefNames;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.data.AccountAttribute;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;

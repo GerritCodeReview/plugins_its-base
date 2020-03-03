@@ -21,8 +21,8 @@ import static org.easymock.EasyMock.isA;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectLevelConfig;
 import com.google.gerrit.server.project.ProjectState;

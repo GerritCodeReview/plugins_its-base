@@ -14,9 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import com.google.gerrit.entities.Change;
-import com.google.gerrit.entities.PatchSet;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.reviewdb.client.Change;
+import com.google.gerrit.reviewdb.client.PatchSet;
 import com.google.gerrit.server.data.ApprovalAttribute;
 import com.google.gerrit.server.data.ChangeAttribute;
 import com.google.gerrit.server.data.PatchSetAttribute;
