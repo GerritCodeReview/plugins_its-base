@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f32da79_68d12404",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-18T16:42:51Z",
+      "side": 1,
+      "message": "nit: wrap long lines.",
+      "range": {
+        "startLine": 9,
+        "startChar": 71,
+        "endLine": 9,
+        "endChar": 97
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed4ad966_f4e9d5c9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-18T16:42:51Z",
+      "side": 1,
+      "message": "Looks like you are trying to put inside this enum three different concepts:\n- The issue exists or doesn\u0027t exist\n- The issue pattern is included or not in the commit message\n- The issue backend has failures or not\n\nWould it be then better to have a separate structure with the three flags? Or alternatively just have three different variables?",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 32
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da2503cb_fcdbb76d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-18T16:42:51Z",
+      "side": 1,
+      "message": "What\u0027s the difference between MISSING and DOESNT_EXIST? Linguistically they are synonymous.\n\nAlso, the MISSING condition is largely unused, it is set but never checked.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 11
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d12683_7b6f514c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-18T16:42:51Z",
+      "side": 1,
+      "message": "This looks like a different fix: you want to basically differentiate in the failure returned if the issue was missing on the Jira instance or in the commit message.\n\nIt\u0027s a good fix, should it be done in a separate change though?",
+      "range": {
+        "startLine": 135,
+        "startChar": 10,
+        "endLine": 135,
+        "endChar": 89
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecf28d12_c4115423",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-18T16:42:51Z",
+      "side": 1,
+      "message": "You should mention that the client will receiving a notification that the issue could not be checked against the ITS-system become of a connectivity issue.",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 18
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
