@@ -22,6 +22,30 @@
       "revId": "0901bfc062ad99ae02615a730cb932f2a3ac6376",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8db04e63_cb1a64d8",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T22:35:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7efd6887_986425f4",
+      "range": {
+        "startLine": 47,
+        "startChar": 73,
+        "endLine": 47,
+        "endChar": 92
+      },
+      "revId": "0901bfc062ad99ae02615a730cb932f2a3ac6376",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }

@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "33c4f29d_ecb8603c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T22:35:48Z",
+      "side": 1,
+      "message": "The enum represents the possible results from the existence check.\nThe issue can exist, can not exist or a connectivity issue can be encountered while checking, so I believe these three states model the domain possible results.\n\nI renamed the enum to ItsExistenceCheckResult to make it more obvious.\n\nWDYT?",
+      "parentUuid": "992c56a1_da21f30c",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 32
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da2503cb_fcdbb76d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 2
