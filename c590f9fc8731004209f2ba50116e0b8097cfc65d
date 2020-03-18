@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "01918a24_de75cac2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:13:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1f32da79_68d12404",
+      "range": {
+        "startLine": 9,
+        "startChar": 71,
+        "endLine": 9,
+        "endChar": 97
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed4ad966_f4e9d5c9",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-18T16:42:51Z",
       "side": 1,
       "message": "Looks like you are trying to put inside this enum three different concepts:\n- The issue exists or doesn\u0027t exist\n- The issue pattern is included or not in the commit message\n- The issue backend has failures or not\n\nWould it be then better to have a separate structure with the three flags? Or alternatively just have three different variables?",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 32
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb07980a_42ba0211",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:13:26Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t fully understand your suggestion.\nYes the enum describes the possible results of an issue existance check, which are mutually exclusive.\n\nWhy do you think three different variables model this in a better way?\nalso, what do you mean about \"separate structure\"?",
+      "parentUuid": "ed4ad966_f4e9d5c9",
       "range": {
         "startLine": 50,
         "startChar": 15,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "66f71db4_055bcd6b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:13:26Z",
+      "side": 1,
+      "message": "I wanted the ItsExistenceCheck to represent all possible results of an existence check.\n* MISSING means, the issue-id is not in the commit message.\n* DOESNT_EXIST means, the issue-id *is* in the commit message, but it doesn\u0027t in the Issue tracker.\n\nThe domain of existence are different, the first on in the commit message, the second one in the issue tracker. I could rename them ISSUE_ID_NOT_IN_COMMIT_MSG and ISSUE_ID_NOT_IN_ITS, if that makes it more obvious.\n\nAs you suggested, we are not checking with this level of granularity, so I\u0027ll just squash them into one.",
+      "parentUuid": "da2503cb_fcdbb76d",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 11
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38d12683_7b6f514c",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2020-03-18T16:42:51Z",
       "side": 1,
       "message": "This looks like a different fix: you want to basically differentiate in the failure returned if the issue was missing on the Jira instance or in the commit message.\n\nIt\u0027s a good fix, should it be done in a separate change though?",
+      "range": {
+        "startLine": 135,
+        "startChar": 10,
+        "endLine": 135,
+        "endChar": 89
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4df9fc30_64e7efed",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:13:26Z",
+      "side": 1,
+      "message": "this 3rd parameter drives the decision on whether to reject the push commitValidationFailure()L150:\n\nI am passing the result of the existence check to commitValidationFailure() because now the decision on whether to fail or not is not just based in associativity setting, but also on the type of existence result.\n\nIf we were moving this to a separate change this fix wouldn\u0027t work.",
+      "parentUuid": "38d12683_7b6f514c",
       "range": {
         "startLine": 135,
         "startChar": 10,
@@ -114,6 +210,30 @@
       "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "617ee77b_0e3f1c57",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:13:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ecf28d12_c4115423",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 18
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
