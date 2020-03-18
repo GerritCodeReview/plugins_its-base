@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f4825b00_8e9d4b5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:16:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01918a24_de75cac2",
+      "range": {
+        "startLine": 9,
+        "startChar": 71,
+        "endLine": 9,
+        "endChar": 97
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed4ad966_f4e9d5c9",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
         "patchSetId": 2
@@ -225,6 +249,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "ecf28d12_c4115423",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 18
+      },
+      "revId": "c590f9fc8731004209f2ba50116e0b8097cfc65d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8974be01_656247bc",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2020-03-18T18:16:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "617ee77b_0e3f1c57",
       "range": {
         "startLine": 47,
         "startChar": 2,
