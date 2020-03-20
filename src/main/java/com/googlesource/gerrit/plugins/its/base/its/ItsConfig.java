@@ -94,16 +94,16 @@ public class ItsConfig {
   }
 
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
-    ProjectState projectState = projectCache.get(projectNK);
-    if (projectState == null) {
+    Optional<ProjectState> projectState = projectCache.get(projectNK);
+    if (!projectState.isPresent()) {
       log.error(
           "Failed to check if {} is enabled for project {}: Project not found",
           pluginName,
           projectNK.get());
       return false;
     }
-    return isEnforcedByAnyParentProject(refName, projectState)
-        || (isEnabledForProject(projectState) && isEnabledForBranch(projectState, refName));
+    return isEnforcedByAnyParentProject(refName, projectState.get())
+        || (isEnabledForProject(projectState.get()) && isEnabledForBranch(projectState.get(), refName));
   }
 
   private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {
@@ -147,12 +147,12 @@ public class ItsConfig {
 
   // Project association
   public Optional<String> getItsProjectName(Project.NameKey projectNK) {
-    ProjectState projectState = projectCache.get(projectNK);
-    if (projectState == null) {
+    Optional<ProjectState> projectState = projectCache.get(projectNK);
+    if (!projectState.isPresent()) {
       return Optional.empty();
     }
     return Optional.ofNullable(
-        pluginCfgFactory.getFromProjectConfig(projectState, pluginName).getString("its-project"));
+        pluginCfgFactory.getFromProjectConfig(projectState.get(), pluginName).getString("its-project"));
   }
 
   // Issue association --------------------------------------------------------
@@ -266,7 +266,7 @@ public class ItsConfig {
   private List<CommentLinkInfo> getCommentLinkInfo(final String commentlinkName) {
     NameKey projectName = currentProjectName.get();
     if (projectName != null) {
-      List<CommentLinkInfo> commentlinks = projectCache.get(projectName).getCommentLinks();
+      List<CommentLinkInfo> commentlinks = projectCache.get(projectName).get().getCommentLinks();
       return commentlinks.stream()
           .filter(input -> input.name.equals(commentlinkName))
           .collect(toList());

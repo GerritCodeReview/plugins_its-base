@@ -98,7 +98,8 @@ public class ItsRulesProjectCacheImpl implements ItsRulesProjectCache {
 
     @Override
     public List<Rule> load(String projectName) throws IOException {
-      ProjectState project = projectCache.checkedGet(Project.nameKey(projectName));
+      ProjectState project =
+          projectCache.get(Project.nameKey(projectName)).orElseThrow(() -> new IOException("Can't load " + projectName));
       List<Rule> projectRules = readRulesFrom(project);
       if (projectRules.isEmpty()) {
         for (ProjectState parent : project.parents()) {
