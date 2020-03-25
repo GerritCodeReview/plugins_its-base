@@ -450,23 +450,132 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed'",
-        ret.get(0).getMessage().contains("Failed"));
+        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
         ret.get(0).getMessage().contains("4711"));
+    assertTrue(
+        "First CommitValidationMessages contains reason of failure",
+        ret.get(0).getMessage().contains("InjectedEx1"));
     assertFalse(
         "First CommitValidationMessages contains '42', although " + "that bug exists",
         ret.get(0).getMessage().contains("42"));
     assertTrue(
         "Second CommitValidationMessages does not contain " + "'Non-existing'",
         ret.get(1).getMessage().contains("Non-existing"));
-    assertTrue(
-        "Second CommitValidationMessages does not contain '4711'",
-        ret.get(1).getMessage().contains("4711"));
+
     assertTrue(
         "Second CommitValidationMessages does not contain '42'",
         ret.get(1).getMessage().contains("42"));
+
+    assertLogMessageContains("4711");
+  }
+
+  public void testMandatoryMatchingSingleIOException()
+      throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertTrue(
+        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        ret.get(0).getMessage().contains("Failed to check"));
+    assertTrue(
+        "First CommitValidationMessages does not contain '4711'",
+        ret.get(0).getMessage().contains("4711"));
+    assertTrue(
+        "First CommitValidationMessages contains reason of failure",
+        ret.get(0).getMessage().contains("InjectedEx1"));
+
+    assertLogMessageContains("4711");
+  }
+
+  public void testMandatoryMatchingMultipleIOExceptionIsNonExisting() throws IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
+        .andReturn(new String[] {"4711", "42"})
+        .atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
+    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
+
+    replayMocks();
+
+    try {
+      ivc.onCommitReceived(event);
+      fail("onCommitReceived did not throw any exception");
+    } catch (CommitValidationException e) {
+      assertLogMessageContains("Failed to check whether or not issue 4711 exists");
+      assertTrue(
+          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
+          e.getMessage().contains("Non-existing"));
+    }
+  }
+
+  public void testMandatoryMatchingMultipleIOExceptionExisting()
+      throws CommitValidationException, IOException {
+    List<CommitValidationMessage> ret;
+    ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
+    ReceiveCommand command = createMock(ReceiveCommand.class);
+    RevCommit commit = createMock(RevCommit.class);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+
+    expect(itsConfig.getItsAssociationPolicy())
+        .andReturn(ItsAssociationPolicy.MANDATORY)
+        .atLeastOnce();
+    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
+    expect(commit.getId()).andReturn(commit).anyTimes();
+    expect(commit.getName()).andReturn("TestCommit").anyTimes();
+    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
+        .andReturn(new String[] {"4711", "42"})
+        .atLeastOnce();
+    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
+    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
+    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
+
+    replayMocks();
+
+    ret = ivc.onCommitReceived(event);
+
+    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertTrue(
+        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        ret.get(0).getMessage().contains("Failed to check"));
+    assertTrue(
+        "First CommitValidationMessages does not contain '4711'",
+        ret.get(0).getMessage().contains("4711"));
+    assertTrue(
+        "First CommitValidationMessages contains reason of failure",
+        ret.get(0).getMessage().contains("InjectedEx1"));
 
     assertLogMessageContains("4711");
   }
