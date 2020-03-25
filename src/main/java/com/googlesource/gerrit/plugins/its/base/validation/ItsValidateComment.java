@@ -47,6 +47,12 @@ public class ItsValidateComment implements CommitValidationListener {
 
   @Inject private IssueExtractor issueExtractor;
 
+  private enum ItsExistenceCheckResult {
+    EXISTS,
+    DOESNT_EXIST,
+    CONNECTIVITY_FAILURE
+  }
+
   private List<CommitValidationMessage> validCommit(Project.NameKey project, RevCommit commit)
       throws CommitValidationException {
     List<CommitValidationMessage> ret = Lists.newArrayList();
@@ -63,16 +69,23 @@ public class ItsValidateComment implements CommitValidationListener {
           List<String> nonExistingIssueIds = Lists.newArrayList();
           client = itsFacadeFactory.getFacade(project);
           for (String issueId : issueIds) {
-            boolean exists = false;
+            ItsExistenceCheckResult existenceCheckResult;
             try {
-              exists = client.exists(issueId);
+              existenceCheckResult =
+                  client.exists(issueId)
+                      ? ItsExistenceCheckResult.EXISTS
+                      : ItsExistenceCheckResult.DOESNT_EXIST;
             } catch (IOException e) {
-              synopsis = "Failed to check whether or not issue " + issueId + " exists";
+              synopsis =
+                  "Failed to check whether or not issue "
+                      + issueId
+                      + " exists, due to connectivity issue. Commit will be accepted.";
               log.warn(synopsis, e);
               details = e.toString();
-              ret.add(commitValidationFailure(synopsis, details));
+              existenceCheckResult = ItsExistenceCheckResult.CONNECTIVITY_FAILURE;
+              ret.add(commitValidationFailure(synopsis, details, existenceCheckResult));
             }
-            if (!exists) {
+            if (existenceCheckResult == ItsExistenceCheckResult.DOESNT_EXIST) {
               nonExistingIssueIds.add(issueId);
             }
           }
@@ -95,7 +108,7 @@ public class ItsValidateComment implements CommitValidationListener {
             sb.append(" Issue-Tracker");
             details = sb.toString();
 
-            ret.add(commitValidationFailure(synopsis, details));
+            ret.add(commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
           }
         } else if (!itsConfig
             .getDummyIssuePattern()
@@ -118,7 +131,7 @@ public class ItsValidateComment implements CommitValidationListener {
           sb.append(" Issue-Tracker");
           details = sb.toString();
 
-          ret.add(commitValidationFailure(synopsis, details));
+          ret.add(commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
         }
         break;
       case OPTIONAL:
@@ -128,10 +141,12 @@ public class ItsValidateComment implements CommitValidationListener {
     return ret;
   }
 
-  private CommitValidationMessage commitValidationFailure(String synopsis, String details)
+  private CommitValidationMessage commitValidationFailure(
+      String synopsis, String details, ItsExistenceCheckResult existenceCheck)
       throws CommitValidationException {
     CommitValidationMessage ret = new CommitValidationMessage(synopsis + "\n" + details, false);
-    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY) {
+    if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY
+        && existenceCheck != ItsExistenceCheckResult.CONNECTIVITY_FAILURE) {
       throw new CommitValidationException(synopsis, Collections.singletonList(ret));
     }
     return ret;
