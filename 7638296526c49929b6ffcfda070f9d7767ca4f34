@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87092dcd_2b6d7448",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateCommentTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-03-26T01:21:03Z",
+      "side": 1,
+      "message": "Unrelated to this merge, but why don\u0027t any of the test methods have the @Test annotation?",
+      "revId": "7638296526c49929b6ffcfda070f9d7767ca4f34",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
