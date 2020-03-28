@@ -14,8 +14,9 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -66,22 +67,20 @@ public class RuleBaseTest extends LoggingMockingTestCase {
     String rules = "[rule \"rule1\"]\n\taction = action1\n";
     injectRuleBase(rules);
 
-    Rule rule1 = createMock(Rule.class);
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    Rule rule1 = mock(Rule.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = Lists.newArrayListWithCapacity(1);
     rule1Match.add(actionRequest1);
-    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
+    when(rule1.actionRequestsFor(properties)).thenReturn(rule1Match);
 
-    expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
-        .andReturn(ImmutableList.of(rule1))
-        .once();
+    when(rulesConfigReader.getRulesFromConfig(any(Config.class)))
+        .thenReturn(ImmutableList.of(rule1))
+        .thenThrow(new UnsupportedOperationException("Method called more than once"));
 
-    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
-
-    replayMocks();
+    when(rulesProjectCache.get(TEST_PROJECT)).thenReturn(ImmutableList.of());
 
     RuleBase ruleBase = createRuleBase();
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
@@ -101,29 +100,26 @@ public class RuleBaseTest extends LoggingMockingTestCase {
             + "[rule \"rule2\"]\n"
             + "\taction = action3\n");
 
-    Rule rule1 = createMock(Rule.class);
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    Rule rule1 = mock(Rule.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
+    ActionRequest actionRequest2 = mock(ActionRequest.class);
 
-    Rule rule2 = createMock(Rule.class);
-    ActionRequest actionRequest3 = createMock(ActionRequest.class);
+    Rule rule2 = mock(Rule.class);
+    ActionRequest actionRequest3 = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1, actionRequest2);
-    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match).anyTimes();
+    when(rule1.actionRequestsFor(properties)).thenReturn(rule1Match);
 
     List<ActionRequest> rule2Match = ImmutableList.of(actionRequest3);
-    expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match).anyTimes();
+    when(rule2.actionRequestsFor(properties)).thenReturn(rule2Match);
 
-    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
+    when(rulesProjectCache.get(TEST_PROJECT)).thenReturn(ImmutableList.of());
 
-    expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
-        .andReturn(ImmutableList.of(rule1, rule2))
-        .andReturn(ImmutableList.of())
-        .anyTimes();
-
-    replayMocks();
+    when(rulesConfigReader.getRulesFromConfig(any(Config.class)))
+        .thenReturn(ImmutableList.of(rule1, rule2))
+        .thenReturn(ImmutableList.of());
 
     RuleBase ruleBase = createRuleBase();
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
@@ -140,26 +136,23 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
-    Rule rule2 = createMock(Rule.class);
-    ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    Rule rule2 = mock(Rule.class);
+    ActionRequest actionRequest2 = mock(ActionRequest.class);
 
     List<ActionRequest> rule2Match = ImmutableList.of(actionRequest2);
-    expect(rule2.actionRequestsFor(properties)).andReturn(rule2Match);
+    when(rule2.actionRequestsFor(properties)).thenReturn(rule2Match);
 
-    Rule rule3 = createMock(Rule.class);
-    ActionRequest actionRequest3 = createMock(ActionRequest.class);
+    Rule rule3 = mock(Rule.class);
+    ActionRequest actionRequest3 = mock(ActionRequest.class);
 
     List<ActionRequest> rule3Match = ImmutableList.of(actionRequest3);
-    expect(rule3.actionRequestsFor(properties)).andReturn(rule3Match);
+    when(rule3.actionRequestsFor(properties)).thenReturn(rule3Match);
 
-    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of());
+    when(rulesProjectCache.get(TEST_PROJECT)).thenReturn(ImmutableList.of());
 
-    expect(rulesConfigReader.getRulesFromConfig(isA(Config.class)))
-        .andReturn(ImmutableList.of(rule2, rule3))
-        .andReturn(ImmutableList.of())
-        .anyTimes();
-
-    replayMocks();
+    when(rulesConfigReader.getRulesFromConfig(any(Config.class)))
+        .thenReturn(ImmutableList.of(rule2, rule3))
+        .thenReturn(ImmutableList.of());
 
     RuleBase ruleBase = createRuleBase();
 
@@ -171,17 +164,15 @@ public class RuleBaseTest extends LoggingMockingTestCase {
   }
 
   public void testProjectConfigIsLoaded() {
-    Rule rule1 = createMock(Rule.class);
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    Rule rule1 = mock(Rule.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of(PROJECT_KEY, TEST_PROJECT);
 
     List<ActionRequest> rule1Match = ImmutableList.of(actionRequest1);
-    expect(rule1.actionRequestsFor(properties)).andReturn(rule1Match);
+    when(rule1.actionRequestsFor(properties)).thenReturn(rule1Match);
 
-    expect(rulesProjectCache.get(TEST_PROJECT)).andReturn(ImmutableList.of(rule1));
-
-    replayMocks();
+    when(rulesProjectCache.get(TEST_PROJECT)).thenReturn(ImmutableList.of(rule1));
 
     RuleBase ruleBase = createRuleBase();
     Collection<ActionRequest> actual = ruleBase.actionRequestsFor(properties);
@@ -238,10 +229,10 @@ public class RuleBaseTest extends LoggingMockingTestCase {
 
       bind(Path.class).annotatedWith(ItsPath.class).toInstance(itsPath);
 
-      rulesConfigReader = createMock(RulesConfigReader.class);
+      rulesConfigReader = mock(RulesConfigReader.class);
       bind(RulesConfigReader.class).toInstance(rulesConfigReader);
 
-      rulesProjectCache = createMock(ItsRulesProjectCache.class);
+      rulesProjectCache = mock(ItsRulesProjectCache.class);
       bind(ItsRulesProjectCache.class).toInstance(rulesProjectCache);
 
       bind(String.class)

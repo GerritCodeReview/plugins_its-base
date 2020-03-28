@@ -14,8 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.base.Suppliers;
 import com.google.gerrit.entities.Project;
@@ -51,57 +54,53 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
   public void setupIsEnabled(
       String enabled, String itsProject, String parentEnabled, String[] branches) {
-    ProjectState projectState = createMock(ProjectState.class);
+    ProjectState projectState = mock(ProjectState.class);
 
-    expect(projectCache.get(Project.nameKey("testProject"))).andReturn(projectState).anyTimes();
-    expect(projectCache.get(Project.nameKey("parentProject"))).andReturn(projectState).anyTimes();
+    when(projectCache.get(Project.nameKey("testProject"))).thenReturn(Optional.of(projectState));
+    when(projectCache.get(Project.nameKey("parentProject"))).thenReturn(Optional.of(projectState));
 
     Iterable<ProjectState> parents;
     if (parentEnabled == null) {
       parents = Arrays.asList(projectState);
     } else {
-      ProjectState parentProjectState = createMock(ProjectState.class);
+      ProjectState parentProjectState = mock(ProjectState.class);
 
-      PluginConfig parentPluginConfig = createMock(PluginConfig.class);
+      PluginConfig parentPluginConfig = mock(PluginConfig.class);
 
-      expect(pluginConfigFactory.getFromProjectConfig(parentProjectState, "ItsTestName"))
-          .andReturn(parentPluginConfig);
+      when(pluginConfigFactory.getFromProjectConfig(parentProjectState, "ItsTestName"))
+          .thenReturn(parentPluginConfig);
 
-      expect(parentPluginConfig.getString("enabled", "false")).andReturn(parentEnabled).anyTimes();
+      when(parentPluginConfig.getString("enabled", "false")).thenReturn(parentEnabled);
 
-      PluginConfig parentPluginConfigWI = createMock(PluginConfig.class);
+      PluginConfig parentPluginConfigWI = mock(PluginConfig.class);
 
-      expect(
-              pluginConfigFactory.getFromProjectConfigWithInheritance(
-                  parentProjectState, "ItsTestName"))
-          .andReturn(parentPluginConfigWI)
-          .anyTimes();
+      when(pluginConfigFactory.getFromProjectConfigWithInheritance(
+              parentProjectState, "ItsTestName"))
+          .thenReturn(parentPluginConfigWI);
 
       String[] parentBranches = {"refs/heads/testBranch"};
-      expect(parentPluginConfigWI.getStringList("branch")).andReturn(parentBranches).anyTimes();
+      when(parentPluginConfigWI.getStringList("branch")).thenReturn(parentBranches);
 
       parents = Arrays.asList(parentProjectState, projectState);
     }
-    expect(projectState.treeInOrder()).andReturn(parents).anyTimes();
+    when(projectState.treeInOrder()).thenReturn(parents);
 
-    PluginConfig pluginConfig = createMock(PluginConfig.class);
+    PluginConfig pluginConfig = mock(PluginConfig.class);
 
-    expect(pluginConfigFactory.getFromProjectConfig(projectState, "ItsTestName"))
-        .andReturn(pluginConfig)
-        .anyTimes();
+    when(pluginConfigFactory.getFromProjectConfig(projectState, "ItsTestName"))
+        .thenReturn(pluginConfig);
 
-    expect(pluginConfig.getString("enabled", "false")).andReturn(enabled).anyTimes();
-    expect(pluginConfig.getString(eq("its-project"))).andReturn(itsProject).anyTimes();
+    when(pluginConfig.getString("enabled", "false")).thenReturn(enabled);
+    when(pluginConfig.getString(eq("its-project"))).thenReturn(itsProject);
 
-    PluginConfig pluginConfigWI = createMock(PluginConfig.class);
+    PluginConfig pluginConfigWI = mock(PluginConfig.class);
 
-    expect(pluginConfigFactory.getFromProjectConfigWithInheritance(projectState, "ItsTestName"))
-        .andReturn(pluginConfigWI)
-        .anyTimes();
+    when(pluginConfigFactory.getFromProjectConfigWithInheritance(projectState, "ItsTestName"))
+        .thenReturn(pluginConfigWI);
 
-    expect(pluginConfigWI.getString("enabled", "false")).andReturn(enabled).anyTimes();
+    when(pluginConfigWI.getString("enabled", "false")).thenReturn(enabled);
 
-    expect(pluginConfigWI.getStringList("branch")).andReturn(branches).anyTimes();
+    when(pluginConfigWI.getStringList("branch")).thenReturn(branches);
   }
 
   public void testIsEnabledRefNoParentNoBranchEnabled() {
@@ -109,8 +108,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -122,8 +119,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -133,8 +128,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -146,8 +139,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -157,8 +148,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -170,8 +159,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -181,8 +168,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("true", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -194,8 +179,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -205,8 +188,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("enforced", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -218,8 +199,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -229,8 +208,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("false", null, null, branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -242,8 +219,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -253,8 +228,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("false", null, "true", branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -266,8 +239,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertFalse(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
   }
@@ -277,8 +248,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     setupIsEnabled("false", null, "enforced", branches);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
@@ -292,8 +261,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -304,8 +271,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -318,8 +283,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -330,8 +293,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertFalse(itsConfig.isEnabled(event));
   }
@@ -344,8 +305,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -356,8 +315,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -370,8 +327,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -382,8 +337,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -396,8 +349,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertFalse(itsConfig.isEnabled(event));
   }
 
@@ -408,8 +359,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -422,8 +371,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -435,8 +382,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
@@ -447,8 +392,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
     ChangeRestoredEvent event = new ChangeRestoredEvent(testChange("testProject", "testBranch"));
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertTrue(itsConfig.isEnabled(event));
   }
@@ -465,17 +408,13 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertTrue(itsConfig.isEnabled(event));
   }
 
   public void BROKEN_testIsEnabledUnknownEvent() {
-    RefEvent event = createMock(RefEvent.class);
+    RefEvent event = mock(RefEvent.class);
 
     ItsConfig itsConfig = createItsConfig();
-
-    replayMocks();
 
     assertFalse(itsConfig.isEnabled(event));
     assertLogMessageContains("not recognised and ignored");
@@ -487,8 +426,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     assertFalse(itsConfig.getItsProjectName(Project.nameKey("testProject")).isPresent());
   }
 
@@ -498,8 +435,6 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     ItsConfig itsConfig = createItsConfig();
 
-    replayMocks();
-
     Optional<String> itsProjectName = itsConfig.getItsProjectName(Project.nameKey("testProject"));
     assertTrue(itsProjectName.isPresent());
     assertEquals("itsProject", itsProjectName.get());
@@ -508,326 +443,278 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   public void testGetIssuePatternNullMatch() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn(null)
-        .atLeastOnce();
-
-    replayMocks();
-
     assertNull("Pattern for null match is not null", itsConfig.getIssuePattern());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
   }
 
   public void testGetIssuePatternNullMatchWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "foo", "match")).andReturn(null).atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("plugin", "ItsTestName", "commentlink")).thenReturn("foo");
 
     assertNull("Pattern for null match is not null", itsConfig.getIssuePattern());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "foo", "match");
   }
 
   public void testGetIssuePattern() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("TestPattern")
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match")).thenReturn("TestPattern");
 
     assertEquals(
         "Expected and generated pattern are not equal",
         "TestPattern",
         itsConfig.getIssuePattern().pattern());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
   }
 
   public void testGetIssuePatternWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "foo", "match"))
-        .andReturn("TestPattern")
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("plugin", "ItsTestName", "commentlink")).thenReturn("foo");
+    when(serverConfig.getString("commentlink", "foo", "match")).thenReturn("TestPattern");
 
     assertEquals(
         "Expected and generated pattern are not equal",
         "TestPattern",
         itsConfig.getIssuePattern().pattern());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "foo", "match");
   }
 
   public void testGetIssuePatternGroupIndexGroupDefault() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("(foo)(bar)(baz)")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(1)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .thenReturn("(foo)(bar)(baz)");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(1);
 
     assertEquals(
         "Expected and actual group index do not match", 1, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetIssuePatternGroupIndexGroupDefaultGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(1)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match")).thenReturn("foo");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(1);
 
     assertEquals(
         "Expected and actual group index do not match", 0, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetIssuePatternGroupIndexGroup1() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("(foo)(bar)(baz)")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(1)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .thenReturn("(foo)(bar)(baz)");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(1);
 
     assertEquals(
         "Expected and actual group index do not match", 1, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetIssuePatternGroupIndexGroup3() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("(foo)(bar)(baz)")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(3)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .thenReturn("(foo)(bar)(baz)");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(3);
 
     assertEquals(
         "Expected and actual group index do not match", 3, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetIssuePatternGroupIndexGroupTooHigh() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("(foo)(bar)(baz)")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(5)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match"))
+        .thenReturn("(foo)(bar)(baz)");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(5);
 
     assertEquals(
         "Expected and actual group index do not match", 1, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetIssuePatternGroupIndexGroupTooHighGroupless() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(serverConfig.getString("commentlink", "ItsTestName", "match"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1))
-        .andReturn(5)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("commentlink", "ItsTestName", "match")).thenReturn("foo");
+    when(serverConfig.getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1)).thenReturn(5);
 
     assertEquals(
         "Expected and actual group index do not match", 0, itsConfig.getIssuePatternGroupIndex());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig).getString("commentlink", "ItsTestName", "match");
+    verifyOneOrMore(serverConfig).getInt("plugin", "ItsTestName", "commentlinkGroupIndex", 1);
   }
 
   public void testGetItsAssociationPolicyOptional() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.OPTIONAL)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.OPTIONAL)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getEnum(
+            "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.OPTIONAL);
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.OPTIONAL);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.OPTIONAL,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL);
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL);
   }
 
   public void testGetItsAssociationPolicyOptionalWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.OPTIONAL)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.OPTIONAL)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("plugin", "ItsTestName", "commentlink")).thenReturn("foo");
+    when(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.OPTIONAL);
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.OPTIONAL);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.OPTIONAL,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL);
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL);
   }
 
   public void testGetItsAssociationPolicySuggested() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED))
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    replayMocks();
+    when(serverConfig.getEnum(
+            "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED))
+        .thenReturn(ItsAssociationPolicy.SUGGESTED);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.SUGGESTED,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL);
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED);
   }
 
   public void testGetItsAssociationPolicySuggestedWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED))
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("plugin", "ItsTestName", "commentlink")).thenReturn("foo");
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED))
+        .thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.SUGGESTED);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.SUGGESTED,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.SUGGESTED);
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL);
   }
 
   public void testGetItsAssociationPolicyMandatory() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn(null)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY))
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getEnum(
+            "commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY))
+        .thenReturn(ItsAssociationPolicy.MANDATORY);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.MANDATORY,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "ItsTestName", "association", ItsAssociationPolicy.OPTIONAL);
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY);
   }
 
   public void testGetItsAssociationPolicyMandatoryWCommentLink() {
     ItsConfig itsConfig = createItsConfig();
 
-    expect(serverConfig.getString("plugin", "ItsTestName", "commentlink"))
-        .andReturn("foo")
-        .atLeastOnce();
-    expect(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(
-            serverConfig.getEnum(
-                "plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY))
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-
-    replayMocks();
+    when(serverConfig.getString("plugin", "ItsTestName", "commentlink")).thenReturn("foo");
+    when(serverConfig.getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL))
+        .thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(serverConfig.getEnum(
+            "plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY))
+        .thenReturn(ItsAssociationPolicy.MANDATORY);
 
     assertEquals(
         "Expected and generated associated policy do not match",
         ItsAssociationPolicy.MANDATORY,
         itsConfig.getItsAssociationPolicy());
+
+    verifyOneOrMore(serverConfig).getString("plugin", "ItsTestName", "commentlink");
+    verifyOneOrMore(serverConfig)
+        .getEnum("commentlink", "foo", "association", ItsAssociationPolicy.OPTIONAL);
+    verifyOneOrMore(serverConfig)
+        .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY);
   }
 
   private ItsConfig createItsConfig() {
     return injector.getInstance(ItsConfig.class);
+  }
+
+  private <T> T verifyOneOrMore(T mock) {
+    return verify(mock, atLeastOnce());
   }
 
   @Override
@@ -839,15 +726,15 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      projectCache = createMock(ProjectCache.class);
+      projectCache = mock(ProjectCache.class);
       bind(ProjectCache.class).toInstance(projectCache);
 
-      pluginConfigFactory = createMock(PluginConfigFactory.class);
+      pluginConfigFactory = mock(PluginConfigFactory.class);
       bind(PluginConfigFactory.class).toInstance(pluginConfigFactory);
 
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
-      serverConfig = createMock(Config.class);
+      serverConfig = mock(Config.class);
       bind(Config.class).annotatedWith(GerritServerConfig.class).toInstance(serverConfig);
     }
   }

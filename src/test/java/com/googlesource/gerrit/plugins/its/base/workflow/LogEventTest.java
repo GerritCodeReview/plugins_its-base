@@ -13,7 +13,8 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -30,32 +31,26 @@ public class LogEventTest extends LoggingMockingTestCase {
   private ItsFacade its;
 
   public void testNull() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn(null);
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn(null);
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testEmpty() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("");
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("");
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testLevelDefault() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -64,12 +59,10 @@ public class LogEventTest extends LoggingMockingTestCase {
   }
 
   public void testLevelError() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("error");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("error");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -78,12 +71,10 @@ public class LogEventTest extends LoggingMockingTestCase {
   }
 
   public void testLevelWarn() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("warn");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("warn");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -92,12 +83,10 @@ public class LogEventTest extends LoggingMockingTestCase {
   }
 
   public void testLevelInfo() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("info");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("info");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -106,12 +95,10 @@ public class LogEventTest extends LoggingMockingTestCase {
   }
 
   public void testLevelDebug() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("debug");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("debug");
 
     Map<String, String> properties = ImmutableMap.of("KeyA", "ValueA");
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -120,8 +107,8 @@ public class LogEventTest extends LoggingMockingTestCase {
   }
 
   public void testMultipleProperties() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameter(1)).andReturn("info");
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameter(1)).thenReturn("info");
 
     Map<String, String> properties =
         ImmutableMap.<String, String>builder()
@@ -129,8 +116,6 @@ public class LogEventTest extends LoggingMockingTestCase {
             .put("KeyB", "ValueB")
             .put("KeyC", "ValueC")
             .build();
-
-    replayMocks();
 
     LogEvent logEvent = createLogEvent();
     logEvent.execute(its, "4711", actionRequest, properties);
@@ -153,7 +138,7 @@ public class LogEventTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      its = createMock(ItsFacade.class);
+      its = mock(ItsFacade.class);
     }
   }
 }
