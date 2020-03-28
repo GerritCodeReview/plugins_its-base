@@ -33,8 +33,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "testValue");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -42,8 +40,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "testValue");
 
     Map<String, String> properties = ImmutableMap.of();
-
-    replayMocks();
 
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
@@ -53,8 +49,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("otherKey", "testValue");
 
-    replayMocks();
-
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
 
@@ -62,8 +56,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "testValue");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "otherValue");
-
-    replayMocks();
 
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
@@ -73,8 +65,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value2");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -82,8 +72,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "value1,value2,value3");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1 value3");
-
-    replayMocks();
 
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
@@ -93,8 +81,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1 value3");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -102,8 +88,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "value1,value2,value3");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1 value2 value3");
-
-    replayMocks();
 
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
@@ -113,8 +97,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "otherValue1 value2 otherValue3");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -122,8 +104,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "!,testValue");
 
     Map<String, String> properties = ImmutableMap.of();
-
-    replayMocks();
 
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
@@ -133,8 +113,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("otherKey", "testValue");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -142,8 +120,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "!,testValue");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "otherValue");
-
-    replayMocks();
 
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
@@ -153,8 +129,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "otherValue");
 
-    replayMocks();
-
     assertTrue("isMetBy gave false", condition.isMetBy(properties));
   }
 
@@ -162,8 +136,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "!,value1,value2,value3");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1");
-
-    replayMocks();
 
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
@@ -173,8 +145,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1 value3");
 
-    replayMocks();
-
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
 
@@ -183,8 +153,6 @@ public class ConditionTest extends LoggingMockingTestCase {
 
     Map<String, String> properties = ImmutableMap.of("testKey", "value1 value2 value3");
 
-    replayMocks();
-
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
 
@@ -192,7 +160,6 @@ public class ConditionTest extends LoggingMockingTestCase {
     Condition condition = createCondition("testKey", "!,value1,value2,value3");
 
     Map<String, String> properties = ImmutableMap.of("testKey", "otherValue1 value2 otherValue3");
-    replayMocks();
 
     assertFalse("isMetBy gave true", condition.isMetBy(properties));
   }
