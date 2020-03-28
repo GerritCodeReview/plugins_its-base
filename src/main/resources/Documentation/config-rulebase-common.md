@@ -574,6 +574,13 @@ tag, as for example `master`).
 `uploaderUsername`
 : username of the user that uploaded this patch set.
 
+### Common properties for all events
+
+`source`
+: source of the event that triggered the action. Can be `its` or `gerrit`.
+  `its` sourced events are fired by its actions. e.g. `fire-event-on-commits` action fires `its` sourced events.
+  `gerrit` sourced events are directly fired by the Gerrit event system.
+
 ## Actions
 
 Lines of the form
@@ -692,6 +699,26 @@ Example with the event property `ref`:
 ```
   action = create-version-from-property ref
 ```
+
+### Action: fire-event-on-commits
+
+The `fire-event-on-commits` action start by collecting commits using a collector then fire the event
+on each collected commit.
+
+This is useful when you want to trigger rules on a multiple past commits.
+
+Available collectors are:
+- `since-last-tag`: Collects all commits between the current ref and previous tag
+
+To avoid to trigger issue actions twice for the same event, you should condition your rule on
+the event property `source`.
+
+Example:
+
+```
+  action = fire-event-on-commits since-last-tag
+```
+
 
 ### Action: log-event
 

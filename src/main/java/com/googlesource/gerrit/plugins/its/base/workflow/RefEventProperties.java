@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,8 +30,8 @@ public class RefEventProperties {
    */
   public RefEventProperties(
       Map<String, String> projectProperties, Set<Map<String, String>> issuesProperties) {
-    this.projectProperties = Collections.unmodifiableMap(projectProperties);
-    this.issuesProperties = Collections.unmodifiableSet(issuesProperties);
+    this.projectProperties = projectProperties;
+    this.issuesProperties = issuesProperties;
   }
 
   /** @return Properties of the ref event */

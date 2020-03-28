@@ -36,6 +36,7 @@ public class ActionExecutor {
   private final LogEvent.Factory logEventFactory;
   private final AddPropertyToField.Factory addPropertyToFieldFactory;
   private final CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private final FireEventOnCommits.Factory fireEventOnCommitsFactory;
   private final DynamicMap<CustomAction> customActions;
 
   @Inject
@@ -47,6 +48,7 @@ public class ActionExecutor {
       LogEvent.Factory logEventFactory,
       AddPropertyToField.Factory addPropertyToFieldFactory,
       CreateVersionFromProperty.Factory createVersionFromPropertyFactory,
+      FireEventOnCommits.Factory fireEventOnCommitsFactory,
       DynamicMap<CustomAction> customActions) {
     this.itsFactory = itsFactory;
     this.addCommentFactory = addCommentFactory;
@@ -55,6 +57,7 @@ public class ActionExecutor {
     this.logEventFactory = logEventFactory;
     this.addPropertyToFieldFactory = addPropertyToFieldFactory;
     this.createVersionFromPropertyFactory = createVersionFromPropertyFactory;
+    this.fireEventOnCommitsFactory = fireEventOnCommitsFactory;
     this.customActions = customActions;
   }
 
@@ -72,6 +75,8 @@ public class ActionExecutor {
         return addPropertyToFieldFactory.create();
       case "create-version-from-property":
         return createVersionFromPropertyFactory.create();
+      case "fire-event-on-commits":
+        return fireEventOnCommitsFactory.create();
       default:
         return customActions.get(PluginName.GERRIT, actionName);
     }

@@ -38,9 +38,11 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
+import com.googlesource.gerrit.plugins.its.base.workflow.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
+import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
@@ -78,6 +80,8 @@ public class ItsHookModule extends FactoryModule {
     factory(AddPropertyToField.Factory.class);
     DynamicMap.mapOf(binder(), CustomAction.class);
     install(ItsRulesProjectCacheImpl.module());
+    factory(FireEventOnCommits.Factory.class);
+    factory(SinceLastTagCommitCollector.Factory.class);
   }
 
   @Provides

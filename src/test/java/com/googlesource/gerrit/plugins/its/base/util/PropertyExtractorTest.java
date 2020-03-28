@@ -41,6 +41,7 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
+import com.googlesource.gerrit.plugins.its.base.workflow.RefEventProperties;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -374,13 +375,30 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
       when(issueExtractor.getIssueIds("testProject", "testRevision")).thenReturn(issueMap);
     }
 
-    Set<Map<String, String>> actual = propertyExtractor.extractFrom(event).getIssuesProperties();
+    RefEventProperties refEventProperties = propertyExtractor.extractFrom(event);
+
+    Map<String, String> actualProjectProperties = refEventProperties.getProjectProperties();
+
+    Map<String, String> expectedProjectProperties =
+        ImmutableMap.<String, String>builder()
+            .put("itsName", "ItsTestName")
+            .put("event", "com.google.gerrit.server.events." + className)
+            .put("event-type", type)
+            .put("source", "gerrit")
+            .putAll(common)
+            .build();
+
+    assertEquals(
+        "Project properties do not match", expectedProjectProperties, actualProjectProperties);
+
+    Set<Map<String, String>> actualIssuesProperties = refEventProperties.getIssuesProperties();
 
     Map<String, String> propertiesIssue4711 =
         ImmutableMap.<String, String>builder()
             .put("itsName", "ItsTestName")
             .put("event", "com.google.gerrit.server.events." + className)
             .put("event-type", type)
+            .put("source", "its")
             .put("association", "body anywhere")
             .put("issue", "4711")
             .putAll(common)
@@ -390,15 +408,17 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
             .put("itsName", "ItsTestName")
             .put("event", "com.google.gerrit.server.events." + className)
             .put("event-type", type)
+            .put("source", "its")
             .put("association", "anywhere footer")
             .put("issue", "42")
             .putAll(common)
             .build();
-    Set<Map<String, String>> expected = new HashSet<>();
-    expected.add(propertiesIssue4711);
-    expected.add(propertiesIssue42);
+    Set<Map<String, String>> expectedIssuesProperties = new HashSet<>();
+    expectedIssuesProperties.add(propertiesIssue4711);
+    expectedIssuesProperties.add(propertiesIssue42);
 
-    assertEquals("Properties do not match", expected, actual);
+    assertEquals(
+        "Issues properties do not match", expectedIssuesProperties, actualIssuesProperties);
   }
 
   @Override
