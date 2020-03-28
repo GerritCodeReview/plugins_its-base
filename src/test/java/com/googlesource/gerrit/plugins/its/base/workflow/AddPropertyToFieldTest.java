@@ -14,20 +14,21 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.testutil.MockingTestCase;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.easymock.EasyMock;
+import junit.framework.TestCase;
 
-public class AddPropertyToFieldTest extends MockingTestCase {
+public class AddPropertyToFieldTest extends TestCase {
 
   private static final String ISSUE_ID = "4711";
   private static final String FIELD_ID = "fieldId";
@@ -47,28 +48,25 @@ public class AddPropertyToFieldTest extends MockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      parametersExtractor = createMock(AddPropertyToFieldParametersExtractor.class);
+      parametersExtractor = mock(AddPropertyToFieldParametersExtractor.class);
       bind(AddPropertyToFieldParametersExtractor.class).toInstance(parametersExtractor);
 
-      its = createMock(ItsFacade.class);
+      its = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
     }
   }
 
   public void testHappyPath() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = Collections.singletonMap(PROPERTY_ID, PROPERTY_VALUE);
-    expect(parametersExtractor.extract(actionRequest, properties))
-        .andReturn(Optional.of(new AddPropertyToFieldParameters(PROPERTY_VALUE, FIELD_ID)));
-
-    its.addValueToField(ISSUE_ID, PROPERTY_VALUE, FIELD_ID);
-    EasyMock.expectLastCall().once();
-
-    replayMocks();
+    when(parametersExtractor.extract(actionRequest, properties))
+        .thenReturn(Optional.of(new AddPropertyToFieldParameters(PROPERTY_VALUE, FIELD_ID)));
 
     AddPropertyToField addPropertyToField = createAddPropertyToField();
     addPropertyToField.execute(its, ISSUE_ID, actionRequest, properties);
+
+    verify(its).addValueToField(ISSUE_ID, PROPERTY_VALUE, FIELD_ID);
   }
 
   private AddPropertyToField createAddPropertyToField() {
