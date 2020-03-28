@@ -14,20 +14,21 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
-import com.googlesource.gerrit.plugins.its.base.testutil.MockingTestCase;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.easymock.EasyMock;
+import junit.framework.TestCase;
 
-public class CreateVersionFromPropertyTest extends MockingTestCase {
+public class CreateVersionFromPropertyTest extends TestCase {
 
   private static final String ITS_PROJECT = "test-project";
   private static final String PROPERTY_VALUE = "propertyValue";
@@ -45,28 +46,25 @@ public class CreateVersionFromPropertyTest extends MockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      its = createMock(ItsFacade.class);
+      its = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
 
-      parametersExtractor = createMock(CreateVersionFromPropertyParametersExtractor.class);
+      parametersExtractor = mock(CreateVersionFromPropertyParametersExtractor.class);
       bind(CreateVersionFromPropertyParametersExtractor.class).toInstance(parametersExtractor);
     }
   }
 
   public void testHappyPath() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = Collections.emptyMap();
-    expect(parametersExtractor.extract(actionRequest, properties))
-        .andReturn(Optional.of(new CreateVersionFromPropertyParameters(PROPERTY_VALUE)));
-
-    its.createVersion(ITS_PROJECT, PROPERTY_VALUE);
-    EasyMock.expectLastCall().once();
-
-    replayMocks();
+    when(parametersExtractor.extract(actionRequest, properties))
+        .thenReturn(Optional.of(new CreateVersionFromPropertyParameters(PROPERTY_VALUE)));
 
     CreateVersionFromProperty createVersionFromProperty = createCreateVersionFromProperty();
     createVersionFromProperty.execute(its, ITS_PROJECT, actionRequest, properties);
+
+    verify(its).createVersion(ITS_PROJECT, PROPERTY_VALUE);
   }
 
   private CreateVersionFromProperty createCreateVersionFromProperty() {

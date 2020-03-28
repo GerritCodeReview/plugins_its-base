@@ -15,16 +15,17 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static com.google.common.truth.Truth8.assertThat;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.googlesource.gerrit.plugins.its.base.testutil.MockingTestCase;
 import java.util.Collections;
 import java.util.Optional;
+import junit.framework.TestCase;
 
-public class AddPropertyToFieldParametersExtractorTest extends MockingTestCase {
+public class AddPropertyToFieldParametersExtractorTest extends TestCase {
 
   private static final String FIELD_ID = "fieldId";
   private static final String PROPERTY_ID = "propertyId";
@@ -54,46 +55,36 @@ public class AddPropertyToFieldParametersExtractorTest extends MockingTestCase {
   }
 
   private void testWrongNumberOfReceivedParameters(String[] parameters) {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(parameters);
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(parameters);
 
     assertFalse(extractor.extract(actionRequest, Collections.emptyMap()).isPresent());
   }
 
   public void testBlankFieldId() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {PROPERTY_ID, ""});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {PROPERTY_ID, ""});
 
     assertFalse(extractor.extract(actionRequest, Collections.emptyMap()).isPresent());
   }
 
   public void testBlankPropertyId() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {"", FIELD_ID});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {"", FIELD_ID});
 
     assertFalse(extractor.extract(actionRequest, Collections.emptyMap()).isPresent());
   }
 
   public void testUnknownPropertyId() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {FIELD_ID, PROPERTY_ID});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {FIELD_ID, PROPERTY_ID});
 
     assertFalse(extractor.extract(actionRequest, Collections.emptyMap()).isPresent());
   }
 
   public void testHappyPath() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {PROPERTY_ID, FIELD_ID});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {PROPERTY_ID, FIELD_ID});
 
     Optional<AddPropertyToFieldParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.singletonMap(PROPERTY_ID, PROPERTY_VALUE));

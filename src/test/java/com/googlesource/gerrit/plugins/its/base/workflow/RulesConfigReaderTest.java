@@ -16,7 +16,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static com.googlesource.gerrit.plugins.its.base.workflow.RulesConfigReader.ACTION_KEY;
 import static com.googlesource.gerrit.plugins.its.base.workflow.RulesConfigReader.RULE_SECTION;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -31,13 +33,13 @@ public class RulesConfigReaderTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      ruleFactory = createMock(Rule.Factory.class);
+      ruleFactory = mock(Rule.Factory.class);
       bind(Rule.Factory.class).toInstance(ruleFactory);
 
-      conditionFactory = createMock(Condition.Factory.class);
+      conditionFactory = mock(Condition.Factory.class);
       bind(Condition.Factory.class).toInstance(conditionFactory);
 
-      actionRequestFactory = createMock(ActionRequest.Factory.class);
+      actionRequestFactory = mock(ActionRequest.Factory.class);
       bind(ActionRequest.Factory.class).toInstance(actionRequestFactory);
     }
   }
@@ -63,22 +65,21 @@ public class RulesConfigReaderTest extends LoggingMockingTestCase {
     cfg.setString(RULE_SECTION, RULE_1, CONDITION_KEY, VALUE_1);
     cfg.setString(RULE_SECTION, RULE_1, ACTION_KEY, ACTION_1);
 
-    Rule rule1 = createMock(Rule.class);
-    expect(ruleFactory.create(RULE_1)).andReturn(rule1);
+    Rule rule1 = mock(Rule.class);
+    when(ruleFactory.create(RULE_1)).thenReturn(rule1);
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
-    expect(actionRequestFactory.create(ACTION_1)).andReturn(actionRequest1);
-    rule1.addActionRequest(actionRequest1);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
+    when(actionRequestFactory.create(ACTION_1)).thenReturn(actionRequest1);
 
-    Condition condition1 = createMock(Condition.class);
-    expect(conditionFactory.create(CONDITION_KEY, VALUE_1)).andReturn(condition1);
-    rule1.addCondition(condition1);
-
-    replayMocks();
+    Condition condition1 = mock(Condition.class);
+    when(conditionFactory.create(CONDITION_KEY, VALUE_1)).thenReturn(condition1);
 
     Collection<Rule> expected = ImmutableList.of(rule1);
 
     RulesConfigReader rulesConfigReader = injector.getInstance(RulesConfigReader.class);
     assertEquals("Rules do not match", expected, rulesConfigReader.getRulesFromConfig(cfg));
+
+    verify(rule1).addActionRequest(actionRequest1);
+    verify(rule1).addCondition(condition1);
   }
 }
