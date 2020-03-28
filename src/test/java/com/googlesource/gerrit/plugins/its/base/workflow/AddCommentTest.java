@@ -13,7 +13,9 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
@@ -29,25 +31,21 @@ public class AddCommentTest extends LoggingMockingTestCase {
   private ItsFacade its;
 
   public void testEmpty() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {});
 
     AddComment addComment = createAddComment();
     addComment.execute(null, "4711", actionRequest, ImmutableMap.of());
   }
 
   public void testPlain() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {"Some", "test", "comment"});
-
-    its.addComment("4711", "Some test comment");
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {"Some", "test", "comment"});
 
     AddComment addComment = createAddComment();
     addComment.execute(its, "4711", actionRequest, ImmutableMap.of());
+
+    verify(its).addComment("4711", "Some test comment");
   }
 
   private AddComment createAddComment() {
@@ -63,7 +61,7 @@ public class AddCommentTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      its = createMock(ItsFacade.class);
+      its = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
     }
   }

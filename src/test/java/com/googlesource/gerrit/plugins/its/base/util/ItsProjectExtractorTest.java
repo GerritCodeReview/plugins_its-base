@@ -14,17 +14,19 @@
 
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
-import com.googlesource.gerrit.plugins.its.base.testutil.MockingTestCase;
+import junit.framework.TestCase;
+
 import java.util.Optional;
 
-public class ItsProjectExtractorTest extends MockingTestCase {
+public class ItsProjectExtractorTest extends TestCase {
 
   private static final String PROJECT = "project";
   private static final String ITS_PROJECT = "itsProject";
@@ -35,11 +37,9 @@ public class ItsProjectExtractorTest extends MockingTestCase {
   public void test() {
     ItsProjectExtractor projectExtractor = injector.getInstance(ItsProjectExtractor.class);
 
-    expect(itsConfig.getItsProjectName(Project.nameKey(PROJECT)))
-        .andReturn(Optional.of(ITS_PROJECT))
-        .once();
-
-    replayMocks();
+    when(itsConfig.getItsProjectName(Project.nameKey(PROJECT)))
+        .thenReturn(Optional.of(ITS_PROJECT))
+        .thenThrow(new UnsupportedOperationException("Method more than once"));
 
     String ret = projectExtractor.getItsProject(PROJECT).orElse(null);
     assertEquals(ret, ITS_PROJECT);
@@ -55,7 +55,7 @@ public class ItsProjectExtractorTest extends MockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      itsConfig = createMock(ItsConfig.class);
+      itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
     }
   }
