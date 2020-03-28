@@ -1,16 +1,17 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static com.google.common.truth.Truth8.assertThat;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.googlesource.gerrit.plugins.its.base.testutil.MockingTestCase;
 import java.util.Collections;
 import java.util.Optional;
+import junit.framework.TestCase;
 
-public class CreateVersionFromPropertyParametersExtractorTest extends MockingTestCase {
+public class CreateVersionFromPropertyParametersExtractorTest extends TestCase {
 
   private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
@@ -35,10 +36,8 @@ public class CreateVersionFromPropertyParametersExtractorTest extends MockingTes
   }
 
   private void testWrongNumberOfReceivedParameters(String[] parameters) {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(parameters);
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(parameters);
 
     Optional<CreateVersionFromPropertyParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.emptyMap());
@@ -46,10 +45,8 @@ public class CreateVersionFromPropertyParametersExtractorTest extends MockingTes
   }
 
   public void testBlankPropertyId() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {""});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {""});
 
     Optional<CreateVersionFromPropertyParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.emptyMap());
@@ -57,10 +54,8 @@ public class CreateVersionFromPropertyParametersExtractorTest extends MockingTes
   }
 
   public void testUnknownPropertyId() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {PROPERTY_ID});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {PROPERTY_ID});
 
     Optional<CreateVersionFromPropertyParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.emptyMap());
@@ -68,10 +63,8 @@ public class CreateVersionFromPropertyParametersExtractorTest extends MockingTes
   }
 
   public void testHappyPath() {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
-    expect(actionRequest.getParameters()).andReturn(new String[] {PROPERTY_ID});
-
-    replayMocks();
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getParameters()).thenReturn(new String[] {PROPERTY_ID});
 
     Optional<CreateVersionFromPropertyParameters> extractedParameters =
         extractor.extract(actionRequest, Collections.singletonMap(PROPERTY_ID, PROPERTY_VALUE));
