@@ -48,6 +48,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
   private LogEvent.Factory logEventFactory;
   private AddPropertyToField.Factory addPropertyToFieldFactory;
   private CreateVersionFromProperty.Factory createVersionFromPropertyFactory;
+  private FireEventOnCommits.Factory fireEventOnCommitsFactory;
   private CustomAction customAction;
 
   private Map<String, String> properties =
@@ -212,7 +213,8 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     CreateVersionFromProperty createVersionFromProperty = mock(CreateVersionFromProperty.class);
     when(createVersionFromPropertyFactory.create()).thenReturn(createVersionFromProperty);
-    when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
+    when(itsFacadeFactory.getFacade(Project.nameKey(projectProperties.get("project"))))
+        .thenReturn(its);
 
     ActionExecutor actionExecutor = createActionExecutor();
     actionExecutor.executeOnProject(Collections.singleton(actionRequest), projectProperties);
@@ -235,6 +237,21 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     actionExecutor.executeOnIssue(actionRequests, properties);
 
     verify(addPropertyToField).execute(its, "4711", actionRequest, properties);
+  }
+
+  public void testFireEventOnCommitsDelegation() throws IOException {
+    ActionRequest actionRequest = mock(ActionRequest.class);
+    when(actionRequest.getName()).thenReturn("fire-event-on-commits");
+
+    FireEventOnCommits fireEventOnCommits = mock(FireEventOnCommits.class);
+    when(fireEventOnCommitsFactory.create()).thenReturn(fireEventOnCommits);
+    when(itsFacadeFactory.getFacade(Project.nameKey(projectProperties.get("project"))))
+        .thenReturn(its);
+
+    ActionExecutor actionExecutor = createActionExecutor();
+    actionExecutor.executeOnProject(Collections.singleton(actionRequest), projectProperties);
+
+    verify(fireEventOnCommits).execute(its, "itsTestProject", actionRequest, projectProperties);
   }
 
   public void testExecuteIssueCustomAction() throws IOException {
@@ -303,6 +320,9 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
       createVersionFromPropertyFactory = mock(CreateVersionFromProperty.Factory.class);
       bind(CreateVersionFromProperty.Factory.class).toInstance(createVersionFromPropertyFactory);
+
+      fireEventOnCommitsFactory = mock(FireEventOnCommits.Factory.class);
+      bind(FireEventOnCommits.Factory.class).toInstance(fireEventOnCommitsFactory);
 
       DynamicMap.mapOf(binder(), CustomAction.class);
       customAction = mock(CustomAction.class);
