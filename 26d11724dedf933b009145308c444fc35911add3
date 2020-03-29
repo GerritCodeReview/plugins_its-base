@@ -584,6 +584,30 @@
     },
     {
       "key": {
+        "uuid": "ef378d10_7f0cb9f3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2020-03-29T16:16:36Z",
+      "side": 1,
+      "message": "This was collecting \"all tags except the current tag\".\nSo this is why it was expecting multiple tags.\nIt does not matter anymore since this code has been superseded.",
+      "parentUuid": "dd8a5025_3a2313be",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 20
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4743c8c0_5434dc71",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
         "patchSetId": 5
@@ -607,6 +631,30 @@
     },
     {
       "key": {
+        "uuid": "e233a023_9f4778e3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2020-03-29T16:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4743c8c0_5434dc71",
+      "range": {
+        "startLine": 59,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 69
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29eafdbf_981c1b79",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
         "patchSetId": 5
@@ -627,6 +675,30 @@
       "revId": "26d11724dedf933b009145308c444fc35911add3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf50be3_74fb9008",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/commit_collector/SinceLastTagCommitCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2020-03-29T16:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29eafdbf_981c1b79",
+      "range": {
+        "startLine": 69,
+        "startChar": 14,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "26d11724dedf933b009145308c444fc35911add3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
