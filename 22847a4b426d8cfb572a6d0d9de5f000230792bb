@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a74720f_06313809",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "+ and adapt tests to Gerrit master.",
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a851365_dadb85db",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is the default Mockito behaviour, so you could just omit the L446/L447. What do you think?",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 447,
+        "endChar": 89
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415d4d3a_14d872d0",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "DRY this verification across the whole test, so that becomes less distracting IMHO.\nWhat do you think?\n\nE.g. verifyOneOrMore()",
+      "range": {
+        "startLine": 451,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 39
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96bd9e6a_fc7571e8",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour: can be omitted.",
+      "range": {
+        "startLine": 459,
+        "startChar": 0,
+        "endLine": 459,
+        "endChar": 81
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b95895_4ae64463",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour: can be omitted.",
+      "range": {
+        "startLine": 470,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3b558f_bd06e943",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 500,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6faeecfc_bc526ac7",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 516,
+        "startChar": 0,
+        "endLine": 516,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aba7f9f4_d2df85ef",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 531,
+        "startChar": 0,
+        "endLine": 531,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed7dcc7_52441786",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 547,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f041e8eb_3ef41a74",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 563,
+        "startChar": 0,
+        "endLine": 563,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59f4a5dd_b223ad15",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 579,
+        "startChar": 0,
+        "endLine": 579,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c8138fc_3d8bddd3",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab0cfef_d5eed75c",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c941345b_87e2380c",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 684,
+        "startChar": 0,
+        "endLine": 684,
+        "endChar": 90
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ca4d13f_28f1fd5c",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractorTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-30T22:10:41Z",
+      "side": 1,
+      "message": "This is default behaviour.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 55
+      },
+      "revId": "22847a4b426d8cfb572a6d0d9de5f000230792bb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
