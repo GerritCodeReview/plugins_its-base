@@ -22,6 +22,30 @@
       "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a5441f6_35aaf53f",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2020-03-30T08:59:11Z",
+      "side": 1,
+      "message": "I wanted, as much as possible, to preserve the shape of the test.\nBut if you really prefer verify, I can use it.\nSo should I use verify?",
+      "parentUuid": "038d563b_f6ce7415",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 87
+      },
+      "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
