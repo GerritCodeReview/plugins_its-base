@@ -46,6 +46,30 @@
       "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1998c193_1745ccfb",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-03-30T09:08:19Z",
+      "side": 1,
+      "message": "I don\u0027t mind either way.  Let\u0027s see what Luca thinks.",
+      "parentUuid": "3a5441f6_35aaf53f",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 87
+      },
+      "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
