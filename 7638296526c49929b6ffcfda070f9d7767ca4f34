@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d3fe709_ac67f5f2",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddStandardCommentTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-31T09:30:00Z",
+      "side": 0,
+      "message": "Why has this been removed?\n(and all the other similar ones below)",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 42
+      },
+      "revId": "7638296526c49929b6ffcfda070f9d7767ca4f34",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}

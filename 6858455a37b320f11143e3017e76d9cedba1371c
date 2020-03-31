@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5055c529_7eefd201",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateCommentTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-31T09:30:00Z",
+      "side": 1,
+      "message": "This isn\u0027t a mock to mock conversion. Any particular reasons for that?",
+      "range": {
+        "startLine": 489,
+        "startChar": 4,
+        "endLine": 489,
+        "endChar": 56
+      },
+      "revId": "6858455a37b320f11143e3017e76d9cedba1371c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9aa01d4_ed4c7741",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateCommentTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-03-31T09:30:00Z",
+      "side": 1,
+      "message": "Why a real commit instead of a mock here?",
+      "range": {
+        "startLine": 563,
+        "startChar": 0,
+        "endLine": 581,
+        "endChar": 3
+      },
+      "revId": "6858455a37b320f11143e3017e76d9cedba1371c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
