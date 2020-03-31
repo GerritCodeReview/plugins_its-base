@@ -16,6 +16,24 @@
       "revId": "58bfb566b82e03cca9235241ce1373d73fdf8828",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67738bde_2ed3d2f1",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/MockingTestCase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1057319
+      },
+      "writtenOn": "2020-03-31T07:57:21Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "9d3c11eb_027cff29",
+      "revId": "58bfb566b82e03cca9235241ce1373d73fdf8828",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
