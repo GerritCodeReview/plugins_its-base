@@ -103,7 +103,8 @@ public class ItsConfig {
       return false;
     }
     return isEnforcedByAnyParentProject(refName, projectState.get())
-        || (isEnabledForProject(projectState.get()) && isEnabledForBranch(projectState.get(), refName));
+        || (isEnabledForProject(projectState.get())
+            && isEnabledForBranch(projectState.get(), refName));
   }
 
   private boolean isEnforcedByAnyParentProject(String refName, ProjectState projectState) {
@@ -152,7 +153,9 @@ public class ItsConfig {
       return Optional.empty();
     }
     return Optional.ofNullable(
-        pluginCfgFactory.getFromProjectConfig(projectState.get(), pluginName).getString("its-project"));
+        pluginCfgFactory
+            .getFromProjectConfig(projectState.get(), pluginName)
+            .getString("its-project"));
   }
 
   // Issue association --------------------------------------------------------

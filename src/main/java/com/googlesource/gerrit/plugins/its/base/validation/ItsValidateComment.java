@@ -108,7 +108,8 @@ public class ItsValidateComment implements CommitValidationListener {
             sb.append(" Issue-Tracker");
             details = sb.toString();
 
-            ret.add(commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
+            ret.add(
+                commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
           }
         } else if (!itsConfig
             .getDummyIssuePattern()
