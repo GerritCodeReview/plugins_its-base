@@ -70,6 +70,30 @@
       "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e79b007_eb819bc4",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-04-01T15:11:48Z",
+      "side": 1,
+      "message": "Actually the fact of requesting that is called *exactly* twice is over-testing IMHO. For the time being is fine like this but the whole test strategy is quite obsolete and would need reworking on master.",
+      "parentUuid": "1998c193_1745ccfb",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 87
+      },
+      "revId": "ecbcbb18e02b9315e429ac458238619402af3082",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
