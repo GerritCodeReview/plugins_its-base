@@ -13,7 +13,8 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -38,8 +39,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
   private ItsFacade facade;
 
   public void testAccountAttributeNull() {
-    replayMocks();
-
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Map<String, String> actual = extractor.extractFrom(null, "prefix");
@@ -54,8 +53,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     accountAttribute.email = "testEmail";
     accountAttribute.name = "testName";
     accountAttribute.username = "testUsername";
-
-    replayMocks();
 
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
@@ -87,10 +84,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.commitMessage = "Commit Message";
     changeAttribute.status = Change.Status.NEW;
 
-    expect(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
-        .andReturn("http://www.example.org/test");
-
-    replayMocks();
+    when(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
+        .thenReturn("http://www.example.org/test");
 
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
@@ -133,10 +128,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.commitMessage = "Commit Message";
     changeAttribute.status = Change.Status.NEW;
 
-    expect(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
-        .andReturn("http://www.example.org/test");
-
-    replayMocks();
+    when(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
+        .thenReturn("http://www.example.org/test");
 
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
@@ -179,10 +172,8 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     changeAttribute.owner = owner;
     changeAttribute.commitMessage = "Commit Message";
 
-    expect(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
-        .andReturn("http://www.example.org/test");
-
-    replayMocks();
+    when(facade.createLinkForWebui("http://www.example.org/test", "http://www.example.org/test"))
+        .thenReturn("http://www.example.org/test");
 
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
@@ -231,8 +222,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     patchSetAttribute.uploader = uploader;
     patchSetAttribute.author = author;
 
-    replayMocks();
-
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Map<String, String> actual = extractor.extractFrom(patchSetAttribute);
@@ -262,8 +251,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     refUpdateAttribute.oldRev = "9876543211987654321298765432139876543214";
     refUpdateAttribute.refName = "refs/heads/master";
 
-    replayMocks();
-
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Map<String, String> actual = extractor.extractFrom(refUpdateAttribute);
@@ -284,8 +271,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     approvalAttribute.type = "TestType";
     approvalAttribute.value = "TestValue";
 
-    replayMocks();
-
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
     Map<String, String> actual = extractor.extractFrom(approvalAttribute);
@@ -298,8 +283,6 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
     ApprovalAttribute approvalAttribute = new ApprovalAttribute();
     approvalAttribute.type = "Test-Type";
     approvalAttribute.value = "TestValue";
-
-    replayMocks();
 
     PropertyAttributeExtractor extractor = injector.getInstance(PropertyAttributeExtractor.class);
 
@@ -318,7 +301,7 @@ public class PropertyAttributeExtractorTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      facade = createMock(ItsFacade.class);
+      facade = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(facade);
     }
   }

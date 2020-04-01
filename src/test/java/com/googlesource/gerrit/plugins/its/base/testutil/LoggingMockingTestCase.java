@@ -22,11 +22,12 @@ import com.google.gerrit.entities.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 import java.sql.Timestamp;
 import java.util.Iterator;
+import junit.framework.TestCase;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
-public abstract class LoggingMockingTestCase extends MockingTestCase {
+public abstract class LoggingMockingTestCase extends TestCase {
 
   protected final Change.Key testChangeKey =
       Change.key("Ic19f7bf6c8b4685c363a8204c32d827ffda52ec0");

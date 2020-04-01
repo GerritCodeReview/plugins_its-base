@@ -15,7 +15,11 @@ package com.googlesource.gerrit.plugins.its.base.validation;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -32,17 +36,14 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.IssueExtractor;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.regex.Pattern;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({RevCommit.class})
 public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private Injector injector;
   private IssueExtractor issueExtractor;
@@ -55,38 +56,29 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit();
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.OPTIONAL)
-        .atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.OPTIONAL);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
   }
 
   public void testSuggestedNonMatching() throws CommitValidationException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("TestMessage");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(itsConfig.getDummyIssuePattern()).andReturn(Optional.empty()).atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("TestMessage")).andReturn(new String[] {}).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.empty());
+    when(issueExtractor.getIssueIds("TestMessage")).thenReturn(new String[] {});
 
     ret = ivc.onCommitReceived(event);
 
@@ -94,121 +86,104 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertTrue(
         "First CommitValidationMessages does not contain 'Missing " + "issue'",
         ret.get(0).getMessage().contains("Missing issue"));
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(itsConfig).getDummyIssuePattern();
+    verifyOneOrMore(issueExtractor).getIssueIds("TestMessage");
   }
 
   public void testMandatoryNonMatching() {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("TestMessage");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(itsConfig.getDummyIssuePattern()).andReturn(Optional.empty()).atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("TestMessage").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("TestMessage")).andReturn(new String[] {}).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.empty());
+    when(issueExtractor.getIssueIds("TestMessage")).thenReturn(new String[] {});
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Missing issue");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(itsConfig).getDummyIssuePattern();
+    verifyOneOrMore(issueExtractor).getIssueIds("TestMessage");
   }
 
   public void testOnlySkipMatching() throws CommitValidationException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("TestMessage SKIP");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(itsConfig.getDummyIssuePattern())
-        .andReturn(Optional.of(Pattern.compile("SKIP")))
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("TestMessage SKIP").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("TestMessage SKIP")).andReturn(new String[] {}).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.of(Pattern.compile("SKIP")));
+    when(issueExtractor.getIssueIds("TestMessage SKIP")).thenReturn(new String[] {});
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(itsConfig).getDummyIssuePattern();
+    verifyOneOrMore(issueExtractor).getIssueIds("TestMessage SKIP");
   }
 
   public void testSuggestedMatchingSingleExisting() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
+    verifyOneOrMore(itsFacade).exists("4711");
   }
 
   public void testMandatoryMatchingSingleExisting() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
+    verifyOneOrMore(itsFacade).exists("4711");
   }
 
   public void testSuggestedMatchingSingleNonExisting()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -219,106 +194,90 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
         ret.get(0).getMessage().contains("4711"));
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
+    verifyOneOrMore(itsFacade).exists("4711");
   }
 
   public void testMandatoryMatchingSingleNonExisting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade);
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
+    verifyOneOrMore(itsFacade).exists("4711");
   }
 
   public void testSuggestedMatchingMultiple() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(true);
+    when(itsFacade.exists("42")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testMandatoryMatchingMultiple() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(true).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(true);
+    when(itsFacade.exists("42")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testSuggestedMatchingMultipleOneNonExsting()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists("42")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
@@ -332,56 +291,48 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertFalse(
         "First CommitValidationMessages contains '42', although " + "that bug exists",
         ret.get(0).getMessage().contains("42"));
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testMandatoryMatchingMultipleOneNonExsting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists("42")).thenReturn(true);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testSuggestedMatchingMultipleSomeNonExsting()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists("42")).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -395,56 +346,48 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     assertTrue(
         "First CommitValidationMessages does not contain '42'",
         ret.get(0).getMessage().contains("42"));
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testMandatoryMatchingMultipleSomeNonExsting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andReturn(false).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists("42")).thenReturn(true);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testSuggestedMatchingMultipleIOExceptionIsNonExsting()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.SUGGESTED)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
+    when(itsFacade.exists("42")).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -470,27 +413,25 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(1).getMessage().contains("42"));
 
     assertLogMessageContains("4711");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testMandatoryMatchingSingleIOException()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711")).andReturn(new String[] {"4711"}).atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
 
     ret = ivc.onCommitReceived(event);
 
@@ -506,29 +447,23 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("InjectedEx1"));
 
     assertLogMessageContains("4711");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
+    verifyOneOrMore(itsFacade).exists("4711");
   }
 
   public void testMandatoryMatchingMultipleIOExceptionIsNonExisting() throws IOException {
-    List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(false).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
+    when(itsFacade.exists("42")).thenReturn(false);
 
     try {
       ivc.onCommitReceived(event);
@@ -539,30 +474,26 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
           "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
           e.getMessage().contains("Non-existing"));
     }
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void testMandatoryMatchingMultipleIOExceptionExisting()
       throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
-    ReceiveCommand command = createMock(ReceiveCommand.class);
-    RevCommit commit = createMock(RevCommit.class);
+    ReceiveCommand command = mock(ReceiveCommand.class);
+    RevCommit commit = createCommit("bug#4711, bug#42");
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
-    expect(itsConfig.getItsAssociationPolicy())
-        .andReturn(ItsAssociationPolicy.MANDATORY)
-        .atLeastOnce();
-    expect(commit.getFullMessage()).andReturn("bug#4711, bug#42").atLeastOnce();
-    expect(commit.getId()).andReturn(commit).anyTimes();
-    expect(commit.getName()).andReturn("TestCommit").anyTimes();
-    expect(issueExtractor.getIssueIds("bug#4711, bug#42"))
-        .andReturn(new String[] {"4711", "42"})
-        .atLeastOnce();
-    expect(itsFacadeFactory.getFacade(project.getNameKey())).andReturn(itsFacade).anyTimes();
-    expect(itsFacade.exists("4711")).andThrow(new IOException("InjectedEx1")).atLeastOnce();
-    expect(itsFacade.exists("42")).andReturn(true).atLeastOnce();
-
-    replayMocks();
+    when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
+    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
+    when(itsFacade.exists("42")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
@@ -578,6 +509,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("InjectedEx1"));
 
     assertLogMessageContains("4711");
+
+    verifyOneOrMore(itsConfig).getItsAssociationPolicy();
+    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
+    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(itsFacade).exists("42");
   }
 
   public void assertEmptyList(List<CommitValidationMessage> list) {
@@ -593,9 +529,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   }
 
   private void setupCommonMocks() {
-    expect(itsConfig.getIssuePattern()).andReturn(Pattern.compile("bug#(\\d+)")).anyTimes();
+    when(itsConfig.getIssuePattern()).thenReturn(Pattern.compile("bug#(\\d+)"));
     Project.NameKey projectNK = Project.nameKey("myProject");
-    expect(itsConfig.isEnabled(projectNK, null)).andReturn(true).anyTimes();
+    when(itsConfig.isEnabled(projectNK, null)).thenReturn(true);
   }
 
   @Override
@@ -613,15 +549,39 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
       String refName,
       RevCommit commit,
       IdentifiedUser user) {
-    CommitReceivedEvent event = createMock(CommitReceivedEvent.class);
+    CommitReceivedEvent event = mock(CommitReceivedEvent.class);
     event.command = command;
     event.project = project;
     event.refName = refName;
     event.commit = commit;
     event.user = user;
-    expect(event.getProjectNameKey()).andReturn(project.getNameKey()).anyTimes();
-    expect(event.getRefName()).andReturn(null).anyTimes();
+    when(event.getProjectNameKey()).thenReturn(project.getNameKey());
+    when(event.getRefName()).thenReturn(null);
     return event;
+  }
+
+  private RevCommit createCommit() {
+    return createCommit("Hello world");
+  }
+
+  private RevCommit createCommit(String fullMessage) {
+    String parents = String.format("parent %040x\n", new java.util.Random().nextLong());
+    String commitData =
+        String.format(
+            "tree %040x\n"
+                + parents
+                + "author John Doe <john@doe.com> %d +0100\n"
+                + "committer John Doe <john@doe.com> %d +0100\n\n"
+                + "%s",
+            new Random().nextLong(),
+            new Date().getTime(),
+            new Date().getTime(),
+            fullMessage);
+    return RevCommit.parse(commitData.getBytes());
+  }
+
+  private <T> T verifyOneOrMore(T mock) {
+    return verify(mock, atLeastOnce());
   }
 
   private class TestModule extends FactoryModule {
@@ -629,16 +589,16 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     protected void configure() {
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
-      issueExtractor = createMock(IssueExtractor.class);
+      issueExtractor = mock(IssueExtractor.class);
       bind(IssueExtractor.class).toInstance(issueExtractor);
 
-      itsFacade = createMock(ItsFacade.class);
+      itsFacade = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(itsFacade);
 
-      itsConfig = createMock(ItsConfig.class);
+      itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
 
-      itsFacadeFactory = createMock(ItsFacadeFactory.class);
+      itsFacadeFactory = mock(ItsFacadeFactory.class);
       bind(ItsFacadeFactory.class).toInstance(itsFacadeFactory);
     }
   }

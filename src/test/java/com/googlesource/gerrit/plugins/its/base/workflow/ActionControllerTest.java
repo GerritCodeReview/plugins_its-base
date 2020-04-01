@@ -13,8 +13,10 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -44,14 +46,11 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   public void testNoPropertySets() {
     ActionController actionController = createActionController();
 
-    ChangeEvent event = createMock(ChangeEvent.class);
+    ChangeEvent event = mock(ChangeEvent.class);
 
     Set<Map<String, String>> propertySets = new HashSet<>();
-    expect(propertyExtractor.extractFrom(event))
-        .andReturn(new RefEventProperties(Collections.emptyMap(), propertySets))
-        .anyTimes();
-
-    replayMocks();
+    when(propertyExtractor.extractFrom(event))
+        .thenReturn(new RefEventProperties(Collections.emptyMap(), propertySets));
 
     actionController.onEvent(event);
   }
@@ -59,22 +58,22 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   public void testNoActionsOrNoIssues() {
     ActionController actionController = createActionController();
 
-    ChangeEvent event = createMock(ChangeEvent.class);
+    ChangeEvent event = mock(ChangeEvent.class);
 
     Set<Map<String, String>> propertySets = new HashSet<>();
     Map<String, String> properties = ImmutableMap.of("fake", "property");
     propertySets.add(properties);
 
-    expect(propertyExtractor.extractFrom(event))
-        .andReturn(new RefEventProperties(properties, propertySets))
-        .anyTimes();
+    when(propertyExtractor.extractFrom(event))
+        .thenReturn(new RefEventProperties(properties, propertySets));
 
     // When no issues are found in the commit message, the list of actions is empty
     // as there are no matchs with an empty map of properties.
     Collection<ActionRequest> actions = Collections.emptySet();
-    expect(ruleBase.actionRequestsFor(properties)).andReturn(actions).times(2);
-
-    replayMocks();
+    when(ruleBase.actionRequestsFor(properties))
+        .thenReturn(actions)
+        .thenReturn(actions)
+        .thenThrow(new UnsupportedOperationException("Method called more than twice"));
 
     actionController.onEvent(event);
   }
@@ -82,7 +81,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   public void testSinglePropertyMapSingleIssueActionSingleProjectAction() {
     ActionController actionController = createActionController();
 
-    ChangeEvent event = createMock(ChangeEvent.class);
+    ChangeEvent event = mock(ChangeEvent.class);
 
     Map<String, String> projectProperties = ImmutableMap.of("its-project", "itsProject");
 
@@ -94,56 +93,58 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     Set<Map<String, String>> propertySets = ImmutableSet.of(issueProperties);
 
-    expect(propertyExtractor.extractFrom(event))
-        .andReturn(new RefEventProperties(projectProperties, propertySets))
-        .anyTimes();
+    when(propertyExtractor.extractFrom(event))
+        .thenReturn(new RefEventProperties(projectProperties, propertySets));
 
-    ActionRequest issueActionRequest1 = createMock(ActionRequest.class);
+    ActionRequest issueActionRequest1 = mock(ActionRequest.class);
     Collection<ActionRequest> issueActionRequests = ImmutableList.of(issueActionRequest1);
-    expect(ruleBase.actionRequestsFor(issueProperties)).andReturn(issueActionRequests).once();
+    when(ruleBase.actionRequestsFor(issueProperties))
+        .thenReturn(issueActionRequests)
+        .thenThrow(new UnsupportedOperationException("Method called more than once"));
 
-    ActionRequest projectActionRequest1 = createMock(ActionRequest.class);
+    ActionRequest projectActionRequest1 = mock(ActionRequest.class);
     Collection<ActionRequest> projectActionRequests = ImmutableList.of(projectActionRequest1);
-    expect(ruleBase.actionRequestsFor(projectProperties)).andReturn(projectActionRequests).once();
-
-    actionExecutor.executeOnIssue(issueActionRequests, issueProperties);
-    actionExecutor.executeOnProject(projectActionRequests, projectProperties);
-
-    replayMocks();
+    when(ruleBase.actionRequestsFor(projectProperties))
+        .thenReturn(projectActionRequests)
+        .thenThrow(new UnsupportedOperationException("Method called more than once"));
 
     actionController.onEvent(event);
+
+    verify(actionExecutor).executeOnIssue(issueActionRequests, issueProperties);
+    verify(actionExecutor).executeOnProject(projectActionRequests, projectProperties);
   }
 
   public void testMultiplePropertyMapsMultipleActionMultipleIssue() {
     ActionController actionController = createActionController();
 
-    ChangeEvent event = createMock(ChangeEvent.class);
+    ChangeEvent event = mock(ChangeEvent.class);
 
     Map<String, String> properties1 = ImmutableMap.of("issue", "testIssue");
     Map<String, String> properties2 = ImmutableMap.of("issue", "testIssue2");
 
     Set<Map<String, String>> propertySets = ImmutableSet.of(properties1, properties2);
 
-    expect(propertyExtractor.extractFrom(event))
-        .andReturn(new RefEventProperties(Collections.emptyMap(), propertySets))
-        .anyTimes();
+    when(propertyExtractor.extractFrom(event))
+        .thenReturn(new RefEventProperties(Collections.emptyMap(), propertySets));
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
     Collection<ActionRequest> actionRequests1 = ImmutableList.of(actionRequest1);
 
-    ActionRequest actionRequest2 = createMock(ActionRequest.class);
-    ActionRequest actionRequest3 = createMock(ActionRequest.class);
+    ActionRequest actionRequest2 = mock(ActionRequest.class);
+    ActionRequest actionRequest3 = mock(ActionRequest.class);
     Collection<ActionRequest> actionRequests2 = ImmutableList.of(actionRequest2, actionRequest3);
 
-    expect(ruleBase.actionRequestsFor(properties1)).andReturn(actionRequests1).once();
-    expect(ruleBase.actionRequestsFor(properties2)).andReturn(actionRequests2).once();
-
-    actionExecutor.executeOnIssue(actionRequests1, properties1);
-    actionExecutor.executeOnIssue(actionRequests2, properties2);
-
-    replayMocks();
+    when(ruleBase.actionRequestsFor(properties1))
+        .thenReturn(actionRequests1)
+        .thenThrow(new UnsupportedOperationException("Method called more than once"));
+    when(ruleBase.actionRequestsFor(properties2))
+        .thenReturn(actionRequests2)
+        .thenThrow(new UnsupportedOperationException("Method called more than once"));
 
     actionController.onEvent(event);
+
+    verify(actionExecutor).executeOnIssue(actionRequests1, properties1);
+    verify(actionExecutor).executeOnIssue(actionRequests2, properties2);
   }
 
   private ActionController createActionController() {
@@ -151,7 +152,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   }
 
   private void setupCommonMocks() {
-    expect(itsConfig.isEnabled(anyObject(RefEvent.class))).andReturn(true).anyTimes();
+    when(itsConfig.isEnabled(any(RefEvent.class))).thenReturn(true);
   }
 
   @Override
@@ -165,16 +166,16 @@ public class ActionControllerTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      propertyExtractor = createMock(PropertyExtractor.class);
+      propertyExtractor = mock(PropertyExtractor.class);
       bind(PropertyExtractor.class).toInstance(propertyExtractor);
 
-      ruleBase = createMock(RuleBase.class);
+      ruleBase = mock(RuleBase.class);
       bind(RuleBase.class).toInstance(ruleBase);
 
-      actionExecutor = createMock(ActionExecutor.class);
+      actionExecutor = mock(ActionExecutor.class);
       bind(ActionExecutor.class).toInstance(actionExecutor);
 
-      itsConfig = createMock(ItsConfig.class);
+      itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
     }
   }

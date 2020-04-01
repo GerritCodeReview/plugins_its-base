@@ -13,6 +13,9 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.inject.Guice;
@@ -28,19 +31,18 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   private ItsFacade its;
 
   public void testChangeMergedPlain() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of("event-type", "change-merged");
 
-    its.addComment("42", "Change merged");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
+
+    verify(its).addComment("42", "Change merged");
   }
 
   public void testChangeMergedFull() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties =
         ImmutableMap.<String, String>builder()
@@ -51,32 +53,31 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
             .build();
 
-    its.addComment(
-        "176",
-        "Change 4711 merged by John Doe:\n"
-            + "Test-Change-Subject\n"
-            + "\n"
-            + "HtTp://ExAmPlE.OrG/ChAnGe");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
+
+    verify(its)
+        .addComment(
+            "176",
+            "Change 4711 merged by John Doe:\n"
+                + "Test-Change-Subject\n"
+                + "\n"
+                + "HtTp://ExAmPlE.OrG/ChAnGe");
   }
 
   public void testChangeAbandonedPlain() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of("event-type", "change-abandoned");
 
-    its.addComment("42", "Change abandoned");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
+
+    verify(its).addComment("42", "Change abandoned");
   }
 
   public void testChangeAbandonedFull() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties =
         ImmutableMap.<String, String>builder()
@@ -88,35 +89,34 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
             .build();
 
-    its.addComment(
-        "176",
-        "Change 4711 abandoned by John Doe:\n"
-            + "Test-Change-Subject\n"
-            + "\n"
-            + "Reason:\n"
-            + "Test-Reason\n"
-            + "\n"
-            + "HtTp://ExAmPlE.OrG/ChAnGe");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
+
+    verify(its)
+        .addComment(
+            "176",
+            "Change 4711 abandoned by John Doe:\n"
+                + "Test-Change-Subject\n"
+                + "\n"
+                + "Reason:\n"
+                + "Test-Reason\n"
+                + "\n"
+                + "HtTp://ExAmPlE.OrG/ChAnGe");
   }
 
   public void testChangeRestoredPlain() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of("event-type", "change-restored");
 
-    its.addComment("42", "Change restored");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
+
+    verify(its).addComment("42", "Change restored");
   }
 
   public void testChangeRestoredFull() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties =
         ImmutableMap.<String, String>builder()
@@ -128,35 +128,34 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
             .build();
 
-    its.addComment(
-        "176",
-        "Change 4711 restored by John Doe:\n"
-            + "Test-Change-Subject\n"
-            + "\n"
-            + "Reason:\n"
-            + "Test-Reason\n"
-            + "\n"
-            + "HtTp://ExAmPlE.OrG/ChAnGe");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
+
+    verify(its)
+        .addComment(
+            "176",
+            "Change 4711 restored by John Doe:\n"
+                + "Test-Change-Subject\n"
+                + "\n"
+                + "Reason:\n"
+                + "Test-Reason\n"
+                + "\n"
+                + "HtTp://ExAmPlE.OrG/ChAnGe");
   }
 
   public void testPatchSetCreatedPlain() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties = ImmutableMap.of("event-type", "patchset-created");
 
-    its.addComment("42", "Change had a related patch set uploaded");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "42", actionRequest, properties);
+
+    verify(its).addComment("42", "Change had a related patch set uploaded");
   }
 
   public void testPatchSetCreatedFull() throws IOException {
-    ActionRequest actionRequest = createMock(ActionRequest.class);
+    ActionRequest actionRequest = mock(ActionRequest.class);
 
     Map<String, String> properties =
         ImmutableMap.<String, String>builder()
@@ -167,17 +166,17 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
             .put("formatChangeUrl", "HtTp://ExAmPlE.OrG/ChAnGe")
             .build();
 
-    its.addComment(
-        "176",
-        "Change 4711 had a related patch set uploaded by "
-            + "John Doe:\n"
-            + "Test-Change-Subject\n"
-            + "\n"
-            + "HtTp://ExAmPlE.OrG/ChAnGe");
-    replayMocks();
-
     StandardAction action = injector.getInstance(AddStandardComment.class);
     action.execute(its, "176", actionRequest, properties);
+
+    verify(its)
+        .addComment(
+            "176",
+            "Change 4711 had a related patch set uploaded by "
+                + "John Doe:\n"
+                + "Test-Change-Subject\n"
+                + "\n"
+                + "HtTp://ExAmPlE.OrG/ChAnGe");
   }
 
   @Override
@@ -190,7 +189,7 @@ public class AddStandardCommentTest extends LoggingMockingTestCase {
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {
-      its = createMock(ItsFacade.class);
+      its = mock(ItsFacade.class);
       bind(ItsFacade.class).toInstance(its);
     }
   }

@@ -13,7 +13,8 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -39,10 +40,8 @@ public class RuleTest extends LoggingMockingTestCase {
 
     Rule rule = createRule("testRule");
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
     rule.addActionRequest(actionRequest1);
-
-    replayMocks();
 
     Collection<ActionRequest> actual = rule.actionRequestsFor(properties);
 
@@ -56,14 +55,12 @@ public class RuleTest extends LoggingMockingTestCase {
 
     Rule rule = createRule("testRule");
 
-    Condition condition1 = createMock(Condition.class);
-    expect(condition1.isMetBy(properties)).andReturn(false).anyTimes();
+    Condition condition1 = mock(Condition.class);
+    when(condition1.isMetBy(properties)).thenReturn(false);
     rule.addCondition(condition1);
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
     rule.addActionRequest(actionRequest1);
-
-    replayMocks();
 
     Collection<ActionRequest> actual = rule.actionRequestsFor(properties);
 
@@ -76,18 +73,16 @@ public class RuleTest extends LoggingMockingTestCase {
 
     Rule rule = createRule("testRule");
 
-    Condition condition1 = createMock(Condition.class);
-    expect(condition1.isMetBy(properties)).andReturn(true).anyTimes();
+    Condition condition1 = mock(Condition.class);
+    when(condition1.isMetBy(properties)).thenReturn(true);
     rule.addCondition(condition1);
 
-    Condition condition2 = createMock(Condition.class);
-    expect(condition2.isMetBy(properties)).andReturn(false).anyTimes();
+    Condition condition2 = mock(Condition.class);
+    when(condition2.isMetBy(properties)).thenReturn(false);
     rule.addCondition(condition2);
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
     rule.addActionRequest(actionRequest1);
-
-    replayMocks();
 
     Collection<ActionRequest> actual = rule.actionRequestsFor(properties);
 
@@ -100,13 +95,11 @@ public class RuleTest extends LoggingMockingTestCase {
 
     Rule rule = createRule("testRule");
 
-    ActionRequest actionRequest1 = createMock(ActionRequest.class);
+    ActionRequest actionRequest1 = mock(ActionRequest.class);
     rule.addActionRequest(actionRequest1);
 
-    ActionRequest actionRequest2 = createMock(ActionRequest.class);
+    ActionRequest actionRequest2 = mock(ActionRequest.class);
     rule.addActionRequest(actionRequest2);
-
-    replayMocks();
 
     Collection<ActionRequest> actual = rule.actionRequestsFor(properties);
 

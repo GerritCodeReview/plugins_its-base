@@ -13,7 +13,8 @@
 // limitations under the License.
 package com.googlesource.gerrit.plugins.its.base.util;
 
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
@@ -56,9 +57,7 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testDummyChangeEvent() {
     PropertyExtractor propertyExtractor = injector.getInstance(PropertyExtractor.class);
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
-
-    replayMocks();
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
     Set<Map<String, String>> actual =
         propertyExtractor.extractFrom(new DummyEvent()).getIssuesProperties();
@@ -70,25 +69,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testChangeAbandonedEvent() {
     ChangeAbandonedEvent event = new ChangeAbandonedEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.abandoner = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("abandonerName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "abandoner"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "abandoner"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
     event.reason = "testReason";
     changeAttribute.project = "testProject";
@@ -111,25 +110,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testChangeMergedEvent() {
     ChangeMergedEvent event = new ChangeMergedEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.submitter = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("submitterName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
@@ -150,25 +149,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testChangeRestoredEvent() {
     ChangeRestoredEvent event = new ChangeRestoredEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.restorer = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("restorerName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "restorer"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "restorer"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
     event.reason = "testReason";
     changeAttribute.project = "testProject";
@@ -191,25 +190,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testCommentAddedEventWOApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.author = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("commenterName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
     event.comment = "testComment";
     changeAttribute.project = "testProject";
@@ -232,34 +231,34 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testCommentAddedEventWApprovals() {
     CommentAddedEvent event = new CommentAddedEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.author = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("commenterName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "commenter"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
-    ApprovalAttribute approvalAttribute1 = createMock(ApprovalAttribute.class);
+    ApprovalAttribute approvalAttribute1 = mock(ApprovalAttribute.class);
     Map<String, String> approuvalProperties1 = ImmutableMap.of("approvalCodeReview", "0");
-    expect(propertyAttributeExtractor.extractFrom(approvalAttribute1))
-        .andReturn(approuvalProperties1);
-    ApprovalAttribute approvalAttribute2 = createMock(ApprovalAttribute.class);
+    when(propertyAttributeExtractor.extractFrom(approvalAttribute1))
+        .thenReturn(approuvalProperties1);
+    ApprovalAttribute approvalAttribute2 = mock(ApprovalAttribute.class);
     Map<String, String> approuvalProperties2 = ImmutableMap.of("approvalVerified", "0");
-    expect(propertyAttributeExtractor.extractFrom(approvalAttribute2))
-        .andReturn(approuvalProperties2);
+    when(propertyAttributeExtractor.extractFrom(approvalAttribute2))
+        .thenReturn(approuvalProperties2);
     ApprovalAttribute[] approvalAttributes = {approvalAttribute1, approvalAttribute2};
     event.approvals = Suppliers.ofInstance(approvalAttributes);
 
@@ -286,25 +285,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testPatchSetCreatedEvent() {
     PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
-    ChangeAttribute changeAttribute = createMock(ChangeAttribute.class);
+    ChangeAttribute changeAttribute = mock(ChangeAttribute.class);
     event.change = Suppliers.ofInstance(changeAttribute);
     Map<String, String> changeProperties =
         ImmutableMap.of("project", "testProject", "changeNumber", "176");
-    expect(propertyAttributeExtractor.extractFrom(changeAttribute)).andReturn(changeProperties);
+    when(propertyAttributeExtractor.extractFrom(changeAttribute)).thenReturn(changeProperties);
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.uploader = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("uploaderName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "uploader"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "uploader"))
+        .thenReturn(accountProperties);
 
-    PatchSetAttribute patchSetAttribute = createMock(PatchSetAttribute.class);
+    PatchSetAttribute patchSetAttribute = mock(PatchSetAttribute.class);
     event.patchSet = Suppliers.ofInstance(patchSetAttribute);
     Map<String, String> patchSetProperties =
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
-    expect(propertyAttributeExtractor.extractFrom(patchSetAttribute)).andReturn(patchSetProperties);
+    when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
@@ -325,25 +324,25 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
   public void testRefUpdatedEvent() {
     RefUpdatedEvent event = new RefUpdatedEvent();
 
-    AccountAttribute accountAttribute = createMock(AccountAttribute.class);
+    AccountAttribute accountAttribute = mock(AccountAttribute.class);
     event.submitter = Suppliers.ofInstance(accountAttribute);
     Map<String, String> accountProperties = ImmutableMap.of("submitterName", "testName");
-    expect(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
-        .andReturn(accountProperties);
+    when(propertyAttributeExtractor.extractFrom(accountAttribute, "submitter"))
+        .thenReturn(accountProperties);
 
-    RefUpdateAttribute refUpdateAttribute = createMock(RefUpdateAttribute.class);
+    RefUpdateAttribute refUpdateAttribute = mock(RefUpdateAttribute.class);
     event.refUpdate = Suppliers.ofInstance(refUpdateAttribute);
     Map<String, String> refUpdatedProperties =
         ImmutableMap.of("revision", "testRevision", "revisionOld", "oldRevision");
-    expect(propertyAttributeExtractor.extractFrom(refUpdateAttribute))
-        .andReturn(refUpdatedProperties);
+    when(propertyAttributeExtractor.extractFrom(refUpdateAttribute))
+        .thenReturn(refUpdatedProperties);
 
     refUpdateAttribute.project = "testProject";
     refUpdateAttribute.newRev = "testRevision";
     refUpdateAttribute.oldRev = "oldRevision";
     refUpdateAttribute.refName = "testBranch";
 
-    expect(itsProjectExtractor.getItsProject("testProject")).andReturn(Optional.empty());
+    when(itsProjectExtractor.getItsProject("testProject")).thenReturn(Optional.empty());
 
     Map<String, String> common =
         ImmutableMap.<String, String>builder()
@@ -369,13 +368,11 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     issueMap.put("42", Sets.newHashSet("footer", "anywhere"));
     if (withRevision) {
       PatchSet.Id patchSetId = PatchSet.id(Change.id(176), 3);
-      expect(issueExtractor.getIssueIds("testProject", "testRevision", patchSetId))
-          .andReturn(issueMap);
+      when(issueExtractor.getIssueIds("testProject", "testRevision", patchSetId))
+          .thenReturn(issueMap);
     } else {
-      expect(issueExtractor.getIssueIds("testProject", "testRevision")).andReturn(issueMap);
+      when(issueExtractor.getIssueIds("testProject", "testRevision")).thenReturn(issueMap);
     }
-
-    replayMocks();
 
     Set<Map<String, String>> actual = propertyExtractor.extractFrom(event).getIssuesProperties();
 
@@ -415,13 +412,13 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
     protected void configure() {
       bind(String.class).annotatedWith(PluginName.class).toInstance("ItsTestName");
 
-      itsProjectExtractor = createMock(ItsProjectExtractor.class);
+      itsProjectExtractor = mock(ItsProjectExtractor.class);
       bind(ItsProjectExtractor.class).toInstance(itsProjectExtractor);
 
-      issueExtractor = createMock(IssueExtractor.class);
+      issueExtractor = mock(IssueExtractor.class);
       bind(IssueExtractor.class).toInstance(issueExtractor);
 
-      propertyAttributeExtractor = createMock(PropertyAttributeExtractor.class);
+      propertyAttributeExtractor = mock(PropertyAttributeExtractor.class);
       bind(PropertyAttributeExtractor.class).toInstance(propertyAttributeExtractor);
     }
   }
