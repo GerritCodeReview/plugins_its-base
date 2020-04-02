@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "071ee748_1f3bfd5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-04-02T01:08:31Z",
+      "side": 1,
+      "message": "nit: for future merges, please use the --log option so that the commit message includes a list of the merged commits",
+      "revId": "17df3faebcb961b2efcff1c3bd81537978c97e97",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
