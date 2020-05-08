@@ -76,9 +76,7 @@ public class SinceLastTagCommitCollector implements CommitCollector {
   private boolean isTagged(Repository repo, RevCommit commit) throws IOException {
     ObjectId commitId = commit.getId();
     try (RevWalk revWalk = new RevWalk(repo)) {
-      return repo.getRefDatabase()
-          .getRefsByPrefix(Constants.R_TAGS)
-          .stream()
+      return repo.getRefDatabase().getRefsByPrefix(Constants.R_TAGS).stream()
           .map(Ref::getObjectId)
           .map(
               refObjectId -> {

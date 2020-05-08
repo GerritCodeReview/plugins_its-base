@@ -68,9 +68,7 @@ public class FireEventOnCommits extends ProjectAction {
     String projectName = extractedParameters.get().getProjectName();
 
     Set<Map<String, String>> issuesProperties =
-        commitCollector
-            .collect(properties)
-            .stream()
+        commitCollector.collect(properties).stream()
             .map(commitId -> issueExtractor.getIssueIds(projectName, commitId))
             .flatMap(Stream::of)
             .map(
