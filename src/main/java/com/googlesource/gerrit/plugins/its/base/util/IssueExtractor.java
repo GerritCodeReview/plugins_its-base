@@ -5,6 +5,7 @@ import static java.util.Arrays.copyOfRange;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.PatchSet;
 import com.google.gerrit.extensions.api.GerritApi;
 import com.google.gerrit.extensions.client.ListChangesOption;
@@ -19,11 +20,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class IssueExtractor {
-  private static final Logger log = LoggerFactory.getLogger(IssueExtractor.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final CommitMessageFetcher commitMessageFetcher;
   private final PatchSetDb db;
@@ -80,7 +79,7 @@ public class IssueExtractor {
     Pattern pattern = itsConfig.getIssuePattern();
     if (pattern == null) return new String[] {};
 
-    log.debug("Matching '{}' against {}", haystack, pattern.pattern());
+    logger.atFine().log("Matching '%s' against '%s'", haystack, pattern.pattern());
 
     Set<String> issues = Sets.newHashSet();
     Matcher matcher = pattern.matcher(haystack);
