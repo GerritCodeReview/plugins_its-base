@@ -14,73 +14,55 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import com.google.common.flogger.FluentLogger;
 import java.io.IOException;
 import java.net.URL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** An ITS facade doing nothing, it's configured when no ITS are referenced in config */
 public class NoopItsFacade implements ItsFacade {
-
-  private Logger log = LoggerFactory.getLogger(NoopItsFacade.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Override
   public void addComment(String issueId, String comment) throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("addComment({},{})", issueId, comment);
-    }
+    logger.atFine().log("addComment(%s,%s)", issueId, comment);
   }
 
   @Override
   public void addValueToField(String issueId, String value, String fieldId) throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("addValueToField({},{},{})", issueId, fieldId, value);
-    }
+    logger.atFine().log("addValueToField(%s,%s,%s)", issueId, fieldId, value);
   }
 
   @Override
   public void addRelatedLink(String issueId, URL relatedUrl, String description)
       throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("addRelatedLink({},{},{})", issueId, relatedUrl, description);
-    }
+    logger.atFine().log("addRelatedLink(%s,%s,%s)", issueId, relatedUrl, description);
   }
 
   @Override
   public boolean exists(String issueId) throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("exists({})", issueId);
-    }
+    logger.atFine().log("exists(%s)", issueId);
     return false;
   }
 
   @Override
   public void performAction(String issueId, String actionName) throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("performAction({},{})", issueId, actionName);
-    }
+    logger.atFine().log("performAction(%s,%s)", issueId, actionName);
   }
 
   @Override
   public void createVersion(String itsProject, String version) {
-    if (log.isDebugEnabled()) {
-      log.debug("createVersion({},{})", itsProject, version);
-    }
+    logger.atFine().log("createVersion(%s,%s)", itsProject, version);
   }
 
   @Override
   public String healthCheck(Check check) throws IOException {
-    if (log.isDebugEnabled()) {
-      log.debug("healthCheck()");
-    }
+    logger.atFine().log("healthCheck()");
     return "{\"status\"=\"ok\",\"system\"=\"not configured\",}";
   }
 
   @Override
   public String createLinkForWebui(String url, String text) {
-    if (log.isDebugEnabled()) {
-      log.debug("createLinkForWebui({},{})", url, text);
-    }
+    logger.atFine().log("createLinkForWebui(%s,%s)", url, text);
     return "";
   }
 }

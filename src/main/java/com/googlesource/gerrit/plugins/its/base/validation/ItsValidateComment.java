@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.validation;
 
 import com.google.common.collect.Lists;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.events.CommitReceivedEvent;
@@ -30,12 +31,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ItsValidateComment implements CommitValidationListener {
 
-  private static final Logger log = LoggerFactory.getLogger(ItsValidateComment.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Inject private ItsFacade client;
 
@@ -80,7 +79,7 @@ public class ItsValidateComment implements CommitValidationListener {
                   "Failed to check whether or not issue "
                       + issueId
                       + " exists, due to connectivity issue. Commit will be accepted.";
-              log.warn(synopsis, e);
+              logger.atWarning().withCause(e).log(synopsis);
               details = e.toString();
               existenceCheckResult = ItsExistenceCheckResult.CONNECTIVITY_FAILURE;
               ret.add(commitValidationFailure(synopsis, details, existenceCheckResult));

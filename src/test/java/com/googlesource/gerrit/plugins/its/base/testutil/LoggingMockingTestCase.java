@@ -22,9 +22,9 @@ import com.google.gerrit.entities.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.logging.LogRecord;
 import junit.framework.TestCase;
 import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
 import org.junit.After;
 
 public abstract class LoggingMockingTestCase extends TestCase {
@@ -34,22 +34,21 @@ public abstract class LoggingMockingTestCase extends TestCase {
   protected final Change.Id testChangeId = Change.id(1);
   protected final Account.Id testAccountId = Account.id(1);
 
-  private java.util.Collection<LoggingEvent> loggedEvents;
+  private java.util.Collection<LogRecord> records;
 
   protected final void assertLogMessageContains(String needle, Level level) {
-    LoggingEvent hit = null;
-    Iterator<LoggingEvent> iter = loggedEvents.iterator();
+    LogRecord hit = null;
+    Iterator<LogRecord> iter = records.iterator();
     while (hit == null && iter.hasNext()) {
-      LoggingEvent event = iter.next();
-      if (event.getRenderedMessage().contains(needle)) {
-        if (level == null || level.equals(event.getLevel())) {
-          hit = event;
+      LogRecord record = iter.next();
+      if (record.getMessage().contains(needle)) {
+        if (level == null || LogUtil.equalLevels(record.getLevel(), level)) {
+          hit = record;
         }
       }
     }
     assertNotNull("Could not find log message containing '" + needle + "'", hit);
-    assertTrue(
-        "Could not remove log message containing '" + needle + "'", loggedEvents.remove(hit));
+    assertTrue("Could not remove log message containing '" + needle + "'", records.remove(hit));
   }
 
   protected final void assertLogMessageContains(String needle) {
@@ -57,31 +56,33 @@ public abstract class LoggingMockingTestCase extends TestCase {
   }
 
   protected final void assertLogThrowableMessageContains(String needle) {
-    LoggingEvent hit = null;
-    Iterator<LoggingEvent> iter = loggedEvents.iterator();
+    LogRecord hit = null;
+    Iterator<LogRecord> iter = records.iterator();
     while (hit == null && iter.hasNext()) {
-      LoggingEvent event = iter.next();
+      LogRecord record = iter.next();
 
-      if (event.getThrowableInformation().getThrowable().toString().contains(needle)) {
-        hit = event;
+      Throwable t = record.getThrown();
+      if (t != null && t.toString().contains(needle)) {
+        hit = record;
       }
     }
     assertNotNull("Could not find log message with a Throwable containing '" + needle + "'", hit);
     assertTrue(
         "Could not remove log message with a Throwable containing '" + needle + "'",
-        loggedEvents.remove(hit));
+        records.remove(hit));
   }
 
   // As the PowerMock runner does not pass through runTest, we inject log
   // verification through @After
   @After
   public final void assertNoUnassertedLogEvents() {
-    if (loggedEvents.size() > 0) {
-      LoggingEvent event = loggedEvents.iterator().next();
+    if (records.size() > 0) {
+      LogRecord record = records.iterator().next();
       String msg = "Found untreated logged events. First one is:\n";
-      msg += event.getRenderedMessage();
-      if (event.getThrowableInformation() != null) {
-        msg += "\n" + event.getThrowableInformation().getThrowable();
+      msg += record.getMessage();
+      Throwable t = record.getThrown();
+      if (t != null) {
+        msg += "\n" + t;
       }
       fail(msg);
     }
@@ -90,7 +91,7 @@ public abstract class LoggingMockingTestCase extends TestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    loggedEvents = Lists.newArrayList();
+    records = Lists.newArrayList();
 
     // The logger we're interested is class name without the trailing "Test".
     // While this is not the most general approach it is sufficient for now,
@@ -98,7 +99,7 @@ public abstract class LoggingMockingTestCase extends TestCase {
     // to check.
     String logName = this.getClass().getCanonicalName();
     logName = logName.substring(0, logName.length() - 4);
-    LogUtil.logToCollection(logName, loggedEvents);
+    LogUtil.logToCollection(logName, records, Level.DEBUG);
   }
 
   @Override
