@@ -20,7 +20,6 @@ import java.util.Collection;
 import org.eclipse.jgit.lib.Config;
 
 public class RulesConfigReader {
-
   /** The section for rules within rulebases */
   static final String RULE_SECTION = "rule";
 

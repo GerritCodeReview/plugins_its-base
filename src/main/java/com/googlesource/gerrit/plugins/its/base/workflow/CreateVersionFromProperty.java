@@ -22,7 +22,6 @@ import java.util.Optional;
 
 /** Creates a version in the ITS. The value of the version is extracted from an event property. */
 public class CreateVersionFromProperty extends ProjectAction {
-
   public interface Factory {
     CreateVersionFromProperty create();
   }

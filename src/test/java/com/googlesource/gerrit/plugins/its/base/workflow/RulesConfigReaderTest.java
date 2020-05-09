@@ -29,7 +29,6 @@ import java.util.Collection;
 import org.eclipse.jgit.lib.Config;
 
 public class RulesConfigReaderTest extends LoggingMockingTestCase {
-
   private class TestModule extends FactoryModule {
     @Override
     protected void configure() {

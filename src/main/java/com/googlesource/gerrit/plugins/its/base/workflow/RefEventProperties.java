@@ -20,7 +20,6 @@ import java.util.Set;
 
 /** The properties extracted from a {@link com.google.gerrit.server.events.RefEvent} */
 public class RefEventProperties {
-
   private final Map<String, String> projectProperties;
   private final Set<Map<String, String>> issuesProperties;
 
