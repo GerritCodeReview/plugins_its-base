@@ -15,17 +15,14 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import com.google.inject.Inject;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class AddPropertyToFieldParametersExtractor {
-
-  private static final Logger log =
-      LoggerFactory.getLogger(AddPropertyToFieldParametersExtractor.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Inject
   public AddPropertyToFieldParametersExtractor() {}
@@ -38,26 +35,26 @@ public class AddPropertyToFieldParametersExtractor {
       ActionRequest actionRequest, Map<String, String> properties) {
     String[] parameters = actionRequest.getParameters();
     if (parameters.length != 2) {
-      log.error(
-          "Wrong number of received parameters. Received parameters are {}. Exactly two parameters are expected. The first one is the ITS field id, the second one is the event property id",
+      logger.atSevere().log(
+          "Wrong number of received parameters. Received parameters are %s. Exactly two parameters are expected. The first one is the ITS field id, the second one is the event property id",
           Arrays.toString(parameters));
       return Optional.empty();
     }
 
     String propertyId = parameters[0];
     if (Strings.isNullOrEmpty(propertyId)) {
-      log.error("Received property id is blank");
+      logger.atSevere().log("Received property id is blank");
       return Optional.empty();
     }
 
     String fieldId = parameters[1];
     if (Strings.isNullOrEmpty(fieldId)) {
-      log.error("Received field id is blank");
+      logger.atSevere().log("Received field id is blank");
       return Optional.empty();
     }
 
     if (!properties.containsKey(propertyId)) {
-      log.error("No event property found for id {}", propertyId);
+      logger.atSevere().log("No event property found for id %s", propertyId);
       return Optional.empty();
     }
 
