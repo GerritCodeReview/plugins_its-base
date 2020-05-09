@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
@@ -23,8 +24,6 @@ import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller that takes actions according to {@code ChangeEvents@}.
@@ -34,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ActionController implements EventListener {
 
-  private static final Logger log = LoggerFactory.getLogger(ActionController.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
@@ -90,8 +89,8 @@ public class ActionController implements EventListener {
     }
     if (!projectProperties.containsKey("its-project")) {
       String project = projectProperties.get("project");
-      log.error(
-          "Could not process project event. No its-project associated with project {}. "
+      logger.atSevere().log(
+          "Could not process project event. No its-project associated with project %s. "
               + "Did you forget to configure the ITS project association in project.config?",
           project);
       return;
