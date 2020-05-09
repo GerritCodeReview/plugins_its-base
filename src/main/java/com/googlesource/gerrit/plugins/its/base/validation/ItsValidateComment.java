@@ -33,7 +33,6 @@ import java.util.List;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 public class ItsValidateComment implements CommitValidationListener {
-
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Inject private ItsFacade client;

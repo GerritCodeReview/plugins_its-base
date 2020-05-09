@@ -32,7 +32,6 @@ import java.util.Set;
  * issue's status).
  */
 public class ActionController implements EventListener {
-
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final PropertyExtractor propertyExtractor;

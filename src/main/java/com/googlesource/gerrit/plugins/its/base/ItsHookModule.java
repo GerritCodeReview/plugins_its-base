@@ -44,7 +44,6 @@ import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
-
   /** Rules configuration filename pattern */
   private static final String CONFIG_FILE_NAME = "actions%s.config";
 

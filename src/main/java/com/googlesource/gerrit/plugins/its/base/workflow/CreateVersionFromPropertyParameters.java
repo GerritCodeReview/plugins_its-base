@@ -16,7 +16,6 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 /** Parameters needed by {@link CreateVersionFromProperty} action */
 public class CreateVersionFromPropertyParameters {
-
   private final String propertyValue;
 
   public CreateVersionFromPropertyParameters(String propertyValue) {
