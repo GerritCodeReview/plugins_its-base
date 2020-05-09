@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 
 /** Fires the triggering event on collected past commits */
 public class FireEventOnCommits extends ProjectAction {
-
   public interface Factory {
     FireEventOnCommits create();
   }

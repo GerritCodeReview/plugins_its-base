@@ -37,7 +37,6 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 public class FireEventOnCommitsTest extends TestCase {
-
   private static final String ITS_PROJECT = "test-project";
   private static final String COMMIT = "1234";
   private static final String PROJECT = "testProject";

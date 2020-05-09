@@ -26,7 +26,6 @@ import java.util.Optional;
 import junit.framework.TestCase;
 
 public class FireEventOnCommitsParametersExtractorTest extends TestCase {
-
   private static final String SINCE_LAST_TAG_COLLECTOR = "since-last-tag";
 
   private SinceLastTagCommitCollector.Factory sinceLastTagCommitCollectorFactory;

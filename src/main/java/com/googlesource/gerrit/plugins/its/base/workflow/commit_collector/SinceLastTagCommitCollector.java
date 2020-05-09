@@ -35,7 +35,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 
 /** Collects all commits between the last tag and HEAD */
 public class SinceLastTagCommitCollector implements CommitCollector {
-
   public interface Factory {
     SinceLastTagCommitCollector create();
   }
