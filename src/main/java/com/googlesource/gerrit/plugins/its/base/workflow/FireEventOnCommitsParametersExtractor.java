@@ -15,19 +15,16 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.CommitCollector;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FireEventOnCommitsParametersExtractor {
-
-  private static final Logger log =
-      LoggerFactory.getLogger(FireEventOnCommitsParametersExtractor.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final SinceLastTagCommitCollector.Factory sinceLastTagCommitCollectorFactory;
 
@@ -54,21 +51,21 @@ public class FireEventOnCommitsParametersExtractor {
       ActionRequest actionRequest, Map<String, String> properties) {
     String[] parameters = actionRequest.getParameters();
     if (parameters.length != 1) {
-      log.error(
-          "Wrong number of received parameters. Received parameters are {}. Only one parameter is expected, the collector name.",
+      logger.atSevere().log(
+          "Wrong number of received parameters. Received parameters are %s. Only one parameter is expected, the collector name.",
           Arrays.toString(parameters));
       return Optional.empty();
     }
 
     String collectorName = parameters[0];
     if (Strings.isNullOrEmpty(collectorName)) {
-      log.error("Received collector name is blank");
+      logger.atSevere().log("Received collector name is blank");
       return Optional.empty();
     }
 
     CommitCollector commitCollector = getCommitCollector(collectorName);
     if (commitCollector == null) {
-      log.error("No commit collector found for name {}", collectorName);
+      logger.atSevere().log("No commit collector found for name %s", collectorName);
       return Optional.empty();
     }
 
