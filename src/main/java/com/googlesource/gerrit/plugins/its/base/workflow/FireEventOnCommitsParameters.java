@@ -18,7 +18,6 @@ import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.Commit
 
 /** Parameters needed by {@link FireEventOnCommits} action */
 public class FireEventOnCommitsParameters {
-
   private final CommitCollector commitCollector;
   private final String projectName;
 
