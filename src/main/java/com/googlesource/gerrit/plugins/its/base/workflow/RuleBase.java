@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.flogger.FluentLogger;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.GlobalRulesFileName;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
@@ -29,12 +30,10 @@ import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Collection and matcher against {@link Rule}s. */
 public class RuleBase {
-  private static final Logger log = LoggerFactory.getLogger(RuleBase.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final File globalRuleFile;
   private final File itsSpecificRuleFile;
@@ -81,7 +80,7 @@ public class RuleBase {
         cfg.load();
         return rulesConfigReader.getRulesFromConfig(cfg);
       } catch (IOException | ConfigInvalidException e) {
-        log.error("Invalid ITS action configuration", e);
+        logger.atSevere().withCause(e).log("Invalid ITS action configuration");
       }
     }
     return Collections.emptyList();
@@ -98,12 +97,12 @@ public class RuleBase {
     Collection<Rule> fromProjectConfig = rulesProjectCache.get(projectName);
     Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
     if (rulesToAdd.isEmpty() && !globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
-      log.debug(
-          "Neither global rule file {} nor Its specific rule file {} exist and no rules are "
-              + "configured for project {}. Please configure rules.",
-          globalRuleFile,
-          itsSpecificRuleFile,
-          projectName);
+      logger
+          .atDebug()
+          .log(
+              "Neither global rule file %s nor Its specific rule file %s exist and no rules are "
+                  + "configured for project %s. Please configure rules.",
+              globalRuleFile, itsSpecificRuleFile, projectName);
       return Collections.emptyList();
     }
     Collection<ActionRequest> actions = new ArrayList<>();

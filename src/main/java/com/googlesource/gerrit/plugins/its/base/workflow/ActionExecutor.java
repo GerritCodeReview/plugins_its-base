@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PluginName;
@@ -22,12 +23,10 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacadeFactory;
 import java.io.IOException;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Executes an {@link ActionRequest} */
 public class ActionExecutor {
-  private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final ItsFacadeFactory itsFactory;
   private final AddComment.Factory addCommentFactory;
@@ -95,7 +94,7 @@ public class ActionExecutor {
         execute(action, issue, actionRequest, properties);
       }
     } catch (IOException e) {
-      log.error("Error while executing action " + actionRequest, e);
+      logger.atSevere().withCause(e).log("Error while executing action %s", actionRequest);
     }
   }
 
@@ -111,7 +110,7 @@ public class ActionExecutor {
       String actionName = actionRequest.getName();
       Action action = getAction(actionName);
       if (action == null) {
-        log.debug("No action found for name {}", actionName);
+        logger.atFine().log("No action found for name %s", actionName);
         return;
       }
       if (action.getType() != ActionType.PROJECT) {
@@ -119,7 +118,7 @@ public class ActionExecutor {
       }
       execute(action, itsProject, actionRequest, properties);
     } catch (IOException e) {
-      log.error("Error while executing action " + actionRequest, e);
+      logger.atSevere().withCause(e).log("Error while executing action %s", actionRequest);
     }
   }
 

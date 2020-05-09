@@ -14,13 +14,12 @@
 
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Dumps the event's properties to the log.
@@ -28,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * <p>This event helps when developing rules as available properties become visible.
  */
 public class LogEvent extends IssueAction {
-  private static final Logger log = LoggerFactory.getLogger(LogEvent.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private enum Level {
     ERROR,
@@ -56,23 +55,25 @@ public class LogEvent extends IssueAction {
   public LogEvent() {}
 
   private void logProperty(Level level, Entry<String, String> property) {
-    String message = String.format("[%s = %s]", property.getKey(), property.getValue());
+    final java.util.logging.Level logLevel;
     switch (level) {
       case ERROR:
-        log.error(message);
+        logLevel = java.util.logging.Level.SEVERE;
         break;
       case WARN:
-        log.warn(message);
+        logLevel = java.util.logging.Level.WARNING;
         break;
       case INFO:
-        log.info(message);
+        logLevel = java.util.logging.Level.INFO;
         break;
       case DEBUG:
-        log.debug(message);
+        logLevel = java.util.logging.Level.FINE;
         break;
       default:
-        log.error("Undefined log level.");
+        logger.atSevere().log("Undefined log level.");
+        return;
     }
+    logger.at(logLevel).log("[%s = %s]", property.getKey(), property.getValue());
   }
 
   @Override

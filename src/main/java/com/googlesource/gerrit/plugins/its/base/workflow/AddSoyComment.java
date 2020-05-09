@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import com.google.common.io.CharStreams;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
@@ -31,8 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Adds a short predefined comments to an issue.
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
 public class AddSoyComment extends IssueAction {
-  private static final Logger log = LoggerFactory.getLogger(AddSoyComment.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   public interface Factory {
     AddSoyComment create();
@@ -99,7 +98,7 @@ public class AddSoyComment extends IssueAction {
     if (!template.isEmpty()) {
       return soyTextTemplate(SoyFileSet.builder(), template, properties);
     }
-    log.error("No template name given in {}", actionRequest);
+    logger.atSevere().log("No template name given in %s", actionRequest);
     return "";
   }
 }

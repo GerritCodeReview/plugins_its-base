@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.its.base.its;
 
 import static java.util.stream.Collectors.toList;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.Project.NameKey;
@@ -44,13 +45,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ItsConfig {
   private static final String PLUGIN = "plugin";
 
-  private static final Logger log = LoggerFactory.getLogger(ItsConfig.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final String pluginName;
   private final ProjectCache projectCache;
@@ -89,17 +88,16 @@ public class ItsConfig {
         || event instanceof RefUpdatedEvent) {
       return isEnabled(event.getProjectNameKey(), event.getRefName());
     }
-    log.debug("Event {} not recognised and ignored", event);
+    logger.atFine().log("Event %s not recognised and ignored", event);
     return false;
   }
 
   public boolean isEnabled(Project.NameKey projectNK, String refName) {
     ProjectState projectState = projectCache.get(projectNK);
     if (projectState == null) {
-      log.error(
-          "Failed to check if {} is enabled for project {}: Project not found",
-          pluginName,
-          projectNK.get());
+      logger.atSevere().log(
+          "Failed to check if %s is enabled for project %s: Project not found",
+          pluginName, projectNK.get());
       return false;
     }
     return isEnforcedByAnyParentProject(refName, projectState)
@@ -257,7 +255,8 @@ public class ItsConfig {
       try {
         return pluginCfgFactory.getFromProjectConfigWithInheritance(projectName, pluginName);
       } catch (NoSuchProjectException e) {
-        log.error("Cannot access " + projectName + " configuration for plugin " + pluginName, e);
+        logger.atSevere().withCause(e).log(
+            "Cannot access %s configuration for plugin %s", projectName, pluginName);
       }
     }
     return new PluginConfig(pluginName, new Config());
