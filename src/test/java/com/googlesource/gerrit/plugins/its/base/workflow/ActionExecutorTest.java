@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class ActionExecutorTest extends LoggingMockingTestCase {
-
   private static final String CUSTOM_ACTION_NAME = "custom-action-name";
 
   private Injector injector;

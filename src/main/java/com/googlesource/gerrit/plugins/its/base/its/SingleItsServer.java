@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 /* An ItsServer implementation that should be bound
  * for backward compatibility */
 public class SingleItsServer implements ItsFacadeFactory {
-
   private final ItsFacade its;
 
   @Inject

@@ -29,7 +29,6 @@ import java.util.Optional;
 import junit.framework.TestCase;
 
 public class CreateVersionFromPropertyTest extends TestCase {
-
   private static final String ITS_PROJECT = "test-project";
   private static final String PROPERTY_VALUE = "propertyValue";
 

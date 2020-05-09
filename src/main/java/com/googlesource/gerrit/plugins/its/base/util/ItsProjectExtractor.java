@@ -20,7 +20,6 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import java.util.Optional;
 
 public class ItsProjectExtractor {
-
   private final ItsConfig itsConfig;
 
   @Inject
