@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AddPropertyToField extends IssueAction {
-
   public interface Factory {
     AddPropertyToField create();
   }

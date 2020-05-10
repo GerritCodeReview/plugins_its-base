@@ -16,7 +16,6 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 
 /** Parameters needed by {@link AddPropertyToField} action */
 public class AddPropertyToFieldParameters {
-
   private final String propertyValue;
   private final String fieldId;
 

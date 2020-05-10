@@ -46,7 +46,6 @@ import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceL
 import java.nio.file.Path;
 
 public class ItsHookModule extends FactoryModule {
-
   /** Rules configuration filename pattern */
   private static final String CONFIG_FILE_NAME = "actions%s.config";
 

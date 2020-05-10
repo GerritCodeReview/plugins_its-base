@@ -12,7 +12,6 @@ import java.util.Optional;
 import junit.framework.TestCase;
 
 public class CreateVersionFromPropertyParametersExtractorTest extends TestCase {
-
   private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
 
