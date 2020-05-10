@@ -70,6 +70,30 @@
       "revId": "873e585b0ed7faa0e7f0da359881dd7bf07dfa18",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dcb9d3a_c8a52d9a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-10T13:42:23Z",
+      "side": 1,
+      "message": "Chiming in with my random drive-by patch uploader perspective, I\u0027d love to see a \"rely on gjf\" (and forget about the rest) approach. I\u0027d still certainly forget to run gjf, but overall it would make things easier and better automatizable.\n\nGoogle\u0027s Java Style guide [1] says that it does not care about these blank lines:\n\n  A blank line before the first member or initializer, or after the\n  last member or initializer of the class, is neither encouraged\n  nor discouraged. \n\n[1] https://google.github.io/styleguide/javaguide.html#s4.6.1-vertical-whitespace",
+      "parentUuid": "f25506c0_e9545ab9",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 84
+      },
+      "revId": "873e585b0ed7faa0e7f0da359881dd7bf07dfa18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
