@@ -46,6 +46,30 @@
       "revId": "873e585b0ed7faa0e7f0da359881dd7bf07dfa18",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f25506c0_e9545ab9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-05-10T07:50:08Z",
+      "side": 1,
+      "message": "That\u0027s what I meant. If gjf doesn\u0027t remove them, why should we need to manually remove them?  I.e. just drop that statement from the guideline, along with any other statements about formatting.",
+      "parentUuid": "5a763d00_73022a4a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 84
+      },
+      "revId": "873e585b0ed7faa0e7f0da359881dd7bf07dfa18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
