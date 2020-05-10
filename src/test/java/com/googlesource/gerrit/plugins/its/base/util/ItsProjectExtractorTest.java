@@ -26,7 +26,6 @@ import java.util.Optional;
 import junit.framework.TestCase;
 
 public class ItsProjectExtractorTest extends TestCase {
-
   private static final String PROJECT = "project";
   private static final String ITS_PROJECT = "itsProject";
 

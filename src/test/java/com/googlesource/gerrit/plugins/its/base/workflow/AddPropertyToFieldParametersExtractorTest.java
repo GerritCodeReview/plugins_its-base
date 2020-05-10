@@ -26,7 +26,6 @@ import java.util.Optional;
 import junit.framework.TestCase;
 
 public class AddPropertyToFieldParametersExtractorTest extends TestCase {
-
   private static final String FIELD_ID = "fieldId";
   private static final String PROPERTY_ID = "propertyId";
   private static final String PROPERTY_VALUE = "propertyValue";
