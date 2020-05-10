@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "2042a884_988f6e8b",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-10T14:26:39Z",
+      "side": 1,
+      "message": "(Forgot to mark resolved)",
+      "parentUuid": "8505429e_4c6cc6f7",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 73
+      },
+      "revId": "17ca82c42d432858acc60435038f83c7f0670465",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97fda256_eabe24b4",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
         "patchSetId": 1
