@@ -656,7 +656,7 @@ example for what the soy template will look like (note @param is required with c
  * @param changeNumber
  * @param formatChangeUrl
  */
-{template .TemplateName autoescape="strict" kind="text"}
+{template .TemplateName kind="text"}
   inline Comment for change {$changeNumber} added. See {$formatChangeUrl}
 {/template}
 ```
