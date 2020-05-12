@@ -76,7 +76,9 @@ public class AddSoyComment extends IssueAction {
             .newRenderer("etc.its.templates." + template)
             .setContentKind(kind)
             .setData(properties);
-    return renderer.render();
+    String rendered = renderer.render();
+    logger.atFinest().log("Rendered template %s to:\n%s", templatePath, rendered);
+    return rendered;
   }
 
   private String soyTextTemplate(Builder builder, String template, Map<String, String> properties) {
