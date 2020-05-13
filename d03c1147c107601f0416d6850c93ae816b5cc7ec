@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a57421c_c575ca4f",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-05-13T10:48:22Z",
+      "side": 1,
+      "message": "Do we still need this class? Can\u0027t we just use Flogger everywhere and get rid of it?",
+      "revId": "d03c1147c107601f0416d6850c93ae816b5cc7ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
