@@ -98,7 +98,7 @@ public class RuleBase {
     Collection<Rule> fromProjectConfig = rulesProjectCache.get(projectName);
     Collection<Rule> rulesToAdd = !fromProjectConfig.isEmpty() ? fromProjectConfig : rules;
     if (rulesToAdd.isEmpty() && !globalRuleFile.exists() && !itsSpecificRuleFile.exists()) {
-      log.warn(
+      log.debug(
           "Neither global rule file {} nor Its specific rule file {} exist and no rules are "
               + "configured for project {}. Please configure rules.",
           globalRuleFile,
