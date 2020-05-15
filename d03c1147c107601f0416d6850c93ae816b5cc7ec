@@ -16,6 +16,24 @@
       "revId": "d03c1147c107601f0416d6850c93ae816b5cc7ec",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cff4f539_aad65720",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-15T13:18:13Z",
+      "side": 1,
+      "message": "We need some way to capture logged messages (so we can check if a given\nmessage/exception got logged in the tests)\n\nNot sure if Flogger can do this on its own, but I could not find anything\nrelated. But even if: What about its-* plugins that are still on log4j and\nhave not switched to Flogger?\n\nSo I\u0027d say we need this class. And we\u0027d best keep both the log4j and the\nJUL part of it.",
+      "parentUuid": "1a57421c_c575ca4f",
+      "revId": "d03c1147c107601f0416d6850c93ae816b5cc7ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
