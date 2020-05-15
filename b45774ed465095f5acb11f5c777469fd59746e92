@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e752e841_a1ef00e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-15T13:25:54Z",
+      "side": 1,
+      "message": "Let\u0027s wait with this change on master until the corresponding stable-3.1 change landed.",
+      "revId": "b45774ed465095f5acb11f5c777469fd59746e92",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
