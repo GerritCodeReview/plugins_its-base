@@ -20,9 +20,7 @@ import com.google.common.io.CharStreams;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
-import com.google.template.soy.SoyFileSet.Builder;
-import com.google.template.soy.data.SanitizedContent;
-import com.google.template.soy.tofu.SoyTofu;
+import com.google.template.soy.jbcsrc.api.SoySauce.Renderer;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
@@ -53,11 +51,9 @@ public class AddSoyComment extends IssueAction {
     this.templateDir = itsPath.resolve("templates");
   }
 
-  private String soyTemplate(
-      SoyFileSet.Builder builder,
-      String template,
-      SanitizedContent.ContentKind kind,
-      Map<String, String> properties) {
+  private String soyTextTemplate(
+      SoyFileSet.Builder builder, String template, Map<String, String> properties) {
+
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
@@ -69,20 +65,15 @@ public class AddSoyComment extends IssueAction {
     }
 
     builder.add(content, templatePath.toAbsolutePath().toString());
-    SoyTofu.Renderer renderer =
+    Renderer renderer =
         builder
             .build()
-            .compileToTofu()
-            .newRenderer("etc.its.templates." + template)
-            .setContentKind(kind)
+            .compileTemplates()
+            .renderTemplate("etc.its.templates." + template)
             .setData(properties);
-    String rendered = renderer.render();
+    String rendered = renderer.renderText().get();
     logger.atFinest().log("Rendered template %s to:\n%s", templatePath, rendered);
     return rendered;
-  }
-
-  private String soyTextTemplate(Builder builder, String template, Map<String, String> properties) {
-    return soyTemplate(builder, template, SanitizedContent.ContentKind.TEXT, properties);
   }
 
   @Override
