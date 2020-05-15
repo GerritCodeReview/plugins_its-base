@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d256fd98_76ac61ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-15T13:25:06Z",
+      "side": 1,
+      "message": "This can wait until the soy fixes on stable-3.1 got discussed. If they land, we can merge all of that in one go to master.",
+      "revId": "72ea17725621a4d4181608987563597e09ced221",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
