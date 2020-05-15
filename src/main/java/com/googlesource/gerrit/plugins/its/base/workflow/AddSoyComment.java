@@ -97,7 +97,7 @@ public class AddSoyComment extends IssueAction {
 
   private String buildComment(ActionRequest actionRequest, Map<String, String> properties) {
     String template = actionRequest.getParameter(1);
-    if (!template.isEmpty()) {
+    if (!Strings.isNullOrEmpty(template)) {
       return soyTextTemplate(SoyFileSet.builder(), template, properties);
     }
     logger.atSevere().log("No template name given in %s", actionRequest);
