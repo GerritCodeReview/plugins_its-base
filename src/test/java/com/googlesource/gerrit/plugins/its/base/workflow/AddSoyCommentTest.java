@@ -40,6 +40,15 @@ public class AddSoyCommentTest extends LoggingMockingTestCase {
   private boolean cleanupSitePath;
   private Path itsPath;
 
+  public void testNoTemplateFileParameter() throws IOException {
+    ActionRequest actionRequest = new ActionRequest("foo");
+
+    AddSoyComment addSoyComment = createAddSoyComment();
+    addSoyComment.execute(its, "4711", actionRequest, ImmutableMap.of());
+
+    assertLogMessageContains("No template");
+  }
+
   public void testTemplateFileDoesNotExist() {
     ActionRequest actionRequest = new ActionRequest("foo nonExistingTemplate");
 
