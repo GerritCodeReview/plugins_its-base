@@ -16,6 +16,24 @@
       "revId": "10adc90d626ff1475746f87290308b34477dfde3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2161b40c_5eb6b75d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-16T13:43:21Z",
+      "side": 1,
+      "message": "Argh! No of course not! Thanks for pointing that out.\nThat allowed me to submit them.",
+      "parentUuid": "51331a47_91b987a0",
+      "revId": "10adc90d626ff1475746f87290308b34477dfde3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
