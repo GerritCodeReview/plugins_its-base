@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daae9c96_a49b9031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-05-16T05:03:15Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e \u003e Patch Set 1:\n\u003e \u003e \n\u003e \u003e What\u0027s the next step here? Am I responsible for verifying the change and adding Verified+1?\n\u003e \u003e \n\u003e \u003e Being new to contributing to Gerrit, I\u0027m not exactly sure what happens next. :)\n\u003e \n\u003e Yes, please go ahead and verify it, then you can submit.  If you don\u0027t have permissions please let me know, and I will fix it.\n\u003e \n\u003e BTW, does this change need to get backported (or moved) to one of the stable branches?\n\nLooks like this got stale.  Can you rebase it and resolve the merge conflict?",
+      "revId": "ca88bf31533bf4bfd1f9da60db9fffdf338abf7c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
