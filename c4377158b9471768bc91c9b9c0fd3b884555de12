@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "475851f9_e6e64e77",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyCommentTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-16T11:15:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "070e13ec_1730c924",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "c4377158b9471768bc91c9b9c0fd3b884555de12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a5eec34_4086ed36",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyCommentTest.java",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "c4377158b9471768bc91c9b9c0fd3b884555de12",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff61fdbd_51e5c1a7",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/workflow/AddSoyCommentTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-05-16T11:15:25Z",
+      "side": 1,
+      "message": "Thanks, done. (The tests obviously run without @Test, but we should certainly annotate them)",
+      "parentUuid": "0a5eec34_4086ed36",
+      "revId": "c4377158b9471768bc91c9b9c0fd3b884555de12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
