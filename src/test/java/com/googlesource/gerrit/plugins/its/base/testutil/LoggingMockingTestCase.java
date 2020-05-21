@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.testutil;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import com.google.common.collect.Lists;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
@@ -36,22 +38,36 @@ public abstract class LoggingMockingTestCase extends TestCase {
 
   private java.util.Collection<LogRecord> records;
 
-  protected final void assertLogMessageContains(String needle, Level level) {
-    LogRecord hit = null;
-    Iterator<LogRecord> iter = records.iterator();
-    while (hit == null && iter.hasNext()) {
-      LogRecord record = iter.next();
-      if (record.getMessage().contains(needle)) {
-        if (level == null || LogUtil.equalLevels(record.getLevel(), level)) {
-          hit = record;
+  protected final void assertLogMessageContains(String needle, Level level, int times) {
+    // We do not support `times == 0`, as it's ambiguous if it means the message does not occur at
+    // all, or message assertion should be skipped.
+    assertThat(times).isGreaterThan(0);
+
+    while (times-- > 0) {
+      LogRecord hit = null;
+      Iterator<LogRecord> iter = records.iterator();
+      while (hit == null && iter.hasNext()) {
+        LogRecord record = iter.next();
+        if (record.getMessage().contains(needle)) {
+          if (level == null || LogUtil.equalLevels(record.getLevel(), level)) {
+            hit = record;
+          }
         }
       }
+      removeLogHit(hit, "containing '" + needle + "'");
     }
-    removeLogHit(hit, "containing '" + needle + "'");
+  }
+
+  protected final void assertLogMessageContains(String needle, Level level) {
+    assertLogMessageContains(needle, level, 1);
   }
 
   protected final void assertLogMessageContains(String needle) {
     assertLogMessageContains(needle, null);
+  }
+
+  protected final void assertLogMessageContains(String needle, int times) {
+    assertLogMessageContains(needle, null, times);
   }
 
   protected final void assertLogThrowableMessageContains(String needle) {
