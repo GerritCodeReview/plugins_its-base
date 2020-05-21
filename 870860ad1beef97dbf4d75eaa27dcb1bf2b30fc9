@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2779ba04_beda74ef",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/LoggingMockingTestCase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-05-21T23:06:18Z",
+      "side": 1,
+      "message": "I would put this comment on the line before the assert, to avoid that gjf wraps it in this strange way",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 45,
+        "endChar": 51
+      },
+      "revId": "870860ad1beef97dbf4d75eaa27dcb1bf2b30fc9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
