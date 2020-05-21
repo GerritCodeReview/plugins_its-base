@@ -90,6 +90,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("First found issue id do not match", "4711", ret[0]);
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched");
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -106,6 +107,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Found issue id does not match", "4711", ret[0]);
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched");
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -122,6 +124,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Found issue id does not match", "bug#4711", ret[0]);
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched");
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -138,6 +141,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Found issue id does not match", "4", ret[0]);
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched");
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -154,6 +158,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Found issue id does not match", "711", ret[0]);
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched");
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -173,6 +178,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertTrue("123 not among the extracted ids", retList.contains("123"));
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched", 3); // #42, #123, #4711
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -192,6 +198,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertTrue("123 not among the extracted ids", retList.contains("123"));
 
     assertLogMessageContains("Matching");
+    assertLogMessageContains("Matched", 2); // #42
+    assertLogMessageContains("Matched"); // #123
+    assertLogMessageContains("Matched"); // #4711
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -214,6 +223,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 5);
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -240,6 +250,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 5);
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #4711 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -266,6 +278,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 5);
+    assertLogMessageContains("Matched", 4); // #42 -> 2x somewhere, 2x subject
+    assertLogMessageContains("Matched", 6); // #42 -> 3x somewhere, 3x subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -293,6 +307,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -320,6 +335,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 3); // #42 -> somewhere, footer, footer-Footer
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -354,6 +370,10 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 9);
+    assertLogMessageContains("Matched", 3); // #42 -> somewhere, footer, footer-KeyA
+    assertLogMessageContains("Matched", 3); // #176 -> somewhere, footer, footer-KeyC
+    assertLogMessageContains("Matched", 3); // #256 -> somewhere, footer, footer-KeyZ
+    assertLogMessageContains("Matched", 2); // #4711 -> somewhere, footer
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -385,6 +405,10 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
+    assertLogMessageContains("Matched", 3); // #4711 -> somewhere, footer, footer-Bug
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -415,6 +439,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
+    assertLogMessageContains("Matched", 3); // #4711 -> somewhere, footer, footer-Bug
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -446,6 +473,10 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
+    assertLogMessageContains("Matched", 3); // #4711 -> somewhere, footer, footer-Bug
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -478,6 +509,10 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
+    assertLogMessageContains("Matched", 3); // #4711 -> somewhere, footer, footer-Bug
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -505,6 +540,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 3);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -532,6 +570,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 3);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -560,6 +601,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 3);
+    assertLogMessageContains("Matched", 2); // #16 -> somewhere, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // #176 -> somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -679,6 +723,13 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 6);
+    assertLogMessageContains("Matched", 3); // #16 -> somewhere, subject, body
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 3); // #176 -> somewhere, footer, footer-Bug
+    assertLogMessageContains(
+        "Matched", 8); // #1984 -> 3xsomewhere, subject, 2xbody, footer, footer-Bug
+    assertLogMessageContains("Matched", 4); // #4711 -> 2xsomewhere, 2xbody
+    assertLogMessageContains("Matched", 5); // #5150 -> 2xsomewhere, body, footer, footer-Bug
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -731,6 +782,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 5);
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -769,6 +821,7 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 10);
+    assertLogMessageContains("Matched", 2); // #42 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -807,6 +860,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 10);
+    assertLogMessageContains("Matched", 2); // Current PS: #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // Previous PS: #42 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -849,6 +904,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 10);
+    assertLogMessageContains("Matched", 2); // Current PS: #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // Previous PS: #42 -> somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -893,6 +950,8 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 11);
+    assertLogMessageContains("Matched", 3); // Current PS: #42 -> somewhere, footer, footer-Bug
+    assertLogMessageContains("Matched", 2); // Previous PS: #42 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -951,6 +1010,9 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 11);
+    assertLogMessageContains(
+        "Matched", 7); // Current PS: 3x somewhere, subject, body, footer, footer-Bug
+    assertLogMessageContains("Matched", 2); // Previous PS: somewhere, body
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
@@ -1011,6 +1073,12 @@ public class IssueExtractorTest extends LoggingMockingTestCase {
     assertEquals("Extracted issues do not match", expected, actual);
 
     assertLogMessageContains("Matching", 12);
+    assertLogMessageContains("Matched", 2); // Current PS: #16 -> somewhere, body
+    assertLogMessageContains(
+        "Matched", 7); // Current PS: #42 -> 3xsomewhere, subject, body, footer, footer-Bug
+    assertLogMessageContains("Matched", 3); // Previous PS: #16 -> somewhere, footer, footer-Bug
+    assertLogMessageContains("Matched", 2); // Previous PS: #42 -> somewhere, subject
+    assertLogMessageContains("Matched", 2); // Previous PS: #4711 -> somewhere, subject
 
     verifyOneOrMore(itsConfig).getIssuePattern();
     verifyOneOrMore(itsConfig).getIssuePatternGroupIndex();
