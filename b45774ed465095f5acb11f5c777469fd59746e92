@@ -16,6 +16,24 @@
       "revId": "b45774ed465095f5acb11f5c777469fd59746e92",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1f3db2a_d565d996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-18T12:22:28Z",
+      "side": 1,
+      "message": "I\u0027ve rebased onto a merge that brings the needed things together.",
+      "parentUuid": "e752e841_a1ef00e2",
+      "revId": "b45774ed465095f5acb11f5c777469fd59746e92",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
