@@ -210,6 +210,8 @@ public class PropertyExtractorTest extends LoggingMockingTestCase {
         ImmutableMap.of("revision", "testRevision", "patchSetNumber", "3");
     when(propertyAttributeExtractor.extractFrom(patchSetAttribute)).thenReturn(patchSetProperties);
 
+    event.approvals = Suppliers.ofInstance(null);
+
     event.comment = "testComment";
     changeAttribute.project = "testProject";
     changeAttribute.number = 176;
