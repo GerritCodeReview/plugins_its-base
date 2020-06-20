@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.its.base.testutil;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import com.google.common.collect.Lists;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
@@ -36,7 +38,11 @@ public abstract class LoggingMockingTestCase extends TestCase {
 
   private java.util.Collection<LogRecord> records;
 
-  protected final void assertLogMessageContains(String needle, Level level) {
+  protected final void assertLogMessageContains(String needle, Level level, int times) {
+    // We do not support `times == 0`, as it's ambiguous if it means the message does not occur at
+    // all, or message assertion should be skipped.
+    assertThat(times).isGreaterThan(0);
+
     LogRecord hit = null;
     Iterator<LogRecord> iter = records.iterator();
     while (hit == null && iter.hasNext()) {
@@ -47,12 +53,23 @@ public abstract class LoggingMockingTestCase extends TestCase {
         }
       }
     }
-    assertNotNull("Could not find log message containing '" + needle + "'", hit);
-    assertTrue("Could not remove log message containing '" + needle + "'", records.remove(hit));
+    removeLogHit(hit, "containing '" + needle + "'");
+
+    if (times > 1) {
+      assertLogMessageContains(needle, level, times - 1);
+    }
+  }
+
+  protected final void assertLogMessageContains(String needle, Level level) {
+    assertLogMessageContains(needle, level, 1);
   }
 
   protected final void assertLogMessageContains(String needle) {
     assertLogMessageContains(needle, null);
+  }
+
+  protected final void assertLogMessageContains(String needle, int times) {
+    assertLogMessageContains(needle, null, times);
   }
 
   protected final void assertLogThrowableMessageContains(String needle) {
@@ -66,10 +83,14 @@ public abstract class LoggingMockingTestCase extends TestCase {
         hit = record;
       }
     }
-    assertNotNull("Could not find log message with a Throwable containing '" + needle + "'", hit);
-    assertTrue(
-        "Could not remove log message with a Throwable containing '" + needle + "'",
-        records.remove(hit));
+    removeLogHit(hit, "with a Throwable containing '\" + needle + \"'");
+  }
+
+  private void removeLogHit(LogRecord hit, String description) {
+    if (hit == null) {
+      failWithUnassertedLogDump("Could not find log message " + description);
+    }
+    assertTrue("Could not remove log message " + description, records.remove(hit));
   }
 
   // As the PowerMock runner does not pass through runTest, we inject log
@@ -77,15 +98,25 @@ public abstract class LoggingMockingTestCase extends TestCase {
   @After
   public final void assertNoUnassertedLogEvents() {
     if (records.size() > 0) {
-      LogRecord record = records.iterator().next();
-      String msg = "Found untreated logged events. First one is:\n";
-      msg += record.getMessage();
-      Throwable t = record.getThrown();
-      if (t != null) {
-        msg += "\n" + t;
-      }
-      fail(msg);
+      failWithUnassertedLogDump("Found unasserted logged events.");
     }
+  }
+
+  public final void failWithUnassertedLogDump(String msg) {
+    msg += "\n";
+    if (records.size() == 0) {
+      msg += "(All logged messages have already been asserted)";
+    } else {
+      msg += records.size() + " logged, but not yet asserted messages remain:";
+      for (LogRecord record : records) {
+        msg += "\n" + record.getMessage();
+        Throwable t = record.getThrown();
+        if (t != null) {
+          msg += "\n   with thrown " + t;
+        }
+      }
+    }
+    fail(msg);
   }
 
   @Override

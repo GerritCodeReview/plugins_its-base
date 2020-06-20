@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.testutil.log;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.flogger.FluentLogger;
 import java.util.Collection;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -86,14 +87,27 @@ public class LogUtil {
    * @param level The level to user for the logger.
    */
   private static void logToCollectionJul(String logName, CollectionAppender appender, Level level) {
-    java.util.logging.Logger julLogger = java.util.logging.Logger.getLogger(logName);
+    // We'd love to simply get the logger of name `logName` and directly configure that. While this
+    // works for running the tests in bazel, it fails when running tests from within Eclipse. In
+    // Eclipse getting the logger of the same name here and from the class-under-test will get two
+    // different loggers, due to backend calling from a different class. So we instead resort to
+    // configuring the root logger and filtering the logName in the appender.
+
+    // The description above works for the 2nd, 3rd, ... test of a test case in Eclipse, but not for
+    // the first. To cover the first test as well, we beforehand tell Flogger to set things up by
+    // getting any random logger /before/ we configure the root logger.
+    FluentLogger unused = FluentLogger.forEnclosingClass();
+
+    java.util.logging.Logger julLogger = java.util.logging.Logger.getLogger("");
     julLogger.setLevel(level);
 
     julLogger.addHandler(
         new Handler() {
           @Override
           public void publish(LogRecord record) {
-            appender.append(record);
+            if (record.getLoggerName().equals(logName)) {
+              appender.append(record);
+            }
           }
 
           @Override
