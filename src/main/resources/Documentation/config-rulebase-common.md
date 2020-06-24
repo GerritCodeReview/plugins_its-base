@@ -281,7 +281,7 @@ would get added to the event for issue “4711”.
 `added@<Association-Value>`
 :	(only for events that allow to determine the patch set number.
 	So for example, this `association` property is not set for
-	RevUpdatedEvents)
+	RefUpdatedEvents)
 
 issue id occurs at `<Association-Value>` in the most recent
 patch set of the change, and either the event is for patch set
@@ -658,12 +658,9 @@ example for what the soy template will look like (note @param is required with c
 
 ```
 {namespace etc.its.templates}
-
-/**
- * @param changeNumber
- * @param formatChangeUrl
- */
-{template .TemplateName autoescape="strict" kind="text"}
+{template .TemplateName kind="text"}
+  {@param changeNumber: string}
+  {@param formatChangeUrl: string}
   inline Comment for change {$changeNumber} added. See {$formatChangeUrl}
 {/template}
 ```

@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.events.GitReferenceUpdatedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -34,12 +35,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ItsRulesProjectCacheImpl implements ItsRulesProjectCache {
-  private static final Logger log = LoggerFactory.getLogger(ItsRulesProjectCacheImpl.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String CACHE_NAME = "its_rules_project";
 
   private final LoadingCache<String, List<Rule>> cache;
@@ -54,7 +53,8 @@ public class ItsRulesProjectCacheImpl implements ItsRulesProjectCache {
     try {
       return cache.get(projectName);
     } catch (ExecutionException e) {
-      log.warn("Cannot get project specific rules for project {}", projectName, e);
+      logger.atWarning().withCause(e).log(
+          "Cannot get project specific rules for project %s", projectName);
       return ImmutableList.of();
     }
   }

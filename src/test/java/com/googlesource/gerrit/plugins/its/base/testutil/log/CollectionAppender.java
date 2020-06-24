@@ -17,18 +17,19 @@ package com.googlesource.gerrit.plugins.its.base.testutil.log;
 import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.LogRecord;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
 /** Log4j appender that logs into a list */
 public class CollectionAppender extends AppenderSkeleton {
-  private Collection<LoggingEvent> events;
+  private Collection<LogRecord> events;
 
   public CollectionAppender() {
     events = new LinkedList<>();
   }
 
-  public CollectionAppender(Collection<LoggingEvent> events) {
+  public CollectionAppender(Collection<LogRecord> events) {
     this.events = events;
   }
 
@@ -39,15 +40,20 @@ public class CollectionAppender extends AppenderSkeleton {
 
   @Override
   protected void append(LoggingEvent event) {
-    if (!events.add(event)) {
-      throw new RuntimeException("Could not append event " + event);
+    LogRecord logRecord = LogUtil.logRecordFromLog4jLoggingEvent(event);
+    append(logRecord);
+  }
+
+  public void append(LogRecord record) {
+    if (!events.add(record)) {
+      throw new RuntimeException("Could not append event " + record);
     }
   }
 
   @Override
   public void close() {}
 
-  public Collection<LoggingEvent> getLoggedEvents() {
+  public Collection<LogRecord> getLoggedEvents() {
     return Lists.newLinkedList(events);
   }
 }

@@ -15,13 +15,12 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import com.google.common.io.CharStreams;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
-import com.google.template.soy.SoyFileSet.Builder;
-import com.google.template.soy.data.SanitizedContent;
-import com.google.template.soy.tofu.SoyTofu;
+import com.google.template.soy.jbcsrc.api.SoySauce.Renderer;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.io.IOException;
@@ -31,8 +30,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Adds a short predefined comments to an issue.
@@ -40,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * <p>Comments are added for merging, abandoning, restoring of changes and adding of patch sets.
  */
 public class AddSoyComment extends IssueAction {
-  private static final Logger log = LoggerFactory.getLogger(AddSoyComment.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   public interface Factory {
     AddSoyComment create();
@@ -54,11 +51,9 @@ public class AddSoyComment extends IssueAction {
     this.templateDir = itsPath.resolve("templates");
   }
 
-  private String soyTemplate(
-      SoyFileSet.Builder builder,
-      String template,
-      SanitizedContent.ContentKind kind,
-      Map<String, String> properties) {
+  private String soyTextTemplate(
+      SoyFileSet.Builder builder, String template, Map<String, String> properties) {
+
     Path templatePath = templateDir.resolve(template + ".soy");
     String content;
 
@@ -70,18 +65,15 @@ public class AddSoyComment extends IssueAction {
     }
 
     builder.add(content, templatePath.toAbsolutePath().toString());
-    SoyTofu.Renderer renderer =
+    Renderer renderer =
         builder
             .build()
-            .compileToTofu()
-            .newRenderer("etc.its.templates." + template)
-            .setContentKind(kind)
+            .compileTemplates()
+            .renderTemplate("etc.its.templates." + template)
             .setData(properties);
-    return renderer.render();
-  }
-
-  private String soyTextTemplate(Builder builder, String template, Map<String, String> properties) {
-    return soyTemplate(builder, template, SanitizedContent.ContentKind.TEXT, properties);
+    String rendered = renderer.renderText().get();
+    logger.atFinest().log("Rendered template %s to:\n%s", templatePath, rendered);
+    return rendered;
   }
 
   @Override
@@ -96,10 +88,10 @@ public class AddSoyComment extends IssueAction {
 
   private String buildComment(ActionRequest actionRequest, Map<String, String> properties) {
     String template = actionRequest.getParameter(1);
-    if (!template.isEmpty()) {
+    if (!Strings.isNullOrEmpty(template)) {
       return soyTextTemplate(SoyFileSet.builder(), template, properties);
     }
-    log.error("No template name given in {}", actionRequest);
+    logger.atSevere().log("No template name given in %s", actionRequest);
     return "";
   }
 }
