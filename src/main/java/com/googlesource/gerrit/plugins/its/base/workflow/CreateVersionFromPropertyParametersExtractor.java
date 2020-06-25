@@ -15,17 +15,14 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class CreateVersionFromPropertyParametersExtractor {
-
-  private static final Logger log =
-      LoggerFactory.getLogger(CreateVersionFromPropertyParametersExtractor.class);
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Inject
   public CreateVersionFromPropertyParametersExtractor() {}
@@ -34,20 +31,20 @@ class CreateVersionFromPropertyParametersExtractor {
       ActionRequest actionRequest, Map<String, String> properties) {
     String[] parameters = actionRequest.getParameters();
     if (parameters.length != 1) {
-      log.error(
-          "Wrong number of received parameters. Received parameters are {}. Only one parameter is expected, the property id.",
+      logger.atSevere().log(
+          "Wrong number of received parameters. Received parameters are %s. Only one parameter is expected, the property id.",
           Arrays.toString(parameters));
       return Optional.empty();
     }
 
     String propertyId = parameters[0];
     if (Strings.isNullOrEmpty(propertyId)) {
-      log.error("Received property id is blank");
+      logger.atSevere().log("Received property id is blank");
       return Optional.empty();
     }
 
     if (!properties.containsKey(propertyId)) {
-      log.error("No event property found for id {}", propertyId);
+      logger.atSevere().log("No event property found for id %s", propertyId);
       return Optional.empty();
     }
 

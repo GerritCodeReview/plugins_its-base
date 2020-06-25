@@ -31,6 +31,14 @@ public interface ItsFacade {
 
   public void addComment(String issueId, String comment) throws IOException;
 
+  /**
+   * Sets a field on the issue to an event property.
+   *
+   * @param issueId The issue to set the field on
+   * @param value The name of the property to set the issues's field to
+   * @param fieldId The field on the issue to set
+   * @throws IOException if an error occurred
+   */
   default void addValueToField(String issueId, String value, String fieldId) throws IOException {
     throw new UnsupportedOperationException(
         "add-value-to-field is not currently implemented by " + getClass());
@@ -38,6 +46,13 @@ public interface ItsFacade {
 
   public void performAction(String issueId, String actionName) throws IOException;
 
+  /**
+   * Creates a new version on a given ITS.
+   *
+   * @param itsProject the ITS to create the version on
+   * @param version the version to create
+   * @throws IOException if an error occurred
+   */
   default void createVersion(String itsProject, String version) throws IOException {
     throw new UnsupportedOperationException("create-version is not implemented by " + getClass());
   }

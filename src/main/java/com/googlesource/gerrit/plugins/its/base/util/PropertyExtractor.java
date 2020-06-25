@@ -130,8 +130,9 @@ public class PropertyExtractor {
       CommentAddedEvent event, Map<String, String> common) {
     common.putAll(propertyAttributeExtractor.extractFrom(event.author.get(), "commenter"));
     common.put("comment", event.comment);
-    if (event.approvals != null) {
-      for (ApprovalAttribute approvalAttribute : event.approvals.get()) {
+    ApprovalAttribute[] approvals = event.approvals.get();
+    if (approvals != null) {
+      for (ApprovalAttribute approvalAttribute : approvals) {
         common.putAll(propertyAttributeExtractor.extractFrom(approvalAttribute));
       }
     }
