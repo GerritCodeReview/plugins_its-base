@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bcd2f61_c362bb55",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/util/IssueExtractor.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T08:45:42Z",
+      "side": 1,
+      "message": "Unfortunately, this has broken all tests because they do rely on assertions about logs produced.\n\nReverting this commit and it should be re-done with the associated amendments to the tests assertion.",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 62
+      },
+      "revId": "6057d2ee934e294c4638d2218e02784876daa5ff",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
