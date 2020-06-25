@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c732fd6a_0696d771",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T14:11:53Z",
+      "side": 1,
+      "message": "The build is green, and tests are not failing: not needed anymore?\n\nBTW: this change is breaking the tests.",
+      "revId": "fb76acbda331d3b020e18a13ec897efad9529d1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
