@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8a8ccdb_7e278a46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T08:56:33Z",
+      "side": 1,
+      "message": "Now the target branch (stable-3.1) is green, we are ready to merge the stable-3.0 upstream.",
+      "revId": "1ce93781307f778f67df83a920704dc3a4bfa942",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
