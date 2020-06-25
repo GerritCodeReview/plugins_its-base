@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 public class CommitMessageFetcher {
@@ -20,22 +21,33 @@ public class CommitMessageFetcher {
     this.repoManager = repoManager;
   }
 
-  public String fetch(String projectName, String commitId) throws IOException {
+  public String fetch(String projectName, String objectId) throws IOException {
     try (Repository repo = repoManager.openRepository(Project.nameKey(projectName))) {
       try (RevWalk revWalk = new RevWalk(repo)) {
-        RevCommit commit = revWalk.parseCommit(ObjectId.fromString(commitId));
-        return commit.getFullMessage();
+        RevObject obj = revWalk.peel(revWalk.parseAny(ObjectId.fromString(objectId)));
+        if (obj instanceof RevCommit) {
+          return ((RevCommit) obj).getFullMessage();
+        }
+        // objectId was found, but it's not a commit.
+        // Since the objectId was found, it's nothing to worry about and we do not need to alert the
+        // user. We silently return the empty string as blobs, trees, ... do not have a proper
+        // commit message.
+        //
+        // Parsing a non-commit objectId (and reaching this point) will happen for example on NoteDB
+        // sites when Gerrit updates `refs/sequences/changes` (which does not point at a commit, but
+        // a blob) on All-Projects and the corresponding RefUpdatedEvent gets processed.
+        return "";
       }
     }
   }
 
-  public String fetchGuarded(String projectName, String commitId) {
+  public String fetchGuarded(String projectName, String objectId) {
     String ret = "";
     try {
-      ret = fetch(projectName, commitId);
+      ret = fetch(projectName, objectId);
     } catch (IOException e) {
       logger.atSevere().withCause(e).log(
-          "Could not fetch commit message for commit %s of project %s", commitId, projectName);
+          "Could not fetch commit message for commit %s of project %s", objectId, projectName);
     }
     return ret;
   }
