@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97eb4d0a_2e6ad913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T14:19:12Z",
+      "side": 1,
+      "message": "Only nits, the rest looks good.",
+      "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f76475d3_99f73ce5",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T14:19:12Z",
+      "side": 1,
+      "message": "Nit: wrap long lines",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 96
+      },
+      "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
