@@ -88,7 +88,6 @@ public class IssueExtractor {
     while (matcher.find()) {
       String issueId = matcher.group(groupIdx);
       if (!Strings.isNullOrEmpty(issueId)) {
-        logger.atFine().log("Matched issue id '%s'", issueId);
         issues.add(issueId);
       }
     }
