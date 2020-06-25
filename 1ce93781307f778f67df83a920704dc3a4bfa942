@@ -16,6 +16,23 @@
       "revId": "1ce93781307f778f67df83a920704dc3a4bfa942",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb5876ff_82aecd6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T09:01:08Z",
+      "side": 1,
+      "message": "This works now:\nb test plugins/its-base:its_base_tests\nINFO: Invocation ID: 06116bdc-e0fe-4040-894d-507b65148e8f\nINFO: Build option --runs_per_test has changed, discarding analysis cache.\nINFO: Analyzed target //plugins/its-base:its_base_tests (0 packages loaded, 5483 targets configured).\nINFO: Found 1 test target...\nTarget //plugins/its-base:its_base_tests up-to-date:\n  bazel-bin/plugins/its-base/its_base_tests.jar\n  bazel-bin/plugins/its-base/its_base_tests\nINFO: Elapsed time: 4.196s, Critical Path: 3.85s\nINFO: 2 processes: 1 darwin-sandbox, 1 worker.\nINFO: Build completed successfully, 3 total actions\n//plugins/its-base:its_base_tests                                        PASSED in 2.6s\n\nExecuted 1 out of 1 test: 1 test passes.\nINFO: Build completed successfully, 3 total actions",
+      "revId": "1ce93781307f778f67df83a920704dc3a4bfa942",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
