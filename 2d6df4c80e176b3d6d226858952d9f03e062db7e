@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cd99bb9_3e3c6a66",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/LoggingMockingTestCase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-25T13:59:08Z",
+      "side": 1,
+      "message": "Not sure that recursion is really needed here: a simple loop would do it as well, correct?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "2d6df4c80e176b3d6d226858952d9f03e062db7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
