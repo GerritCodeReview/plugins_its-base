@@ -87,6 +87,30 @@
       "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c45941c9_7f727886",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-28T22:37:56Z",
+      "side": 1,
+      "message": "google-java-format does detect long lines in comments and documentation.\nAnd it breaks them accordingly. It breaks lines after 100 characters:\n\n  https://google.github.io/styleguide/javaguide.html#s4.4-column-limit\n\nIn fact: IIRC, I used google-java-format to produce the original comments\nyou complained about.\n\nYou\u0027re asking for a smaller column limit than google-java-format.\n\nThat is somewhat ok because google-java-format is the norm for the `gerrit`\nrepo, while this is `its-base`.",
+      "parentUuid": "92d51c94_ec0783c1",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 96
+      },
+      "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
