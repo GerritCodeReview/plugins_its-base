@@ -16,6 +16,24 @@
       "revId": "fb76acbda331d3b020e18a13ec897efad9529d1a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dbb9c840_ef4656e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-28T20:50:28Z",
+      "side": 1,
+      "message": "\u003e BTW: this change is breaking the tests.\n\nThis commit fixes the issues brought in by\n6057d2ee934e294c4638d2218e02784876daa5ff.\n\nAs you reverted that commit, this fix of course no longer\nworks but breaks things.\n\nBut as you already said: This commit is no longer needed\n(due to your revert) and I\u0027ll hence abandoned.",
+      "parentUuid": "c732fd6a_0696d771",
+      "revId": "fb76acbda331d3b020e18a13ec897efad9529d1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
