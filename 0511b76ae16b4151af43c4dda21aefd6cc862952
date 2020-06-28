@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93242cf1_1c22ebc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-28T19:35:52Z",
+      "side": 1,
+      "message": "@David It seems changes got merged in a different way by the maintainers and this change no\nlonger applies cleanly. Is this change still needed, or can it be aborted?",
+      "revId": "0511b76ae16b4151af43c4dda21aefd6cc862952",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
