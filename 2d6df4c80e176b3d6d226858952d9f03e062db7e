@@ -22,6 +22,30 @@
       "revId": "2d6df4c80e176b3d6d226858952d9f03e062db7e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ca5f22b_3dab0c27",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/LoggingMockingTestCase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-28T20:39:33Z",
+      "side": 1,
+      "message": "Done in PS4.",
+      "parentUuid": "2cd99bb9_3e3c6a66",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "2d6df4c80e176b3d6d226858952d9f03e062db7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
