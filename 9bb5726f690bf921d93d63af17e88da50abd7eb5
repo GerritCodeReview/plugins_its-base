@@ -33,6 +33,24 @@
       "revId": "9bb5726f690bf921d93d63af17e88da50abd7eb5",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b735a49_6dad8fef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-06-28T20:51:11Z",
+      "side": 1,
+      "message": "\u003e This doesn\u0027t look like the merge with the current master.\n\nYes, because this branch merges stable-3.0 into stable-3.1.\n\nBut since you re-shuffled the uploaded commits on stable-3.1, it of course\nis no longer against the tip of stable-3.1 :-)\n\nBut you uploaded your own merge commit hence abandoning.",
+      "parentUuid": "ebfaca01_740f32cf",
+      "revId": "9bb5726f690bf921d93d63af17e88da50abd7eb5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
