@@ -63,6 +63,30 @@
       "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92d51c94_ec0783c1",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-28T21:31:33Z",
+      "side": 1,
+      "message": "Good point, we should do something to detect long lines automatically, when they are in comments and documentation.",
+      "parentUuid": "36367806_19574ad4",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 96
+      },
+      "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
