@@ -111,6 +111,30 @@
       "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc89b096_6cabecb2",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/testutil/log/LogUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-06-29T05:57:58Z",
+      "side": 1,
+      "message": "Thanks for highlighting this: needs to be raised also on Gerrit as wrapping long lines is a common manual step required during reviews.\n\nIt would be nice then relax the limit (and change also the vertical ruler to align a column 100 in Gerrit) rather than doing it manually.\n\nOn all plugins I typically apply the same rules we use in Gerrit.",
+      "parentUuid": "c45941c9_7f727886",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 96
+      },
+      "revId": "f65f58da5667386bff15122a75d3f9e718cfb72b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
