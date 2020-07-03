@@ -17,11 +17,13 @@ package com.googlesource.gerrit.plugins.its.base.its;
 import static java.util.stream.Collectors.toList;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.common.Nullable;
 import com.google.gerrit.common.data.AccessSection;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.Project.NameKey;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.api.projects.CommentLinkInfo;
+import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -55,6 +57,7 @@ public class ItsConfig {
   private final ProjectCache projectCache;
   private final PluginConfigFactory pluginCfgFactory;
   private final Config gerritConfig;
+  private String instanceId;
 
   private static final ThreadLocal<Project.NameKey> currentProjectName =
       ThreadLocal.withInitial(() -> null);
@@ -68,16 +71,24 @@ public class ItsConfig {
       @PluginName String pluginName,
       ProjectCache projectCache,
       PluginConfigFactory pluginCfgFactory,
-      @GerritServerConfig Config gerritConfig) {
+      @GerritServerConfig Config gerritConfig,
+      @Nullable @GerritInstanceId String instanceId) {
     this.pluginName = pluginName;
     this.projectCache = projectCache;
     this.pluginCfgFactory = pluginCfgFactory;
     this.gerritConfig = gerritConfig;
+    this.instanceId = instanceId;
   }
 
   // Plugin enablement --------------------------------------------------------
 
   public boolean isEnabled(RefEvent event) {
+    if (instanceId != null && !instanceId.equals(event.instanceId)) {
+      logger.atFine().log(
+          "Event %s is coming from a remote Gerrit instance-id (%s)", event, event.instanceId);
+      return false;
+    }
+
     if (event instanceof PatchSetCreatedEvent
         || event instanceof CommentAddedEvent
         || event instanceof ChangeMergedEvent
