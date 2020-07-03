@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bb4edfd_cb2e2680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-03T20:35:56Z",
+      "side": 1,
+      "message": "@Ponch I am so grateful you introduced the instance-id :-)",
+      "revId": "b3c2b0f7ee122b0cca3ac8f6b19f900b69d2d20f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
