@@ -16,6 +16,23 @@
       "revId": "b3c2b0f7ee122b0cca3ac8f6b19f900b69d2d20f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32252054_e8f2e453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-03T20:36:43Z",
+      "side": 1,
+      "message": "TODO: Need to add a unit-test to verify the fix",
+      "revId": "b3c2b0f7ee122b0cca3ac8f6b19f900b69d2d20f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
