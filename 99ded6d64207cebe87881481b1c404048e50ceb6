@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "567712a3_d51acedc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-04T20:15:17Z",
+      "side": 1,
+      "message": "Actually, this is for any multi-server setup, single or multi-site.",
+      "parentUuid": "af17e5da_ebfe3df7",
+      "revId": "99ded6d64207cebe87881481b1c404048e50ceb6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5e5a668_bf268d27",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 5
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "a2a9a964_d43ec1c0",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-04T20:15:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5e5a668_bf268d27",
+      "range": {
+        "startLine": 64,
+        "startChar": 2,
+        "endLine": 64,
+        "endChar": 8
+      },
+      "revId": "99ded6d64207cebe87881481b1c404048e50ceb6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25e2ac7e_e5d64e9d",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 5
@@ -62,6 +104,30 @@
       "revId": "99ded6d64207cebe87881481b1c404048e50ceb6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32c38387_d22b3e42",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-04T20:15:17Z",
+      "side": 1,
+      "message": "At line L768 is used as a value for GerritInstanceId",
+      "parentUuid": "25e2ac7e_e5d64e9d",
+      "range": {
+        "startLine": 269,
+        "startChar": 2,
+        "endLine": 269,
+        "endChar": 52
+      },
+      "revId": "99ded6d64207cebe87881481b1c404048e50ceb6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
