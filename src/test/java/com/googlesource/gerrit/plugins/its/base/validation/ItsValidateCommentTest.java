@@ -51,7 +51,8 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private ItsConfig itsConfig;
   private ItsFacadeFactory itsFacadeFactory;
 
-  private Project project = new Project(Project.nameKey("myProject"));
+  private Project.NameKey projectName = Project.nameKey("myProject");
+  private Project project = Project.builder(projectName).build();
 
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
@@ -139,7 +140,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
@@ -160,7 +161,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
@@ -182,7 +183,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
@@ -208,7 +209,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
 
     CommitValidationException thrown =
@@ -229,7 +230,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -251,7 +252,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -275,7 +276,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -306,7 +307,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -330,7 +331,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -361,7 +362,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -385,7 +386,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -430,7 +431,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
 
     ret = ivc.onCommitReceived(event);
@@ -461,7 +462,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -491,7 +492,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(true);
 
