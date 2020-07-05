@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bf90b4b_b3068dba",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateCommentTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1012155
+      },
+      "writtenOn": "2020-07-05T13:48:28Z",
+      "side": 1,
+      "message": "Not sure, but I\u0027d expect `project` to be the `Project`, not the `Project.NameKey`.\nEspecially if both are relevant and used, as it is here.\n\nAlso it\u0027s not totally obvious to me that the `Project.NameKey project` is an\ninstance variable, but `newProject` is a method.\n\n-----\n\nIt might be simpler use the old, original file and update to get the Project through:\n\n  private Project project \u003d Project.builder(Project.nameKey(\"myProject\")).build();\n\nthen you would not need to touch all tests.\n\n-----\n\nCR-1 only to make the above nits visible.\nBut if you say that it\u0027s on purpose, that\u0027s fine too and I\u0027d gladly retract.",
+      "revId": "7b45eb18000c30e06c8c098c31cbebcf88796fd5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
