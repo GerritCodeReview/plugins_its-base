@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5f126fc_90a20e87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "I found it hard to follow. Moreover, it seems that Nullable in productive code is not justified, and only needed for current (partly bound) test setup. Here is much simpler approach: [1].\n\n[1] http://paste.openstack.org/show/795547",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 19
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e81f464_5853b32a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "This should never be needed in productive code. Since Gerrit 3.2 @GerritInstanceId is always bound. This is done only because test setup. I suggested alternative implementation where @Nullable could be removed.",
+      "range": {
+        "startLine": 75,
+        "startChar": 6,
+        "endLine": 75,
+        "endChar": 15
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984446a3_2b9a9136",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "Same here, shouldn\u0027t be needed.",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 26
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "083eb588_a69809dd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "You could also check whether event.instanceId !\u003d null and skip the check, similarly to instanceId !\u003d null check. This could simplify tests.",
+      "range": {
+        "startLine": 86,
+        "startChar": 49,
+        "endLine": 86,
+        "endChar": 65
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86c8e8d1_029c73e5",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "The Annotation approach is rather over engineered. All you want to achieve is to bin a constant. see my alternative suggestion below.",
+      "range": {
+        "startLine": 764,
+        "startChar": 4,
+        "endLine": 777,
+        "endChar": 0
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38ee4a8b_008d4346",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-05T09:33:24Z",
+      "side": 1,
+      "message": "This could just be:\n\n   private static final String INSTANCE_ID \u003d \"local-instance-id\";\n   [...]\n   bind(String.class)\n        .annotatedWith(GerritInstanceId.class)\n        .toProvider(Providers.of(INSTANCE_ID));",
+      "range": {
+        "startLine": 791,
+        "startChar": 6,
+        "endLine": 793,
+        "endChar": 67
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
