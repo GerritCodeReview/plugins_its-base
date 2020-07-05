@@ -51,14 +51,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
   private ItsConfig itsConfig;
   private ItsFacadeFactory itsFacadeFactory;
 
-  private Project project = new Project(Project.nameKey("myProject"));
+  private Project.NameKey project = Project.nameKey("myProject");
 
   public void testOptional() throws CommitValidationException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit();
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.OPTIONAL);
 
@@ -74,7 +74,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("TestMessage");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.empty());
@@ -96,7 +96,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("TestMessage");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.empty());
@@ -116,7 +116,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("TestMessage SKIP");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(itsConfig.getDummyIssuePattern()).thenReturn(Optional.of(Pattern.compile("SKIP")));
@@ -136,10 +136,10 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
@@ -156,11 +156,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
@@ -178,11 +178,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
@@ -204,11 +204,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
 
     CommitValidationException thrown =
@@ -225,11 +225,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -247,11 +247,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(true);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -271,11 +271,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -302,11 +302,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -326,11 +326,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -357,11 +357,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     when(itsFacade.exists("4711")).thenReturn(false);
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -381,11 +381,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -426,11 +426,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
 
     ret = ivc.onCommitReceived(event);
@@ -457,11 +457,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(false);
 
@@ -487,11 +487,11 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
     RevCommit commit = createCommit("bug#4711, bug#42");
-    CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
+    CommitReceivedEvent event = newCommitReceivedEvent(command, newProject(), null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
     when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
-    when(itsFacadeFactory.getFacade(project.getNameKey())).thenReturn(itsFacade);
+    when(itsFacadeFactory.getFacade(project)).thenReturn(itsFacade);
     doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
     when(itsFacade.exists("42")).thenReturn(true);
 
@@ -582,6 +582,10 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
   private <T> T verifyOneOrMore(T mock) {
     return verify(mock, atLeastOnce());
+  }
+
+  private Project newProject() {
+    return Project.builder(project).build();
   }
 
   private class TestModule extends FactoryModule {
