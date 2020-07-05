@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "77adf14c_574714e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-05T11:22:32Z",
+      "side": 1,
+      "message": "The [1] has a lot more moving parts and, most importantly, doesn\u0027t cover the single-server situation, where the instance-id is actually null.",
+      "parentUuid": "f5f126fc_90a20e87",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 19
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e81f464_5853b32a",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-05T09:33:24Z",
       "side": 1,
       "message": "This should never be needed in productive code. Since Gerrit 3.2 @GerritInstanceId is always bound. This is done only because test setup. I suggested alternative implementation where @Nullable could be removed.",
+      "range": {
+        "startLine": 75,
+        "startChar": 6,
+        "endLine": 75,
+        "endChar": 15
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d6e2161_a02ed553",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-05T11:22:32Z",
+      "side": 1,
+      "message": "Are you sure? I believe the GerritInstanceId is optional, if you look at EventBroker.java:79.",
+      "parentUuid": "6e81f464_5853b32a",
       "range": {
         "startLine": 75,
         "startChar": 6,
@@ -87,6 +135,30 @@
         "startChar": 49,
         "endLine": 86,
         "endChar": 65
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e68cdfac_3316f2e7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-05T11:22:32Z",
+      "side": 1,
+      "message": "Not really, for single-server, instanceId is null.",
+      "parentUuid": "984446a3_2b9a9136",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 26
       },
       "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
