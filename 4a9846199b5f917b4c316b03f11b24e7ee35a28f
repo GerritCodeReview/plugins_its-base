@@ -45,6 +45,30 @@
       "revId": "4a9846199b5f917b4c316b03f11b24e7ee35a28f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4309586b_dabd02ea",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:34:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e45c3ca_e906f787",
+      "range": {
+        "startLine": 779,
+        "startChar": 4,
+        "endLine": 779,
+        "endChar": 11
+      },
+      "revId": "4a9846199b5f917b4c316b03f11b24e7ee35a28f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
