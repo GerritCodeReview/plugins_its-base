@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "566a329e_52ade42a",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:16:08Z",
+      "side": 1,
+      "message": "this *should have been* private, but I kept it public for consistency with the setupIsEnabled at L73",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 69,
+        "endChar": 8
+      },
+      "revId": "4a9846199b5f917b4c316b03f11b24e7ee35a28f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
