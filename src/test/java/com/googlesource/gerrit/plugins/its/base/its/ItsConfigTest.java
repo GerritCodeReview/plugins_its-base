@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.its.base.its;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -24,6 +25,7 @@ import com.google.common.base.Suppliers;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -39,8 +41,13 @@ import com.google.gerrit.server.project.ProjectCache;
 import com.google.gerrit.server.project.ProjectState;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.util.Providers;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsAssociationPolicy;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
 import org.eclipse.jgit.lib.Config;
@@ -51,6 +58,17 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   private ProjectCache projectCache;
   private PluginConfigFactory pluginConfigFactory;
   private Config serverConfig;
+
+  @Retention(RUNTIME)
+  @Target(ElementType.METHOD)
+  static @interface GerritInstanceIdTest {}
+
+  static final String LOCAL_INSTANCE_ID = "local-gerrit-instance-id";
+  static final String FOREIGN_INSTANCE_ID = "foreign-gerrit-instance-id";
+
+  public void enableItsConfig() {
+    setupIsEnabled("true", null, null, new String[] {});
+  }
 
   public void setupIsEnabled(
       String enabled, String itsProject, String parentEnabled, String[] branches) {
@@ -251,6 +269,28 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
     Project.NameKey projectNK = Project.nameKey("testProject");
     assertTrue(itsConfig.isEnabled(projectNK, "refs/heads/testBranch"));
+  }
+
+  @GerritInstanceIdTest
+  public void testIsNotEnabledEventFromForeignInstanceId() {
+    enableItsConfig();
+
+    assertFalse(createItsConfig().isEnabled(newEventFromGerritInstanceId(FOREIGN_INSTANCE_ID)));
+    assertLogMessageContains("is coming from a remote Gerrit instance-id");
+  }
+
+  @GerritInstanceIdTest
+  public void testIsEnabledEventFromLocalInstanceId() {
+    enableItsConfig();
+
+    assertTrue(createItsConfig().isEnabled(newEventFromGerritInstanceId(LOCAL_INSTANCE_ID)));
+  }
+
+  public void testIsNotEnabledEventWithRemoteInstanceIdButNotDefinedLocally() {
+    enableItsConfig();
+
+    assertFalse(createItsConfig().isEnabled(newEventFromGerritInstanceId(FOREIGN_INSTANCE_ID)));
+    assertLogMessageContains("is coming from a remote Gerrit instance-id");
   }
 
   public void testIsEnabledEventNoBranches() {
@@ -709,6 +749,12 @@ public class ItsConfigTest extends LoggingMockingTestCase {
         .getEnum("plugin", "ItsTestName", "association", ItsAssociationPolicy.MANDATORY);
   }
 
+  private PatchSetCreatedEvent newEventFromGerritInstanceId(String instanceId) {
+    PatchSetCreatedEvent event = new PatchSetCreatedEvent(testChange("testProject", "testBranch"));
+    event.instanceId = instanceId;
+    return event;
+  }
+
   private ItsConfig createItsConfig() {
     return injector.getInstance(ItsConfig.class);
   }
@@ -720,10 +766,20 @@ public class ItsConfigTest extends LoggingMockingTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    injector = Guice.createInjector(new TestModule());
+
+    Method testMethod = ItsConfigTest.class.getMethod(getName());
+    String gerritInstanceIdTest =
+        testMethod.getAnnotation(GerritInstanceIdTest.class) == null ? null : LOCAL_INSTANCE_ID;
+    injector = Guice.createInjector(new TestModule(gerritInstanceIdTest));
   }
 
   private class TestModule extends FactoryModule {
+    private final String gerritInstanceId;
+
+    TestModule(String gerritInstanceId) {
+      this.gerritInstanceId = gerritInstanceId;
+    }
+
     @Override
     protected void configure() {
       projectCache = mock(ProjectCache.class);
@@ -736,6 +792,10 @@ public class ItsConfigTest extends LoggingMockingTestCase {
 
       serverConfig = mock(Config.class);
       bind(Config.class).annotatedWith(GerritServerConfig.class).toInstance(serverConfig);
+
+      bind(String.class)
+          .annotatedWith(GerritInstanceId.class)
+          .toProvider(Providers.of(gerritInstanceId));
     }
   }
 }
