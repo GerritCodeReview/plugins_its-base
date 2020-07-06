@@ -16,6 +16,23 @@
       "revId": "c2bb193a487fb40c5554562084b2a524f5079f16",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12ac1507_2fbc7410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1026112
+      },
+      "writtenOn": "2020-07-06T06:31:17Z",
+      "side": 1,
+      "message": "Remove David from attention set",
+      "revId": "c2bb193a487fb40c5554562084b2a524f5079f16",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
