@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "7a6b3952_d6684ca4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a60eccc_2a0c23f4",
+      "range": {
+        "startLine": 75,
+        "startChar": 6,
+        "endLine": 75,
+        "endChar": 15
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "984446a3_2b9a9136",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
         "patchSetId": 7
@@ -310,6 +334,30 @@
     },
     {
       "key": {
+        "uuid": "8880b8da_a3578c13",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07c4f140_27ed38b3",
+      "range": {
+        "startLine": 86,
+        "startChar": 49,
+        "endLine": 86,
+        "endChar": 65
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86c8e8d1_029c73e5",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 7
@@ -333,6 +381,30 @@
     },
     {
       "key": {
+        "uuid": "560caa74_920ee93f",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:10:15Z",
+      "side": 1,
+      "message": "I simplified the approach, and introduced two constants. The annotation is still needed as it is the simplest way to have a differentiated setup phase for two tests.",
+      "parentUuid": "86c8e8d1_029c73e5",
+      "range": {
+        "startLine": 764,
+        "startChar": 4,
+        "endLine": 777,
+        "endChar": 0
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38ee4a8b_008d4346",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 7
@@ -353,6 +425,30 @@
       "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02f54ab8_968f8490",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2020-07-06T07:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ee4a8b_008d4346",
+      "range": {
+        "startLine": 791,
+        "startChar": 6,
+        "endLine": 793,
+        "endChar": 67
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
