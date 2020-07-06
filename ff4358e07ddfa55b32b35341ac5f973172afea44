@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "07c4f140_27ed38b3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-06T06:16:10Z",
+      "side": 1,
+      "message": "Yes, exactly.",
+      "parentUuid": "57158d07_5d6af423",
+      "range": {
+        "startLine": 86,
+        "startChar": 49,
+        "endLine": 86,
+        "endChar": 65
+      },
+      "revId": "ff4358e07ddfa55b32b35341ac5f973172afea44",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86c8e8d1_029c73e5",
         "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/its/ItsConfigTest.java",
         "patchSetId": 7
