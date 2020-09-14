@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.common.Nullable;
-import com.google.gerrit.common.data.AccessSection;
+import com.google.gerrit.entities.AccessSection;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.Project.NameKey;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -274,7 +274,7 @@ public class ItsConfig {
             "Cannot access %s configuration for plugin %s", projectName, pluginName);
       }
     }
-    return new PluginConfig(pluginName, new Config());
+    return PluginConfig.create(pluginName, new Config(), null);
   }
 
   private List<CommentLinkInfo> getCommentLinkInfo(final String commentlinkName) {
