@@ -654,7 +654,7 @@ example for what the soy template will look like (note @param is required with c
 {template .TemplateName kind="text"}
   {@param changeNumber: string}
   {@param formatChangeUrl: string}
-  inline Comment for change {$changeNumber} added. See {$formatChangeUrl}
+  Comment for change {$changeNumber} added. See {$formatChangeUrl}
 {/template}
 ```
 
