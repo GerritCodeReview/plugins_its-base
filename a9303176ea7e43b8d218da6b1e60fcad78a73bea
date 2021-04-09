@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7316334_9aa827c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1108915
+      },
+      "writtenOn": "2021-04-09T12:15:24Z",
+      "side": 1,
+      "message": "Hi! I\u0027ve noticed this minor mistake in documentation - I\u0027ve verified what are actual fields available in event by using `action log-event`",
+      "revId": "a9303176ea7e43b8d218da6b1e60fcad78a73bea",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
