@@ -461,7 +461,7 @@ tag, as for example `master`).
 `changerEmail`
 :   email address of the user that changed the WIP state
 
-`submitterName`
+`changerName`
 :   name of the user that changed the WIP state
 
 `changerUsername`
@@ -478,7 +478,7 @@ tag, as for example `master`).
 `changerEmail`
 :   email address of the user that changed the private state
 
-`submitterName`
+`changerName`
 :   name of the user that changed the private state
 
 `changerUsername`
