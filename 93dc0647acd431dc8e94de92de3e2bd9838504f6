@@ -16,6 +16,24 @@
       "message": "@Luca: Can this get merged soon? The fix for setting current project name for EventListener events would be really helpful in the JIRA ITS plugin.",
       "revId": "93dc0647acd431dc8e94de92de3e2bd9838504f6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afa669ef_67c44421",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-06-16T17:34:09Z",
+      "side": 1,
+      "message": "Let me rebase and re-merge and see if I can get some traction on it.",
+      "parentUuid": "b04b0e33_5d6f7673",
+      "revId": "93dc0647acd431dc8e94de92de3e2bd9838504f6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
