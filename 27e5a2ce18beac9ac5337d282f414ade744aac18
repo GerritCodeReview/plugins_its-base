@@ -33,6 +33,24 @@
       "message": "I can only give +1",
       "revId": "27e5a2ce18beac9ac5337d282f414ade744aac18",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21c89d7_5c98a432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-07-21T00:55:13Z",
+      "side": 1,
+      "message": "I\u0027ve added you in the list of maintainers.",
+      "parentUuid": "ec34d1ab_494f437c",
+      "revId": "27e5a2ce18beac9ac5337d282f414ade744aac18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
