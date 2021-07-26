@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
+  private static Project.NameKey testProjectName = new Project.NameKey("test-project");
   private Injector injector;
 
   private PropertyExtractor propertyExtractor;
@@ -51,6 +53,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
     Set<Map<String, String>> propertySets = new HashSet<>();
     when(propertyExtractor.extractFrom(event))
         .thenReturn(new RefEventProperties(Collections.emptyMap(), propertySets));
+    when(event.getProjectNameKey()).thenReturn(testProjectName);
 
     actionController.onEvent(event);
   }
@@ -66,6 +69,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     when(propertyExtractor.extractFrom(event))
         .thenReturn(new RefEventProperties(properties, propertySets));
+    when(event.getProjectNameKey()).thenReturn(testProjectName).once();
 
     // When no issues are found in the commit message, the list of actions is empty
     // as there are no matchs with an empty map of properties.
@@ -95,6 +99,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     when(propertyExtractor.extractFrom(event))
         .thenReturn(new RefEventProperties(projectProperties, propertySets));
+    when(event.getProjectNameKey()).thenReturn(testProjectName).once();
 
     ActionRequest issueActionRequest1 = mock(ActionRequest.class);
     Collection<ActionRequest> issueActionRequests = ImmutableList.of(issueActionRequest1);
@@ -126,6 +131,7 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
     when(propertyExtractor.extractFrom(event))
         .thenReturn(new RefEventProperties(Collections.emptyMap(), propertySets));
+    when(event.getProjectNameKey()).thenReturn(testProjectName).once();
 
     ActionRequest actionRequest1 = mock(ActionRequest.class);
     Collection<ActionRequest> actionRequests1 = ImmutableList.of(actionRequest1);
