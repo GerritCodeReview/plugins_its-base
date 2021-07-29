@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b8d290_36af683a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "2021-07-29T08:09:08Z",
+      "side": 1,
+      "message": "there is a compilation issue https://ci.gerritcodereview.com/t/gerrit/build/50a07590885a4050a6614e55adc8ea26",
+      "revId": "13a62713770560fd7a149196e820b379a7fdc7ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
