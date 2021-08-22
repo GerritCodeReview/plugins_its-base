@@ -16,6 +16,23 @@
       "message": "there is a compilation issue https://ci.gerritcodereview.com/t/gerrit/build/50a07590885a4050a6614e55adc8ea26",
       "revId": "13a62713770560fd7a149196e820b379a7fdc7ec",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f109823_9f7c301e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096582
+      },
+      "writtenOn": "2021-08-22T21:51:29Z",
+      "side": 1,
+      "message": "How can we get progress on this patch? It is a simple fix, but I don\u0027t have permission to push a change to this patch.",
+      "revId": "13a62713770560fd7a149196e820b379a7fdc7ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
