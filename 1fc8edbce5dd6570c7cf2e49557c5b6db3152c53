@@ -16,6 +16,24 @@
       "message": "I only have +1 code-review privileges for this. Could someone please review to get this merged?",
       "revId": "1fc8edbce5dd6570c7cf2e49557c5b6db3152c53",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e541270_1f907ac7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-09-05T23:35:43Z",
+      "side": 1,
+      "message": "I have +2 permissions, but I am the owner of this change and even a +2 from me won\u0027t be enough :-(",
+      "parentUuid": "c0838b6f_efb3b10f",
+      "revId": "1fc8edbce5dd6570c7cf2e49557c5b6db3152c53",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
