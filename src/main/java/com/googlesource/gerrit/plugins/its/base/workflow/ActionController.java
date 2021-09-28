@@ -89,7 +89,7 @@ public class ActionController implements EventListener {
     }
     if (!projectProperties.containsKey("its-project")) {
       String project = projectProperties.get("project");
-      logger.atSevere().log(
+      logger.atFinest().log(
           "Could not process project event. No its-project associated with project %s. "
               + "Did you forget to configure the ITS project association in project.config?",
           project);
