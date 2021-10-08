@@ -22,7 +22,7 @@ The ([per default][common-config-commentlinkGroupIndex]) first group of
 
 So for example having
 
-```
+```ini
 [commentlink "@PLUGIN@"]
     match = [Bb][Uu][Gg][ ]*([1-9][0-9]*)
     html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
@@ -57,7 +57,7 @@ OPTIONAL
 
 Example:
 
-```
+```ini
 [plugin "@PLUGIN@"]
     association = MANDATORY
 ```
@@ -81,7 +81,7 @@ integration is enabled or not. To enable the issue tracker integration
 for a project the project must have the following entry in its
 `project.config` file in the `refs/meta/config` branch:
 
-```
+```ini
   [plugin "@PLUGIN@"]
     enabled = true
 ```
@@ -115,7 +115,7 @@ expressions. Multiple branches may be specified.
 E.g. to limit the issue tracker system integration to the `master`
 branch and all stable branches the following could be configured:
 
-```
+```ini
   [plugin "@PLUGIN@"]
     enabled = true
     branch = refs/heads/master
@@ -132,7 +132,7 @@ for a project mapping to an ITS project named `manhattan-project`, the project
 must have the following entry in its `project.config` file in the
 `refs/meta/config` branch:
 
-```
+```ini
   [plugin "@PLUGIN@"]
     its-project = manhattan-project
 ```
@@ -159,15 +159,13 @@ issue tracking systems (i.e. a Bugzilla and a Jira instance).  In
 this configuration you can simply install both its plugins and
 configure them as described.
 
-In situations where users want to reference issues from multiple
-instances of the same issue tracking system (i.e. two independent
-Bugzilla instances) they can simply create two its-bugzilla plugin
-files with different names (i.e. its-bugzilla-external.jar and
-its-bugzilla-internal.jar).  Gerrit will give each plugin the same
-name as the file name (minus the extension).  You can view the names
-by going to the Gerrit UI under menu Plugins -> Installed.  Now you
+In situations where users want to reference issues from multiple instances of
+the same issue tracking system (e.g., two independent Bugzilla instances),
+create two its-bugzilla plugin files with different names (e.g.,
+`its-bugzilla-external.jar` and `its-bugzilla-internal.jar`). Edit the file
+`META-INF\MANIFEST.MF` in the jar (extract using `unzip`), and change the name
+in the `Gerrit-PluginName` field to match the change to the filename. Now you
 just need to use the appropriate name to configure each plugin.
-
 
 ## Further common configuration details
 
