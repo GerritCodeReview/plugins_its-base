@@ -16,6 +16,24 @@
       "message": "I am trying to merge the changes from 3.1 to 3.2. However, it seems that I am hitting an issue in the Zuul check pipeline.",
       "revId": "48e6a859059fcbbd74940fc811308f45f18eb1a6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff6c8466_51edfcad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-10-08T00:07:09Z",
+      "side": 1,
+      "message": "The failure seems unrelated:\nFailed to update apt cache: E:The repository \u0027https://deb.nodesource.com/node_10.x stretch Release\u0027 does not have a Release file.",
+      "parentUuid": "5df8f9c3_e0e9233f",
+      "revId": "48e6a859059fcbbd74940fc811308f45f18eb1a6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
