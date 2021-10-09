@@ -3,13 +3,13 @@
 [TOC]: # "Table of Contents"
 
 ### Table of Contents
+
 - [Overview](#overview)
 - [Rule Bases Scope](#rule-bases-scope)
 - [Rules](#rules)
 - [Conditions](#conditions)
 - [Event Properties](#event-properties)
 - [Actions](#actions)
-
 
 ## Overview
 
@@ -26,7 +26,7 @@ actions, once all of its conditions are met.
 
 A simple rule bases file may look like
 
-```
+```ini
 [rule "rule1"]
     event-type = change-merged
     action = add-standard-comment
@@ -103,6 +103,7 @@ are defined, the final set of rules applied is the merge of them and this
 is true either if they are defined in generic or project specific scope.
 
 [rules-inheritance]: #rules-inheritance
+
 ### <a name="rules-inheritance">Rules inheritance</a>
 
 For project specific rules, i.e., those defined on the `refs/meta/config`
@@ -152,7 +153,7 @@ conditions, and set of actions. Each of those sets may be empty.
 
 The conditions are lines of the form
 
-```
+```ini
   name = value1, value2, ..., valueN
 ```
 
@@ -162,7 +163,7 @@ example to match events that come with an `association` property
 having `subject`, or `footer-Bug`, the following condition can be
 used:
 
-```
+```ini
   association = subject,footer-Bug
 ```
 
@@ -171,7 +172,7 @@ with a property 'name' having 'value2', or ..., or 'valueN'. So for
 example to match events that do not come with a `status` property
 having `DRAFT`, the following condition can be used:
 
-```
+```ini
   status = !,DRAFT
 ```
 
@@ -209,7 +210,7 @@ The common properties for each event are
 
 For example
 
-    ```
+```ini
     [rule "someRuleForBugzillaOnly"]
       its-name = its-bugzilla
       approvalCodeReview = -2
@@ -218,7 +219,7 @@ For example
       its-name = its-jira
       approvalCodeReview = -2
       action = add-comment Dear JIRA users, the change had a -2 Code-Review approval.
-    ```
+```
 
 would report the “Heya Bugzilla...” text only through its-bugzilla for
 changes that had a -2 Code-Review and have an association through
@@ -585,7 +586,7 @@ tag, as for example `master`).
 
 Lines of the form
 
-```
+```ini
   action = name param1 param2 ... paramN
 ```
 
@@ -620,7 +621,7 @@ associated rule.
 
 So for example
 
-```
+```ini
   action = add-comment This is a sample command
 ```
 
@@ -646,7 +647,7 @@ event and adds the output as comment to any associated issue.
 
 So for example
 
-```
+```ini
   action = add-soy-comment TemplateName
 ```
 
@@ -654,7 +655,6 @@ would render the template `etc/its/templates/TemplateName.soy` add the
 output as comment to associated issues.
 
 example for what the soy template will look like (note @param is required with correct variables.)
-
 
 ```
 {namespace etc.its.templates}
@@ -679,7 +679,7 @@ The ITS field value deduplication depends on the its implementation.
 
 Example with the event property `branch` and a field identified as `labels`:
 
-```
+```ini
   action = add-property-to-field branch labels
 ```
 
@@ -693,7 +693,7 @@ created in the Gerrit project.
 
 Example with the event property `ref`:
 
-```
+```ini
   action = create-version-from-property ref
 ```
 
@@ -705,6 +705,7 @@ on each collected commit.
 This is useful when you want to trigger rules on a multiple past commits.
 
 Available collectors are:
+
 - `since-last-tag`: Collects all commits between the current ref and previous tag
 
 To avoid to trigger issue actions twice for the same event, you should condition your rule on
@@ -712,10 +713,9 @@ the event property `source`.
 
 Example:
 
-```
+```ini
   action = fire-event-on-commits since-last-tag
 ```
-
 
 ### Action: log-event
 
@@ -725,7 +725,7 @@ Logging happens at the info level per default, but can be overriden by
 adding the desired log level as parameter. Supported values are
 `error`, `warn`, `info`, and `debug`). So for example
 
-```
+```ini
   action = log-event error
 ```
 
