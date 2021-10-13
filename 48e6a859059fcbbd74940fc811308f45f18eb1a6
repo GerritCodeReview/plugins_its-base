@@ -68,6 +68,24 @@
       "message": "Could you please help to review this change? Thanks in advance!",
       "revId": "48e6a859059fcbbd74940fc811308f45f18eb1a6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99750a9d_fe4716b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-10-13T18:08:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff6c8466_51edfcad",
+      "revId": "48e6a859059fcbbd74940fc811308f45f18eb1a6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
