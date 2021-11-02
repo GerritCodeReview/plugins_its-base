@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2494223d_f37eb0f6",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-11-02T16:54:54Z",
+      "side": 1,
+      "message": "Could you add a real-life CLI example?",
+      "revId": "491148d527cb892f8e0f4db2fabbe2650097362c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
