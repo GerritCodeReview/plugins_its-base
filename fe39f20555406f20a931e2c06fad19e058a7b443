@@ -41,6 +41,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b7f0bb0_13463ef6",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1111258
+      },
+      "writtenOn": "2021-11-12T19:34:55Z",
+      "side": 1,
+      "message": "\u003e Best to use \u0027jar\u0027 instead.\n\nIndeed, forgot about that tool.",
+      "parentUuid": "b69fac3d_6fbf1593",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 55
+      },
+      "revId": "fe39f20555406f20a931e2c06fad19e058a7b443",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8424f0b8_4bfc5798",
@@ -64,6 +88,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3ce7caf_3c7728e0",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1111258
+      },
+      "writtenOn": "2021-11-12T19:34:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8424f0b8_4bfc5798",
+      "range": {
+        "startLine": 175,
+        "startChar": 2,
+        "endLine": 175,
+        "endChar": 7
+      },
+      "revId": "fe39f20555406f20a931e2c06fad19e058a7b443",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db361992_d73a0fed",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-11-12T12:02:28Z",
       "side": 1,
       "message": "jar cvfm",
+      "range": {
+        "startLine": 178,
+        "startChar": 2,
+        "endLine": 178,
+        "endChar": 5
+      },
+      "revId": "fe39f20555406f20a931e2c06fad19e058a7b443",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab5cba8_c01cfb74",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1111258
+      },
+      "writtenOn": "2021-11-12T19:34:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db361992_d73a0fed",
       "range": {
         "startLine": 178,
         "startChar": 2,
