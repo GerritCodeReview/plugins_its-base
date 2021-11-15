@@ -159,15 +159,25 @@ issue tracking systems (i.e. a Bugzilla and a Jira instance).  In
 this configuration you can simply install both its plugins and
 configure them as described.
 
-In situations where users want to reference issues from multiple
-instances of the same issue tracking system (i.e. two independent
-Bugzilla instances) they can simply create two its-bugzilla plugin
-files with different names (i.e. its-bugzilla-external.jar and
-its-bugzilla-internal.jar).  Gerrit will give each plugin the same
-name as the file name (minus the extension).  You can view the names
-by going to the Gerrit UI under menu Plugins -> Installed.  Now you
+In situations where users want to reference issues from multiple instances of
+the same issue tracking system (e.g., two independent Bugzilla instances),
+create two its-bugzilla plugin files with different names (e.g.,
+`its-bugzilla-external.jar` and `its-bugzilla-internal.jar`). Edit the file
+`META-INF/MANIFEST.MF` in the jar (extract using `unzip`), and change the name
+in the `Gerrit-PluginName` field to match the change to the filename. Now you
 just need to use the appropriate name to configure each plugin.
 
+Example:
+
+```console
+cd /tmp
+wget 'https://gerrit-ci.gerritforge.com/job/plugin-its-bugzilla-bazel-master/lastSuccessfulBuild/artifact/bazel-bin/plugins/its-bugzilla/its-bugzilla.jar'
+mkdir its-bugzilla-external
+cd its-bugzilla-external
+jar --verbose --extract --file ../its-bugzilla.jar
+sed -i 's/its-bugzilla/its-bugzilla-external/' META-INF/MANIFEST.MF
+jar --verbose --create --file ../its-bugzilla-external.jar .
+```
 
 ## Further common configuration details
 
