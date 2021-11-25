@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d01b77_433e5b02",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2021-11-25T00:03:21Z",
+      "side": 1,
+      "message": "I believe you should also mention to the jar command where is the manifest to include",
+      "revId": "50a054fcf205f09841fa4ac020e9580c03686995",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
