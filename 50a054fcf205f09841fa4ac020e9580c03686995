@@ -52,6 +52,24 @@
       "parentUuid": "7cf075fa_f2f69cba",
       "revId": "50a054fcf205f09841fa4ac020e9580c03686995",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daae3a40_d16e5557",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1111258
+      },
+      "writtenOn": "2022-01-04T20:11:28Z",
+      "side": 1,
+      "message": "\u003e Can you include the command that include the manifest then?\n\nIt is there, added in patch set 7.",
+      "parentUuid": "d1023272_a36e814c",
+      "revId": "50a054fcf205f09841fa4ac020e9580c03686995",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
