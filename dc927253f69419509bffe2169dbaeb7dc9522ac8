@@ -16,6 +16,23 @@
       "message": "Thanks, Kenyon.",
       "revId": "dc927253f69419509bffe2169dbaeb7dc9522ac8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0723d6d_630b3148",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2022-01-05T01:13:29Z",
+      "side": 1,
+      "message": "The Zuul failure is unrelated",
+      "revId": "dc927253f69419509bffe2169dbaeb7dc9522ac8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
