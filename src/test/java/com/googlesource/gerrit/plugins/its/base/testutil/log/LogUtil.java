@@ -132,7 +132,7 @@ public class LogUtil {
    * @return The corresponding JUL LogRecord
    */
   public static LogRecord logRecordFromLog4jLoggingEvent(LoggingEvent event) {
-    LogRecord logRecord = new LogRecord(Level.ALL, event.getRenderedMessage());
+    LogRecord logRecord = new LogRecord(log4jToJul.get(event.getLevel()), event.getRenderedMessage());
     ThrowableInformation tInfo = event.getThrowableInformation();
     if (tInfo != null) {
       logRecord.setThrown(tInfo.getThrowable());
