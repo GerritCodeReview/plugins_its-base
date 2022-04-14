@@ -22,7 +22,7 @@ import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.googlesource.gerrit.plugins.its.base.testutil.log.LogUtil;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.logging.LogRecord;
 import junit.framework.TestCase;
@@ -147,6 +147,6 @@ public abstract class LoggingMockingTestCase extends TestCase {
         testChangeId,
         testAccountId,
         BranchNameKey.create(Project.nameKey(project), branch),
-        new Timestamp(System.currentTimeMillis()));
+        Instant.now());
   }
 }
