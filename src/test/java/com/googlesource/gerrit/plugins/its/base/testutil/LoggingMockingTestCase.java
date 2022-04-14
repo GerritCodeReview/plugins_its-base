@@ -147,6 +147,6 @@ public abstract class LoggingMockingTestCase extends TestCase {
         testChangeId,
         testAccountId,
         BranchNameKey.create(Project.nameKey(project), branch),
-        new Timestamp(System.currentTimeMillis()));
+        new Timestamp(System.currentTimeMillis()).toInstant());
   }
 }
