@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ead0da8_903ab4db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2022-04-19T12:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40246b05_0d997d69",
+      "range": {
+        "startLine": 11,
+        "startChar": 70,
+        "endLine": 11,
+        "endChar": 74
+      },
+      "revId": "200c1be3f29c3abe3a3baa0047da7afc2ed89361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e5de1bf_f9fc7d5b",
@@ -47,6 +71,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79385e77_78113707",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2022-04-19T12:08:10Z",
+      "side": 1,
+      "message": "The Change lastUpdatedOn contructor. Added link to the parameter.",
+      "parentUuid": "0e5de1bf_f9fc7d5b",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "200c1be3f29c3abe3a3baa0047da7afc2ed89361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e0cf109_94e9ac1a",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-04-19T09:20:49Z",
       "side": 1,
       "message": "Was this causing the tests to fail? what was the error?",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 57
+      },
+      "revId": "200c1be3f29c3abe3a3baa0047da7afc2ed89361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5037585b_2befa83d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2022-04-19T12:08:10Z",
+      "side": 1,
+      "message": "Added more details. See if it makes sense.",
+      "parentUuid": "7e0cf109_94e9ac1a",
       "range": {
         "startLine": 13,
         "startChar": 2,
