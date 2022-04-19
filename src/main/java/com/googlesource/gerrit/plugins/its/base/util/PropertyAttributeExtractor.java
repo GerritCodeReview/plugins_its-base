@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Extractor to translate the various {@code *Attribute}s to properties. */
 class PropertyAttributeExtractor {
