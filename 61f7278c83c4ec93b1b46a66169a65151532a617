@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e90a98b_df55ee72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2022-05-03T20:16:27Z",
+      "side": 1,
+      "message": "With the stable-3.6 branch now created, which branch should be used for stable-3.5?",
+      "revId": "61f7278c83c4ec93b1b46a66169a65151532a617",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
