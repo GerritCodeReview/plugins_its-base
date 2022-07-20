@@ -79,7 +79,7 @@ public class ItsValidateComment implements CommitValidationListener {
                   "Failed to check whether or not issue "
                       + issueId
                       + " exists, due to connectivity issue. Commit will be accepted.";
-              logger.atWarning().withCause(e).log(synopsis);
+              logger.atWarning().withCause(e).log("%s", synopsis);
               details = e.toString();
               existenceCheckResult = ItsExistenceCheckResult.CONNECTIVITY_FAILURE;
               ret.add(commitValidationFailure(synopsis, details, existenceCheckResult));
