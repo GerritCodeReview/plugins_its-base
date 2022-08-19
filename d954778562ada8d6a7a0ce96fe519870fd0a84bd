@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cde250fd_41eb6274",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1040243
+      },
+      "writtenOn": "2022-08-19T10:03:07Z",
+      "side": 1,
+      "message": "it is improvement of the previous, I will trim more.",
+      "parentUuid": "368be4dd_451b5b32",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "d954778562ada8d6a7a0ce96fe519870fd0a84bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "56e61206_c51d83de",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
