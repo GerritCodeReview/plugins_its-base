@@ -16,6 +16,23 @@
       "message": "Hi,\nIs there anything I can do to push this forward?\nThe Zuul error is unrelated.\nThanks!",
       "revId": "2a97e0627ee3ee09eec2e7858bfe3b4d63c0c9c6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dafb460b_5bf4fe5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2022-08-19T09:16:48Z",
+      "side": 1,
+      "message": "Giving +2 on the good will you\u0027ll fix the indenting on the commit message :-)\n\nThe Zuul Verified -1 is related to a GCloud issue and not to this change, so I\u0027ll give a Verified +1 manually instead.",
+      "revId": "2a97e0627ee3ee09eec2e7858bfe3b4d63c0c9c6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }

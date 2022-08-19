@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "368be4dd_451b5b32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2022-08-19T09:16:48Z",
+      "side": 1,
+      "message": "Did you forget to push? I still see the comment not aligned on the left side.",
+      "parentUuid": "69f026b5_819029a4",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "d954778562ada8d6a7a0ce96fe519870fd0a84bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "56e61206_c51d83de",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
