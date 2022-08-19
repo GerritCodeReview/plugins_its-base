@@ -50,6 +50,23 @@
       "message": "Once rebased on master it works:\n//plugins/its-base:its_base_tests                                        PASSED in 3.2s",
       "revId": "2a97e0627ee3ee09eec2e7858bfe3b4d63c0c9c6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb9ec97c_c83a74f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2022-08-19T09:38:18Z",
+      "side": 1,
+      "message": "@Alon can you also rebase it on master?",
+      "revId": "2a97e0627ee3ee09eec2e7858bfe3b4d63c0c9c6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
