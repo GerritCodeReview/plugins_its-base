@@ -169,7 +169,7 @@ public class AddSoyCommentTest extends LoggingMockingTestCase {
     Path templatePath = itsPath.resolve("templates").resolve(name + ".soy");
     Files.createDirectories(templatePath.getParent());
     String namespace = "{namespace etc.its.templates}";
-    String opening = "{template ." + name + (kind != null ? (" kind=\"" + kind + "\"") : "") + "}";
+    String opening = "{template " + name + (kind != null ? (" kind=\"" + kind + "\"") : "") + "}";
     String closing = "{/template}";
 
     String fullTemplate = namespace + opening + content + closing;

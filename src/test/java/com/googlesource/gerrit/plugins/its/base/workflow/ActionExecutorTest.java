@@ -149,7 +149,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    AddComment addComment = mock(AddComment.class);
+    AddComment addComment = mockIssueAction(AddComment.class);
     when(addCommentFactory.create()).thenReturn(addComment);
     when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
 
@@ -165,7 +165,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    AddSoyComment addSoyComment = mock(AddSoyComment.class);
+    AddSoyComment addSoyComment = mockIssueAction(AddSoyComment.class);
     when(addSoyCommentFactory.create()).thenReturn(addSoyComment);
     when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
 
@@ -181,7 +181,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    AddStandardComment addStandardComment = mock(AddStandardComment.class);
+    AddStandardComment addStandardComment = mockIssueAction(AddStandardComment.class);
     when(addStandardCommentFactory.create()).thenReturn(addStandardComment);
     when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
 
@@ -197,7 +197,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    LogEvent logEvent = mock(LogEvent.class);
+    LogEvent logEvent = mockIssueAction(LogEvent.class);
     when(logEventFactory.create()).thenReturn(logEvent);
     when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
 
@@ -211,7 +211,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = mock(ActionRequest.class);
     when(actionRequest.getName()).thenReturn("create-version-from-property");
 
-    CreateVersionFromProperty createVersionFromProperty = mock(CreateVersionFromProperty.class);
+    CreateVersionFromProperty createVersionFromProperty = mockProjectAction(CreateVersionFromProperty.class);
     when(createVersionFromPropertyFactory.create()).thenReturn(createVersionFromProperty);
     when(itsFacadeFactory.getFacade(Project.nameKey(projectProperties.get("project"))))
         .thenReturn(its);
@@ -229,7 +229,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
     Set<ActionRequest> actionRequests = ImmutableSet.of(actionRequest);
 
-    AddPropertyToField addPropertyToField = mock(AddPropertyToField.class);
+    AddPropertyToField addPropertyToField = mockIssueAction(AddPropertyToField.class);
     when(addPropertyToFieldFactory.create()).thenReturn(addPropertyToField);
     when(itsFacadeFactory.getFacade(Project.nameKey(properties.get("project")))).thenReturn(its);
 
@@ -243,7 +243,7 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
     ActionRequest actionRequest = mock(ActionRequest.class);
     when(actionRequest.getName()).thenReturn("fire-event-on-commits");
 
-    FireEventOnCommits fireEventOnCommits = mock(FireEventOnCommits.class);
+    FireEventOnCommits fireEventOnCommits = mockProjectAction(FireEventOnCommits.class);
     when(fireEventOnCommitsFactory.create()).thenReturn(fireEventOnCommits);
     when(itsFacadeFactory.getFacade(Project.nameKey(projectProperties.get("project"))))
         .thenReturn(its);
@@ -286,6 +286,18 @@ public class ActionExecutorTest extends LoggingMockingTestCase {
 
   private ActionExecutor createActionExecutor() {
     return injector.getInstance(ActionExecutor.class);
+  }
+
+  private static <T extends IssueAction> T mockIssueAction(Class<T> clazz) {
+    T action = mock(clazz);
+    when(action.getType()).thenReturn(ActionType.ISSUE);
+    return action;
+  }
+
+  private static <T extends ProjectAction> T mockProjectAction(Class<T> clazz) {
+    T action = mock(clazz);
+    when(action.getType()).thenReturn(ActionType.PROJECT);
+    return action;
   }
 
   @Override
