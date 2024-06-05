@@ -20,6 +20,7 @@ import com.google.common.io.CharStreams;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 import com.google.template.soy.SoyFileSet;
+import com.google.template.soy.jbcsrc.api.SoySauce;
 import com.google.template.soy.jbcsrc.api.SoySauce.Renderer;
 import com.googlesource.gerrit.plugins.its.base.ItsPath;
 import com.googlesource.gerrit.plugins.its.base.its.ItsFacade;
@@ -52,6 +53,7 @@ public class AddSoyComment extends IssueAction {
   }
 
   private String soyTextTemplate(
+  private String soyTextTemplate(
       SoyFileSet.Builder builder, String template, Map<String, String> properties) {
 
     Path templatePath = templateDir.resolve(template + ".soy");
@@ -65,12 +67,22 @@ public class AddSoyComment extends IssueAction {
     }
 
     builder.add(content, templatePath.toAbsolutePath().toString());
-    Renderer renderer =
-        builder
-            .build()
-            .compileTemplates()
-            .renderTemplate("etc.its.templates." + template)
-            .setData(properties);
+
+    int baseNameIndex = template.indexOf("_");
+    // In case there are multiple templates in file.
+    String fileNamespace =
+        baseNameIndex == -1 ? template : template.substring(0, baseNameIndex);
+    String templateInFileNamespace =
+        String.join(".", "etc.its.templates", fileNamespace, template);
+    String templateInCommonNamespace = String.join(".", "etc.its.templates", template);
+    SoySauce soySauce = builder.build().compileTemplates();
+    // For backwards compatibility with existing customizations and plugin templates with the
+    // old non-unique namespace.
+    String fullTemplateName =
+        soySauce.hasTemplate(templateInFileNamespace)
+            ? templateInFileNamespace
+            : templateInCommonNamespace;
+    Renderer renderer = soySauce.renderTemplate(fullTemplateName).setData(properties);
     String rendered = renderer.renderText().get();
     logger.atFinest().log("Rendered template %s to:\n%s", templatePath, rendered);
     return rendered;
