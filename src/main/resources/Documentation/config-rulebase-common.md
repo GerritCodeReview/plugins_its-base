@@ -316,8 +316,8 @@ for issue “4711” would get a property 'association' with value
 : reason why the change has been abandoned.
 
 In addition to the above properties, the event also provides
-properties for the abandoned [Change][common-properties-for-events-on-a-change], and
-its most recent [Patch Set][common-properties-for-events-on-a-patch-set].
+properties for the abandoned [Change](#common-properties-for-events-on-a-change), and
+its most recent [Patch Set](#common-properties-for-events-on-a-patch-set).
 
 ### ChangeMergedEvent
 
@@ -337,8 +337,8 @@ its most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 : username of the user causing the merge of the change.
 
 In addition to the above properties, the event also provides
-properties for the merged [Change][common-properties-for-events-on-a-change], and its
-most recent [Patch Set][common-properties-for-events-on-a-patch-set].
+properties for the merged [Change](#common-properties-for-events-on-a-change), and its
+most recent [Patch Set](#common-properties-for-events-on-a-patch-set).
 
 ### ChangeRestoredEvent
 
@@ -361,8 +361,8 @@ most recent [Patch Set][common-properties-for-events-on-a-patch-set].
 : username of the user restoring the change.
 
 In addition to the above properties, the event also provides
-properties for the restored [Change][common-properties-for-events-on-a-change], and it's
-most recent [Patch Set][common-properties-for-events-on-a-patch-set].
+properties for the restored [Change](#common-properties-for-events-on-a-change), and it's
+most recent [Patch Set](#common-properties-for-events-on-a-patch-set).
 
 ### CommentAddedEvent
 
@@ -399,8 +399,8 @@ value is added. So for example voting “-2” for the approval
 : `-2`
 
 In addition to the above properties, the event also provides
-properties for the [Change][common-properties-for-events-on-a-change] the comment was
-added for, and it's most recent [Patch Set][common-properties-for-events-on-a-patch-set].
+properties for the [Change](#common-properties-for-events-on-a-change) the comment was
+added for, and it's most recent [Patch Set](#common-properties-for-events-on-a-patch-set).
 
 ### PatchSetCreatedEvent
 
@@ -411,8 +411,8 @@ added for, and it's most recent [Patch Set][common-properties-for-events-on-a-pa
 : `patchset-created`
 
 In addition to the above properties, the event also provides
-properties for the uploaded [Patch Set][common-properties-for-events-on-a-patch-set],
-and the [Change][common-properties-for-events-on-a-change] it belongs to.
+properties for the uploaded [Patch Set](#common-properties-for-events-on-a-patch-set),
+and the [Change](#common-properties-for-events-on-a-change) it belongs to.
 
 ### RefUpdatedEvent
 
@@ -468,6 +468,10 @@ tag, as for example `master`).
 `changerUsername`
 :   username of the user that changed the WIP state
 
+In addition to the above properties, the event also provides
+properties for the [Change](#common-properties-for-events-on-a-change) that changed
+WIP state.
+
 ### PrivateStateChangedEvent
 
 `event`
@@ -484,6 +488,10 @@ tag, as for example `master`).
 
 `changerUsername`
 :   username of the user that changed the private state
+
+In addition to the above properties, the event also provides
+properties for the [Change](#common-properties-for-events-on-a-change) that changed
+private state.
 
 ### Common properties for events on a change
 
@@ -517,12 +525,14 @@ tag, as for example `master`).
 `subject`
 : first line of the change's most recent patch set's commit message.
 
+`escapedSubject`
+: same as `subject` but escaped using Java String rules.
+
 `commitMessage`
 : full commit message of the most recent patch set
 
 `status`
-:	status of the change (`null`, `NEW`, `SUBMITTED`, `MERGED`,
-	or `ABANDONED` )
+: status of the change ("", `NEW`, `MERGED`, or `ABANDONED`)
 
 `topic`
 : name of the topic the change belongs to.
@@ -544,7 +554,7 @@ tag, as for example `master`).
 `authorUsername`
 : username of this patch set's author.
 
-`created-on`
+`createdOn`
 : Timestamp of creation of the patch set (Seconds since 1st January 1970).
 
 `deletions`
