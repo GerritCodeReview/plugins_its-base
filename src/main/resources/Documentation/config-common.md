@@ -15,9 +15,9 @@
 
 In order to extract ITS ids from commit messages, @PLUGIN@ uses
 [commentlink][upstream-comment-link-doc]s of
-([per default][common-config-commentlink]) name "`@PLUGIN@`".
+([per default](#common-config-commentlink)) name "`@PLUGIN@`".
 
-The ([per default][common-config-commentlinkGroupIndex]) first group of
+The ([per default](#common-config-commentlinkGroupIndex)) first group of
 `commentlink.@PLUGIN@.match` is considered the issue id.
 
 So for example having
@@ -25,7 +25,7 @@ So for example having
 ```ini
 [commentlink "@PLUGIN@"]
     match = [Bb][Uu][Gg][ ]*([1-9][0-9]*)
-    html = "<a href=\"http://my.issure.tracker.example.org/show_bug.cgi?id=$1\">(bug $1)</a>"
+    link = http://my.issure.tracker.example.org/show_bug.cgi?id=$1
 ```
 
 in `etc/gerrit.config` would allow to match the issues `4711`, `167`
@@ -35,7 +35,7 @@ from a commit message like
 Sample commit message relating to bug 4711, and bug 167.
 ```
 
-[upstream-comment-link-doc](../../../Documentation/config-gerrit.html#commentlink)
+[upstream-comment-link-doc]: ../../../Documentation/config-gerrit.html#commentlink
 
 By setting a `commentlink`'s `association` on the plugin's @PLUGIN@ configuration, it
 is possible to require commits to carry ITS references; the following
