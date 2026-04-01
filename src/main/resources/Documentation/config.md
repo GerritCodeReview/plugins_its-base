@@ -1,15 +1,13 @@
 Configuring @PLUGIN@
 ====================
 
-Configuring @PLUGIN@ is a five step process:
+Configuring @PLUGIN@ is a four step process:
 
-1. [Set up the ITS connectivity settings][config-connectivity]
-2. [Set up the general configuration][config-common]
-3. [Set up rule on how/what actions should be taken][config-rulebase-common]
-4. Restart gerrit, so the config changes take effect.
-5. Install the @PLUGIN@ jar in your gerrit site.
+1. [Set up the general configuration][config-common]
+2. [Set up rule on how/what actions should be taken][config-rulebase-common]
+3. Restart gerrit, so the config changes take effect.
+4. Install the @PLUGIN@ jar in your gerrit site.
 
-[config-connectivity]: config-connectivity.md
 [config-common]: config-common.md
 [config-rulebase-common]: config-rulebase-common.md
 

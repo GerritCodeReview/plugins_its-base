@@ -605,24 +605,27 @@ represent the action `name` being called with parameters `param1`,
 
 The following actions are available:
 
-[`add-comment`][action-add-comment]
+[`add-comment`](#action-add-comment)
 : adds the parameters as issue comment
 
-[`add-standard-comment`][action-add-standard-comment]
+[`add-standard-comment`](#action-add-standard-comment)
 : adds a predefined standard comment for certain events
 
-[`add-soy-comment`][action-add-soy-comment]
+[`add-soy-comment`](#action-add-soy-comment)
 : adds a rendered Closure Template (soy) template as issue comment
 
-[`create-version-from-property`][action-create-version-from-property]
+[`add-property-to-field`](#action-add-property-to-field)
+: adds an event property value to an ITS designated field
+
+[`create-version-from-property`](#action-create-version-from-property)
 : creates a version based on an event's property value
 
-[`log-event`][action-log-event]
+[`fire-event-on-commits`](#action-fire-event-on-commits)
+: fires events for a set of commits
+
+[`log-event`](#action-log-event)
 : appends the event's properties to Gerrit's log
 
-[Further actions][further-actions] may be provided by @PLUGIN@.
-
-[further-actions]: config-rulebase-plugin-actions.md
 
 ### Action: add-comment
 
