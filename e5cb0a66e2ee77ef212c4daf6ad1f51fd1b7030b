@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cac210ac_0fb4c361",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-04-01T22:04:36Z",
+      "side": 1,
+      "message": "Old typo, but maybe you can fix it now?\n```suggestion\n    link \u003d http://my.issue.tracker.example.org/show_bug.cgi?id\u003d$1\n```",
+      "revId": "e5cb0a66e2ee77ef212c4daf6ad1f51fd1b7030b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa994d5_dabf8815",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-04-01T22:04:36Z",
+      "side": 1,
+      "message": "Maybe it would be better to use `@URL@` instead of the relative link?\n```suggestion\n[upstream-comment-link-doc]: @URL@/Documentation/config-gerrit.html#commentlink\n```",
+      "revId": "e5cb0a66e2ee77ef212c4daf6ad1f51fd1b7030b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
