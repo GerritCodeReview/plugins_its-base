@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf3e3b1d_8912727a",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-04-02T05:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac210ac_0fb4c361",
+      "revId": "e5cb0a66e2ee77ef212c4daf6ad1f51fd1b7030b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faa994d5_dabf8815",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-04-01T22:04:36Z",
       "side": 1,
       "message": "Maybe it would be better to use `@URL@` instead of the relative link?\n```suggestion\n[upstream-comment-link-doc]: @URL@/Documentation/config-gerrit.html#commentlink\n```",
+      "revId": "e5cb0a66e2ee77ef212c4daf6ad1f51fd1b7030b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5dd45a3_d9de5423",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-04-02T05:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faa994d5_dabf8815",
       "revId": "e5cb0a66e2ee77ef212c4daf6ad1f51fd1b7030b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
