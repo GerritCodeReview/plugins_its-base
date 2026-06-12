@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -26,6 +27,7 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -35,13 +37,17 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddPropertyToField;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.AdmissionControl;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
+import com.googlesource.gerrit.plugins.its.base.workflow.EventExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
+import com.googlesource.gerrit.plugins.its.base.workflow.OrderedExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
+import com.googlesource.gerrit.plugins.its.base.workflow.SerializingExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
 import java.nio.file.Path;
 
@@ -69,6 +75,7 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    DynamicSet.bind(binder(), LifecycleListener.class).to(EventExecutor.class);
     factory(ActionRequest.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
@@ -101,5 +108,15 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  @Provides
+  @Singleton
+  OrderedExecutor orderedExecutor(EventExecutor eventExecutor) {
+    if (!eventExecutor.isAsync()) {
+      return (orderingKey, task) -> task.run();
+    }
+    return new AdmissionControl(
+        new SerializingExecutor(eventExecutor), eventExecutor.getPoolSize());
   }
 }

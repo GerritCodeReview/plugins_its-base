@@ -14,6 +14,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -183,6 +184,17 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      OrderedExecutor orderedExecutor = mock(OrderedExecutor.class);
+      doAnswer(
+              invocation -> {
+                Runnable task = invocation.getArgument(1);
+                task.run();
+                return null;
+              })
+          .when(orderedExecutor)
+          .execute(any(), any());
+      bind(OrderedExecutor.class).toInstance(orderedExecutor);
     }
   }
 }
