@@ -14,6 +14,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,7 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.Tracker;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
@@ -183,6 +185,19 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      BoundedOrderedExecutor boundedOrderedExecutor = mock(BoundedOrderedExecutor.class);
+      doAnswer(
+              invocation -> {
+                Runnable task = invocation.getArgument(1);
+                task.run();
+                return null;
+              })
+          .when(boundedOrderedExecutor)
+          .execute(any(), any());
+      bind(BoundedOrderedExecutor.class)
+          .annotatedWith(Tracker.class)
+          .toInstance(boundedOrderedExecutor);
     }
   }
 }

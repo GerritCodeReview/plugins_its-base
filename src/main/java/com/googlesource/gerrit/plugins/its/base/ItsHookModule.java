@@ -17,15 +17,19 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.events.EventListener;
+import com.google.gerrit.server.git.WorkQueue;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
 import com.google.inject.Inject;
+import com.google.inject.Key;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -35,11 +39,13 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddPropertyToField;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.BoundedOrderedExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
+import com.googlesource.gerrit.plugins.its.base.workflow.LifecycleExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
@@ -52,6 +58,12 @@ public class ItsHookModule extends FactoryModule {
 
   /** Folder where rules configuration files are located */
   private static final String ITS_FOLDER = "its";
+
+  private static final String TRACKER_SECTION = "tracker";
+
+  private static final String KEY_THREAD_POOL_SIZE = "threadPoolSize";
+
+  private static final int DEFAULT_THREAD_POOL_SIZE = 0;
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
@@ -69,6 +81,8 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    DynamicSet.bind(binder(), LifecycleListener.class)
+        .to(Key.get(LifecycleExecutor.class, Tracker.class));
     factory(ActionRequest.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
@@ -101,5 +115,28 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  @Provides
+  @TrackerThreadPoolSize
+  int trackerThreadPoolSize() {
+    return pluginCfgFactory
+        .getGlobalPluginConfig(pluginName)
+        .getInt(TRACKER_SECTION, KEY_THREAD_POOL_SIZE, DEFAULT_THREAD_POOL_SIZE);
+  }
+
+  @Provides
+  @Singleton
+  @Tracker
+  LifecycleExecutor trackerLifecycleExecutor(
+      WorkQueue workQueue, @TrackerThreadPoolSize int poolSize) {
+    return new LifecycleExecutor(workQueue, poolSize, pluginName + "-tracker");
+  }
+
+  @Provides
+  @Singleton
+  @Tracker
+  BoundedOrderedExecutor trackerExecutor(@Tracker LifecycleExecutor executor) {
+    return new BoundedOrderedExecutor(executor);
   }
 }
