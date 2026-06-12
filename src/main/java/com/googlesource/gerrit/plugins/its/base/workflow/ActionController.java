@@ -15,15 +15,25 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.data.PatchSetAttribute;
+import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
+import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.Actions;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 /**
  * Controller that takes actions according to {@code ChangeEvents@}.
@@ -39,64 +49,117 @@ public class ActionController implements EventListener {
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
   private final ItsConfig itsConfig;
+  private final Executor actionsExecutor;
 
   @Inject
   public ActionController(
       PropertyExtractor propertyExtractor,
       RuleBase ruleBase,
       ActionExecutor actionExecutor,
-      ItsConfig itsConfig) {
+      ItsConfig itsConfig,
+      @Actions Executor actionsExecutor) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
     this.itsConfig = itsConfig;
+    this.actionsExecutor = actionsExecutor;
   }
 
   @Override
   public void onEvent(Event event) {
     if (event instanceof RefEvent) {
       RefEvent refEvent = (RefEvent) event;
-      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
       if (itsConfig.isEnabled(refEvent)) {
-        handleEvent(refEvent);
+        new EventHandler(refEvent);
       }
     }
   }
 
-  private void handleEvent(RefEvent refEvent) {
-    RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+  private class EventHandler implements BoundedOrderedDispatcher.OrderedTask {
+    private final RefEvent refEvent;
+    private final List<Runnable> actionRunnables = new ArrayList<>();
 
-    handleIssuesEvent(refEventProperties.getIssuesProperties());
-    handleProjectEvent(refEventProperties.getProjectProperties());
-  }
+    EventHandler(RefEvent refEvent) {
+      this.refEvent = refEvent;
 
-  private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
-    for (Map<String, String> issueProperties : issuesProperties) {
-      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
-      if (!actions.isEmpty()) {
-        actionExecutor.executeOnIssue(actions, issueProperties);
+      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
+      try {
+        RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+        handleIssuesEvent(refEventProperties.getIssuesProperties());
+        handleProjectEvent(refEventProperties.getProjectProperties());
+      } finally {
+        ItsConfig.clearCurrentProjectName();
+      }
+      if (!actionRunnables.isEmpty()) {
+        actionsExecutor.execute(this);
       }
     }
+
+    private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
+      for (Map<String, String> issueProperties : issuesProperties) {
+        Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
+        if (!actions.isEmpty()) {
+          actionRunnables.add(() -> actionExecutor.executeOnIssue(actions, issueProperties));
+        }
+      }
+    }
+
+    private void handleProjectEvent(Map<String, String> projectProperties) {
+      if (projectProperties.isEmpty()) {
+        return;
+      }
+
+      Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
+      if (projectActions.isEmpty()) {
+        return;
+      }
+      if (!projectProperties.containsKey("its-project")) {
+        String project = projectProperties.get("project");
+        logger.atFinest().log(
+            "Could not process project event. No its-project associated with project %s. "
+                + "Did you forget to configure the ITS project association in project.config?",
+            project);
+        return;
+      }
+
+      actionRunnables.add(() -> actionExecutor.executeOnProject(projectActions, projectProperties));
+    }
+
+    @Override
+    public void run() {
+      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
+      try {
+        actionRunnables.forEach(Runnable::run);
+      } finally {
+        ItsConfig.clearCurrentProjectName();
+      }
+    }
+
+    @Override
+    public Optional<ChangeKey> key() {
+      return ChangeKey.optionallyFrom(refEvent);
+    }
+
+    @Override
+    public String toString() {
+      String target = refEvent.getBranchNameKey().toString();
+      if (refEvent instanceof PatchSetEvent patchSetEvent) {
+        PatchSetAttribute patchSet = patchSetEvent.patchSet.get();
+        if (patchSet != null) {
+          target = refEvent.getProjectNameKey().get() + " " + patchSet.ref;
+        }
+      }
+      return "its-actions: " + refEvent.getType() + " " + target;
+    }
   }
 
-  private void handleProjectEvent(Map<String, String> projectProperties) {
-    if (projectProperties.isEmpty()) {
-      return;
+  public record ChangeKey(Project.NameKey projectName, String destRefName, Change.Key changeKey) {
+    public static Optional<ChangeKey> optionallyFrom(RefEvent event) {
+      if (!(event instanceof ChangeEvent changeEvent)) {
+        return Optional.empty();
+      }
+      return Optional.of(
+          new ChangeKey(event.getProjectNameKey(), event.getRefName(), changeEvent.getChangeKey()));
     }
-
-    Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
-    if (projectActions.isEmpty()) {
-      return;
-    }
-    if (!projectProperties.containsKey("its-project")) {
-      String project = projectProperties.get("project");
-      logger.atFinest().log(
-          "Could not process project event. No its-project associated with project %s. "
-              + "Did you forget to configure the ITS project association in project.config?",
-          project);
-      return;
-    }
-
-    actionExecutor.executeOnProject(projectActions, projectProperties);
   }
 }

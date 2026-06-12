@@ -17,15 +17,20 @@ package com.googlesource.gerrit.plugins.its.base;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.ProjectConfigEntry;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.gerrit.server.events.EventListener;
+import com.google.gerrit.server.git.WorkQueue;
 import com.google.gerrit.server.git.validators.CommitValidationListener;
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Key;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.its.ItsHookEnabledConfigEntry;
 import com.googlesource.gerrit.plugins.its.base.validation.ItsValidateComment;
@@ -35,15 +40,18 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddPropertyToField;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddSoyComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
+import com.googlesource.gerrit.plugins.its.base.workflow.BoundedOrderedDispatcher;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
 import com.googlesource.gerrit.plugins.its.base.workflow.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
+import com.googlesource.gerrit.plugins.its.base.workflow.LifecycleThreadPool;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
 import java.nio.file.Path;
+import java.util.concurrent.Executor;
 
 public class ItsHookModule extends FactoryModule {
 
@@ -53,12 +61,23 @@ public class ItsHookModule extends FactoryModule {
   /** Folder where rules configuration files are located */
   private static final String ITS_FOLDER = "its";
 
+  private static final String ACTIONS_SECTION = "actions";
+
+  private static final String KEY_THREADS = "threads";
+
+  private static final int DEFAULT_THREADS = 0;
+
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
+  private final int actionsThreads;
 
   public ItsHookModule(@PluginName String pluginName, PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
+    this.actionsThreads =
+        pluginCfgFactory
+            .getGlobalPluginConfig(pluginName)
+            .getInt(ACTIONS_SECTION, KEY_THREADS, DEFAULT_THREADS);
   }
 
   @Override
@@ -69,6 +88,11 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    if (actionsThreads > 0) {
+      install(new ActionsExecutorModule());
+    } else {
+      bind(Executor.class).annotatedWith(Actions.class).toInstance(Runnable::run);
+    }
     factory(ActionRequest.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
@@ -101,5 +125,27 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  private class ActionsExecutorModule extends AbstractModule {
+    @Override
+    protected void configure() {
+      DynamicSet.bind(binder(), LifecycleListener.class)
+          .to(Key.get(LifecycleThreadPool.class, Actions.class));
+    }
+
+    @Provides
+    @Singleton
+    @Actions
+    LifecycleThreadPool actionsThreadPool(WorkQueue workQueue) {
+      return new LifecycleThreadPool(workQueue, actionsThreads, pluginName + "-actions");
+    }
+
+    @Provides
+    @Singleton
+    @Actions
+    Executor actionsExecutor(@Actions LifecycleThreadPool pool) {
+      return new BoundedOrderedDispatcher(pool, actionsThreads);
+    }
   }
 }
