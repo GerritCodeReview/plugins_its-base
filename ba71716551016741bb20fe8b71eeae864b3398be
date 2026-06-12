@@ -16,6 +16,24 @@
       "message": "Make it configurable with default as 1 ?",
       "revId": "ba71716551016741bb20fe8b71eeae864b3398be",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2feda5d7_9fea28a7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4069542
+      },
+      "writtenOn": "2026-06-12T23:57:21Z",
+      "side": 1,
+      "message": "Nvm, commit message explains this.",
+      "parentUuid": "24926153_d928ebd3",
+      "revId": "ba71716551016741bb20fe8b71eeae864b3398be",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
