@@ -66,6 +66,10 @@ public class ItsConfig {
     currentProjectName.set(projectName);
   }
 
+  public static void clearCurrentProjectName() {
+    currentProjectName.remove();
+  }
+
   @Inject
   public ItsConfig(
       @PluginName String pluginName,
