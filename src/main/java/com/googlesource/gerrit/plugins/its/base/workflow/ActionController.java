@@ -15,6 +15,10 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.common.Nullable;
+import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
@@ -39,28 +43,48 @@ public class ActionController implements EventListener {
   private final RuleBase ruleBase;
   private final ActionExecutor actionExecutor;
   private final ItsConfig itsConfig;
+  private final EventExecutor executor;
 
   @Inject
   public ActionController(
       PropertyExtractor propertyExtractor,
       RuleBase ruleBase,
       ActionExecutor actionExecutor,
-      ItsConfig itsConfig) {
+      ItsConfig itsConfig,
+      EventExecutor executor) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
     this.itsConfig = itsConfig;
+    this.executor = executor;
   }
 
   @Override
-  public void onEvent(Event event) {
-    if (event instanceof RefEvent) {
-      RefEvent refEvent = (RefEvent) event;
-      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
-      if (itsConfig.isEnabled(refEvent)) {
-        handleEvent(refEvent);
-      }
+  public void onEvent(final Event event) {
+    if (!(event instanceof RefEvent refEvent)) {
+      return;
     }
+    if (!itsConfig.isEnabled(refEvent)) {
+      return;
+    }
+    final Project.NameKey projectName = refEvent.getProjectNameKey();
+    executor.execute(orderingKey(refEvent, projectName), new EventTask(refEvent, projectName));
+  }
+
+  /**
+   * Returns the key used to serialize event processing, or {@code null} when no ordering is
+   * required. All events of a change share the same key.
+   */
+  @Nullable
+  private static String orderingKey(final RefEvent event, final Project.NameKey projectName) {
+    if (!(event instanceof ChangeEvent changeEvent)) {
+      return null;
+    }
+    final Change.Key changeKey = changeEvent.getChangeKey();
+    if (changeKey == null) {
+      return null;
+    }
+    return projectName.get() + "\n" + event.getRefName() + "\n" + changeKey.get();
   }
 
   private void handleEvent(RefEvent refEvent) {
@@ -98,5 +122,33 @@ public class ActionController implements EventListener {
     }
 
     actionExecutor.executeOnProject(projectActions, projectProperties);
+  }
+
+  private class EventTask implements Runnable {
+    private final RefEvent event;
+    private final Project.NameKey projectName;
+
+    EventTask(final RefEvent event, Project.NameKey projectName) {
+      this.event = event;
+      this.projectName = projectName;
+    }
+
+    @Override
+    public void run() {
+      ItsConfig.setCurrentProjectName(projectName);
+      try {
+        handleEvent(event);
+      } catch (RuntimeException failure) {
+        logger.atSevere().withCause(failure).log(
+            "Error while handling event %s for project %s", event, projectName);
+      } finally {
+        ItsConfig.clearCurrentProjectName();
+      }
+    }
+
+    @Override
+    public String toString() {
+      return "its: " + event.getType() + " " + event.getBranchNameKey();
+    }
   }
 }

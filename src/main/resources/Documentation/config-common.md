@@ -183,6 +183,7 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
 [common-config-commentlink](#common-config-commentlink)
 [common-config-commentlinkGroupIndex](#common-config-commentlinkGroupIndex)
+[common-config-threadPoolSize](#common-config-threadPoolSize)
 
 <a name="common-config-commentlink">`@PLUGIN@.commentlink`</a>
 :   The name of the comment link to use to extract issue ids.
@@ -206,6 +207,27 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
     This setting is useful to bypass the MANDATORY check for commits matching
     a specific pattern.
+
+<a name="common-config-threadPoolSize">`@PLUGIN@.threadPoolSize`</a>
+:   The number of threads @PLUGIN@ uses to process events asynchronously.
+
+    When set to `0`, asynchronous processing is disabled and @PLUGIN@ runs ITS
+    actions synchronously on the event-dispatch thread, blocking it until the
+    issue tracker calls complete.
+
+    The events of a single change are serialized, so that issue tracker state
+    transitions work as expected.
+
+    When set to a positive value, events are processed asynchronously on a pool
+    of that many threads. A high value (for example `20`) is recommended so that
+    the multiple events of a single change do not block events from other,
+    unrelated changes.
+
+    At most 300 event tasks may be in flight (running or pending) at once,
+    regardless of the configured pool size, so the amount of queued work
+    stays bounded.
+
+    Default is `0`
 
 [Back to @PLUGIN@ documentation index][index]
 
