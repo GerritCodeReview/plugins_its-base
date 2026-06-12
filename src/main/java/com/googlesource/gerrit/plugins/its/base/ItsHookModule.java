@@ -14,9 +14,11 @@
 
 package com.googlesource.gerrit.plugins.its.base;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.config.FactoryModule;
+import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -38,20 +40,32 @@ import com.googlesource.gerrit.plugins.its.base.workflow.AddStandardComment;
 import com.googlesource.gerrit.plugins.its.base.workflow.Condition;
 import com.googlesource.gerrit.plugins.its.base.workflow.CreateVersionFromProperty;
 import com.googlesource.gerrit.plugins.its.base.workflow.CustomAction;
+import com.googlesource.gerrit.plugins.its.base.workflow.EventExecutor;
 import com.googlesource.gerrit.plugins.its.base.workflow.FireEventOnCommits;
 import com.googlesource.gerrit.plugins.its.base.workflow.ItsRulesProjectCacheImpl;
 import com.googlesource.gerrit.plugins.its.base.workflow.LogEvent;
 import com.googlesource.gerrit.plugins.its.base.workflow.Rule;
 import com.googlesource.gerrit.plugins.its.base.workflow.commit_collector.SinceLastTagCommitCollector;
+import java.io.IOException;
 import java.nio.file.Path;
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.storage.file.FileBasedConfig;
+import org.eclipse.jgit.util.FS;
 
 public class ItsHookModule extends FactoryModule {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   /** Rules configuration filename pattern */
   private static final String CONFIG_FILE_NAME = "actions%s.config";
 
   /** Folder where rules configuration files are located */
   private static final String ITS_FOLDER = "its";
+
+  private static final String PLUGIN_SECTION = "plugin";
+
+  private static final String EXECUTION_THREAD_POOL_SIZE = "executionThreadPoolSize";
+
+  private static final int DEFAULT_EXECUTION_THREAD_POOL_SIZE = 0;
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
@@ -69,6 +83,7 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    DynamicSet.bind(binder(), LifecycleListener.class).to(EventExecutor.class);
     factory(ActionRequest.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
@@ -101,5 +116,22 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  @Provides
+  @ExecutionThreadPoolSize
+  @Inject
+  int executionThreadPoolSize(SitePaths sitePaths) {
+    FileBasedConfig gerritConfig =
+        new FileBasedConfig(sitePaths.gerrit_config.toFile(), FS.DETECTED);
+    try {
+      gerritConfig.load();
+    } catch (IOException | ConfigInvalidException e) {
+      logger.atWarning().withCause(e).log(
+          "Cannot read %s. Disabling asynchronous ITS event processing", sitePaths.gerrit_config);
+      return DEFAULT_EXECUTION_THREAD_POOL_SIZE;
+    }
+    return gerritConfig.getInt(
+        PLUGIN_SECTION, pluginName, EXECUTION_THREAD_POOL_SIZE, DEFAULT_EXECUTION_THREAD_POOL_SIZE);
   }
 }
