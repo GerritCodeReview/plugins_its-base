@@ -21,12 +21,14 @@ import static org.mockito.Mockito.when;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.ItsExecutor;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
   private static Project.NameKey testProjectName = Project.nameKey("test-project");
@@ -183,6 +186,10 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      bind(ExecutorService.class)
+          .annotatedWith(ItsExecutor.class)
+          .toInstance(MoreExecutors.newDirectExecutorService());
     }
   }
 }
