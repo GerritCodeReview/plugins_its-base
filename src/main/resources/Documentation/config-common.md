@@ -183,6 +183,7 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
 [common-config-commentlink](#common-config-commentlink)
 [common-config-commentlinkGroupIndex](#common-config-commentlinkGroupIndex)
+[common-config-threadPoolSize](#common-config-threadPoolSize)
 
 <a name="common-config-commentlink">`@PLUGIN@.commentlink`</a>
 :   The name of the comment link to use to extract issue ids.
@@ -206,6 +207,26 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
     This setting is useful to bypass the MANDATORY check for commits matching
     a specific pattern.
+
+<a name="common-config-threadPoolSize">`@PLUGIN@.threadPoolSize`</a>
+:   Number of threads used to process events and run the resulting ITS actions
+    (such as adding comments or transitioning issues).
+
+    @PLUGIN@ handles events asynchronously so that ITS calls do not block
+    Gerrit's event dispatch thread. The events of a single change are always
+    processed sequentially, in the order they occurred, even when several
+    threads are configured; this guarantees that the issue state transitions
+    for a change are never reordered. Events of different changes may be
+    processed in parallel.
+
+    Increasing this value improves throughput when many changes generate events
+    at the same time (for example during a mass push or a bulk review), at the
+    cost of additional threads.
+
+    This is a global setting that is only read from the `plugin.@PLUGIN@`
+    section of `etc/gerrit.config`; it cannot be overridden per project.
+
+    Default is `1`.
 
 [Back to @PLUGIN@ documentation index][index]
 

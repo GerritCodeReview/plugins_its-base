@@ -183,6 +183,8 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      bind(EventExecutor.class).toInstance((orderingKey, task) -> task.run());
     }
   }
 }
