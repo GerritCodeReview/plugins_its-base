@@ -1,0 +1,133 @@
+// Copyright (C) 2026 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.googlesource.gerrit.plugins.its.base.workflow;
+
+import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.common.Nullable;
+import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.server.config.SitePaths;
+import com.google.gerrit.server.git.WorkQueue;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.storage.file.FileBasedConfig;
+import org.eclipse.jgit.util.FS;
+
+/**
+ * Runs ITS event tasks. The pool size is read from the {@code
+ * plugin.<plugin>.executionThreadPoolSize} setting in {@code etc/gerrit.config}. A non-positive
+ * size disables asynchronous processing, meaning tasks will then run synchronously on the calling
+ * (event-dispatch) thread.
+ *
+ * <p>When asynchronous processing is enabled, tasks run on a core {@link WorkQueue} pool. Tasks
+ * that share an ordering key are serialized through {@link RuntimeQueueMap}, the first such task
+ * drains any same-key tasks that arrive while it runs, so they execute one at a time in submission
+ * order, while tasks with different keys run on different pool threads in parallel. Tasks submitted
+ * without an ordering key are not serialized.
+ *
+ * <p>To keep the backlog bounded, the number of in-flight tasks is limited to the pool size. {@link
+ * #execute} acquires a slot before queueing a task and releases it once the task has run, so the
+ * calling (event-dispatch) thread blocks when all slots are in use.
+ */
+@Singleton
+public class EventExecutor implements LifecycleListener {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  static final String EXECUTION_THREAD_POOL_SIZE = "executionThreadPoolSize";
+  static final int DEFAULT_EXECUTION_THREAD_POOL_SIZE = 0;
+
+  private static final String PLUGIN_SECTION = "plugin";
+
+  private final ScheduledExecutorService executor;
+
+  private final Semaphore admissions;
+  private final RuntimeQueueMap<Object> runtimeQueueMap = new RuntimeQueueMap<>();
+
+  @Inject
+  EventExecutor(WorkQueue workQueue, SitePaths sitePaths, @PluginName String pluginName) {
+    int executionThreadPoolSize = getExecutionThreadPoolSize(sitePaths, pluginName);
+    admissions = new Semaphore(executionThreadPoolSize);
+    this.executor =
+        executionThreadPoolSize > 0
+            ? workQueue.createQueue(executionThreadPoolSize, pluginName)
+            : null;
+  }
+
+  public void execute(@Nullable Object orderingKey, Runnable task) {
+    if (executor == null) {
+      task.run();
+      return;
+    }
+    admissions.acquireUninterruptibly();
+    Runnable admittedTask = new AdmittedTask(task);
+    try {
+      executor.execute(
+          orderingKey != null ? runtimeQueueMap.wrap(orderingKey, admittedTask) : admittedTask);
+    } catch (RuntimeException e) {
+      admissions.release();
+      logger.atWarning().withCause(e).log("Failed to queue ITS task %s", task);
+    }
+  }
+
+  @Override
+  public void start() {}
+
+  @Override
+  public void stop() {
+    if (executor != null) {
+      executor.shutdown();
+    }
+  }
+
+  private final class AdmittedTask implements Runnable {
+    private final Runnable task;
+
+    AdmittedTask(Runnable task) {
+      this.task = task;
+    }
+
+    @Override
+    public void run() {
+      try {
+        task.run();
+      } finally {
+        admissions.release();
+      }
+    }
+
+    @Override
+    public String toString() {
+      return task.toString();
+    }
+  }
+
+  private static int getExecutionThreadPoolSize(SitePaths sitePaths, String pluginName) {
+    FileBasedConfig gerritConfig =
+        new FileBasedConfig(sitePaths.gerrit_config.toFile(), FS.DETECTED);
+    try {
+      gerritConfig.load();
+    } catch (IOException | ConfigInvalidException e) {
+      logger.atWarning().withCause(e).log(
+          "Cannot read %s. Disabling asynchronous ITS event processing", sitePaths.gerrit_config);
+      return DEFAULT_EXECUTION_THREAD_POOL_SIZE;
+    }
+    return gerritConfig.getInt(
+        PLUGIN_SECTION, pluginName, EXECUTION_THREAD_POOL_SIZE, DEFAULT_EXECUTION_THREAD_POOL_SIZE);
+  }
+}
