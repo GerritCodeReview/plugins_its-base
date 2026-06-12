@@ -183,6 +183,7 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
 [common-config-commentlink](#common-config-commentlink)
 [common-config-commentlinkGroupIndex](#common-config-commentlinkGroupIndex)
+[common-config-executionThreadPoolSize](#common-config-executionThreadPoolSize)
 
 <a name="common-config-commentlink">`@PLUGIN@.commentlink`</a>
 :   The name of the comment link to use to extract issue ids.
@@ -206,6 +207,32 @@ jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-ex
 
     This setting is useful to bypass the MANDATORY check for commits matching
     a specific pattern.
+
+<a name="common-config-executionThreadPoolSize">`@PLUGIN@.executionThreadPoolSize`</a>
+:   The number of threads @PLUGIN@ uses to apply ITS actions asynchronously.
+
+    Detecting issue ids and evaluating the configured rules always runs
+    synchronously on Gerrit's event-dispatch thread. Only the resulting actions,
+    which update the issue tracker, are handed off to this thread pool, and only
+    for events that trigger at least one action.
+
+    When set to `0`, asynchronous processing is disabled and @PLUGIN@ runs the
+    actions synchronously on the event-dispatch thread, blocking it until the
+    issue tracker calls complete.
+
+    The actions of a single change are serialized, so that issue tracker state
+    transitions work as expected.
+
+    When set to a positive value, actions are applied asynchronously on a pool
+    of that many threads. A high value (for example `20`) is recommended so that
+    the actions of a single change do not hold up the actions of other,
+    unrelated changes.
+
+    The number of action tasks in flight is bounded by the pool size: once all
+    threads are busy, the event-dispatch thread blocks until a running task
+    completes, so the amount of queued work stays bounded.
+
+    Default is `0`
 
 [Back to @PLUGIN@ documentation index][index]
 
