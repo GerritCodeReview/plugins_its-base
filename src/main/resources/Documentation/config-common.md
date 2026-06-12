@@ -8,6 +8,7 @@
 - [Associating a Gerrit project with its ITS project counterpart](#associating-a-gerrit-project-with-its-its-project-counterpart)
 - [Configuring rules of when to take which actions in the ITS](#configuring-rules-of-when-to-take-which-actions-in-the-its)
 - [Multiple Its](#multiple-its)
+- [Asynchronous action processing](#asynchronous-action-processing)
 - [Further common configuration details](#further-common-configuration-details)
 
 
@@ -178,6 +179,45 @@ jar --verbose --extract --file ../its-bugzilla.jar
 sed -i '' -e 's/its-bugzilla/its-bugzilla-external/' META-INF/MANIFEST.MF
 jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-external.jar .
 ```
+
+## Asynchronous action processing
+
+By default, @PLUGIN@ applies ITS actions synchronously on Gerrit's event-dispatch
+thread. Since these actions make blocking calls to the issue tracker, they can
+delay the Gerrit operation that produced the event. The actions can instead be
+handed off to a dedicated thread pool by setting a pool size in the plugin's own
+configuration file `etc/@PLUGIN@.config`:
+
+```ini
+[execution]
+    threadPoolSize = 10
+```
+
+<a name="common-config-executionThreadPoolSize">`execution.threadPoolSize`</a>
+:   The number of threads @PLUGIN@ uses to apply ITS actions asynchronously.
+
+    Detecting issue ids and evaluating the configured rules always runs
+    synchronously on Gerrit's event-dispatch thread. Only the resulting actions,
+    which update the issue tracker, are handed off to this thread pool, and only
+    for events that trigger at least one action.
+
+    When set to `0`, asynchronous processing is disabled and @PLUGIN@ runs the
+    actions synchronously on the event-dispatch thread, blocking it until the
+    issue tracker calls complete.
+
+    The actions of a single change are serialized, so that issue tracker state
+    transitions work as expected.
+
+    When set to a positive value, actions are applied asynchronously on a pool
+    of that many threads. A high value (for example `20`) is recommended so that
+    the actions of a single change do not hold up the actions of other,
+    unrelated changes.
+
+    The number of action tasks in flight is bounded by the pool size: once all
+    threads are busy, the event-dispatch thread blocks until a running task
+    completes, so the amount of queued work stays bounded.
+
+    Default is `0`
 
 ## Further common configuration details
 
