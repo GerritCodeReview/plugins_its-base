@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4743a2c3_19fbb6bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-06-15T17:26:14Z",
+      "side": 1,
+      "message": "This design may be problematic as it effectively reduces something that has many threads down to a single serialized thread, that will likely cause a throughput issue for us.",
+      "revId": "ba71716551016741bb20fe8b71eeae864b3398be",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24926153_d928ebd3",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
         "patchSetId": 1
