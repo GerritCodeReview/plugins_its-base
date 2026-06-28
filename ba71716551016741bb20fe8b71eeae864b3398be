@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7ad5736_7e6ffaca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-06-28T18:10:06Z",
+      "side": 1,
+      "message": "Using a pool now.",
+      "parentUuid": "4743a2c3_19fbb6bf",
+      "revId": "ba71716551016741bb20fe8b71eeae864b3398be",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24926153_d928ebd3",
