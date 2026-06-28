@@ -50,6 +50,23 @@
       "message": "I believe the way this implemented it controls the max buffered + running? If we consider MAX_TASKS_IN_FLIGHT the sum of two other values MAX_BUFFERED and MAX_THREADS, and we want to match the current plugin behavior as close as possible without blocking the requests creating events unless the system cannot keep up, we would set MAX_BUFFERED to 0, and MAX_THREADS to the current value of threads which can create events. So, I suggest we start by setting this to MAX_THREADS.\n\nAs a follow on change idea (by no means do we need to do this), we may want to support a config which supports somehow have a mode which can be used to figure out all the sources of events and automatically set MAX_THREADS to the number of threads which can create events.\n\nA separate follow on idea is to make MAX_BUFFERED configurable so it need not be 0, but 0 is probably a good value in most situations.\n\nOne concern I have with the current semaphore approach is that it is not amenable to virtual threads, but it is simple enough to change easily, and fairly clean I think.",
       "revId": "4ce0f82fdfcc2b708102b9f340fff9a98260fbca",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4ea433_604b30da",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-06-28T19:24:41Z",
+      "side": 1,
+      "message": "I think this probably should be moved before the semaphore is taken. If we do that, we will still block the submitting thread, however we will ensure that the queue reflects how many events are waiting to be processed. If we do this, the queue will still be bounded because the submission threads are all bounded and once they all block, no more events can be generated to be submitted (same behavior as before this change). However, by submitting the entries in the queue before blocking, we get the benefit of seeing the queued events in show-queue, and the Executor can appropriately scale up and down the thread pool based on load.",
+      "revId": "4ce0f82fdfcc2b708102b9f340fff9a98260fbca",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
