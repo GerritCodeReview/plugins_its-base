@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "833adbf9_5119ebe4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/KeyLock.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-06-30T23:49:45Z",
+      "side": 1,
+      "message": "If we don\u0027t remove keys, the map will keep growing. It will result in a memory leak?",
+      "parentUuid": "7fee27a7_ee69cd61",
+      "revId": "99646a98185a697d225805f3c5ab08865c661634",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d79d2ae_5826accc",
         "filename": "src/main/resources/Documentation/config-common.md",
         "patchSetId": 4
