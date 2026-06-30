@@ -15,14 +15,18 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -53,50 +57,92 @@ public class ActionController implements EventListener {
   }
 
   @Override
-  public void onEvent(Event event) {
-    if (event instanceof RefEvent) {
-      RefEvent refEvent = (RefEvent) event;
-      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
-      if (itsConfig.isEnabled(refEvent)) {
-        handleEvent(refEvent);
-      }
+  public void onEvent(final Event event) {
+    if (!(event instanceof RefEvent refEvent)) {
+      return;
     }
+    if (!itsConfig.isEnabled(refEvent)) {
+      return;
+    }
+    final Project.NameKey projectName = refEvent.getProjectNameKey();
+
+    Optional<EventActions> eventActions = gatherActions(refEvent, projectName);
+    if (eventActions.isEmpty()) {
+      return;
+    }
+
+    executeActions(refEvent, projectName, eventActions.get());
   }
 
-  private void handleEvent(RefEvent refEvent) {
-    RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+  private Optional<EventActions> gatherActions(RefEvent refEvent, Project.NameKey projectName) {
+    List<ScopedActions> issueActions;
+    Optional<ScopedActions> projectActions;
+    ItsConfig.setCurrentProjectName(projectName);
+    try {
+      RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+      issueActions = gatherIssueActions(refEventProperties.getIssuesProperties());
+      projectActions = gatherProjectActions(refEventProperties.getProjectProperties());
+    } catch (RuntimeException e) {
+      logger.atSevere().withCause(e).log(
+          "Error while extracting ITS actions from event %s for project %s", refEvent, projectName);
+      return Optional.empty();
+    }
 
-    handleIssuesEvent(refEventProperties.getIssuesProperties());
-    handleProjectEvent(refEventProperties.getProjectProperties());
+    if (issueActions.isEmpty() && projectActions.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(new EventActions(issueActions, projectActions));
   }
 
-  private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
+  private List<ScopedActions> gatherIssueActions(Set<Map<String, String>> issuesProperties) {
+    List<ScopedActions> issueActions = new ArrayList<>();
     for (Map<String, String> issueProperties : issuesProperties) {
       Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
       if (!actions.isEmpty()) {
-        actionExecutor.executeOnIssue(actions, issueProperties);
+        issueActions.add(new ScopedActions(actions, issueProperties));
       }
     }
+    return issueActions;
   }
 
-  private void handleProjectEvent(Map<String, String> projectProperties) {
+  private Optional<ScopedActions> gatherProjectActions(Map<String, String> projectProperties) {
     if (projectProperties.isEmpty()) {
-      return;
+      return Optional.empty();
     }
-
     Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
     if (projectActions.isEmpty()) {
-      return;
+      return Optional.empty();
     }
     if (!projectProperties.containsKey("its-project")) {
-      String project = projectProperties.get("project");
       logger.atFinest().log(
           "Could not process project event. No its-project associated with project %s. "
               + "Did you forget to configure the ITS project association in project.config?",
-          project);
-      return;
+          projectProperties.get("project"));
+      return Optional.empty();
     }
-
-    actionExecutor.executeOnProject(projectActions, projectProperties);
+    return Optional.of(new ScopedActions(projectActions, projectProperties));
   }
+
+  private void executeActions(
+      RefEvent event, Project.NameKey projectName, EventActions eventActions) {
+    try {
+      for (ScopedActions issueAction : eventActions.issueActions()) {
+        actionExecutor.executeOnIssue(issueAction.actions(), issueAction.properties());
+      }
+      eventActions
+          .projectActions()
+          .ifPresent(
+              projectAction ->
+                  actionExecutor.executeOnProject(
+                      projectAction.actions(), projectAction.properties()));
+    } catch (RuntimeException failure) {
+      logger.atSevere().withCause(failure).log(
+          "Error while handling event %s for project %s", event, projectName);
+    }
+  }
+
+  private record ScopedActions(Collection<ActionRequest> actions, Map<String, String> properties) {}
+
+  private record EventActions(
+      List<ScopedActions> issueActions, Optional<ScopedActions> projectActions) {}
 }
