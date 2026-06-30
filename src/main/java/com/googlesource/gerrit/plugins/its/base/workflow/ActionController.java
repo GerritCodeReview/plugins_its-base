@@ -21,7 +21,9 @@ import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -31,10 +33,18 @@ import java.util.Set;
  *
  * <p>The taken actions are typically Its related (e.g.: adding an Its comment, or changing an
  * issue's status).
+ *
+ * <p>Event handling is split into two phases: extract properties and match rules to produce
+ * actions, then run those actions against the issue tracker.
  */
 public class ActionController implements EventListener {
 
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  private record ScopedActions(Collection<ActionRequest> actions, Map<String, String> properties) {}
+
+  private record EventActions(
+      List<ScopedActions> issueActions, Optional<ScopedActions> projectActions) {}
 
   private final PropertyExtractor propertyExtractor;
   private final RuleBase ruleBase;
@@ -55,38 +65,51 @@ public class ActionController implements EventListener {
 
   @Override
   public void onEvent(Event event) {
-    if (event instanceof RefEvent) {
-      RefEvent refEvent = (RefEvent) event;
-      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
-      if (itsConfig.isEnabled(refEvent)) {
-        handleEvent(refEvent);
-      }
+    if (!(event instanceof RefEvent refEvent)) {
+      return;
     }
+
+    ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
+    if (!itsConfig.isEnabled(refEvent)) {
+      return;
+    }
+
+    Optional<EventActions> eventActions = gatherActions(refEvent);
+    if (eventActions.isEmpty()) {
+      return;
+    }
+    executeActions(eventActions.get());
   }
 
-  private void handleEvent(RefEvent refEvent) {
+  private Optional<EventActions> gatherActions(RefEvent refEvent) {
     RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
-
-    handleIssuesEvent(refEventProperties.getIssuesProperties());
-    handleProjectEvent(refEventProperties.getProjectProperties());
+    List<ScopedActions> issueActions = gatherIssueActions(refEventProperties.getIssuesProperties());
+    Optional<ScopedActions> projectActions =
+        gatherProjectActions(refEventProperties.getProjectProperties());
+    if (issueActions.isEmpty() && projectActions.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(new EventActions(issueActions, projectActions));
   }
 
-  private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
+  private List<ScopedActions> gatherIssueActions(Set<Map<String, String>> issuesProperties) {
+    List<ScopedActions> issueActions = new ArrayList<>();
     for (Map<String, String> issueProperties : issuesProperties) {
       gatherIssueAction(issueProperties)
-          .ifPresent(actions -> actionExecutor.executeOnIssue(actions, issueProperties));
+          .ifPresent(actions -> issueActions.add(new ScopedActions(actions, issueProperties)));
     }
-  }
-
-  private void handleProjectEvent(Map<String, String> projectProperties) {
-    gatherProjectAction(projectProperties)
-        .ifPresent(actions -> actionExecutor.executeOnProject(actions, projectProperties));
+    return issueActions;
   }
 
   private Optional<Collection<ActionRequest>> gatherIssueAction(
       Map<String, String> issueProperties) {
     Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
     return actions.isEmpty() ? Optional.empty() : Optional.of(actions);
+  }
+
+  private Optional<ScopedActions> gatherProjectActions(Map<String, String> projectProperties) {
+    return gatherProjectAction(projectProperties)
+        .map(actions -> new ScopedActions(actions, projectProperties));
   }
 
   private Optional<Collection<ActionRequest>> gatherProjectAction(
@@ -109,5 +132,17 @@ public class ActionController implements EventListener {
     }
 
     return Optional.of(projectActions);
+  }
+
+  private void executeActions(EventActions eventActions) {
+    for (ScopedActions issueAction : eventActions.issueActions()) {
+      actionExecutor.executeOnIssue(issueAction.actions(), issueAction.properties());
+    }
+    eventActions
+        .projectActions()
+        .ifPresent(
+            projectAction ->
+                actionExecutor.executeOnProject(
+                    projectAction.actions(), projectAction.properties()));
   }
 }
