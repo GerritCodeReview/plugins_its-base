@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
@@ -69,23 +70,31 @@ public class ActionController implements EventListener {
       return;
     }
 
-    ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
+    final Project.NameKey projectName = refEvent.getProjectNameKey();
     if (!itsConfig.isEnabled(refEvent)) {
       return;
     }
 
-    Optional<EventActions> eventActions = gatherActions(refEvent);
+    Optional<EventActions> eventActions = gatherActions(refEvent, projectName);
     if (eventActions.isEmpty()) {
       return;
     }
-    executeActions(eventActions.get());
+    executeActions(refEvent, projectName, eventActions.get());
   }
 
-  private Optional<EventActions> gatherActions(RefEvent refEvent) {
-    RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
-    List<ScopedActions> issueActions = gatherIssueActions(refEventProperties.getIssuesProperties());
-    Optional<ScopedActions> projectActions =
-        gatherProjectActions(refEventProperties.getProjectProperties());
+  private Optional<EventActions> gatherActions(RefEvent refEvent, Project.NameKey projectName) {
+    List<ScopedActions> issueActions;
+    Optional<ScopedActions> projectActions;
+    ItsConfig.setCurrentProjectName(projectName);
+    try {
+      RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
+      issueActions = gatherIssueActions(refEventProperties.getIssuesProperties());
+      projectActions = gatherProjectActions(refEventProperties.getProjectProperties());
+    } catch (RuntimeException e) {
+      logger.atSevere().withCause(e).log(
+          "Error while extracting ITS actions from event %s for project %s", refEvent, projectName);
+      return Optional.empty();
+    }
     if (issueActions.isEmpty() && projectActions.isEmpty()) {
       return Optional.empty();
     }
@@ -134,15 +143,21 @@ public class ActionController implements EventListener {
     return Optional.of(projectActions);
   }
 
-  private void executeActions(EventActions eventActions) {
-    for (ScopedActions issueAction : eventActions.issueActions()) {
-      actionExecutor.executeOnIssue(issueAction.actions(), issueAction.properties());
+  private void executeActions(
+      RefEvent event, Project.NameKey projectName, EventActions eventActions) {
+    try {
+      for (ScopedActions issueAction : eventActions.issueActions()) {
+        actionExecutor.executeOnIssue(issueAction.actions(), issueAction.properties());
+      }
+      eventActions
+          .projectActions()
+          .ifPresent(
+              projectAction ->
+                  actionExecutor.executeOnProject(
+                      projectAction.actions(), projectAction.properties()));
+    } catch (RuntimeException e) {
+      logger.atSevere().withCause(e).log(
+          "Error while handling event %s for project %s", event, projectName);
     }
-    eventActions
-        .projectActions()
-        .ifPresent(
-            projectAction ->
-                actionExecutor.executeOnProject(
-                    projectAction.actions(), projectAction.properties()));
   }
 }
