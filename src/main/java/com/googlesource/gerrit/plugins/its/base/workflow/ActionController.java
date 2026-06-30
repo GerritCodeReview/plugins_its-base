@@ -23,6 +23,7 @@ import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -72,21 +73,31 @@ public class ActionController implements EventListener {
 
   private void handleIssuesEvent(Set<Map<String, String>> issuesProperties) {
     for (Map<String, String> issueProperties : issuesProperties) {
-      Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
-      if (!actions.isEmpty()) {
-        actionExecutor.executeOnIssue(actions, issueProperties);
-      }
+      gatherIssueAction(issueProperties)
+          .ifPresent(actions -> actionExecutor.executeOnIssue(actions, issueProperties));
     }
   }
 
   private void handleProjectEvent(Map<String, String> projectProperties) {
+    gatherProjectAction(projectProperties)
+        .ifPresent(actions -> actionExecutor.executeOnProject(actions, projectProperties));
+  }
+
+  private Optional<Collection<ActionRequest>> gatherIssueAction(
+      Map<String, String> issueProperties) {
+    Collection<ActionRequest> actions = ruleBase.actionRequestsFor(issueProperties);
+    return actions.isEmpty() ? Optional.empty() : Optional.of(actions);
+  }
+
+  private Optional<Collection<ActionRequest>> gatherProjectAction(
+      Map<String, String> projectProperties) {
     if (projectProperties.isEmpty()) {
-      return;
+      return Optional.empty();
     }
 
     Collection<ActionRequest> projectActions = ruleBase.actionRequestsFor(projectProperties);
     if (projectActions.isEmpty()) {
-      return;
+      return Optional.empty();
     }
     if (!projectProperties.containsKey("its-project")) {
       String project = projectProperties.get("project");
@@ -94,9 +105,9 @@ public class ActionController implements EventListener {
           "Could not process project event. No its-project associated with project %s. "
               + "Did you forget to configure the ITS project association in project.config?",
           project);
-      return;
+      return Optional.empty();
     }
 
-    actionExecutor.executeOnProject(projectActions, projectProperties);
+    return Optional.of(projectActions);
   }
 }
