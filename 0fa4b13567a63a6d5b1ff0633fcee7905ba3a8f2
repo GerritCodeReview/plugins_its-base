@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54bf1f1f_be35eade",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T23:42:45Z",
+      "side": 1,
+      "message": "This is kind of a neat class, that maybe should be more generic. This essentially adds a wrapper to the core Executor which ties it to a config option and a LifecycleListener. It feels like something that could be used almost everywhere we use an Executor?",
+      "revId": "0fa4b13567a63a6d5b1ff0633fcee7905ba3a8f2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b686db_2c64f7ec",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/SerializingExecutor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T23:42:45Z",
+      "side": 1,
+      "message": "I think this interface and class create more complexity than they save. I think plugging in a RuntimeQueueMap at its basic usage point only takes 2 lines of code?",
+      "revId": "0fa4b13567a63a6d5b1ff0633fcee7905ba3a8f2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
