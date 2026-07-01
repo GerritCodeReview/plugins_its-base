@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fce36d1_57bc53a0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/KeyLock.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4069542
+      },
+      "writtenOn": "2026-07-01T20:14:25Z",
+      "side": 1,
+      "message": "release on L#54 makes sure map doesn\u0027t grow.\n\nLets say that we have (A -\u003e B -\u003e C -D) for a single key and we are currently running A. For some reason if C is interrupted then we are directly allowing D to run because of the countdown while A is still running ?",
+      "parentUuid": "833adbf9_5119ebe4",
+      "revId": "99646a98185a697d225805f3c5ab08865c661634",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d79d2ae_5826accc",
         "filename": "src/main/resources/Documentation/config-common.md",
         "patchSetId": 4
