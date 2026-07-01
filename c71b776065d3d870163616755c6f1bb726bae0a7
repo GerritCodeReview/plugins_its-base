@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b37e87_0df32d32",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:08:14Z",
+      "side": 1,
+      "message": "This probably does not belong in this layer. It should above this layer, either in its own very small layer, or in ActionController.",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26565040_0c19713d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:08:14Z",
+      "side": 1,
+      "message": "The sempahore stuff probably should go in its own layer.",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
