@@ -54,6 +54,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37485faa_fff7b0ff",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/KeyLock.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-01T23:31:29Z",
+      "side": 1,
+      "message": "I think, you are right, but we are no longer using the KeyLock.",
+      "parentUuid": "5fce36d1_57bc53a0",
+      "revId": "99646a98185a697d225805f3c5ab08865c661634",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d79d2ae_5826accc",
