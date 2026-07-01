@@ -33,6 +33,74 @@
       "message": "The sempahore stuff probably should go in its own layer.",
       "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc5ccb9_e3b55d22",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:22:08Z",
+      "side": 1,
+      "message": "QueueRunner, or maybe just Task?",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9d739d_b80eb2d6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:22:08Z",
+      "side": 1,
+      "message": "Why do we need \u0027current\u0027 instead of using activeTask directly?",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e53d21b7_d2456186",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:22:08Z",
+      "side": 1,
+      "message": "I think this variable makes it harder to track the end condition of the loop, especially since it is a simple one.",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb3f833c_76c12d5c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-01T22:22:08Z",
+      "side": 1,
+      "message": "We do NOT want to interrupt the current thread here in this method as that will interrupt the queued tasks, when the kill would have been targeting the recently completed task. Instead, we actually want to clear the interrupt with Thread.interrupted() (which likely can be done on line 88)",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
