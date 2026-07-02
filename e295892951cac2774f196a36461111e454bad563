@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11830919_3b24d3b7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/OrderedExecutor.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T04:43:23Z",
+      "side": 1,
+      "message": "Couple of problems I see with the order switch is that, firstly, when there is a failure we are doing a release, so that can happen before the acquire even runs. And, the second is similar, the task can execute and release before the acquire even runs.",
+      "parentUuid": "81e0fa43_edb48e97",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9904b3f1_35150c8d",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
         "patchSetId": 10
