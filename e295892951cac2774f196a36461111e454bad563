@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad97569_d76faefe",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-02T03:21:16Z",
+      "side": 1,
+      "message": "Is this going to work if we have another executor?",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297378b0_2e799dfc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/OrderedExecutor.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-02T03:21:16Z",
+      "side": 1,
+      "message": "This name does not hint at the bounded nature of it, which is one reason separating concerns would be nice.",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e0fa43_edb48e97",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/OrderedExecutor.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-02T03:21:16Z",
+      "side": 1,
+      "message": "The acquire needs to happen after the submission.",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9904b3f1_35150c8d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-02T03:21:16Z",
+      "side": 1,
+      "message": "One line these? \n\n```this.activeTask \u003d current \u003d getAlways(current.nextFuture);```",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b76b6596_51a94e0e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-02T03:21:16Z",
+      "side": 1,
+      "message": "Add a comment saying \"should never reach here\"?",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
