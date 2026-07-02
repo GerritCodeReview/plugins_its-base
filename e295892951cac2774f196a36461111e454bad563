@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0fb250be_54cad6d8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/OrderedExecutor.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T04:42:26Z",
+      "side": 1,
+      "message": "How about renaming it to BoundedOrderedExecutor or BoundedKeyedExecutor? The doc for the class already talks about it.",
+      "parentUuid": "297378b0_2e799dfc",
+      "revId": "e295892951cac2774f196a36461111e454bad563",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81e0fa43_edb48e97",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/OrderedExecutor.java",
         "patchSetId": 10
