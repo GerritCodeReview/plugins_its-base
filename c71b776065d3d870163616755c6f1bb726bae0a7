@@ -88,6 +88,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "427c1d18_2f161b4d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cc5ccb9_e3b55d22",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb9d739d_b80eb2d6",
@@ -101,6 +119,24 @@
       "writtenOn": "2026-07-01T22:22:08Z",
       "side": 1,
       "message": "Why do we need \u0027current\u0027 instead of using activeTask directly?",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059ca95a_646a71b3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "`current` is meant for internal iteration state and `activeTask` for an external thread asking (via the toString) whats currently running. Using `activeTask` everywhere will make every read within the iteration volatile, which is not needed.",
+      "parentUuid": "bb9d739d_b80eb2d6",
       "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -122,6 +158,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "094666f0_272dda7b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e53d21b7_d2456186",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb3f833c_76c12d5c",
@@ -135,6 +189,24 @@
       "writtenOn": "2026-07-01T22:22:08Z",
       "side": 1,
       "message": "We do NOT want to interrupt the current thread here in this method as that will interrupt the queued tasks, when the kill would have been targeting the recently completed task. Instead, we actually want to clear the interrupt with Thread.interrupted() (which likely can be done on line 88)",
+      "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b0d352_1b70a93d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "Ack. Done.",
+      "parentUuid": "eb3f833c_76c12d5c",
       "revId": "c71b776065d3d870163616755c6f1bb726bae0a7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }

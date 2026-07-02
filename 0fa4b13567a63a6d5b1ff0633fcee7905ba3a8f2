@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a133cb5_eceb8bb3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "Done. We can move the executionThreadPoolSize out using Guice\u0027s @Provides.",
+      "parentUuid": "54bf1f1f_be35eade",
+      "revId": "0fa4b13567a63a6d5b1ff0633fcee7905ba3a8f2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5b686db_2c64f7ec",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-07-01T23:42:45Z",
       "side": 1,
       "message": "I think this interface and class create more complexity than they save. I think plugging in a RuntimeQueueMap at its basic usage point only takes 2 lines of code?",
+      "revId": "0fa4b13567a63a6d5b1ff0633fcee7905ba3a8f2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "684581f9_3567c1ef",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/SerializingExecutor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-02T01:00:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b686db_2c64f7ec",
       "revId": "0fa4b13567a63a6d5b1ff0633fcee7905ba3a8f2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
