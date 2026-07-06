@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f195dbb7_5fee255d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-06T18:00:57Z",
+      "side": 1,
+      "message": "Prefix with KEY_?",
+      "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47b096bd_36345783",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-06T18:00:57Z",
+      "side": 1,
+      "message": "This will release the sensitive too early",
+      "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
