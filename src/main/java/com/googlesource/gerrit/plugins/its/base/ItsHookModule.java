@@ -61,6 +61,8 @@ public class ItsHookModule extends FactoryModule {
   /** Folder where rules configuration files are located */
   private static final String ITS_FOLDER = "its";
 
+  private static final String EVALUATION_SECTION = "evaluation";
+
   private static final String ACTIONS_SECTION = "actions";
 
   private static final String KEY_THREADS = "threads";
@@ -69,15 +71,14 @@ public class ItsHookModule extends FactoryModule {
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
+  private final int evaluationThreads;
   private final int actionsThreads;
 
   public ItsHookModule(@PluginName String pluginName, PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
-    this.actionsThreads =
-        pluginCfgFactory
-            .getGlobalPluginConfig(pluginName)
-            .getInt(ACTIONS_SECTION, KEY_THREADS, DEFAULT_THREADS);
+    this.evaluationThreads = getThreadsFrom(EVALUATION_SECTION);
+    this.actionsThreads = getThreadsFrom(ACTIONS_SECTION);
   }
 
   @Override
@@ -88,11 +89,7 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
-    if (actionsThreads > 0) {
-      install(new ActionsExecutorModule());
-    } else {
-      bind(Executor.class).annotatedWith(Actions.class).toInstance(Runnable::run);
-    }
+    configureExecutors();
     factory(ActionRequest.Factory.class);
     factory(Condition.Factory.class);
     factory(Rule.Factory.class);
@@ -125,6 +122,54 @@ public class ItsHookModule extends FactoryModule {
   @PluginRulesFileName
   String pluginRulesFileName() {
     return String.format(CONFIG_FILE_NAME, "-" + pluginName);
+  }
+
+  private int getThreadsFrom(String section) {
+    return pluginCfgFactory
+        .getGlobalPluginConfig(pluginName)
+        .getInt(section, KEY_THREADS, DEFAULT_THREADS);
+  }
+
+  private void configureExecutors() {
+    checkThreadPoolConfig();
+    if (evaluationThreads > 0) {
+      install(new EvaluationExecutorModule());
+    } else {
+      bind(Executor.class).annotatedWith(Evaluation.class).toInstance(Runnable::run);
+    }
+    if (actionsThreads > 0) {
+      install(new ActionsExecutorModule());
+    } else {
+      bind(Executor.class).annotatedWith(Actions.class).toInstance(Runnable::run);
+    }
+  }
+
+  private void checkThreadPoolConfig() {
+    if (evaluationThreads > 0 && actionsThreads <= 0) {
+      addError("evaluation.threads (%d) requires actions.threads > 0", evaluationThreads);
+    }
+  }
+
+  private class EvaluationExecutorModule extends AbstractModule {
+    @Override
+    protected void configure() {
+      DynamicSet.bind(binder(), LifecycleListener.class)
+          .to(Key.get(LifecycleThreadPool.class, Evaluation.class));
+    }
+
+    @Provides
+    @Singleton
+    @Evaluation
+    LifecycleThreadPool evaluationThreadPool(WorkQueue workQueue) {
+      return new LifecycleThreadPool(workQueue, evaluationThreads, pluginName + "-evaluation");
+    }
+
+    @Provides
+    @Singleton
+    @Evaluation
+    Executor evaluationExecutor(@Evaluation LifecycleThreadPool pool) {
+      return new BoundedOrderedDispatcher(pool, evaluationThreads);
+    }
   }
 
   private class ActionsExecutorModule extends AbstractModule {
