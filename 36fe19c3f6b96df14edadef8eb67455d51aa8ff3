@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "423e076f_8fddd138",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-08T23:00:57Z",
+      "side": 1,
+      "message": "The word \u0027admission\u0027 doesn\u0027t feel right in here to me, especially since we aren\u0027t actually limiting admissions. I would suggest naming this variable \u0027outstanding\u0027 or \u0027inflight\u0027",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce92c20a_26b3444a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-08T23:00:57Z",
+      "side": 1,
+      "message": "Ideally, the bounding mechanism would be implemented by a separate class. This class isn\u0027t actually an executor, maybe create an ExecutorThrottle class with the semaphore behavior? This would then be an inner Task class, and maybe the AtomicBoolean might be called readyForRelease?",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "011e26f4_6ae952a0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-08T23:00:57Z",
+      "side": 1,
+      "message": "Since this is a generic class, it would be nice to name it in a way that tells me more about its functionally, maybe LifecycleExecutor?",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
