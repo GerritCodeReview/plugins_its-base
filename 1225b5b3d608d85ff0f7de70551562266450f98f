@@ -69,6 +69,24 @@
       "parentUuid": "576df0d3_f6a068af",
       "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caad269d_522cec6f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-08T17:03:01Z",
+      "side": 1,
+      "message": "How about `admissionReadyForRelease`?",
+      "parentUuid": "f1824855_4e0e3703",
+      "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
