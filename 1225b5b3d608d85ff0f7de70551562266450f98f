@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b22132_6e704687",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/ItsHookModule.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-08T18:57:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f195dbb7_5fee255d",
+      "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47b096bd_36345783",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "How about `admissionReadyForRelease`?",
       "parentUuid": "f1824855_4e0e3703",
+      "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94be8a29_4230c699",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-08T18:57:03Z",
+      "side": 1,
+      "message": "Renamed to admissionReadyForRelease",
+      "parentUuid": "caad269d_522cec6f",
       "revId": "1225b5b3d608d85ff0f7de70551562266450f98f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
