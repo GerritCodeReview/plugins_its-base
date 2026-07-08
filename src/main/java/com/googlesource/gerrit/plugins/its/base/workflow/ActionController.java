@@ -25,6 +25,7 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.its.base.Evaluation;
 import com.googlesource.gerrit.plugins.its.base.Tracker;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
@@ -49,6 +50,7 @@ public class ActionController implements EventListener {
   private final ActionExecutor actionExecutor;
   private final ItsConfig itsConfig;
   private final BoundedOrderedExecutor trackerExecutor;
+  private final BoundedOrderedExecutor evaluationExecutor;
 
   @Inject
   public ActionController(
@@ -56,11 +58,13 @@ public class ActionController implements EventListener {
       RuleBase ruleBase,
       ActionExecutor actionExecutor,
       ItsConfig itsConfig,
+      @Evaluation BoundedOrderedExecutor evaluationExecutor,
       @Tracker BoundedOrderedExecutor trackerExecutor) {
     this.propertyExtractor = propertyExtractor;
     this.ruleBase = ruleBase;
     this.actionExecutor = actionExecutor;
     this.itsConfig = itsConfig;
+    this.evaluationExecutor = evaluationExecutor;
     this.trackerExecutor = trackerExecutor;
   }
 
@@ -69,7 +73,7 @@ public class ActionController implements EventListener {
     if (event instanceof RefEvent) {
       RefEvent refEvent = (RefEvent) event;
       if (itsConfig.isEnabled(refEvent)) {
-        new EventHandler(refEvent);
+        evaluationExecutor.execute(ChangeKey.from(refEvent), new EventHandler(refEvent));
       }
     }
   }
@@ -80,7 +84,10 @@ public class ActionController implements EventListener {
 
     EventHandler(RefEvent refEvent) {
       this.refEvent = refEvent;
+    }
 
+    @Override
+    public void run() {
       ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
       try {
         RefEventProperties refEventProperties = propertyExtractor.extractFrom(refEvent);
@@ -88,7 +95,7 @@ public class ActionController implements EventListener {
         handleProjectEvent(refEventProperties.getProjectProperties());
 
         if (!actionRunnables.isEmpty()) {
-          trackerExecutor.execute(ChangeKey.from(refEvent), this);
+          trackerExecutor.execute(ChangeKey.from(refEvent), new ActionRunner());
         }
       } finally {
         ItsConfig.clearCurrentProjectName();
@@ -126,17 +133,11 @@ public class ActionController implements EventListener {
     }
 
     @Override
-    public void run() {
-      ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
-      try {
-        actionRunnables.forEach(Runnable::run);
-      } finally {
-        ItsConfig.clearCurrentProjectName();
-      }
+    public String toString() {
+      return "its-evaluation: " + refEventToString();
     }
 
-    @Override
-    public String toString() {
+    private String refEventToString() {
       String target = refEvent.getBranchNameKey().toString();
       if (refEvent instanceof PatchSetEvent patchSetEvent) {
         PatchSetAttribute patchSet = patchSetEvent.patchSet.get();
@@ -144,7 +145,24 @@ public class ActionController implements EventListener {
           target = refEvent.getProjectNameKey().get() + " " + patchSet.ref;
         }
       }
-      return "its-actions: " + refEvent.getType() + " " + target;
+      return refEvent.getType() + " " + target;
+    }
+
+    private class ActionRunner implements Runnable {
+      @Override
+      public void run() {
+        ItsConfig.setCurrentProjectName(refEvent.getProjectNameKey());
+        try {
+          actionRunnables.forEach(Runnable::run);
+        } finally {
+          ItsConfig.clearCurrentProjectName();
+        }
+      }
+
+      @Override
+      public String toString() {
+        return "its-actions: " + refEventToString();
+      }
     }
   }
 

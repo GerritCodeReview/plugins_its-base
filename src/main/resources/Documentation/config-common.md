@@ -8,7 +8,7 @@
 - [Associating a Gerrit project with its ITS project counterpart](#associating-a-gerrit-project-with-its-its-project-counterpart)
 - [Configuring rules of when to take which actions in the ITS](#configuring-rules-of-when-to-take-which-actions-in-the-its)
 - [Multiple Its](#multiple-its)
-- [Asynchronous action processing](#asynchronous-action-processing)
+- [Asynchronous event processing](#asynchronous-event-processing)
 - [Further common configuration details](#further-common-configuration-details)
 
 
@@ -180,18 +180,46 @@ sed -i '' -e 's/its-bugzilla/its-bugzilla-external/' META-INF/MANIFEST.MF
 jar --verbose --create --manifest=META-INF/MANIFEST.MF --file=../its-bugzilla-external.jar .
 ```
 
-## Asynchronous action processing
+## Asynchronous event processing
 
-By default, @PLUGIN@ applies ITS actions synchronously on Gerrit's event-dispatch
-thread. Since these actions make blocking calls to the issue tracker, they can
-delay the Gerrit operation that produced the event. The actions can instead be
-handed off to a dedicated thread pool by setting a pool size in the plugin's own
-configuration file `etc/@PLUGIN@.config`:
+By default, @PLUGIN@ handles ITS events synchronously on Gerrit's event-dispatch
+thread. Handling an event has two phases:
+
+* *evaluation*: detecting issue ids and evaluating the configured rules to decide
+  which actions to take
+* *execution*: applying those actions, which make blocking calls to the issue
+  tracker
+
+Both phases run on the event-dispatch thread by default and can delay the Gerrit
+operation that produced the event. They can be handed off to a dedicated thread
+pool by setting a pool size in the plugin's config file `etc/@PLUGIN@.config`:
 
 ```ini
+[evaluation]
+    threadPoolSize = 50
 [tracker]
     threadPoolSize = 10
 ```
+
+<a name="common-config-evaluationThreadPoolSize">`evaluation.threadPoolSize`</a>
+:   The number of threads @PLUGIN@ uses to detect issue ids and evaluate the
+    configured rules asynchronously.
+
+    When set to `0`, evaluation runs synchronously on Gerrit's event-dispatch
+    thread, blocking it until issue detection and rule evaluation complete.
+    When set to a positive value, evaluation runs asynchronously on a pool of
+    that many threads.
+
+    The number of evaluation tasks in flight is bounded by the pool size. Once
+    all threads are busy, the event-dispatch thread blocks until a running task
+    completes, so the amount of queued work stays bounded.
+
+    If `evaluation.threadPoolSize` is set to a positive value, the plugin requires
+    `tracker.threadPoolSize` to also be positive. It is recommended that the
+    evaluation pool size be greater than the tracker pool size, as all events
+    are evaluated, but not all of them have actions to execute.
+
+    Default is `0`
 
 <a name="common-config-trackerThreadPoolSize">`tracker.threadPoolSize`</a>
 :   The number of threads @PLUGIN@ uses to apply ITS actions asynchronously.

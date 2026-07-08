@@ -28,6 +28,7 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.Evaluation;
 import com.googlesource.gerrit.plugins.its.base.Tracker;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
@@ -186,18 +187,25 @@ public class ActionControllerTest extends LoggingMockingTestCase {
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
 
-      BoundedOrderedExecutor boundedOrderedExecutor = mock(BoundedOrderedExecutor.class);
+      bind(BoundedOrderedExecutor.class)
+          .annotatedWith(Evaluation.class)
+          .toInstance(synchronousExecutor());
+      bind(BoundedOrderedExecutor.class)
+          .annotatedWith(Tracker.class)
+          .toInstance(synchronousExecutor());
+    }
+
+    private BoundedOrderedExecutor synchronousExecutor() {
+      BoundedOrderedExecutor executor = mock(BoundedOrderedExecutor.class);
       doAnswer(
               invocation -> {
                 Runnable task = invocation.getArgument(1);
                 task.run();
                 return null;
               })
-          .when(boundedOrderedExecutor)
+          .when(executor)
           .execute(any(), any());
-      bind(BoundedOrderedExecutor.class)
-          .annotatedWith(Tracker.class)
-          .toInstance(boundedOrderedExecutor);
+      return executor;
     }
   }
 }

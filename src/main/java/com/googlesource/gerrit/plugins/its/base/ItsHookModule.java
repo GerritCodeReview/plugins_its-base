@@ -61,16 +61,22 @@ public class ItsHookModule extends FactoryModule {
 
   private static final String TRACKER_SECTION = "tracker";
 
+  private static final String EVALUATION_SECTION = "evaluation";
+
   private static final String KEY_THREAD_POOL_SIZE = "threadPoolSize";
 
   private static final int DEFAULT_THREAD_POOL_SIZE = 0;
 
   private final String pluginName;
   private final PluginConfigFactory pluginCfgFactory;
+  private final int evaluationThreadPoolSize;
+  private final int trackerThreadPoolSize;
 
   public ItsHookModule(@PluginName String pluginName, PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
     this.pluginCfgFactory = pluginCfgFactory;
+    this.evaluationThreadPoolSize = threadPoolSize(EVALUATION_SECTION);
+    this.trackerThreadPoolSize = threadPoolSize(TRACKER_SECTION);
   }
 
   @Override
@@ -81,6 +87,9 @@ public class ItsHookModule extends FactoryModule {
     bind(ItsConfig.class);
     DynamicSet.bind(binder(), CommitValidationListener.class).to(ItsValidateComment.class);
     DynamicSet.bind(binder(), EventListener.class).to(ActionController.class);
+    checkThreadPoolConfig();
+    DynamicSet.bind(binder(), LifecycleListener.class)
+        .to(Key.get(LifecycleExecutor.class, Evaluation.class));
     DynamicSet.bind(binder(), LifecycleListener.class)
         .to(Key.get(LifecycleExecutor.class, Tracker.class));
     factory(ActionRequest.Factory.class);
@@ -120,9 +129,21 @@ public class ItsHookModule extends FactoryModule {
   @Provides
   @TrackerThreadPoolSize
   int trackerThreadPoolSize() {
-    return pluginCfgFactory
-        .getGlobalPluginConfig(pluginName)
-        .getInt(TRACKER_SECTION, KEY_THREAD_POOL_SIZE, DEFAULT_THREAD_POOL_SIZE);
+    return trackerThreadPoolSize;
+  }
+
+  @Provides
+  @EvaluationThreadPoolSize
+  int evaluationThreadPoolSize() {
+    return evaluationThreadPoolSize;
+  }
+
+  @Provides
+  @Singleton
+  @Evaluation
+  LifecycleExecutor evaluationLifecycleExecutor(
+      WorkQueue workQueue, @EvaluationThreadPoolSize int poolSize) {
+    return new LifecycleExecutor(workQueue, poolSize, pluginName + "-evaluation");
   }
 
   @Provides
@@ -138,5 +159,26 @@ public class ItsHookModule extends FactoryModule {
   @Tracker
   BoundedOrderedExecutor trackerExecutor(@Tracker LifecycleExecutor executor) {
     return new BoundedOrderedExecutor(executor);
+  }
+
+  @Provides
+  @Singleton
+  @Evaluation
+  BoundedOrderedExecutor evaluationExecutor(@Evaluation LifecycleExecutor executor) {
+    return new BoundedOrderedExecutor(executor);
+  }
+
+  private int threadPoolSize(String section) {
+    return pluginCfgFactory
+        .getGlobalPluginConfig(pluginName)
+        .getInt(section, KEY_THREAD_POOL_SIZE, DEFAULT_THREAD_POOL_SIZE);
+  }
+
+  private void checkThreadPoolConfig() {
+    if (evaluationThreadPoolSize > 0 && trackerThreadPoolSize <= 0) {
+      addError(
+          "evaluation.threadPoolSize (%d) requires tracker.threadPoolSize > 0",
+          evaluationThreadPoolSize);
+    }
   }
 }
