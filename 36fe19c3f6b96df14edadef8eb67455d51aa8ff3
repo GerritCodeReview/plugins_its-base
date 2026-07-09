@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f47115ba_a4f14297",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-09T00:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "423e076f_8fddd138",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce92c20a_26b3444a",
@@ -35,6 +53,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c6a8eb2_6e596806",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-09T00:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce92c20a_26b3444a",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "011e26f4_6ae952a0",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-07-08T23:00:57Z",
       "side": 1,
       "message": "Since this is a generic class, it would be nice to name it in a way that tells me more about its functionally, maybe LifecycleExecutor?",
+      "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ff00495_9a9d2405",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/EventExecutor.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-09T00:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "011e26f4_6ae952a0",
       "revId": "36fe19c3f6b96df14edadef8eb67455d51aa8ff3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
