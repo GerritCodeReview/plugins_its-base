@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd3bc50_fe46b567",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ExecutorThrottle.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T01:36:17Z",
+      "side": 1,
+      "message": "\u0027Admitted\u0027 feels misleading here since it is not actually admitted. Could the interface be improved here so that this method is called submit (), and it take in the Executor to submit to and have it doing the await also? That way the wrapper need not be exposed outside of this class.",
+      "revId": "625c737e73190a8151a1136588b8df2cce318cd3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
