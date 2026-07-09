@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48de82c_4b7c4de2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Should this be outside the try block?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bb45c22_d1857c7c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ActionController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Public? Rename to optionallyFrom() and return an Optional?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3617db97_e6543cc8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Implement Execo",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ff9a00_b58cc9ee",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/BoundedOrderedExecutor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Generic logging on error here feels like something the framework (the ThrottlingClass should do) instead of this class?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63be967d_f3587230",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ExecutorThrottle.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Make public?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e57b98c3_9f253dc1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ExecutorThrottle.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "This probably should be named execute() instead since submit() typically returns a Future from framework classes.",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63c4cec8_02cbfa7a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/ExecutorThrottle.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Make private or protected?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2338c502_2472a016",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LifecycleExecutor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "This custom method makes it hard for the user to reason about when using this class. More specifically, ThreadPoolExecutor exposes a method with the same name which returns a different value, and if someone is familiar with that framework class, they would expect this method to do the same thing. When considering the Java classes, I believe getMaxPoolSize() is more representative of what this method does? Can we improve this class so that it does not expose any methods with custom meanings by either extending an existing framework class, or implementing an existing framework interface? \n\nThere are several new classes is this change with names such as Executor which imply they are classes from the framework classes, and they are not. I would advise either remaining them to avoid confusion, or bringing them more inline with the contracts of the framework classes.",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01306687_1d71c904",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/LifecycleExecutor.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "It seems that this sort of checking to see whether the Executor is being used or not is being done several places now in the plug-in, and I\u0027m not sure that is needed, can we avoid that? I suspect that it makes more sense to never create this class in the first place when an executor is not being used?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1442aa92_70cba272",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Add javadocs?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c8e70db_8a520d42",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Should we explain here (or in the getAlways() method) that any interrupts received were intended for the previous task and thus should be ignored?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd4e4eda_ddc21bfb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "This doesn\u0027t quite follow the existing offer() contracts because returning false did not indicate that the queue is full, instead it indicates that the item is the head of a new queue. Should it be renamed to offerIfNotFirst() it something like that?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2a09191_99b66f4d",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Reading the text above this makes me think that this section should be [actions], would that work?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f446836_c51f72d8",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "In gerrit config, this is usually just called \u0027threads\u0027. As is it feels a bit confusing because it is not actually setting the pool size, but rather the maxPoolSize?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2902112e_7a95fb7f",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Clarify that this sentence applies even when async?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d7b4192_bc111b50",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Does this last sentence still make sense to mention? I think it was originally added because actions for a single change could use (block) more than one thread?",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5279b4b_bdc5ac60",
+        "filename": "src/main/resources/Documentation/config-common.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-09T12:33:15Z",
+      "side": 1,
+      "message": "Mentions of pool size here are inaccurate (since they are actually based on \u0027max\u0027).",
+      "revId": "64b22ffac3b35eef0a4b2419d43a491455793612",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
