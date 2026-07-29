@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.server.git.WorkQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -55,7 +56,7 @@ public class RuntimeQueueMap<K> {
     return new Task(k, mine);
   }
 
-  private class Task implements Runnable {
+  private class Task implements WorkQueue.CanceledWhileRunning {
     private final K key;
     private final Runnable task;
 
@@ -114,6 +115,20 @@ public class RuntimeQueueMap<K> {
           logger.atSevere().withCause(e).log("Pipeline future failed unexpectedly");
           throw new RuntimeException(e);
         }
+      }
+    }
+
+    @Override
+    public void cancel() {
+      if (task instanceof WorkQueue.CancelableRunnable cancelable) {
+        cancelable.cancel();
+      }
+    }
+
+    @Override
+    public void setCanceledWhileRunning() {
+      if (task instanceof WorkQueue.CanceledWhileRunning canceled) {
+        canceled.setCanceledWhileRunning();
       }
     }
 
