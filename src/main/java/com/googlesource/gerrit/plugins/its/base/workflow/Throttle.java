@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.its.base.workflow;
 
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.server.git.WorkQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,24 +30,23 @@ public class Throttle {
   private final Semaphore inflight;
 
   Throttle(int permits) {
-    this.inflight = new Semaphore(permits);
+    this.inflight = new Semaphore(permits, true);
   }
 
   void execute(Executor executor, Runnable task) {
     ThrottledTask throttledTask = new ThrottledTask(task);
+    inflight.acquireUninterruptibly();
     try {
       executor.execute(throttledTask);
     } catch (RuntimeException e) {
+      throttledTask.release();
       logger.atWarning().withCause(e).log("Failed to queue ITS task %s", task);
-      return;
     }
-    inflight.acquireUninterruptibly();
-    throttledTask.releaseIfReady();
   }
 
-  private final class ThrottledTask implements Runnable {
+  private final class ThrottledTask implements WorkQueue.CancelableRunnable {
     private final Runnable task;
-    private final AtomicBoolean readyForRelease = new AtomicBoolean();
+    private final AtomicBoolean released = new AtomicBoolean();
 
     private ThrottledTask(Runnable task) {
       this.task = task;
@@ -57,12 +57,17 @@ public class Throttle {
       try {
         task.run();
       } finally {
-        releaseIfReady();
+        release();
       }
     }
 
-    private void releaseIfReady() {
-      if (readyForRelease.getAndSet(true)) {
+    @Override
+    public void cancel() {
+      release();
+    }
+
+    private void release() {
+      if (released.compareAndSet(false, true)) {
         inflight.release();
       }
     }
