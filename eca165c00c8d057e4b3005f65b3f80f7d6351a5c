@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e876fb_631b2417",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T21:41:19Z",
+      "side": 1,
+      "message": "It would be good to mention that this is done in Gerrit core, and that Gerrit should protect its executor agains this.",
+      "revId": "eca165c00c8d057e4b3005f65b3f80f7d6351a5c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
