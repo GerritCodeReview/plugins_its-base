@@ -119,7 +119,17 @@ public class RuntimeQueueMap<K> {
 
     @Override
     public String toString() {
-      return activeTask.task.toString();
+      try {
+        Runnable current = activeTask.task;
+        try {
+          return current.toString();
+        } catch (Exception e) {
+          logger.atWarning().withCause(e).log("Cannot describe task");
+          return current.getClass().getName();
+        }
+      } catch (Exception e) {
+        return "unknown task";
+      }
     }
   }
 }

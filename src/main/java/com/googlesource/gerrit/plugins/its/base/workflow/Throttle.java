@@ -69,7 +69,16 @@ public class Throttle {
 
     @Override
     public String toString() {
-      return task.toString();
+      try {
+        try {
+          return task.toString();
+        } catch (Exception e) {
+          logger.atWarning().withCause(e).log("Cannot describe task");
+          return task.getClass().getName();
+        }
+      } catch (Exception e) {
+        return "unknown task";
+      }
     }
   }
 }
