@@ -17,11 +17,9 @@ package com.googlesource.gerrit.plugins.its.base.workflow;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
-import com.google.gerrit.server.data.PatchSetAttribute;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
-import com.google.gerrit.server.events.PatchSetEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.its.base.Actions;
@@ -144,11 +142,8 @@ public class ActionController implements EventListener {
 
     private String refEventToString() {
       String target = refEvent.getBranchNameKey().toString();
-      if (refEvent instanceof PatchSetEvent patchSetEvent) {
-        PatchSetAttribute patchSet = patchSetEvent.patchSet.get();
-        if (patchSet != null) {
-          target = refEvent.getProjectNameKey().get() + " " + patchSet.ref;
-        }
+      if (refEvent instanceof ChangeEvent changeEvent) {
+        target = target + " " + changeEvent.getChangeKey();
       }
       return refEvent.getType() + " " + target;
     }
