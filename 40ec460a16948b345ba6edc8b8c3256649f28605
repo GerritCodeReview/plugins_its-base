@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "138e5e58_4abd1e0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T22:14:32Z",
+      "side": 1,
+      "message": "s/be/be fixed to/",
+      "revId": "40ec460a16948b345ba6edc8b8c3256649f28605",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795a085d_ad482607",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T22:14:32Z",
+      "side": 1,
+      "message": "s/Throttle/which Throttle/",
+      "revId": "40ec460a16948b345ba6edc8b8c3256649f28605",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112d8b99_842483a3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T22:14:32Z",
+      "side": 1,
+      "message": "This still is not safe, any method calls can cause an exception. I think you need to wrap this with another try, and then maybe just return a fixed string here?",
+      "revId": "40ec460a16948b345ba6edc8b8c3256649f28605",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
