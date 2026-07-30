@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57a5196a_7a3dfcb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T22:10:40Z",
+      "side": 1,
+      "message": "s/be/be fixed/?",
+      "range": {
+        "startLine": 15,
+        "startChar": 68,
+        "endLine": 15,
+        "endChar": 70
+      },
+      "revId": "06cd320f3dc6f06785c49a761854bc2911b0dba8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846aae9a_56f00b26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T22:10:40Z",
+      "side": 1,
+      "message": "I would make this more explicit, instead of saying \"fail before the task starts running\", I would say \"never run the task.",
+      "revId": "06cd320f3dc6f06785c49a761854bc2911b0dba8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
