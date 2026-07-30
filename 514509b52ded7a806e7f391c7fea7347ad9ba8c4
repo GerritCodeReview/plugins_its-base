@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1b0e1f_fe8ad149",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-30T22:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d198d03_fab92a6c",
+      "revId": "514509b52ded7a806e7f391c7fea7347ad9ba8c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "200b7ee4_0fa4e16c",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-07-30T21:43:01Z",
       "side": 1,
       "message": "This too should probably get protected.",
+      "revId": "514509b52ded7a806e7f391c7fea7347ad9ba8c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9ba219_f5eea7c9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-07-30T22:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "200b7ee4_0fa4e16c",
       "revId": "514509b52ded7a806e7f391c7fea7347ad9ba8c4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
