@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d198d03_fab92a6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T21:43:01Z",
+      "side": 1,
+      "message": "Here too it should explain that this is a bug in Gerrit core.",
+      "revId": "514509b52ded7a806e7f391c7fea7347ad9ba8c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "200b7ee4_0fa4e16c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/workflow/RuntimeQueueMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-07-30T21:43:01Z",
+      "side": 1,
+      "message": "This too should probably get protected.",
+      "revId": "514509b52ded7a806e7f391c7fea7347ad9ba8c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
