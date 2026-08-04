@@ -83,9 +83,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain 'Missing " + "issue'",
+        "First CommitValidationMessages does not contain 'Missing issue'",
         ret.get(0).getMessage().contains("Missing issue"));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
@@ -188,13 +188,13 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
+        "First CommitValidationMessages does not contain 'Non-existing'",
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        "Second CommitValidationMessages does not contain '4711'",
+        ret.get(1).getMessage().contains("4711"));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
@@ -282,16 +282,16 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
+        "First CommitValidationMessages does not contain 'Non-existing'",
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        "Second CommitValidationMessages does not contain '4711'",
+        ret.get(1).getMessage().contains("4711"));
     assertFalse(
-        "First CommitValidationMessages contains '42', although " + "that bug exists",
-        ret.get(0).getMessage().contains("42"));
+        "Second CommitValidationMessages contains '42', although that bug exists",
+        ret.get(1).getMessage().contains("42"));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -337,16 +337,16 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
+    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
+        "First CommitValidationMessages does not contain 'Non-existing'",
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        "Second CommitValidationMessages does not contain '4711'",
+        ret.get(1).getMessage().contains("4711"));
     assertTrue(
-        "First CommitValidationMessages does not contain '42'",
-        ret.get(0).getMessage().contains("42"));
+        "Second CommitValidationMessages does not contain '42'",
+        ret.get(1).getMessage().contains("42"));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -392,9 +392,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
+    assertEquals("Size of returned CommitValidationMessages does not match", 3, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        "First CommitValidationMessages does not contain 'Failed to check'",
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
@@ -403,15 +403,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         "First CommitValidationMessages contains reason of failure",
         ret.get(0).getMessage().contains("InjectedEx1"));
     assertFalse(
-        "First CommitValidationMessages contains '42', although " + "that bug exists",
+        "First CommitValidationMessages contains '42', although that bug exists",
         ret.get(0).getMessage().contains("42"));
     assertTrue(
-        "Second CommitValidationMessages does not contain " + "'Non-existing'",
+        "Second CommitValidationMessages does not contain 'Non-existing'",
         ret.get(1).getMessage().contains("Non-existing"));
 
     assertTrue(
-        "Second CommitValidationMessages does not contain '42'",
-        ret.get(1).getMessage().contains("42"));
+        "Third CommitValidationMessages does not contain '42'",
+        ret.get(2).getMessage().contains("42"));
 
     assertLogMessageContains("4711");
 
@@ -438,7 +438,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        "First CommitValidationMessages does not contain 'Failed to check'",
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
@@ -500,7 +500,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
     assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
+        "First CommitValidationMessages does not contain 'Failed to check'",
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
