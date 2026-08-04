@@ -83,10 +83,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain 'Missing " + "issue'",
-        ret.get(0).getMessage().contains("Missing issue"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Missing issue-id in commit message", CommitValidationMessage.Type.WARNING),
+            new CommitValidationMessage(
+                "Add an issue-id matching bug#(\\d+) for an existing ticket in ItsTestName to the"
+                    + " commit message",
+                CommitValidationMessage.Type.HINT))
+        .inOrder();
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(itsConfig).getDummyIssuePattern();
@@ -105,7 +110,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Missing issue");
+    assertThat(thrown).hasMessageThat().isEqualTo("Missing issue-id in commit message");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(itsConfig).getDummyIssuePattern();
@@ -188,13 +193,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
-        ret.get(0).getMessage().contains("Non-existing"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Non-existing issue-ids referenced in commit message",
+                CommitValidationMessage.Type.WARNING),
+            new CommitValidationMessage(
+                "4711 not found in ItsTestName issue tracker", CommitValidationMessage.Type.HINT))
+        .inOrder();
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
@@ -214,7 +220,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("Non-existing issue-ids referenced in commit message");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
@@ -282,16 +290,14 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
-        ret.get(0).getMessage().contains("Non-existing"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
-    assertFalse(
-        "First CommitValidationMessages contains '42', although " + "that bug exists",
-        ret.get(0).getMessage().contains("42"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Non-existing issue-ids referenced in commit message",
+                CommitValidationMessage.Type.WARNING),
+            new CommitValidationMessage(
+                "4711 not found in ItsTestName issue tracker", CommitValidationMessage.Type.HINT))
+        .inOrder();
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -313,7 +319,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("Non-existing issue-ids referenced in commit message");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -337,16 +345,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Non-existing'",
-        ret.get(0).getMessage().contains("Non-existing"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '42'",
-        ret.get(0).getMessage().contains("42"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Non-existing issue-ids referenced in commit message",
+                CommitValidationMessage.Type.WARNING),
+            new CommitValidationMessage(
+                "4711, 42 not found in ItsTestName issue tracker",
+                CommitValidationMessage.Type.HINT))
+        .inOrder();
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -368,7 +375,9 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
-    assertThat(thrown).hasMessageThat().contains("Non-existing");
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("Non-existing issue-ids referenced in commit message");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -392,28 +401,21 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 2, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
-        ret.get(0).getMessage().contains("Failed to check"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
-    assertTrue(
-        "First CommitValidationMessages contains reason of failure",
-        ret.get(0).getMessage().contains("InjectedEx1"));
-    assertFalse(
-        "First CommitValidationMessages contains '42', although " + "that bug exists",
-        ret.get(0).getMessage().contains("42"));
-    assertTrue(
-        "Second CommitValidationMessages does not contain " + "'Non-existing'",
-        ret.get(1).getMessage().contains("Non-existing"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Failed to check whether or not issue 4711 exists, due to connectivity issue."
+                    + " Commit will be accepted.\n"
+                    + "java.io.IOException: InjectedEx1",
+                CommitValidationMessage.Type.OTHER),
+            new CommitValidationMessage(
+                "Non-existing issue-ids referenced in commit message",
+                CommitValidationMessage.Type.WARNING),
+            new CommitValidationMessage(
+                "42 not found in ItsTestName issue tracker", CommitValidationMessage.Type.HINT))
+        .inOrder();
 
-    assertTrue(
-        "Second CommitValidationMessages does not contain '42'",
-        ret.get(1).getMessage().contains("42"));
-
-    assertLogMessageContains("4711");
+    assertLogMessageContains("Failed to check whether or not issue 4711 exists");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
@@ -436,18 +438,16 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
-        ret.get(0).getMessage().contains("Failed to check"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
-    assertTrue(
-        "First CommitValidationMessages contains reason of failure",
-        ret.get(0).getMessage().contains("InjectedEx1"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Failed to check whether or not issue 4711 exists, due to connectivity issue."
+                    + " Commit will be accepted.\n"
+                    + "java.io.IOException: InjectedEx1",
+                CommitValidationMessage.Type.OTHER))
+        .inOrder();
 
-    assertLogMessageContains("4711");
+    assertLogMessageContains("Failed to check whether or not issue 4711 exists");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
@@ -471,9 +471,7 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
       fail("onCommitReceived did not throw any exception");
     } catch (CommitValidationException e) {
       assertLogMessageContains("Failed to check whether or not issue 4711 exists");
-      assertTrue(
-          "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
-          e.getMessage().contains("Non-existing"));
+      assertEquals(e.getMessage(), "Non-existing issue-ids referenced in commit message");
     }
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
@@ -498,18 +496,16 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
 
     ret = ivc.onCommitReceived(event);
 
-    assertEquals("Size of returned CommitValidationMessages does not match", 1, ret.size());
-    assertTrue(
-        "First CommitValidationMessages does not contain " + "'Failed to check'",
-        ret.get(0).getMessage().contains("Failed to check"));
-    assertTrue(
-        "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
-    assertTrue(
-        "First CommitValidationMessages contains reason of failure",
-        ret.get(0).getMessage().contains("InjectedEx1"));
+    assertThat(ret)
+        .containsExactly(
+            new CommitValidationMessage(
+                "Failed to check whether or not issue 4711 exists, due to connectivity issue."
+                    + " Commit will be accepted.\n"
+                    + "java.io.IOException: InjectedEx1",
+                CommitValidationMessage.Type.OTHER))
+        .inOrder();
 
-    assertLogMessageContains("4711");
+    assertLogMessageContains("Failed to check whether or not issue 4711 exists");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
     verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
