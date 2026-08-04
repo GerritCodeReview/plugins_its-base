@@ -27,6 +27,8 @@ import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlesource.gerrit.plugins.its.base.Actions;
+import com.googlesource.gerrit.plugins.its.base.Evaluation;
 import com.googlesource.gerrit.plugins.its.base.its.ItsConfig;
 import com.googlesource.gerrit.plugins.its.base.testutil.LoggingMockingTestCase;
 import com.googlesource.gerrit.plugins.its.base.util.PropertyExtractor;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 public class ActionControllerTest extends LoggingMockingTestCase {
   private static Project.NameKey testProjectName = Project.nameKey("test-project");
@@ -183,6 +186,9 @@ public class ActionControllerTest extends LoggingMockingTestCase {
 
       itsConfig = mock(ItsConfig.class);
       bind(ItsConfig.class).toInstance(itsConfig);
+
+      bind(Executor.class).annotatedWith(Evaluation.class).toInstance(Runnable::run);
+      bind(Executor.class).annotatedWith(Actions.class).toInstance(Runnable::run);
     }
   }
 }
