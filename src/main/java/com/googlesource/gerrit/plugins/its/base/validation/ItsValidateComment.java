@@ -82,7 +82,7 @@ public class ItsValidateComment implements CommitValidationListener {
               logger.atWarning().withCause(e).log("%s", synopsis);
               details = e.toString();
               existenceCheckResult = ItsExistenceCheckResult.CONNECTIVITY_FAILURE;
-              ret.add(commitValidationFailure(synopsis, details, existenceCheckResult));
+              ret.addAll(commitValidationFailure(synopsis, details, existenceCheckResult));
             }
             if (existenceCheckResult == ItsExistenceCheckResult.DOESNT_EXIST) {
               nonExistingIssueIds.add(issueId);
@@ -90,24 +90,16 @@ public class ItsValidateComment implements CommitValidationListener {
           }
 
           if (!nonExistingIssueIds.isEmpty()) {
-            synopsis = "Non-existing issue ids referenced in commit message";
+            synopsis = "Non-existing issue-ids referenced in commit message";
 
             StringBuilder sb = new StringBuilder();
-            sb.append("The issue-ids\n");
-            for (String issueId : nonExistingIssueIds) {
-              sb.append("    * ");
-              sb.append(issueId);
-              sb.append("\n");
-            }
-            sb.append("are referenced in the commit message of\n");
-            sb.append(commit.getId().getName());
-            sb.append(",\n");
-            sb.append("but do not exist in ");
+            sb.append(String.join(", ", nonExistingIssueIds));
+            sb.append(" not found in ");
             sb.append(pluginName);
-            sb.append(" Issue-Tracker");
+            sb.append(" issue tracker");
             details = sb.toString();
 
-            ret.add(
+            ret.addAll(
                 commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
           }
         } else if (!itsConfig
@@ -117,21 +109,14 @@ public class ItsValidateComment implements CommitValidationListener {
           synopsis = "Missing issue-id in commit message";
 
           StringBuilder sb = new StringBuilder();
-          sb.append("Commit ");
-          sb.append(commit.getId().getName());
-          sb.append(" not associated to any issue\n");
-          sb.append("\n");
-          sb.append("Hint: insert one or more issue-id anywhere in the ");
-          sb.append("commit message.\n");
-          sb.append("      Issue-ids are strings matching ");
-          sb.append(itsConfig.getIssuePattern().pattern());
-          sb.append("\n");
-          sb.append("      and are pointing to existing tickets on ");
+          sb.append("Issue-id for tracker ");
           sb.append(pluginName);
-          sb.append(" Issue-Tracker");
+          sb.append(" should match ");
+          sb.append(itsConfig.getIssuePattern().pattern());
           details = sb.toString();
 
-          ret.add(commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
+          ret.addAll(
+              commitValidationFailure(synopsis, details, ItsExistenceCheckResult.DOESNT_EXIST));
         }
         break;
       case OPTIONAL:
@@ -141,13 +126,21 @@ public class ItsValidateComment implements CommitValidationListener {
     return ret;
   }
 
-  private CommitValidationMessage commitValidationFailure(
+  private List<CommitValidationMessage> commitValidationFailure(
       String synopsis, String details, ItsExistenceCheckResult existenceCheck)
       throws CommitValidationException {
-    CommitValidationMessage ret = new CommitValidationMessage(synopsis + "\n" + details, false);
+    List<CommitValidationMessage> ret = Lists.newArrayList();
+    if (existenceCheck == ItsExistenceCheckResult.CONNECTIVITY_FAILURE) {
+      ret.add(
+          new CommitValidationMessage(
+              synopsis + "\n" + details, CommitValidationMessage.Type.OTHER));
+    } else {
+      ret.add(new CommitValidationMessage(synopsis, CommitValidationMessage.Type.WARNING));
+      ret.add(new CommitValidationMessage(details, CommitValidationMessage.Type.HINT));
+    }
     if (itsConfig.getItsAssociationPolicy() == ItsAssociationPolicy.MANDATORY
         && existenceCheck != ItsExistenceCheckResult.CONNECTIVITY_FAILURE) {
-      throw new CommitValidationException(synopsis, Collections.singletonList(ret));
+      throw new CommitValidationException(synopsis, ret);
     }
     return ret;
   }
