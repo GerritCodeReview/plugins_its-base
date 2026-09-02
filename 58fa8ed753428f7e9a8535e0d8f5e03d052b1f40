@@ -16,6 +16,46 @@
       "message": "Any feedback on this change?",
       "revId": "58fa8ed753428f7e9a8535e0d8f5e03d052b1f40",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb00533_2bb891d7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-09-02T05:06:08Z",
+      "side": 1,
+      "message": "The new hint drops the actionable part of the old hint. Previously it said \"insert one or more issue-id anywhere in the commit message ... and are pointing to existing tickets...\". For first time users that is useful information.\n\nCould the new hint be something like: \"Add an issue-id matching ... for an existing ticket in its-jira to the commit message\"",
+      "revId": "58fa8ed753428f7e9a8535e0d8f5e03d052b1f40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccbb4bb0_d5eb8f76",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 4665459
+      },
+      "writtenOn": "2026-09-02T05:06:08Z",
+      "side": 1,
+      "message": "If `ItsAssociationPolicy` is `MANDATORY`, use `CommitValidationMessage.Type.ERROR`, instead of WARNING?",
+      "range": {
+        "startLine": 141,
+        "startChar": 68,
+        "endLine": 141,
+        "endChar": 77
+      },
+      "revId": "58fa8ed753428f7e9a8535e0d8f5e03d052b1f40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
