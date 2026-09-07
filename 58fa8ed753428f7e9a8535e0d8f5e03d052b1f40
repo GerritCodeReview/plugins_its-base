@@ -35,6 +35,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1f2705_12b517da",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-09-07T19:04:55Z",
+      "side": 1,
+      "message": "Updated according to suggestion.",
+      "parentUuid": "adb00533_2bb891d7",
+      "revId": "58fa8ed753428f7e9a8535e0d8f5e03d052b1f40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccbb4bb0_d5eb8f76",
@@ -48,6 +66,30 @@
       "writtenOn": "2026-09-02T05:06:08Z",
       "side": 1,
       "message": "If `ItsAssociationPolicy` is `MANDATORY`, use `CommitValidationMessage.Type.ERROR`, instead of WARNING?",
+      "range": {
+        "startLine": 141,
+        "startChar": 68,
+        "endLine": 141,
+        "endChar": 77
+      },
+      "revId": "58fa8ed753428f7e9a8535e0d8f5e03d052b1f40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c31b95a3_64237561",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateComment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-09-07T19:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccbb4bb0_d5eb8f76",
       "range": {
         "startLine": 141,
         "startChar": 68,
