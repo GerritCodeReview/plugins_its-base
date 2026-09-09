@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61896ab_51e8ad8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-09-09T19:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9784d77e_cda46929",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 6
+      },
+      "revId": "d8f603c10a52a64203c17189d8ced90d8c5635c1",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5414de14_4472c58e",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-09-09T05:17:46Z",
       "side": 1,
       "message": "Can we improve the tests so that they cover the new functionality added in this change?\n\nFor example, can we replace L285–L294 with a single assert like below?\n\n```\nassertThat(ret)\n    .containsExactly(\n        new CommitValidationMessage(\n            \"Non-existing issue-ids referenced in commit message\",\n            CommitValidationMessage.Type.WARNING),\n        new CommitValidationMessage(\n            \"4711 not found in ItsTestName issue tracker\",\n            CommitValidationMessage.Type.HINT))\n    .inOrder();\n```",
+      "revId": "d8f603c10a52a64203c17189d8ced90d8c5635c1",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1783a78_4970a77b",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/its/base/validation/ItsValidateCommentTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 4270951
+      },
+      "writtenOn": "2026-09-09T19:57:47Z",
+      "side": 1,
+      "message": "Updated as suggested.",
+      "parentUuid": "5414de14_4472c58e",
       "revId": "d8f603c10a52a64203c17189d8ced90d8c5635c1",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
