@@ -45,6 +45,12 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.ReceiveCommand;
 
 public class ItsValidateCommentTest extends LoggingMockingTestCase {
+  private static final String BUG_ID_1 = "4711";
+  private static final String BUG_ID_2 = "42";
+  private static final String SINGLE_BUG_MESSAGE = String.format("bug#%s", BUG_ID_1);
+  private static final String MULTIPLE_BUG_MESSAGE =
+      String.format("bug#%s, bug#%s", BUG_ID_1, BUG_ID_2);
+
   private Injector injector;
   private IssueExtractor issueExtractor;
   private ItsFacade itsFacade;
@@ -136,41 +142,41 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711");
+    RevCommit commit = createCommit(SINGLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(issueExtractor.getIssueIds(SINGLE_BUG_MESSAGE)).thenReturn(new String[] {BUG_ID_1});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
-    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(issueExtractor).getIssueIds(SINGLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
   }
 
   public void testMandatoryMatchingSingleExisting() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711");
+    RevCommit commit = createCommit(SINGLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(issueExtractor.getIssueIds(SINGLE_BUG_MESSAGE)).thenReturn(new String[] {BUG_ID_1});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
-    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(issueExtractor).getIssueIds(SINGLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
   }
 
   public void testSuggestedMatchingSingleNonExisting()
@@ -178,13 +184,13 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711");
+    RevCommit commit = createCommit(SINGLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(issueExtractor.getIssueIds(SINGLE_BUG_MESSAGE)).thenReturn(new String[] {BUG_ID_1});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -194,76 +200,78 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(bugEntryInMessage(BUG_ID_1)));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
-    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(issueExtractor).getIssueIds(SINGLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
   }
 
   public void testMandatoryMatchingSingleNonExisting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711");
+    RevCommit commit = createCommit(SINGLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(issueExtractor.getIssueIds(SINGLE_BUG_MESSAGE)).thenReturn(new String[] {BUG_ID_1});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
-    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(issueExtractor).getIssueIds(SINGLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
   }
 
   public void testSuggestedMatchingMultiple() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(true);
-    when(itsFacade.exists("42")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testMandatoryMatchingMultiple() throws CommitValidationException, IOException {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(true);
-    when(itsFacade.exists("42")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
     assertEmptyList(ret);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testSuggestedMatchingMultipleOneNonExsting()
@@ -271,14 +279,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
-    when(itsFacade.exists("42")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
@@ -288,37 +297,42 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(bugEntryInMessage(BUG_ID_1)));
     assertFalse(
         "First CommitValidationMessages contains '42', although " + "that bug exists",
-        ret.get(0).getMessage().contains("42"));
+        ret.get(0).getMessage().contains(bugEntryInMessage(BUG_ID_2)));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
+  }
+
+  private String bugEntryInMessage(String bugId) {
+    return "* " + bugId;
   }
 
   public void testMandatoryMatchingMultipleOneNonExsting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
-    when(itsFacade.exists("42")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testSuggestedMatchingMultipleSomeNonExsting()
@@ -326,14 +340,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
-    when(itsFacade.exists("42")).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -343,37 +358,38 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Non-existing"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(bugEntryInMessage(BUG_ID_1)));
     assertTrue(
         "First CommitValidationMessages does not contain '42'",
-        ret.get(0).getMessage().contains("42"));
+        ret.get(0).getMessage().contains(bugEntryInMessage(BUG_ID_2)));
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testMandatoryMatchingMultipleSomeNonExsting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    when(itsFacade.exists("4711")).thenReturn(false);
-    when(itsFacade.exists("42")).thenReturn(true);
+    when(itsFacade.exists(BUG_ID_1)).thenReturn(false);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     CommitValidationException thrown =
         assertThrows(CommitValidationException.class, () -> ivc.onCommitReceived(event));
     assertThat(thrown).hasMessageThat().contains("Non-existing");
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testSuggestedMatchingMultipleIOExceptionIsNonExsting()
@@ -381,14 +397,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.SUGGESTED);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
-    when(itsFacade.exists("42")).thenReturn(false);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists(BUG_ID_1);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(false);
 
     ret = ivc.onCommitReceived(event);
 
@@ -398,27 +415,27 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(BUG_ID_1));
     assertTrue(
         "First CommitValidationMessages contains reason of failure",
         ret.get(0).getMessage().contains("InjectedEx1"));
     assertFalse(
         "First CommitValidationMessages contains '42', although " + "that bug exists",
-        ret.get(0).getMessage().contains("42"));
+        ret.get(0).getMessage().contains(BUG_ID_2));
     assertTrue(
         "Second CommitValidationMessages does not contain " + "'Non-existing'",
         ret.get(1).getMessage().contains("Non-existing"));
 
     assertTrue(
         "Second CommitValidationMessages does not contain '42'",
-        ret.get(1).getMessage().contains("42"));
+        ret.get(1).getMessage().contains(bugEntryInMessage(BUG_ID_2)));
 
-    assertLogMessageContains("4711");
+    assertLogMessageContains(BUG_ID_1);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testMandatoryMatchingSingleIOException()
@@ -426,13 +443,13 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711");
+    RevCommit commit = createCommit(SINGLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711")).thenReturn(new String[] {"4711"});
+    when(issueExtractor.getIssueIds(SINGLE_BUG_MESSAGE)).thenReturn(new String[] {BUG_ID_1});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists(BUG_ID_1);
 
     ret = ivc.onCommitReceived(event);
 
@@ -442,44 +459,45 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(BUG_ID_1));
     assertTrue(
         "First CommitValidationMessages contains reason of failure",
         ret.get(0).getMessage().contains("InjectedEx1"));
 
-    assertLogMessageContains("4711");
+    assertLogMessageContains(BUG_ID_1);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711");
-    verifyOneOrMore(itsFacade).exists("4711");
+    verifyOneOrMore(issueExtractor).getIssueIds(SINGLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
   }
 
   public void testMandatoryMatchingMultipleIOExceptionIsNonExisting() throws IOException {
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
-    when(itsFacade.exists("42")).thenReturn(false);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists(BUG_ID_1);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(false);
 
     try {
       ivc.onCommitReceived(event);
       fail("onCommitReceived did not throw any exception");
     } catch (CommitValidationException e) {
-      assertLogMessageContains("Failed to check whether or not issue 4711 exists");
+      assertLogMessageContains("Failed to check whether or not issue " + BUG_ID_1 + " exists");
       assertTrue(
           "Message of thrown CommitValidationException does not " + "contain 'Non-existing'",
           e.getMessage().contains("Non-existing"));
     }
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void testMandatoryMatchingMultipleIOExceptionExisting()
@@ -487,14 +505,15 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
     List<CommitValidationMessage> ret;
     ItsValidateComment ivc = injector.getInstance(ItsValidateComment.class);
     ReceiveCommand command = mock(ReceiveCommand.class);
-    RevCommit commit = createCommit("bug#4711, bug#42");
+    RevCommit commit = createCommit(MULTIPLE_BUG_MESSAGE);
     CommitReceivedEvent event = newCommitReceivedEvent(command, project, null, commit, null);
 
     when(itsConfig.getItsAssociationPolicy()).thenReturn(ItsAssociationPolicy.MANDATORY);
-    when(issueExtractor.getIssueIds("bug#4711, bug#42")).thenReturn(new String[] {"4711", "42"});
+    when(issueExtractor.getIssueIds(MULTIPLE_BUG_MESSAGE))
+        .thenReturn(new String[] {BUG_ID_1, BUG_ID_2});
     when(itsFacadeFactory.getFacade(projectName)).thenReturn(itsFacade);
-    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists("4711");
-    when(itsFacade.exists("42")).thenReturn(true);
+    doThrow(new IOException("InjectedEx1")).when(itsFacade).exists(BUG_ID_1);
+    when(itsFacade.exists(BUG_ID_2)).thenReturn(true);
 
     ret = ivc.onCommitReceived(event);
 
@@ -504,17 +523,17 @@ public class ItsValidateCommentTest extends LoggingMockingTestCase {
         ret.get(0).getMessage().contains("Failed to check"));
     assertTrue(
         "First CommitValidationMessages does not contain '4711'",
-        ret.get(0).getMessage().contains("4711"));
+        ret.get(0).getMessage().contains(BUG_ID_1));
     assertTrue(
         "First CommitValidationMessages contains reason of failure",
         ret.get(0).getMessage().contains("InjectedEx1"));
 
-    assertLogMessageContains("4711");
+    assertLogMessageContains(BUG_ID_1);
 
     verifyOneOrMore(itsConfig).getItsAssociationPolicy();
-    verifyOneOrMore(issueExtractor).getIssueIds("bug#4711, bug#42");
-    verifyOneOrMore(itsFacade).exists("4711");
-    verifyOneOrMore(itsFacade).exists("42");
+    verifyOneOrMore(issueExtractor).getIssueIds(MULTIPLE_BUG_MESSAGE);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_1);
+    verifyOneOrMore(itsFacade).exists(BUG_ID_2);
   }
 
   public void assertEmptyList(List<CommitValidationMessage> list) {
